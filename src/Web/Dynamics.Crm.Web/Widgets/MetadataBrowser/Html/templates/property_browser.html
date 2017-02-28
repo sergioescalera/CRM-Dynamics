@@ -1,0 +1,16 @@
+﻿<div class="property-browser">
+    <table class="table table-bordered table-hover table-striped">
+        <thead></thead>
+        <tbody>
+            <tr data-ng-repeat="(propertyName, value) in object">
+                <td>
+                    <span data-ng-bind="propertyName"></span>
+                </td>
+                <td>
+                    <pre data-ng-bind="value | json"></pre>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot></tfoot>
+    </table>
+</div>

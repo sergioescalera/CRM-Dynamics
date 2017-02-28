@@ -1,0 +1,43 @@
+[
+  {
+    "outputFileName": "Widgets/MetadataBrowser/Scripts/Bundle.js",
+    "inputFiles": [
+      "Data/OData.js",
+      "Widgets/MetadataBrowser/Scripts/Config.js",
+      "Widgets/MetadataBrowser/Scripts/Core.js",
+      "Widgets/MetadataBrowser/Scripts/Controllers.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/Libs/SDK.MetaData.min.js",
+    "inputFiles": [
+      "Scripts/Libs/SDK.MetaData.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/Dynamics.Crm.Forms.js",
+    "inputFiles": [
+      "Core/*.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/Dynamics.Crm.Dialogs.js",
+    "inputFiles": [
+      "Core/Constants.js",
+      "Core/ScriptManager.js",
+      "Dialogs/*.js"
+    ]
+  },
+  {
+    "outputFileName": "Libs/bootstrap/css/bootstrap.min.css",
+    "inputFiles": [
+      "Libs/bootstrap/css/bootstrap.css"
+    ]
+  },
+  {
+    "outputFileName": "Libs/bootstrap/js/bootstrap.min.js",
+    "inputFiles": [
+      "Libs/bootstrap/js/bootstrap.js"
+    ]
+  }
+]

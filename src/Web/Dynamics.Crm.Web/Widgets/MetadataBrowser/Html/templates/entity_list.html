@@ -1,0 +1,76 @@
+﻿<div class="crm-entity-list" ng-controller="metadataBrowser.ui.controllers.entityList as vm">
+    <div class="splash" ng-show="vm.isBusy">
+        <i class="fa fa-3x fa-spinner fa-spin"></i>
+    </div>
+    <form name="SearchForm" class="form-inline" ng-hide="vm.isBusy || !vm.entities.length" novalidate>
+        <div class="form-group">
+            <span class="input-group">
+                <input type="text" class="form-control" ng-model="vm.filter" placeholder="Filter entities" required />
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" ng-disabled="SearchForm.$invalid" ng-click="vm.search()" title="Search"><i class="fa fa-search"></i></button>
+                </span>
+            </span>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-default" ng-click="vm.clear()" title="Clear filter"><i class="fa fa-remove"></i></button>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-default" ng-click="vm.export()" title="Export to csv"><i class="fa fa-download"></i></button>
+        </div>
+    </form>
+    <form name="SettingsForm" ng-hide="vm.isBusy || !vm.entities.length" novalidate>
+        <div class="form-group">
+            <div class="btn-group">
+                <label class="btn btn-default" ng-model="vm.advancedView" data-btn-radio="false">Table View</label>
+                <label class="btn btn-default" ng-model="vm.advancedView" data-btn-radio="true">Advanced View</label>
+            </div>
+        </div>
+    </form>
+    <div class="table-view" ng-hide="vm.isBusy || !vm.entities.length || vm.advancedView">
+        <table class="table table-bordered table-hover table-striped">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Display Name</th>
+                    <th>Schema Name</th>
+                    <th>Logical Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="entity in vm.entitiesToShow">
+                    <td>
+                        <button class="btn btn-link" ng-click="vm.openEntity(entity)"><i class="fa fa-folder-open-o"></i></button>
+                    </td>
+                    <td>
+                        <span ng-hide="entity.DisplayName.UserLocalizedLabel.Label">N/A</span>
+                        <span ng-bind="entity.DisplayName.UserLocalizedLabel.Label"></span>
+                    </td>
+                    <td>
+                        <span ng-bind="entity.SchemaName"></span>
+                    </td>
+                    <td>
+                        <span ng-bind="entity.LogicalName"></span>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4">
+                        <span data-pager="" data-align="false" ng-model="vm.currentPage" data-total-items="vm.total" data-items-per-page="vm.pageSize"></span>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div class="advanced-view" ng-hide="vm.isBusy || !vm.entities.length || !vm.advancedView">
+        <div data-accordion="">
+            <div data-accordion-group="" ng-repeat="entity in vm.entitiesToShow">
+                <div data-accordion-heading="">
+                    <span ng-bind="entity.SchemaName || entity.LogicalName"></span>
+                </div>
+                <div data-ts-property-browser="" data-object="entity"></div>
+            </div>
+        </div>
+        <span data-pager="" data-align="false" ng-model="vm.currentPage" total-items="vm.total" items-per-page="vm.pageSize"></span>
+    </div>
+</div>

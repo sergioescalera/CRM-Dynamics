@@ -1,0 +1,49 @@
+﻿[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+.title .fa {
+    margin: 0 13px;
+}
+
+.crm-metadata-browser {
+    padding: 0;
+}
+
+    .crm-metadata-browser .nav-tabs .fa {
+        margin: 0 7px;
+    }
+
+    .crm-metadata-browser .tab-pane {
+        padding: 20px 0;
+    }
+
+    .crm-metadata-browser .accordion-toggle {
+        display: block;
+        text-decoration: none;
+    }
+
+    .crm-metadata-browser .crm-server-configuration-form .accordion-toggle .fa {
+        margin: 0 5px;
+    }
+
+    .crm-metadata-browser .crm-server-configuration-form form button .fa {
+        margin: 0 5px;
+    }
+
+    .crm-metadata-browser .crm-server-configuration-list .accordion-toggle .fa {
+        margin: 0 5px;
+    }
+
+    .crm-metadata-browser .crm-entity-list form {
+        padding: 10px 0;
+    }
+
+    .crm-metadata-browser .crm-entity-details form {
+        padding: 10px 0;
+    }
+
+    .crm-metadata-browser .splash {
+        padding: 100px;
+        text-align: center;
+    }

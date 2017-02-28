@@ -1,0 +1,185 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{EBE01D25-C445-42E0-85E0-73BCCEEC3FC2}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Dynamics.Crm.Web</RootNamespace>
+    <AssemblyName>Dynamics.Crm.Web</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TypeScriptToolsVersion>1.8</TypeScriptToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Libs\bootstrap\css\bootstrap-theme.css" />
+    <Content Include="Libs\bootstrap\css\bootstrap.css" />
+    <Content Include="Libs\bootstrap\css\bootstrap.min.css">
+      <DependentUpon>bootstrap.css</DependentUpon>
+    </Content>
+    <Content Include="Libs\bootstrap\js\bootstrap.js" />
+    <Content Include="Libs\bootstrap\js\bootstrap.min.js">
+      <DependentUpon>bootstrap.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\Dynamics.Crm.Dialogs.js" />
+    <Content Include="Scripts\Dynamics.Crm.Dialogs.min.js">
+      <DependentUpon>Dynamics.Crm.Dialogs.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\Dynamics.Crm.Forms.js" />
+    <Content Include="Scripts\Dynamics.Crm.Forms.min.js">
+      <DependentUpon>Dynamics.Crm.Forms.js</DependentUpon>
+    </Content>
+    <Content Include="Libs\lodash\lodash.core.js" />
+    <Content Include="Libs\lodash\lodash.js" />
+    <Content Include="Libs\moment\moment.js" />
+    <Content Include="Web.config" />
+    <Content Include="Widgets\MetadataBrowser\Html\config.html" />
+    <Content Include="Widgets\MetadataBrowser\Html\main.html" />
+    <Content Include="Widgets\MetadataBrowser\Html\templates\entity_details.html" />
+    <Content Include="Widgets\MetadataBrowser\Html\templates\entity_list.html" />
+    <Content Include="Widgets\MetadataBrowser\Html\templates\property_browser.html" />
+    <Content Include="Widgets\MetadataBrowser\Images\icon_16.png" />
+    <Content Include="Widgets\MetadataBrowser\Images\icon_32.png" />
+    <Content Include="Widgets\MetadataBrowser\Scripts\Bundle.js" />
+    <Content Include="Widgets\MetadataBrowser\Scripts\Bundle.min.js">
+      <DependentUpon>Bundle.js</DependentUpon>
+    </Content>
+    <Content Include="Libs\SDK.MetaData.js" />
+    <Content Include="Libs\SDK.MetaData.min.js">
+      <DependentUpon>SDK.MetaData.js</DependentUpon>
+    </Content>
+    <Content Include="Widgets\MetadataBrowser\Styles\stylesheet.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bundleconfig.json" />
+    <Content Include="Libs\bootstrap\config.json" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="Core\Attributes.ts" />
+    <TypeScriptCompile Include="Core\Constants.ts" />
+    <TypeScriptCompile Include="Core\Controls.ts" />
+    <TypeScriptCompile Include="Core\Diagnostics.ts" />
+    <TypeScriptCompile Include="Core\Dialogs.ts" />
+    <TypeScriptCompile Include="Core\Enums.ts" />
+    <TypeScriptCompile Include="Core\Forms.ts" />
+    <TypeScriptCompile Include="Core\Entity.ts" />
+    <TypeScriptCompile Include="Core\Navigation.ts" />
+    <TypeScriptCompile Include="Core\Reports.ts" />
+    <TypeScriptCompile Include="Core\ScriptManager.ts" />
+    <TypeScriptCompile Include="Core\Sections.ts" />
+    <TypeScriptCompile Include="Core\Tabs.ts" />
+    <TypeScriptCompile Include="Data\OData.ts" />
+    <TypeScriptCompile Include="Dialogs\BootstrapDialogs.ts" />
+    <TypeScriptCompile Include="Dialogs\Dialogs.ts" />
+    <TypeScriptCompile Include="Widgets\MetadataBrowser\Scripts\Config.ts" />
+    <TypeScriptCompile Include="Widgets\MetadataBrowser\Scripts\Controllers.ts" />
+    <TypeScriptCompile Include="Widgets\MetadataBrowser\Scripts\Core.ts" />
+    <TypeScriptCompile Include="_typings\angular.d.ts" />
+    <TypeScriptCompile Include="_typings\bootstrap.d.ts" />
+    <TypeScriptCompile Include="_typings\jquery.d.ts" />
+    <TypeScriptCompile Include="_typings\lodash.d.ts" />
+    <TypeScriptCompile Include="_typings\moment.d.ts" />
+    <TypeScriptCompile Include="_typings\SDK.MetaData.d.ts" />
+    <TypeScriptCompile Include="_typings\Xrm.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Libs\jquery\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>29560</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:29560/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

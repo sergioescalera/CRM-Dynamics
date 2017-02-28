@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="SharedProjectFile_SccProperties">
+    <SharedProjectFile_ProjectGuid>{6a901cbc-cf2f-496a-a169-c31b1ec3ee60}</SharedProjectFile_ProjectGuid>
+    <SharedProjectFile_SccProjectName>SAK</SharedProjectFile_SccProjectName>
+    <SharedProjectFile_SccAuxPath>SAK</SharedProjectFile_SccAuxPath>
+    <SharedProjectFile_SccLocalPath>SAK</SharedProjectFile_SccLocalPath>
+    <SharedProjectFile_SccProvider>SAK</SharedProjectFile_SccProvider>
+  </PropertyGroup>
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>614d943a-4ce3-483d-8718-30186c3d18c4</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Dynamics.Crm</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Activities\CodeActivityContextWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Activities\WorkflowActivityBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Activities\WorkflowActivityContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\PipelineMessageAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\PipelineModeAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\PipelineStageAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\PluginAttributesCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\PrimaryEntityAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Concurrency\EntityExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\Enums.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\Messages.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Repository.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Schema.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Diagnostics\Debug.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Diagnostics\PrettyPrintEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Diagnostics\PluginContextExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\AddressExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\DateTimeExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityReferenceExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\EnumerableExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\EnumExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ExecutionContextExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ObjectExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\OptionSetValueExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\OrganizationServiceExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\PluginContextExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ServiceProviderExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\WorkflowActivityContextExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IAddress.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\ICodeActivityContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IRepository.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IWorkflowActivityContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IPluginContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Address.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Enums.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Plugins\PluginBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Plugins\PluginContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Validation\ValidationHelper.cs" />
+  </ItemGroup>
+</Project>

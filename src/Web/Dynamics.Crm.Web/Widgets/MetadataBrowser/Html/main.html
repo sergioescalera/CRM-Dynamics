@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>MS Dynamics CRM Metadata Browser</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=10" />    
+    <script src="https://ajax.aspnetcdn.com/ajax/modernizr/modernizr-2.8.3.js"></script>
+    <link href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.4/css/bootstrap-theme.css" rel="stylesheet" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.1/toastr.min.css" rel="stylesheet" />
+    <link href="../Styles/stylesheet.css" rel="stylesheet" />
+</head>
+<body>
+    <header>
+        <div class="container-fluid">
+            <div class="jumbotron">
+                <h3 class="title"><i class="fa fa-database"></i>CRM Meta-data Browser</h3>
+            </div>
+        </div>
+    </header>
+    <section class="crm-metadata-browser"
+             style="display: none"
+             ng-style="{ display: 'block' }"             
+             ng-controller="metadataBrowser.ui.controllers.crmMetadataBrowser as vm">
+        <div class="container-fluid">
+            <div data-tabset="">                
+                <div data-tab="" data-active="true">
+                    <div tab-heading=""><i class="fa fa-list"></i>Entities</div>
+                    <div ng-include="'templates/entity_list.html'"></div>
+                </div>
+                <div data-tab="" data-active="entityTab.active" ng-repeat="entityTab in vm.navigationService.EntityTabs">
+                    <div tab-heading="">
+                        <i class="fa fa-file"></i>
+                        <span ng-bind="entityTab.title"></span>
+                        <a href="javascript:void(0);" ng-click="vm.navigationService.DeleteEntityTab(entityTab)"><i class="fa fa-remove"></i></a>
+                    </div>
+                    <div data-ts-entity-details="" data-entity="entityTab.entity"></div>
+                </div>
+            </div>            
+        </div>
+    </section>
+    <footer></footer>
+    <script src="../../../ClientGlobalContext.js.aspx"></script>    
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.4/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.1/toastr.min.js"></script>    
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.0/ui-bootstrap-tpls.min.js"></script>
+    <script src="../Scripts/Bundle.js"></script>
+    <script>
+        angular
+            .element(document)
+            .ready(function () {
+                angular.bootstrap(document, [MetadataBrower.Config.moduleName]);
+            });
+    </script>
+</body>
+</html>
