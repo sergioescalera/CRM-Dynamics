@@ -4,7 +4,7 @@ namespace Dynamics.Crm.Data
 {
     public static class Schema
     {
-        public const String publisherPrefix = "ts4_";
+        public const String publisherPrefix = "sib_";
 
         public static class Common
         {
@@ -92,11 +92,37 @@ namespace Dynamics.Crm.Data
             public const String DirectionCodeFieldName = "directioncode";
         }
 
+        public static class LogEntryEntity
+        {
+            public static readonly String TypeName = $"{publisherPrefix}logentry";
+
+            public static readonly String IdFieldName = $"{publisherPrefix}logentryid";
+
+            public static readonly String NameFieldName = $"{publisherPrefix}name";
+
+            public static readonly String MessageFieldName = $"{publisherPrefix}message";
+
+            public static readonly String DescriptionFieldName = $"{publisherPrefix}description";
+
+            public static readonly String SourceFieldName = $"{publisherPrefix}source";
+
+            public static readonly String TypeFieldName = $"{publisherPrefix}type";
+
+            public static readonly String UserFieldName = $"{publisherPrefix}user";
+        }
+
         public static class SiteEntity
         {
             public const String TypeName = "site";
                          
             public const String IdFieldName = "siteid";            
+        }
+
+        public static class SystemUserEntity
+        {
+            public const String TypeName = "systemuser";
+
+            public const String IdFieldName = "systemuserid";
         }
     }
 }

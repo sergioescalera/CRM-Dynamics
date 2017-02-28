@@ -1,5 +1,7 @@
 ﻿using Dynamics.Crm.Attributes;
+using Dynamics.Crm.Data;
 using Dynamics.Crm.Interfaces;
+using Dynamics.Crm.Models;
 using Microsoft.Xrm.Sdk;
 using System;
 using System.Diagnostics;
@@ -22,17 +24,11 @@ namespace Dynamics.Crm.Plugins
                 stopwatch.Start();
                 Execute(context);
                 stopwatch.Stop();
-            }
-            catch (InvalidPluginExecutionException)
-            {
-                throw;
-            }
-            catch (FaultException<OrganizationServiceFault> e)
-            {
-                throw;
-            }
+            }            
             catch (Exception e)
             {
+                CreateLogEntry(context, e);
+
                 throw;
             }
         }
@@ -67,6 +63,23 @@ namespace Dynamics.Crm.Plugins
             {
                 context.EnsureTargetLogicalName(attributes.PrimaryEntityLogicalName);
             }
-        }        
+        }
+
+        protected virtual void CreateLogEntry(IPluginContext context, Exception exception)
+        {
+            var repository = new LogEntryRepository(context);
+
+            var entry = new LogEntry
+            {
+                Description = exception.ToString(),
+                Message = exception.Message,
+                Name = GetType().FullName,
+                Source = "Plugin",
+                Type = LogEntryType.Error,
+                User = new EntityReference(Schema.SystemUserEntity.TypeName, context.ExecutionContext.InitiatingUserId)
+            };
+
+            repository.Create(entry);
+        }
     }
 }

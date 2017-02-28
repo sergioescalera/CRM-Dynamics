@@ -116,6 +116,9 @@
     <None Include="bundleconfig.json" />
     <Content Include="Libs\bootstrap\config.json" />
     <Content Include="packages.config" />
+    <Content Include="Libs\bootstrap\js\bootstrap.min.js.map">
+      <DependentUpon>bootstrap.min.js</DependentUpon>
+    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

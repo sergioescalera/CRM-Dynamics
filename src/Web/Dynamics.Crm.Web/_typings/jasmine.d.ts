@@ -2,7 +2,7 @@
 declare var it: (specTitle: string, spec: () => void) => void;
 declare var expect: (actual) => IExpectation;
 interface IExpectation {
-    toBe(expected): void;
+    toBe(expected: any): void;
     toBeNull(): void;
     toEqual(expected: any): void;
     not: IExpectation;

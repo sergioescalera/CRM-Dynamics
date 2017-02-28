@@ -27,6 +27,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Concurrency\EntityExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\Enums.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\Messages.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\LogEntryRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Repository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Schema.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Diagnostics\Debug.cs" />
@@ -48,11 +49,14 @@
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IAddress.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\ICodeActivityContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\ILogEntryRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IWorkflowActivityContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IPluginContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Address.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Enums.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\LogEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\LogEntryType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Plugins\PluginBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Plugins\PluginContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Validation\ValidationHelper.cs" />

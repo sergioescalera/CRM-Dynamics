@@ -12,7 +12,7 @@ namespace Dynamics.Crm.Data
     {
         private EntityMetadata _metadata;
 
-        protected IPluginContext Local
+        protected IPluginContext PluginContext
         {
             get;
             private set;
@@ -30,28 +30,28 @@ namespace Dynamics.Crm.Data
             private set;
         }
 
-        protected abstract string EntityName
+        protected abstract String EntityName
         {
             get;
         }
         
-        public Repository(IPluginContext local, OrganizationServiceContext context)
+        public Repository(IPluginContext pluginContext, OrganizationServiceContext context)
         {
-            if (local == null)
-                throw new ArgumentNullException(nameof(local));
+            if (pluginContext == null)
+                throw new ArgumentNullException(nameof(pluginContext));
 
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
 
-            Local = local;
-            Service = local.OrganizationService;
+            PluginContext = pluginContext;
+            Service = pluginContext.OrganizationService;
             Context = context;
         }
 
         public virtual void Create(Entity entity)
         {
             if (entity == null)
-                throw new ArgumentNullException("entity");
+                throw new ArgumentNullException(nameof(entity));
 
             if (Context.IsAttached(entity) || Context.IsDeleted(entity))
                 throw new InvalidOperationException();
@@ -73,7 +73,7 @@ namespace Dynamics.Crm.Data
         public virtual void Delete(Entity entity)
         {
             if (entity == null)
-                throw new ArgumentNullException("entity");
+                throw new ArgumentNullException(nameof(entity));
 
             Attach(entity);
 
@@ -83,7 +83,7 @@ namespace Dynamics.Crm.Data
         public virtual void Update(Entity entity)
         {
             if (entity == null)
-                throw new ArgumentNullException("entity");
+                throw new ArgumentNullException(nameof(entity));
 
             Attach(entity);
 

@@ -6,19 +6,22 @@
       "Widgets/MetadataBrowser/Scripts/Config.js",
       "Widgets/MetadataBrowser/Scripts/Core.js",
       "Widgets/MetadataBrowser/Scripts/Controllers.js"
-    ]
+    ],
+    "sourceMap": false
   },
   {
     "outputFileName": "Scripts/Libs/SDK.MetaData.min.js",
     "inputFiles": [
       "Scripts/Libs/SDK.MetaData.js"
-    ]
+    ],
+    "sourceMap": false
   },
   {
     "outputFileName": "Scripts/Dynamics.Crm.Forms.js",
     "inputFiles": [
       "Core/*.js"
-    ]
+    ],
+    "sourceMap": false
   },
   {
     "outputFileName": "Scripts/Dynamics.Crm.Dialogs.js",
@@ -26,18 +29,21 @@
       "Core/Constants.js",
       "Core/ScriptManager.js",
       "Dialogs/*.js"
-    ]
+    ],
+    "sourceMap": false
   },
   {
     "outputFileName": "Libs/bootstrap/css/bootstrap.min.css",
     "inputFiles": [
       "Libs/bootstrap/css/bootstrap.css"
-    ]
+    ],
+    "sourceMap": false
   },
   {
     "outputFileName": "Libs/bootstrap/js/bootstrap.min.js",
     "inputFiles": [
       "Libs/bootstrap/js/bootstrap.js"
-    ]
+    ],
+    "sourceMap": false
   }
 ]
