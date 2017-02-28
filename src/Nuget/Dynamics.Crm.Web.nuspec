@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Dynamics.Crm.Web</id>
+    <version>1.0.1</version>
+    <authors>Sergio Escalera</authors>
+    <owners>Sergio Escalera</owners>    
+    <projectUrl>https://github.com/sergioescalera/CRM-Dynamics/</projectUrl>    
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <title>CRM Dynamics Resources</title>
+    <description>CRM Dynamics Web Resources</description>
+    <tags>CRM Dynamics Forms JavaScript</tags>    
+  </metadata>
+  <files>
+    <file src="..\Web\Dynamics.Crm.Web\Scripts\Dynamics.Crm.Dialogs.js" target="content\Scripts" />
+    <file src="..\Web\Dynamics.Crm.Web\Scripts\Dynamics.Crm.Dialogs.min.js" target="content\Scripts" />
+    <file src="..\Web\Dynamics.Crm.Web\Scripts\Dynamics.Crm.Forms.js" target="content\Scripts" />
+    <file src="..\Web\Dynamics.Crm.Web\Scripts\Dynamics.Crm.Forms.min.js" target="content\Scripts" />
+  </files>
+</package>
