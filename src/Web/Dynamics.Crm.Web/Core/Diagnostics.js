@@ -5,9 +5,6 @@ var Dynamics;
         var Diagnostics;
         (function (Diagnostics) {
             "use strict";
-            Diagnostics.debug = true;
-            Diagnostics.trace = true;
-            Diagnostics.log = new ConsoleLogger();
             var ConsoleLogger = (function () {
                 function ConsoleLogger() {
                 }
@@ -57,7 +54,10 @@ var Dynamics;
                 console.log("}");
             }
             Diagnostics.printArguments = printArguments;
+            // variables
+            Diagnostics.debug = true;
+            Diagnostics.trace = true;
+            Diagnostics.log = new ConsoleLogger();
         })(Diagnostics = Crm.Diagnostics || (Crm.Diagnostics = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Diagnostics.js.map

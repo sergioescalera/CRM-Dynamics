@@ -8,7 +8,7 @@
         entityId?: string,
         width: number = 800,
         height: number = 600,
-        modal: string = "yes") {
+        modal: string = "yes"): void {
 
         var url = getUrl(dialogId, entityName, entityId);
 
@@ -23,7 +23,7 @@
     export function getUrl(
         dialogId: string,
         entityName: string = Xrm.Page.data.entity.getEntityName(),
-        entityId: string = Xrm.Page.data.entity.getId()) {
+        entityId: string = Xrm.Page.data.entity.getId()): string {
 
         var url = Xrm.Page.context.getClientUrl() +
             "/cs/dialog/rundialog.aspx?DialogId={dialogId}&EntityName={type}&ObjectId={id}"

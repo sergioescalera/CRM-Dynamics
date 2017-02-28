@@ -2,10 +2,6 @@
 
     "use strict";
 
-    export var debug: boolean = true;
-    export var trace: boolean = true;
-    export var log: ILogger = new ConsoleLogger();
-
     export interface IError extends Error {
         description?: string;
         stack?: string;
@@ -32,12 +28,12 @@
                 " - Message: {errorMessage}" +
                 " - Stack: {stackTrace}" +
                 " - Description: {errorDescription}"
-                .replace("{entityName}", entityName)
-                .replace("{message}", message)
-                .replace("{errorMessage}", error.message)
-                .replace("{errorName}", error.name)
-                .replace("{stackTrace}", error.stack || "<NoStackTrace>")
-                .replace("{errorDescription}", error.description || "<NoDescription>");
+                    .replace("{entityName}", entityName)
+                    .replace("{message}", message)
+                    .replace("{errorMessage}", error.message)
+                    .replace("{errorName}", error.name)
+                    .replace("{stackTrace}", error.stack || "<NoStackTrace>")
+                    .replace("{errorDescription}", error.description || "<NoDescription>");
 
             console.error(output);
         }
@@ -48,7 +44,7 @@
         }
     }
 
-    function getEntityName() {
+    function getEntityName(): string {
 
         try {
 
@@ -64,7 +60,7 @@
 
     // trace arguments
 
-    export function printArguments(...args: any[]) {
+    export function printArguments(...args: any[]): void {
 
         console.log("Function " + arguments[0] + " called with arguments: {");
         for (var i = 1; i < arguments.length; i++) {
@@ -72,4 +68,11 @@
         }
         console.log("}");
     }
+
+    // variables
+
+    export var debug: boolean = true;
+    export var trace: boolean = true;
+
+    export var log: ILogger = new ConsoleLogger();
 }

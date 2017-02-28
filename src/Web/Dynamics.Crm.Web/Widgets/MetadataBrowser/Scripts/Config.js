@@ -9,4 +9,3 @@ var MetadataBrower;
         ]);
     })(Config = MetadataBrower.Config || (MetadataBrower.Config = {}));
 })(MetadataBrower || (MetadataBrower = {}));
-//# sourceMappingURL=Config.js.map

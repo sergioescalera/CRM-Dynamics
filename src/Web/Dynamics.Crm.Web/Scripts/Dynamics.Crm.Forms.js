@@ -123,12 +123,12 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Attributes.js.map
+
 var Dynamics;
 (function (Dynamics) {
     var Crm;
     (function (Crm) {
-        Crm.publisherPrefix = "ts4_";
+        Crm.publisherPrefix = "sib_";
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
 var Dynamics;
@@ -168,7 +168,7 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Constants.js.map
+
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -270,7 +270,7 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Controls.js.map
+
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -278,9 +278,6 @@ var Dynamics;
         var Diagnostics;
         (function (Diagnostics) {
             "use strict";
-            Diagnostics.debug = true;
-            Diagnostics.trace = true;
-            Diagnostics.log = new ConsoleLogger();
             var ConsoleLogger = (function () {
                 function ConsoleLogger() {
                 }
@@ -330,10 +327,14 @@ var Dynamics;
                 console.log("}");
             }
             Diagnostics.printArguments = printArguments;
+            // variables
+            Diagnostics.debug = true;
+            Diagnostics.trace = true;
+            Diagnostics.log = new ConsoleLogger();
         })(Diagnostics = Crm.Diagnostics || (Crm.Diagnostics = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Diagnostics.js.map
+
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -366,7 +367,7 @@ var Dynamics;
         })(Dialogs = Crm.Dialogs || (Crm.Dialogs = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Dialogs.js.map
+
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -391,7 +392,7 @@ var Dynamics;
         })(Core = Crm.Core || (Crm.Core = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Entity.js.map
+
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -420,7 +421,7 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Enums.js.map
+
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -462,7 +463,7 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Forms.js.map
+
 
 var Dynamics;
 (function (Dynamics) {
@@ -520,7 +521,7 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Navigation.js.map
+
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -548,7 +549,7 @@ var Dynamics;
         })(Reports = Crm.Reports || (Crm.Reports = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Reports.js.map
+
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -601,7 +602,7 @@ var Dynamics;
         })(ScriptManager = Crm.ScriptManager || (Crm.ScriptManager = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=ScriptManager.js.map
+
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -633,7 +634,7 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Sections.js.map
+
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -725,4 +726,45 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Tabs.js.map
+
+var Dynamics;
+(function (Dynamics) {
+    var Crm;
+    (function (Crm) {
+        var Tasks;
+        (function (Tasks) {
+            "use strict";
+            function execute(tasks, config) {
+                if (config === void 0) { config = {}; }
+                var results = [];
+                if (!Array.isArray(tasks)) {
+                    console.warn("Tasks.run: Invalid argument. An array was expected.");
+                }
+                else {
+                    for (var i = 0; i < tasks.length; i++) {
+                        var task = tasks[i];
+                        try {
+                            var result = task();
+                            results.push(result);
+                            if (!config.executeAll && !!result) {
+                                return results;
+                            }
+                        }
+                        catch (e) {
+                            Crm.Diagnostics.log.Error("Tasks.execute:{taskName}".replace("{taskName}", getTaskName(task)), e);
+                            results.push(e);
+                            if (!config.continueOnError) {
+                                return results;
+                            }
+                        }
+                    }
+                }
+                return results;
+            }
+            Tasks.execute = execute;
+            function getTaskName(task) {
+                return "";
+            }
+        })(Tasks = Crm.Tasks || (Crm.Tasks = {}));
+    })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
+})(Dynamics || (Dynamics = {}));

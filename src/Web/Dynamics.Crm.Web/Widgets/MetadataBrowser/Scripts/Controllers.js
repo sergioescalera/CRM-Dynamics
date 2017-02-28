@@ -210,4 +210,3 @@ var MetadataBrower;
             .directive("tsPropertyBrowser", propertyBrowser);
     })(Controllers = MetadataBrower.Controllers || (MetadataBrower.Controllers = {}));
 })(MetadataBrower || (MetadataBrower = {}));
-//# sourceMappingURL=Controllers.js.map

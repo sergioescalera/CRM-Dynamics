@@ -1,6 +1,6 @@
 ﻿module Dynamics.Crm {
 
-    export var publisherPrefix = "ts4_"
+    export var publisherPrefix = "sib_"
 }
 
 module Dynamics.Crm.Forms {

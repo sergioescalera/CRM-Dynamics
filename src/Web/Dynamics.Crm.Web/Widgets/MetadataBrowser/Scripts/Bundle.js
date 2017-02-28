@@ -152,7 +152,7 @@ var Dynamics;
         })(OData = Crm.OData || (Crm.OData = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=OData.js.map
+
 var MetadataBrower;
 (function (MetadataBrower) {
     var Config;
@@ -164,7 +164,7 @@ var MetadataBrower;
         ]);
     })(Config = MetadataBrower.Config || (MetadataBrower.Config = {}));
 })(MetadataBrower || (MetadataBrower = {}));
-//# sourceMappingURL=Config.js.map
+
 var MetadataBrower;
 (function (MetadataBrower) {
     var Core;
@@ -250,7 +250,7 @@ var MetadataBrower;
             .factory("metadataBrowser.core.navigationService", [NavigationServiceFactory]);
     })(Core = MetadataBrower.Core || (MetadataBrower.Core = {}));
 })(MetadataBrower || (MetadataBrower = {}));
-//# sourceMappingURL=Core.js.map
+
 var MetadataBrower;
 (function (MetadataBrower) {
     var Controllers;
@@ -463,4 +463,3 @@ var MetadataBrower;
             .directive("tsPropertyBrowser", propertyBrowser);
     })(Controllers = MetadataBrower.Controllers || (MetadataBrower.Controllers = {}));
 })(MetadataBrower || (MetadataBrower = {}));
-//# sourceMappingURL=Controllers.js.map

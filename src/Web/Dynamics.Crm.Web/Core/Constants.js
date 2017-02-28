@@ -2,7 +2,7 @@ var Dynamics;
 (function (Dynamics) {
     var Crm;
     (function (Crm) {
-        Crm.publisherPrefix = "ts4_";
+        Crm.publisherPrefix = "sib_";
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
 var Dynamics;
@@ -42,4 +42,3 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Constants.js.map

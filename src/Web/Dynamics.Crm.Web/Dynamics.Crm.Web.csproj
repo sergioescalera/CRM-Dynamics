@@ -64,6 +64,8 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\jasmine\jasmine.css" />
+    <Content Include="Content\jasmine\jasmine_favicon.png" />
     <Content Include="Libs\bootstrap\css\bootstrap-theme.css" />
     <Content Include="Libs\bootstrap\css\bootstrap.css" />
     <Content Include="Libs\bootstrap\css\bootstrap.min.css">
@@ -84,6 +86,11 @@
     <Content Include="Libs\lodash\lodash.core.js" />
     <Content Include="Libs\lodash\lodash.js" />
     <Content Include="Libs\moment\moment.js" />
+    <Content Include="Scripts\jasmine\boot.js" />
+    <Content Include="Scripts\jasmine\console.js" />
+    <Content Include="Scripts\jasmine\jasmine-html.js" />
+    <Content Include="Scripts\jasmine\jasmine.js" />
+    <Content Include="UnitTests\Index.html" />
     <Content Include="Web.config" />
     <Content Include="Widgets\MetadataBrowser\Html\config.html" />
     <Content Include="Widgets\MetadataBrowser\Html\main.html" />
@@ -108,6 +115,7 @@
   <ItemGroup>
     <None Include="bundleconfig.json" />
     <Content Include="Libs\bootstrap\config.json" />
+    <Content Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -129,14 +137,17 @@
     <TypeScriptCompile Include="Core\ScriptManager.ts" />
     <TypeScriptCompile Include="Core\Sections.ts" />
     <TypeScriptCompile Include="Core\Tabs.ts" />
+    <TypeScriptCompile Include="Core\Tasks.ts" />
     <TypeScriptCompile Include="Data\OData.ts" />
     <TypeScriptCompile Include="Dialogs\BootstrapDialogs.ts" />
     <TypeScriptCompile Include="Dialogs\Dialogs.ts" />
+    <TypeScriptCompile Include="UnitTests\TasksUnitTests.ts" />
     <TypeScriptCompile Include="Widgets\MetadataBrowser\Scripts\Config.ts" />
     <TypeScriptCompile Include="Widgets\MetadataBrowser\Scripts\Controllers.ts" />
     <TypeScriptCompile Include="Widgets\MetadataBrowser\Scripts\Core.ts" />
     <TypeScriptCompile Include="_typings\angular.d.ts" />
     <TypeScriptCompile Include="_typings\bootstrap.d.ts" />
+    <TypeScriptCompile Include="_typings\jasmine.d.ts" />
     <TypeScriptCompile Include="_typings\jquery.d.ts" />
     <TypeScriptCompile Include="_typings\lodash.d.ts" />
     <TypeScriptCompile Include="_typings\moment.d.ts" />
