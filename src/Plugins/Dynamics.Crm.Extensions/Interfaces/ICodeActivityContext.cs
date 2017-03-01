@@ -1,4 +1,5 @@
-﻿using System.Activities;
+﻿#if WORKFLOWS
+using System.Activities;
 
 namespace Dynamics.Crm.Interfaces
 {
@@ -9,3 +10,4 @@ namespace Dynamics.Crm.Interfaces
         CodeActivityContext InnerContext { get; }
     }
 }
+#endif

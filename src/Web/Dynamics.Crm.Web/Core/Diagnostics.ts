@@ -44,7 +44,7 @@
             if (debug) {
                 debugger;
             }
-
+            
             var entry = createLogEntry(message, error);
 
             console.error(entry);

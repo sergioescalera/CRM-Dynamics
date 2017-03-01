@@ -1,4 +1,5 @@
-﻿using Microsoft.Xrm.Sdk;
+﻿#if WORKFLOWS
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Workflow;
 using System.Activities;
 
@@ -13,3 +14,4 @@ namespace Dynamics.Crm.Interfaces
         IWorkflowContext WorkflowContext { get; }
     }
 }
+#endif

@@ -75,8 +75,7 @@ namespace Dynamics.Crm.Plugins
                 Message = exception.Message,
                 Name = GetType().FullName,
                 Source = "Plugin",
-                Type = LogEntryType.Error,
-                User = new EntityReference(Schema.SystemUserEntity.TypeName, context.ExecutionContext.InitiatingUserId)
+                Type = LogEntryType.Error                
             };
 
             repository.Create(entry);

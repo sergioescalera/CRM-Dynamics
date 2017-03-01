@@ -1,8 +1,8 @@
-﻿using Dynamics.Crm.Interfaces;
+﻿#if WORKFLOWS
+using Dynamics.Crm.Interfaces;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Workflow;
 using System;
-using System.Activities;
 
 namespace Dynamics.Crm.Activities
 {
@@ -48,3 +48,4 @@ namespace Dynamics.Crm.Activities
         }
     }
 }
+#endif

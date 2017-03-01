@@ -1,4 +1,5 @@
-﻿using Dynamics.Crm.Interfaces;
+﻿#if WORKFLOWS
+using Dynamics.Crm.Interfaces;
 using System.Activities;
 
 namespace Dynamics.Crm.Extensions
@@ -11,3 +12,4 @@ namespace Dynamics.Crm.Extensions
         }
     }
 }
+#endif

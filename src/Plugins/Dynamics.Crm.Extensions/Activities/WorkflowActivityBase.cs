@@ -1,8 +1,9 @@
-﻿using Dynamics.Crm.Interfaces;
+﻿#if WORKFLOWS
+using Dynamics.Crm.Interfaces;
+using Microsoft.Xrm.Sdk;
+using System;
 using System.Activities;
 using System.Diagnostics;
-using System;
-using Microsoft.Xrm.Sdk;
 using System.ServiceModel;
 
 namespace Dynamics.Crm.Activities
@@ -43,3 +44,4 @@ namespace Dynamics.Crm.Activities
         }
     }
 }
+#endif

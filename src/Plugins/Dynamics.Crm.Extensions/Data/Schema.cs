@@ -94,7 +94,7 @@ namespace Dynamics.Crm.Data
 
         public static class LogEntryEntity
         {
-            public static readonly String TypeName = $"{publisherPrefix}logentry";
+            public const String TypeName = publisherPrefix + "logentry";
 
             public static readonly String IdFieldName = $"{publisherPrefix}logentryid";
 
