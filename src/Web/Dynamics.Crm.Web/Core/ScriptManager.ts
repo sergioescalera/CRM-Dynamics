@@ -16,7 +16,7 @@
 
     export function loadScript(
         script: string,
-        document: Document): JQueryPromise<void> {
+        document: Document = window.document): JQueryPromise<void> {
 
         console.log("Dynamics.Crm.ScriptManager.loadScript: " + script);
 
@@ -52,7 +52,7 @@
 
     export function loadStylesheet(
         stylesheet: string,
-        document: Document): void {
+        document: Document = window.document): void {
 
         console.log("Dynamics.Crm.ScriptManager.loadStylesheet: " + stylesheet);
 

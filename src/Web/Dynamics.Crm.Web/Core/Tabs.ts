@@ -37,7 +37,7 @@
         }
     }
 
-    export function setVisible(tabNames: string[], value: boolean) {
+    export function setVisible(tabNames: string[], value: boolean): void {
 
         if (Diagnostics.trace) {
             Diagnostics.printArguments("Tabs.setVisible", tabNames, value);
@@ -76,7 +76,7 @@
         }
     }
 
-    export function expandCollapse(tabNames: string[], value: boolean) {
+    export function expandCollapse(tabNames: string[], value: boolean): void {
 
         if (Diagnostics.trace) {
             Diagnostics.printArguments("Tabs.expandCollapse", tabNames, value);

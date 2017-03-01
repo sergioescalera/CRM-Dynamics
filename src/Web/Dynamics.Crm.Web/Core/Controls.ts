@@ -23,17 +23,17 @@
 
     // enable / disable
 
-    export function disable(attributeNames: string[], all: boolean = true): void {
+    export function disable(attributeNames: string[], applyToAll: boolean = true): void {
 
-        setDisabled(attributeNames, true, all);
+        setDisabled(attributeNames, true, applyToAll);
     }
 
-    export function enable(attributeNames: string[], all: boolean = true): void {
+    export function enable(attributeNames: string[], applyToAll: boolean = true): void {
 
-        setDisabled(attributeNames, false, all);
+        setDisabled(attributeNames, false, applyToAll);
     }
 
-    export function setDisabled(attributeNames: string[], disabled: boolean, all: boolean): void {
+    export function setDisabled(attributeNames: string[], disabled: boolean, applyToAll: boolean = true): void {
 
         if (Diagnostics.trace) {
             Diagnostics.printArguments("setDisabled", attributeNames, disabled);
@@ -43,7 +43,7 @@
 
             for (var i = 0; i < attributeNames.length; i++) {
 
-                if (all) {
+                if (applyToAll) {
 
                     var attribute = Attributes.get(attributeNames[i], false);
 
@@ -83,7 +83,7 @@
         }
     }
 
-    function setVisible(attributeNames: string[], value: boolean, all: boolean) {
+    export function setVisible(attributeNames: string[], value: boolean, applyToAll: boolean = true) {
 
         Diagnostics.printArguments("setDisabled", attributeNames, value);
 
@@ -91,7 +91,7 @@
 
             for (var i = 0; i < attributeNames.length; i++) {
 
-                if (all) {
+                if (applyToAll) {
                     var attribute = Attributes.get(attributeNames[i], false);
 
                     if (attribute) {

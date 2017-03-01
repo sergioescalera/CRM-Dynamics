@@ -7,6 +7,9 @@ var Dynamics;
             "use strict";
             function execute(tasks, config) {
                 if (config === void 0) { config = {}; }
+                if (Crm.Diagnostics.trace) {
+                    Crm.Diagnostics.printArguments("Tasks.execute", tasks, config);
+                }
                 var results = [];
                 if (!Array.isArray(tasks)) {
                     console.warn("Tasks.run: Invalid argument. An array was expected.");

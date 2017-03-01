@@ -22,23 +22,24 @@ var Dynamics;
                 }
                 Controls.get = get;
                 // enable / disable
-                function disable(attributeNames, all) {
-                    if (all === void 0) { all = true; }
-                    setDisabled(attributeNames, true, all);
+                function disable(attributeNames, applyToAll) {
+                    if (applyToAll === void 0) { applyToAll = true; }
+                    setDisabled(attributeNames, true, applyToAll);
                 }
                 Controls.disable = disable;
-                function enable(attributeNames, all) {
-                    if (all === void 0) { all = true; }
-                    setDisabled(attributeNames, false, all);
+                function enable(attributeNames, applyToAll) {
+                    if (applyToAll === void 0) { applyToAll = true; }
+                    setDisabled(attributeNames, false, applyToAll);
                 }
                 Controls.enable = enable;
-                function setDisabled(attributeNames, disabled, all) {
+                function setDisabled(attributeNames, disabled, applyToAll) {
+                    if (applyToAll === void 0) { applyToAll = true; }
                     if (Crm.Diagnostics.trace) {
                         Crm.Diagnostics.printArguments("setDisabled", attributeNames, disabled);
                     }
                     if (Array.isArray(attributeNames)) {
                         for (var i = 0; i < attributeNames.length; i++) {
-                            if (all) {
+                            if (applyToAll) {
                                 var attribute = Forms.Attributes.get(attributeNames[i], false);
                                 if (attribute) {
                                     attribute.controls.forEach(function (c) { return c.setDisabled(disabled); });
@@ -72,11 +73,12 @@ var Dynamics;
                     }
                 }
                 Controls.hide = hide;
-                function setVisible(attributeNames, value, all) {
+                function setVisible(attributeNames, value, applyToAll) {
+                    if (applyToAll === void 0) { applyToAll = true; }
                     Crm.Diagnostics.printArguments("setDisabled", attributeNames, value);
                     if (Array.isArray(attributeNames)) {
                         for (var i = 0; i < attributeNames.length; i++) {
-                            if (all) {
+                            if (applyToAll) {
                                 var attribute = Forms.Attributes.get(attributeNames[i], false);
                                 if (attribute) {
                                     attribute.controls.forEach(function (c) { return c.setVisible(value); });
@@ -95,6 +97,7 @@ var Dynamics;
                         console.log(attributeNames);
                     }
                 }
+                Controls.setVisible = setVisible;
             })(Controls = Forms.Controls || (Forms.Controls = {}));
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));

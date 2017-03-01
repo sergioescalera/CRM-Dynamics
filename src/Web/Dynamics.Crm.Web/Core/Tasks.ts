@@ -9,6 +9,10 @@
 
     export function execute(tasks: (() => boolean)[], config: ITasksConfig = {}): any[] {
 
+        if (Diagnostics.trace) {
+            Diagnostics.printArguments("Tasks.execute", tasks, config);
+        }
+
         var results: any[] = [];
 
         if (!Array.isArray(tasks)) {

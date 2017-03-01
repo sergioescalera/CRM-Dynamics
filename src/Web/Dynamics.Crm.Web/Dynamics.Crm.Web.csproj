@@ -150,6 +150,7 @@
     <TypeScriptCompile Include="Widgets\MetadataBrowser\Scripts\Core.ts" />
     <TypeScriptCompile Include="_typings\angular.d.ts" />
     <TypeScriptCompile Include="_typings\bootstrap.d.ts" />
+    <TypeScriptCompile Include="_typings\Dynamics.Crm.Forms.d.ts" />
     <TypeScriptCompile Include="_typings\jasmine.d.ts" />
     <TypeScriptCompile Include="_typings\jquery.d.ts" />
     <TypeScriptCompile Include="_typings\lodash.d.ts" />

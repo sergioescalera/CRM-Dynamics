@@ -7,7 +7,7 @@
         reportId: string,
         entityId: string = null,
         entityCode: string = null,
-        action: string = "run") {
+        action: string = "run"): string {
 
         var url = Xrm.Page.context.getClientUrl();
 

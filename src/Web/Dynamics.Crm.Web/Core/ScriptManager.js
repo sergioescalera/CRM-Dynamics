@@ -14,6 +14,7 @@ var Dynamics;
             }
             ScriptManager.loadScripts = loadScripts;
             function loadScript(script, document) {
+                if (document === void 0) { document = window.document; }
                 console.log("Dynamics.Crm.ScriptManager.loadScript: " + script);
                 var promise = _scripts[script];
                 if (!!promise) {
@@ -37,6 +38,7 @@ var Dynamics;
             }
             ScriptManager.loadStylesheets = loadStylesheets;
             function loadStylesheet(stylesheet, document) {
+                if (document === void 0) { document = window.document; }
                 console.log("Dynamics.Crm.ScriptManager.loadStylesheet: " + stylesheet);
                 var filter = _stylesheets.filter(function (s) { return s === stylesheet; });
                 if (filter.length === 0) {

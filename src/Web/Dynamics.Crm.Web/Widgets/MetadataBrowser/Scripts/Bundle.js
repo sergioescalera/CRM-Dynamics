@@ -117,6 +117,20 @@ var Dynamics;
                 });
             }
             OData.deleteEntity = deleteEntity;
+            function createEntity(entity) {
+                var baseUrl = getContext().getClientUrl();
+                var url = "{0}/api/data/v8.1/{1}"
+                    .replace("{0}", baseUrl)
+                    .replace("{1}", entitySetName(entity.type));
+                return $
+                    .ajax({
+                    url: url,
+                    dataType: "json",
+                    type: "POST",
+                    data: entity.attributes
+                });
+            }
+            OData.createEntity = createEntity;
             // meta-data
             function entityDefinitions() {
                 var baseUrl = getContext().getClientUrl();
@@ -152,7 +166,7 @@ var Dynamics;
         })(OData = Crm.OData || (Crm.OData = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
+//# sourceMappingURL=OData.js.map
 var MetadataBrower;
 (function (MetadataBrower) {
     var Config;
@@ -164,7 +178,7 @@ var MetadataBrower;
         ]);
     })(Config = MetadataBrower.Config || (MetadataBrower.Config = {}));
 })(MetadataBrower || (MetadataBrower = {}));
-
+//# sourceMappingURL=Config.js.map
 var MetadataBrower;
 (function (MetadataBrower) {
     var Core;
@@ -250,7 +264,7 @@ var MetadataBrower;
             .factory("metadataBrowser.core.navigationService", [NavigationServiceFactory]);
     })(Core = MetadataBrower.Core || (MetadataBrower.Core = {}));
 })(MetadataBrower || (MetadataBrower = {}));
-
+//# sourceMappingURL=Core.js.map
 var MetadataBrower;
 (function (MetadataBrower) {
     var Controllers;
@@ -463,3 +477,4 @@ var MetadataBrower;
             .directive("tsPropertyBrowser", propertyBrowser);
     })(Controllers = MetadataBrower.Controllers || (MetadataBrower.Controllers = {}));
 })(MetadataBrower || (MetadataBrower = {}));
+//# sourceMappingURL=Controllers.js.map

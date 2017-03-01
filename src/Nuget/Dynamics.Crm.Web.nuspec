@@ -16,5 +16,6 @@
     <file src="..\Web\Dynamics.Crm.Web\Scripts\Dynamics.Crm.Dialogs.min.js" target="content\Scripts" />
     <file src="..\Web\Dynamics.Crm.Web\Scripts\Dynamics.Crm.Forms.js" target="content\Scripts" />
     <file src="..\Web\Dynamics.Crm.Web\Scripts\Dynamics.Crm.Forms.min.js" target="content\Scripts" />
+    <file src="..\Web\Dynamics.Crm.Web\_typings\Dynamics.Crm.Forms.d.js" target="content\_typings" />
   </files>
 </package>

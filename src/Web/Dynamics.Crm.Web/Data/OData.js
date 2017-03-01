@@ -117,6 +117,20 @@ var Dynamics;
                 });
             }
             OData.deleteEntity = deleteEntity;
+            function createEntity(entity) {
+                var baseUrl = getContext().getClientUrl();
+                var url = "{0}/api/data/v8.1/{1}"
+                    .replace("{0}", baseUrl)
+                    .replace("{1}", entitySetName(entity.type));
+                return $
+                    .ajax({
+                    url: url,
+                    dataType: "json",
+                    type: "POST",
+                    data: entity.attributes
+                });
+            }
+            OData.createEntity = createEntity;
             // meta-data
             function entityDefinitions() {
                 var baseUrl = getContext().getClientUrl();

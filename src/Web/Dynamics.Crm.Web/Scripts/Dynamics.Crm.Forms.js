@@ -193,23 +193,24 @@ var Dynamics;
                 }
                 Controls.get = get;
                 // enable / disable
-                function disable(attributeNames, all) {
-                    if (all === void 0) { all = true; }
-                    setDisabled(attributeNames, true, all);
+                function disable(attributeNames, applyToAll) {
+                    if (applyToAll === void 0) { applyToAll = true; }
+                    setDisabled(attributeNames, true, applyToAll);
                 }
                 Controls.disable = disable;
-                function enable(attributeNames, all) {
-                    if (all === void 0) { all = true; }
-                    setDisabled(attributeNames, false, all);
+                function enable(attributeNames, applyToAll) {
+                    if (applyToAll === void 0) { applyToAll = true; }
+                    setDisabled(attributeNames, false, applyToAll);
                 }
                 Controls.enable = enable;
-                function setDisabled(attributeNames, disabled, all) {
+                function setDisabled(attributeNames, disabled, applyToAll) {
+                    if (applyToAll === void 0) { applyToAll = true; }
                     if (Crm.Diagnostics.trace) {
                         Crm.Diagnostics.printArguments("setDisabled", attributeNames, disabled);
                     }
                     if (Array.isArray(attributeNames)) {
                         for (var i = 0; i < attributeNames.length; i++) {
-                            if (all) {
+                            if (applyToAll) {
                                 var attribute = Forms.Attributes.get(attributeNames[i], false);
                                 if (attribute) {
                                     attribute.controls.forEach(function (c) { return c.setDisabled(disabled); });
@@ -243,11 +244,12 @@ var Dynamics;
                     }
                 }
                 Controls.hide = hide;
-                function setVisible(attributeNames, value, all) {
+                function setVisible(attributeNames, value, applyToAll) {
+                    if (applyToAll === void 0) { applyToAll = true; }
                     Crm.Diagnostics.printArguments("setDisabled", attributeNames, value);
                     if (Array.isArray(attributeNames)) {
                         for (var i = 0; i < attributeNames.length; i++) {
-                            if (all) {
+                            if (applyToAll) {
                                 var attribute = Forms.Attributes.get(attributeNames[i], false);
                                 if (attribute) {
                                     attribute.controls.forEach(function (c) { return c.setVisible(value); });
@@ -266,6 +268,7 @@ var Dynamics;
                         console.log(attributeNames);
                     }
                 }
+                Controls.setVisible = setVisible;
             })(Controls = Forms.Controls || (Forms.Controls = {}));
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
@@ -566,6 +569,7 @@ var Dynamics;
             }
             ScriptManager.loadScripts = loadScripts;
             function loadScript(script, document) {
+                if (document === void 0) { document = window.document; }
                 console.log("Dynamics.Crm.ScriptManager.loadScript: " + script);
                 var promise = _scripts[script];
                 if (!!promise) {
@@ -589,6 +593,7 @@ var Dynamics;
             }
             ScriptManager.loadStylesheets = loadStylesheets;
             function loadStylesheet(stylesheet, document) {
+                if (document === void 0) { document = window.document; }
                 console.log("Dynamics.Crm.ScriptManager.loadStylesheet: " + stylesheet);
                 var filter = _stylesheets.filter(function (s) { return s === stylesheet; });
                 if (filter.length === 0) {
@@ -630,6 +635,42 @@ var Dynamics;
                     return null;
                 }
                 Sections.get = get;
+                function show(names, condition) {
+                    if (condition === void 0) { condition = true; }
+                    if (condition) {
+                        setVisible(names, true);
+                    }
+                }
+                Sections.show = show;
+                function hide(names, condition) {
+                    if (condition === void 0) { condition = true; }
+                    if (condition) {
+                        setVisible(names, false);
+                    }
+                }
+                Sections.hide = hide;
+                function setVisible(names, value) {
+                    if (Crm.Diagnostics.trace) {
+                        Crm.Diagnostics.printArguments("Sections.setVisible", names, value);
+                    }
+                    if (Array.isArray(names)) {
+                        for (var i = 0; i < names.length; i++) {
+                            var name = names[i];
+                            var pair = name.split("|");
+                            var section;
+                            if (pair && pair.length === 2) {
+                                section = get(pair[0], pair[1], false);
+                            }
+                            if (section) {
+                                section.setVisible(value);
+                            }
+                        }
+                    }
+                    else {
+                        console.warn("Sections.setVisible: Invalid argument. An array was expected.");
+                    }
+                }
+                Sections.setVisible = setVisible;
             })(Sections = Forms.Sections || (Forms.Sections = {}));
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
@@ -736,6 +777,9 @@ var Dynamics;
             "use strict";
             function execute(tasks, config) {
                 if (config === void 0) { config = {}; }
+                if (Crm.Diagnostics.trace) {
+                    Crm.Diagnostics.printArguments("Tasks.execute", tasks, config);
+                }
                 var results = [];
                 if (!Array.isArray(tasks)) {
                     console.warn("Tasks.run: Invalid argument. An array was expected.");
