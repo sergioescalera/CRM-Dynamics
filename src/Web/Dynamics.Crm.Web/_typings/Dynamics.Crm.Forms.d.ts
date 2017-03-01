@@ -9,6 +9,7 @@ declare interface ICrmDynamics {
     Forms: ICrmForms;
     Reports: ICrmReports;
     ScriptManager: IScriptManager;
+    Tasks: ITasks;
 }
 
 declare interface ICrmCore {
@@ -126,6 +127,15 @@ declare interface IScriptManager {
     loadStylesheet(
         stylesheet: string,
         document?: Document): void
+}
+
+declare interface ITasks {
+    execute(tasks: (() => any)[], config?: ITasksConfig): any[];
+}
+
+declare interface ITasksConfig {
+    continueOnError?: boolean;
+    executeAll?: boolean;
 }
 
 declare interface IError extends Error {

@@ -56,7 +56,7 @@ var Dynamics;
                     attributes: {}
                 };
                 entry.attributes[Crm.componentName("name")] = message;
-                entry.attributes[Crm.componentName("message")] = message;
+                entry.attributes[Crm.componentName("message")] = message === error.message ? message : (message + error.message);
                 entry.attributes[Crm.componentName("description")] = description;
                 entry.attributes[Crm.componentName("source")] = source;
                 entry.attributes[Crm.componentName("type")] = Dynamics.Crm.Core.LogEntryType.Error;

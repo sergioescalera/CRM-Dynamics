@@ -79,9 +79,9 @@
             type: Dynamics.Crm.publisherPrefix + "logentry",
             attributes: {}
         };
-
+        
         entry.attributes[componentName("name")] = message;
-        entry.attributes[componentName("message")] = message;
+        entry.attributes[componentName("message")] = message === error.message ? message : (message + error.message);
         entry.attributes[componentName("description")] = description;
         entry.attributes[componentName("source")] = source;
         entry.attributes[componentName("type")] = Dynamics.Crm.Core.LogEntryType.Error;
