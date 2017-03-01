@@ -286,6 +286,8 @@ var Dynamics;
         var Diagnostics;
         (function (Diagnostics) {
             "use strict";
+            Diagnostics.debug = true;
+            Diagnostics.trace = true;
             var ConsoleLogger = (function () {
                 function ConsoleLogger() {
                 }
@@ -352,6 +354,14 @@ var Dynamics;
                     return "UnknownEntity";
                 }
             }
+            function useLogEntryLogger() {
+                Diagnostics.log = new LogEntryLogger();
+            }
+            Diagnostics.useLogEntryLogger = useLogEntryLogger;
+            function useConsoleLogger() {
+                Diagnostics.log = new ConsoleLogger();
+            }
+            Diagnostics.useConsoleLogger = useConsoleLogger;
             // trace arguments
             function printArguments() {
                 var args = [];
@@ -366,9 +376,7 @@ var Dynamics;
             }
             Diagnostics.printArguments = printArguments;
             // variables
-            Diagnostics.debug = true;
-            Diagnostics.trace = true;
-            Diagnostics.log = new LogEntryLogger();
+            useLogEntryLogger();
         })(Diagnostics = Crm.Diagnostics || (Crm.Diagnostics = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));

@@ -13,6 +13,11 @@
         Warning(message: string): void;
     }
 
+    export var debug: boolean = true;
+    export var trace: boolean = true;
+
+    export var log: ILogger;
+
     class ConsoleLogger implements ILogger {
 
         Error(message: string, error: IError): void {
@@ -44,7 +49,7 @@
             if (debug) {
                 debugger;
             }
-            
+
             var entry = createLogEntry(message, error);
 
             console.error(entry);
@@ -79,7 +84,7 @@
             type: Dynamics.Crm.publisherPrefix + "logentry",
             attributes: {}
         };
-        
+
         entry.attributes[componentName("name")] = message;
         entry.attributes[componentName("message")] = message === error.message ? message : (message + error.message);
         entry.attributes[componentName("description")] = description;
@@ -103,6 +108,16 @@
         }
     }
 
+    export function useLogEntryLogger(): void {
+
+        log = new LogEntryLogger();
+    }
+
+    export function useConsoleLogger(): void {
+
+        log = new ConsoleLogger();
+    }
+
     // trace arguments
 
     export function printArguments(...args: any[]): void {
@@ -116,8 +131,5 @@
 
     // variables
 
-    export var debug: boolean = true;
-    export var trace: boolean = true;
-
-    export var log: ILogger = new LogEntryLogger();
+    useLogEntryLogger();
 }

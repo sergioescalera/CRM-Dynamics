@@ -91,6 +91,10 @@
     <Content Include="Scripts\jasmine\console.js" />
     <Content Include="Scripts\jasmine\jasmine-html.js" />
     <Content Include="Scripts\jasmine\jasmine.js" />
+    <Content Include="UnitTests\Dynamics.Crm.UnitTests.js" />
+    <Content Include="UnitTests\Dynamics.Crm.UnitTests.min.js">
+      <DependentUpon>Dynamics.Crm.UnitTests.js</DependentUpon>
+    </Content>
     <Content Include="UnitTests\Index.html" />
     <Content Include="Web.config" />
     <Content Include="Widgets\MetadataBrowser\Html\config.html" />
@@ -147,6 +151,9 @@
     <TypeScriptCompile Include="Data\Repositories.ts" />
     <TypeScriptCompile Include="Dialogs\BootstrapDialogs.ts" />
     <TypeScriptCompile Include="Dialogs\Dialogs.ts" />
+    <TypeScriptCompile Include="UnitTests\Mocks.ts" />
+    <TypeScriptCompile Include="UnitTests\Setup.ts" />
+    <TypeScriptCompile Include="UnitTests\TabsUnitTests.ts" />
     <TypeScriptCompile Include="UnitTests\TasksUnitTests.ts" />
     <TypeScriptCompile Include="Widgets\MetadataBrowser\Scripts\Config.ts" />
     <TypeScriptCompile Include="Widgets\MetadataBrowser\Scripts\Controllers.ts" />

@@ -1,0 +1,1 @@
+﻿Dynamics.Crm.Diagnostics.useConsoleLogger();

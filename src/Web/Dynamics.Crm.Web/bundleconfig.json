@@ -35,6 +35,16 @@
     "sourceMap": false
   },
   {
+    "outputFileName": "UnitTests/Dynamics.Crm.UnitTests.js",
+    "inputFiles": [
+      "UnitTests/Setup.js",
+      "UnitTests/Mocks.js",
+      "UnitTests/TabsUnitTests.js",
+      "UnitTests/TasksUnitTests.js"
+    ],
+    "sourceMap": false
+  },
+  {
     "outputFileName": "Libs/bootstrap/css/bootstrap.min.css",
     "inputFiles": [
       "Libs/bootstrap/css/bootstrap.css"
