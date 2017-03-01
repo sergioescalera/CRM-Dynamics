@@ -75,6 +75,7 @@
     <Content Include="Libs\bootstrap\js\bootstrap.min.js">
       <DependentUpon>bootstrap.js</DependentUpon>
     </Content>
+    <Content Include="Libs\jquery\jquery-2.1.3.min.js" />
     <Content Include="Scripts\Dynamics.Crm.Dialogs.js" />
     <Content Include="Scripts\Dynamics.Crm.Dialogs.min.js">
       <DependentUpon>Dynamics.Crm.Dialogs.js</DependentUpon>
@@ -141,7 +142,9 @@
     <TypeScriptCompile Include="Core\Sections.ts" />
     <TypeScriptCompile Include="Core\Tabs.ts" />
     <TypeScriptCompile Include="Core\Tasks.ts" />
+    <TypeScriptCompile Include="Data\Interfaces.ts" />
     <TypeScriptCompile Include="Data\OData.ts" />
+    <TypeScriptCompile Include="Data\Repositories.ts" />
     <TypeScriptCompile Include="Dialogs\BootstrapDialogs.ts" />
     <TypeScriptCompile Include="Dialogs\Dialogs.ts" />
     <TypeScriptCompile Include="UnitTests\TasksUnitTests.ts" />
@@ -161,9 +164,7 @@
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Libs\jquery\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

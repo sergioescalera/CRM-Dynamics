@@ -36,6 +36,10 @@ var Dynamics;
                 throw new Error("Version not supported: {version}.".replace("{version}", version));
             }
             function entitySetName(entityName) {
+                entityName = entityName.toLowerCase();
+                if (entityName[entityName.length - 1] === "y") {
+                    return entityName.substr(0, entityName.length - 1) + "ies";
+                }
                 return entityName + "s";
             }
             function entityIdFieldName(entityName) {
@@ -122,12 +126,14 @@ var Dynamics;
                 var url = "{0}/api/data/v8.1/{1}"
                     .replace("{0}", baseUrl)
                     .replace("{1}", entitySetName(entity.type));
+                var data = JSON.stringify(entity.attributes);
                 return $
                     .ajax({
                     url: url,
+                    contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     type: "POST",
-                    data: entity.attributes
+                    data: data
                 });
             }
             OData.createEntity = createEntity;
@@ -166,7 +172,7 @@ var Dynamics;
         })(OData = Crm.OData || (Crm.OData = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=OData.js.map
+
 var MetadataBrower;
 (function (MetadataBrower) {
     var Config;
@@ -178,7 +184,7 @@ var MetadataBrower;
         ]);
     })(Config = MetadataBrower.Config || (MetadataBrower.Config = {}));
 })(MetadataBrower || (MetadataBrower = {}));
-//# sourceMappingURL=Config.js.map
+
 var MetadataBrower;
 (function (MetadataBrower) {
     var Core;
@@ -264,7 +270,7 @@ var MetadataBrower;
             .factory("metadataBrowser.core.navigationService", [NavigationServiceFactory]);
     })(Core = MetadataBrower.Core || (MetadataBrower.Core = {}));
 })(MetadataBrower || (MetadataBrower = {}));
-//# sourceMappingURL=Core.js.map
+
 var MetadataBrower;
 (function (MetadataBrower) {
     var Controllers;
@@ -477,4 +483,3 @@ var MetadataBrower;
             .directive("tsPropertyBrowser", propertyBrowser);
     })(Controllers = MetadataBrower.Controllers || (MetadataBrower.Controllers = {}));
 })(MetadataBrower || (MetadataBrower = {}));
-//# sourceMappingURL=Controllers.js.map

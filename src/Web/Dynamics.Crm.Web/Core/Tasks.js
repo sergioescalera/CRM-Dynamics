@@ -25,7 +25,7 @@ var Dynamics;
                             }
                         }
                         catch (e) {
-                            Crm.Diagnostics.log.Error("Tasks.execute:{taskName}".replace("{taskName}", getTaskName(task)), e);
+                            Crm.Diagnostics.log.Error("Tasks.execute: An error has occurred.", e);
                             results.push(e);
                             if (!config.continueOnError) {
                                 return results;

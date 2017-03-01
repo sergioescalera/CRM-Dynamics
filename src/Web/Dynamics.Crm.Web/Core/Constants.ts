@@ -1,6 +1,8 @@
 ﻿module Dynamics.Crm {
 
     export var publisherPrefix = "sib_"
+
+    export var componentName = (name: string) => publisherPrefix + name;
 }
 
 module Dynamics.Crm.Forms {

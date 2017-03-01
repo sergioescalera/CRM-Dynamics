@@ -3,7 +3,7 @@
     "use strict";
 
     export interface IEntity {
-        id: string;
+        id?: string;
         type: string;
         attributes: any;
     }

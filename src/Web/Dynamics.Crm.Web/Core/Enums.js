@@ -26,3 +26,19 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
+var Dynamics;
+(function (Dynamics) {
+    var Crm;
+    (function (Crm) {
+        var Core;
+        (function (Core) {
+            (function (LogEntryType) {
+                LogEntryType[LogEntryType["Trace"] = 0] = "Trace";
+                LogEntryType[LogEntryType["Warning"] = 1] = "Warning";
+                LogEntryType[LogEntryType["Error"] = 2] = "Error";
+                LogEntryType[LogEntryType["Info"] = 3] = "Info";
+            })(Core.LogEntryType || (Core.LogEntryType = {}));
+            var LogEntryType = Core.LogEntryType;
+        })(Core = Crm.Core || (Crm.Core = {}));
+    })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
+})(Dynamics || (Dynamics = {}));

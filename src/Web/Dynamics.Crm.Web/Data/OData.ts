@@ -49,6 +49,13 @@
 
     function entitySetName(entityName: string): string {
 
+        entityName = entityName.toLowerCase();
+
+        if (entityName[entityName.length - 1] === "y") {
+
+            return entityName.substr(0, entityName.length - 1) + "ies";
+        }
+
         return entityName + "s";
     }
 
@@ -159,19 +166,22 @@
     }
 
     export function createEntity(entity: Core.IEntity): JQueryPromise<void> {
-
+        
         var baseUrl = getContext().getClientUrl();
 
         var url = "{0}/api/data/v8.1/{1}"
             .replace("{0}", baseUrl)
             .replace("{1}", entitySetName(entity.type));
 
+        var data = JSON.stringify(entity.attributes);
+
         return $
             .ajax({
                 url: url,
+                contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 type: "POST",
-                data: entity.attributes
+                data: data
             });
     }
 

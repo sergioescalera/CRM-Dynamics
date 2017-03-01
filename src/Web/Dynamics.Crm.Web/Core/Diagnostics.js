@@ -12,26 +12,56 @@ var Dynamics;
                     if (Diagnostics.debug) {
                         debugger;
                     }
-                    var entityName = getEntityName();
-                    var output = "{message}" +
-                        " - Entity: {entityName}" +
-                        " - Name: {errorName}" +
-                        " - Message: {errorMessage}" +
-                        " - Stack: {stackTrace}" +
-                        " - Description: {errorDescription}"
-                            .replace("{entityName}", entityName)
-                            .replace("{message}", message)
-                            .replace("{errorMessage}", error.message)
-                            .replace("{errorName}", error.name)
-                            .replace("{stackTrace}", error.stack || "<NoStackTrace>")
-                            .replace("{errorDescription}", error.description || "<NoDescription>");
-                    console.error(output);
+                    var entry = createLogEntry(message, error);
+                    console.error(entry);
                 };
                 ConsoleLogger.prototype.Message = function (message) {
                     console.log(message);
                 };
+                ConsoleLogger.prototype.Warning = function (message) {
+                    console.log(message);
+                };
                 return ConsoleLogger;
             }());
+            var LogEntryLogger = (function () {
+                function LogEntryLogger() {
+                }
+                LogEntryLogger.prototype.Error = function (message, error) {
+                    if (Diagnostics.debug) {
+                        debugger;
+                    }
+                    var entry = createLogEntry(message, error);
+                    console.error(entry);
+                    Dynamics.Crm.Data.unitOfWork
+                        .GetLogEntryRepository()
+                        .Create(entry);
+                };
+                LogEntryLogger.prototype.Message = function (message) {
+                    console.log(message);
+                };
+                LogEntryLogger.prototype.Warning = function (message) {
+                    console.log(message);
+                };
+                return LogEntryLogger;
+            }());
+            function createLogEntry(message, error) {
+                var entityName = getEntityName();
+                var source = ("JavaScript::{entityName}")
+                    .replace("{entityName}", entityName);
+                var description = ("Stack: {stackTrace}\nDescription: {errorDescription}")
+                    .replace("{stackTrace}", error.stack || "<none>")
+                    .replace("{errorDescription}", error.description || "<none>");
+                var entry = {
+                    type: Dynamics.Crm.publisherPrefix + "logentry",
+                    attributes: {}
+                };
+                entry.attributes[Crm.componentName("name")] = message;
+                entry.attributes[Crm.componentName("message")] = message;
+                entry.attributes[Crm.componentName("description")] = description;
+                entry.attributes[Crm.componentName("source")] = source;
+                entry.attributes[Crm.componentName("type")] = Dynamics.Crm.Core.LogEntryType.Error;
+                return entry;
+            }
             function getEntityName() {
                 try {
                     return Xrm.Page.data.entity.getEntityName();
@@ -57,7 +87,7 @@ var Dynamics;
             // variables
             Diagnostics.debug = true;
             Diagnostics.trace = true;
-            Diagnostics.log = new ConsoleLogger();
+            Diagnostics.log = new LogEntryLogger();
         })(Diagnostics = Crm.Diagnostics || (Crm.Diagnostics = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));

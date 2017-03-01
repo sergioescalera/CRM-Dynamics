@@ -3,6 +3,7 @@ var Dynamics;
     var Crm;
     (function (Crm) {
         Crm.publisherPrefix = "sib_";
+        Crm.componentName = function (name) { return Crm.publisherPrefix + name; };
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
 var Dynamics;

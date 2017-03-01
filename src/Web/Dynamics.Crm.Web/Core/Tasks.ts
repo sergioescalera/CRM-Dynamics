@@ -38,7 +38,7 @@
                 } catch (e) {
 
                     Diagnostics.log.Error(
-                        "Tasks.execute:{taskName}".replace("{taskName}", getTaskName(task)), e);
+                        "Tasks.execute: An error has occurred.", e);
 
                     results.push(e);
 
