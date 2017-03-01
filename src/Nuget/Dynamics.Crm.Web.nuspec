@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Dynamics.Crm.Web</id>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
     <authors>Sergio Escalera</authors>
     <owners>Sergio Escalera</owners>    
     <projectUrl>https://github.com/sergioescalera/CRM-Dynamics/</projectUrl>    
@@ -16,8 +16,8 @@
     <file src="..\Web\Dynamics.Crm.Web\Scripts\Dynamics.Crm.Dialogs.min.js" target="content\Scripts" />
     <file src="..\Web\Dynamics.Crm.Web\Scripts\Dynamics.Crm.Forms.js" target="content\Scripts" />
     <file src="..\Web\Dynamics.Crm.Web\Scripts\Dynamics.Crm.Forms.min.js" target="content\Scripts" />
-    <file src="..\Web\Dynamics.Crm.Web\_typings\Dynamics.Crm.Forms.d.js" target="content\_typings" />
-    <file src="..\Web\Dynamics.Crm.Web\_typings\Xrm.d.js" target="content\_typings" />
-    <file src="..\Web\Dynamics.Crm.Web\_typings\jquery.d.js" target="content\_typings" />
+    <file src="..\Web\Dynamics.Crm.Web\_typings\Dynamics.Crm.Forms.d.ts" target="content\_typings" />
+    <file src="..\Web\Dynamics.Crm.Web\_typings\Xrm.d.ts" target="content\_typings" />
+    <file src="..\Web\Dynamics.Crm.Web\_typings\jquery.d.ts" target="content\_typings" />
   </files>
 </package>
