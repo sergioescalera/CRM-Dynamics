@@ -85,6 +85,12 @@ var Dynamics;
                 })
                     .then(function (data) {
                     return toEntity(entityName, attributes, data);
+                })
+                    .fail(function (response) {
+                    if (!response || !response.responseJSON || !response.responseJSON.error) {
+                        return;
+                    }
+                    Dynamics.Crm.Diagnostics.log.Error(response.responseJSON.error.message, response.responseJSON.error.innererror || response.responseJSON.error);
                 });
             }
             OData.retrieve = retrieve;
@@ -104,6 +110,12 @@ var Dynamics;
                     .then(function (data) {
                     var results = data.value;
                     return results.map(function (o) { return toEntity(entityName, attributes, o); });
+                })
+                    .fail(function (response) {
+                    if (!response || !response.responseJSON || !response.responseJSON.error) {
+                        return;
+                    }
+                    Dynamics.Crm.Diagnostics.log.Error(response.responseJSON.error.message, response.responseJSON.error.innererror || response.responseJSON.error);
                 });
             }
             OData.retrieveMultiple = retrieveMultiple;
@@ -172,3 +184,4 @@ var Dynamics;
         })(OData = Crm.OData || (Crm.OData = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
+//# sourceMappingURL=OData.js.map

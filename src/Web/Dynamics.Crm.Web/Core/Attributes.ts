@@ -114,9 +114,9 @@
         return lookup[0];
     }
 
-    export function setLookupValue(attributeName: string, entityType: string, name: string, id: string): void {
+    export function setLookupValue(attributeName: string, entityType: string, name: string, id: string, required: boolean = true): void {
 
-        var attribute = get(attributeName, false);
+        var attribute = get(attributeName, required);
 
         if (!attribute) {
             return;

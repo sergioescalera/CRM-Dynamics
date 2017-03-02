@@ -26,3 +26,4 @@ var Dynamics;
         })(Data = Crm.Data || (Crm.Data = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
+//# sourceMappingURL=Repositories.js.map

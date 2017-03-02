@@ -51,13 +51,13 @@ var Dynamics;
                 var source = ("JavaScript::{entityName}")
                     .replace("{entityName}", entityName);
                 var description = ("Stack: {stackTrace}\nDescription: {errorDescription}")
-                    .replace("{stackTrace}", error.stack || "<none>")
+                    .replace("{stackTrace}", error.stack || error.stacktrace || "<none>")
                     .replace("{errorDescription}", error.description || "<none>");
                 var entry = {
                     type: Dynamics.Crm.publisherPrefix + "logentry",
                     attributes: {}
                 };
-                entry.attributes[Crm.componentName("name")] = message;
+                entry.attributes[Crm.componentName("name")] = error.type ? (error.type + ":" + message) : message;
                 entry.attributes[Crm.componentName("message")] = message === error.message ? message : (message + error.message);
                 entry.attributes[Crm.componentName("description")] = description;
                 entry.attributes[Crm.componentName("source")] = source;
@@ -99,3 +99,4 @@ var Dynamics;
         })(Diagnostics = Crm.Diagnostics || (Crm.Diagnostics = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
+//# sourceMappingURL=Diagnostics.js.map

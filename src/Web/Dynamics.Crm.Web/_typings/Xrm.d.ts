@@ -358,7 +358,7 @@ interface Control {
     getParent(): Object; //  Returns a reference to the section object that contains the control.
     getSrc(): string; //  Returns the current URL being displayed in an IFRAME.
     getInitialUrl(): string; //  Returns the default URL that an IFrame control is configured to display.
-    getObject(): Object; //  Returns the object in the form representing an IFrame or Web resource.
+    getObject(): HTMLFrameElement; //  Returns the object in the form representing an IFrame or Web resource.
     getVisible(): boolean; //  Returns a value that indicates whether the control is currently visible.
     refresh(): void; //  Refreshes the data displayed in a Sub-Grid
     removeOption(value: number): void; //  Removes an option from an Option Set control.

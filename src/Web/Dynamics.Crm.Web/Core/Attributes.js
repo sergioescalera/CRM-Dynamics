@@ -89,8 +89,9 @@ var Dynamics;
                     return lookup[0];
                 }
                 Attributes.getLookupValue = getLookupValue;
-                function setLookupValue(attributeName, entityType, name, id) {
-                    var attribute = get(attributeName, false);
+                function setLookupValue(attributeName, entityType, name, id, required) {
+                    if (required === void 0) { required = true; }
+                    var attribute = get(attributeName, required);
                     if (!attribute) {
                         return;
                     }
@@ -123,3 +124,4 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
+//# sourceMappingURL=Attributes.js.map

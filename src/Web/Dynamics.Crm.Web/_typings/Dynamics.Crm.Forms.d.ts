@@ -7,9 +7,11 @@ declare interface ICrmDynamics {
     Diagnostics: ICrmDiagnostics;
     Dialogs: ICrmDialogs;
     Forms: ICrmForms;
+    OData: ICrmOData;
     Reports: ICrmReports;
     ScriptManager: IScriptManager;
     Tasks: ITasks;
+    User: ICrmUser;
 }
 
 declare interface ICrmCore {
@@ -28,6 +30,8 @@ declare interface ICrmForms {
     getFormFactor(): number;
     getIsDesktop(): boolean;
     getIsDirty(): boolean;
+    isCreateForm(): boolean;
+    isUpdateForm(): boolean;
     supportsIFrames(): boolean;
 }
 
@@ -43,7 +47,7 @@ declare interface ICrmAttributes {
     hideOptions(attribute: Attribute, hide?: (o: number) => boolean);
 
     getLookupValue(attributeName: string, required?: boolean): LookupControlItem;
-    setLookupValue(attributeName: string, entityType: string, name: string, id: string): void;
+    setLookupValue(attributeName: string, entityType: string, name: string, id: string, required?: boolean): void;
 
     showNotification(attribute: Attribute, message: string, messageId: string): void;
     hideNotification(attribute: Attribute, messageId: string): void;
@@ -56,8 +60,8 @@ declare interface ICrmControls {
     enable(attributeNames: string[], applyToAll?: boolean): void;
     setDisabled(attributeNames: string[], disabled: boolean, applyToAll?: boolean): void;
 
-    show(attributeNames: string[], condition?: boolean): void;
-    hide(attributeNames: string[], condition?: boolean): void
+    show(attributeNames: string[], condition?: boolean, applyToAll?: boolean): void;
+    hide(attributeNames: string[], condition?: boolean, applyToAll?: boolean): void
     setVisible(attributeNames: string[], value: boolean, applyToAll?: boolean);
 }
 
@@ -97,6 +101,21 @@ declare interface ICrmDialogs {
         dialogId: string,
         entityName?: string,
         entityId?: string): string
+}
+
+declare interface ICrmOData {
+    retrieve(entityName: string, entityId: string, attributes: string[], expand?: string[]): JQueryPromise<IEntity>;
+    retrieveMultiple(entityName: string, attributes: string[], filters: string[]): JQueryPromise<IEntity[]>;
+}
+
+declare interface IEntity {
+    id?: string;
+    type: string;
+    attributes: any;
+}
+
+declare interface ICrmUser {
+    getId(): string;
 }
 
 declare interface ICrmDiagnostics {

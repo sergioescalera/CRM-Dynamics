@@ -37,8 +37,18 @@
         return Xrm.Page.data.entity.getIsDirty();
     }
 
+    export function isCreateForm(): boolean {
+
+        return getFormType() === FormType.Create;
+    }
+
+    export function isUpdateForm(): boolean {
+
+        return getFormType() === FormType.Update;
+    }
+
     export function supportsIFrames(): boolean {
 
         return getIsDesktop();
-    }
+    }    
 }

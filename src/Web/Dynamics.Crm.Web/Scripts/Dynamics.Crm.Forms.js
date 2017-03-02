@@ -93,8 +93,9 @@ var Dynamics;
                     return lookup[0];
                 }
                 Attributes.getLookupValue = getLookupValue;
-                function setLookupValue(attributeName, entityType, name, id) {
-                    var attribute = get(attributeName, false);
+                function setLookupValue(attributeName, entityType, name, id, required) {
+                    if (required === void 0) { required = true; }
+                    var attribute = get(attributeName, required);
                     if (!attribute) {
                         return;
                     }
@@ -127,7 +128,7 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
+//# sourceMappingURL=Attributes.js.map
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -173,7 +174,7 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
+//# sourceMappingURL=Constants.js.map
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -235,30 +236,30 @@ var Dynamics;
                 }
                 Controls.setDisabled = setDisabled;
                 // show / hide
-                function show(attributeNames, condition) {
+                function show(attributeNames, condition, applyToAll) {
                     if (condition === void 0) { condition = true; }
+                    if (applyToAll === void 0) { applyToAll = true; }
                     if (condition) {
-                        setVisible(attributeNames, true, true);
+                        setVisible(attributeNames, true, applyToAll);
                     }
                 }
                 Controls.show = show;
-                function hide(attributeNames, condition) {
+                function hide(attributeNames, condition, applyToAll) {
                     if (condition === void 0) { condition = true; }
+                    if (applyToAll === void 0) { applyToAll = true; }
                     if (condition) {
-                        setVisible(attributeNames, false, true);
+                        setVisible(attributeNames, false, applyToAll);
                     }
                 }
                 Controls.hide = hide;
                 function setVisible(attributeNames, value, applyToAll) {
                     if (applyToAll === void 0) { applyToAll = true; }
-                    Crm.Diagnostics.printArguments("setDisabled", attributeNames, value);
+                    Crm.Diagnostics.printArguments("setVisible", attributeNames, value);
                     if (Array.isArray(attributeNames)) {
                         for (var i = 0; i < attributeNames.length; i++) {
-                            if (applyToAll) {
-                                var attribute = Forms.Attributes.get(attributeNames[i], false);
-                                if (attribute) {
-                                    attribute.controls.forEach(function (c) { return c.setVisible(value); });
-                                }
+                            var attribute = Forms.Attributes.get(attributeNames[i], false);
+                            if (applyToAll && attribute) {
+                                attribute.controls.forEach(function (c) { return c.setVisible(value); });
                             }
                             else {
                                 var control = get(attributeNames[i], false);
@@ -278,7 +279,7 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
+//# sourceMappingURL=Controls.js.map
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -332,13 +333,13 @@ var Dynamics;
                 var source = ("JavaScript::{entityName}")
                     .replace("{entityName}", entityName);
                 var description = ("Stack: {stackTrace}\nDescription: {errorDescription}")
-                    .replace("{stackTrace}", error.stack || "<none>")
+                    .replace("{stackTrace}", error.stack || error.stacktrace || "<none>")
                     .replace("{errorDescription}", error.description || "<none>");
                 var entry = {
                     type: Dynamics.Crm.publisherPrefix + "logentry",
                     attributes: {}
                 };
-                entry.attributes[Crm.componentName("name")] = message;
+                entry.attributes[Crm.componentName("name")] = error.type ? (error.type + ":" + message) : message;
                 entry.attributes[Crm.componentName("message")] = message === error.message ? message : (message + error.message);
                 entry.attributes[Crm.componentName("description")] = description;
                 entry.attributes[Crm.componentName("source")] = source;
@@ -380,7 +381,7 @@ var Dynamics;
         })(Diagnostics = Crm.Diagnostics || (Crm.Diagnostics = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
+//# sourceMappingURL=Diagnostics.js.map
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -413,7 +414,7 @@ var Dynamics;
         })(Dialogs = Crm.Dialogs || (Crm.Dialogs = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
+//# sourceMappingURL=Dialogs.js.map
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -438,7 +439,7 @@ var Dynamics;
         })(Core = Crm.Core || (Crm.Core = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
+//# sourceMappingURL=Entity.js.map
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -483,7 +484,7 @@ var Dynamics;
         })(Core = Crm.Core || (Crm.Core = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
+//# sourceMappingURL=Enums.js.map
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -518,6 +519,14 @@ var Dynamics;
                 return Xrm.Page.data.entity.getIsDirty();
             }
             Forms.getIsDirty = getIsDirty;
+            function isCreateForm() {
+                return getFormType() === Forms.FormType.Create;
+            }
+            Forms.isCreateForm = isCreateForm;
+            function isUpdateForm() {
+                return getFormType() === Forms.FormType.Update;
+            }
+            Forms.isUpdateForm = isUpdateForm;
             function supportsIFrames() {
                 return getIsDesktop();
             }
@@ -525,7 +534,7 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
+//# sourceMappingURL=Forms.js.map
 
 var Dynamics;
 (function (Dynamics) {
@@ -583,7 +592,7 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
+//# sourceMappingURL=Navigation.js.map
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -611,7 +620,7 @@ var Dynamics;
         })(Reports = Crm.Reports || (Crm.Reports = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
+//# sourceMappingURL=Reports.js.map
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -666,7 +675,7 @@ var Dynamics;
         })(ScriptManager = Crm.ScriptManager || (Crm.ScriptManager = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
+//# sourceMappingURL=ScriptManager.js.map
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -734,7 +743,7 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
+//# sourceMappingURL=Sections.js.map
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -826,7 +835,7 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
+//# sourceMappingURL=Tabs.js.map
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -871,8 +880,23 @@ var Dynamics;
         })(Tasks = Crm.Tasks || (Crm.Tasks = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
-
+//# sourceMappingURL=Tasks.js.map
+var Dynamics;
+(function (Dynamics) {
+    var Crm;
+    (function (Crm) {
+        var User;
+        (function (User) {
+            function getId() {
+                var userId = Xrm.Page.context.getUserId();
+                return Crm.Core.parseIdentifier(userId);
+            }
+            User.getId = getId;
+        })(User = Crm.User || (Crm.User = {}));
+    })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
+})(Dynamics || (Dynamics = {}));
+//# sourceMappingURL=User.js.map
+//# sourceMappingURL=Interfaces.js.map
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -960,6 +984,12 @@ var Dynamics;
                 })
                     .then(function (data) {
                     return toEntity(entityName, attributes, data);
+                })
+                    .fail(function (response) {
+                    if (!response || !response.responseJSON || !response.responseJSON.error) {
+                        return;
+                    }
+                    Dynamics.Crm.Diagnostics.log.Error(response.responseJSON.error.message, response.responseJSON.error.innererror || response.responseJSON.error);
                 });
             }
             OData.retrieve = retrieve;
@@ -979,6 +1009,12 @@ var Dynamics;
                     .then(function (data) {
                     var results = data.value;
                     return results.map(function (o) { return toEntity(entityName, attributes, o); });
+                })
+                    .fail(function (response) {
+                    if (!response || !response.responseJSON || !response.responseJSON.error) {
+                        return;
+                    }
+                    Dynamics.Crm.Diagnostics.log.Error(response.responseJSON.error.message, response.responseJSON.error.innererror || response.responseJSON.error);
                 });
             }
             OData.retrieveMultiple = retrieveMultiple;
@@ -1047,7 +1083,7 @@ var Dynamics;
         })(OData = Crm.OData || (Crm.OData = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
+//# sourceMappingURL=OData.js.map
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -1076,3 +1112,4 @@ var Dynamics;
         })(Data = Crm.Data || (Crm.Data = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
+//# sourceMappingURL=Repositories.js.map

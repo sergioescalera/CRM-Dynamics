@@ -59,30 +59,30 @@ var Dynamics;
                 }
                 Controls.setDisabled = setDisabled;
                 // show / hide
-                function show(attributeNames, condition) {
+                function show(attributeNames, condition, applyToAll) {
                     if (condition === void 0) { condition = true; }
+                    if (applyToAll === void 0) { applyToAll = true; }
                     if (condition) {
-                        setVisible(attributeNames, true, true);
+                        setVisible(attributeNames, true, applyToAll);
                     }
                 }
                 Controls.show = show;
-                function hide(attributeNames, condition) {
+                function hide(attributeNames, condition, applyToAll) {
                     if (condition === void 0) { condition = true; }
+                    if (applyToAll === void 0) { applyToAll = true; }
                     if (condition) {
-                        setVisible(attributeNames, false, true);
+                        setVisible(attributeNames, false, applyToAll);
                     }
                 }
                 Controls.hide = hide;
                 function setVisible(attributeNames, value, applyToAll) {
                     if (applyToAll === void 0) { applyToAll = true; }
-                    Crm.Diagnostics.printArguments("setDisabled", attributeNames, value);
+                    Crm.Diagnostics.printArguments("setVisible", attributeNames, value);
                     if (Array.isArray(attributeNames)) {
                         for (var i = 0; i < attributeNames.length; i++) {
-                            if (applyToAll) {
-                                var attribute = Forms.Attributes.get(attributeNames[i], false);
-                                if (attribute) {
-                                    attribute.controls.forEach(function (c) { return c.setVisible(value); });
-                                }
+                            var attribute = Forms.Attributes.get(attributeNames[i], false);
+                            if (applyToAll && attribute) {
+                                attribute.controls.forEach(function (c) { return c.setVisible(value); });
                             }
                             else {
                                 var control = get(attributeNames[i], false);
@@ -102,3 +102,4 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
+//# sourceMappingURL=Controls.js.map

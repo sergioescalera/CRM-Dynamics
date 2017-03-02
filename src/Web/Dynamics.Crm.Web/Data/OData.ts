@@ -119,8 +119,18 @@
                 dataType: "json"
             })
             .then((data: any) => {
-
+                
                 return toEntity(entityName, attributes, data);
+            })
+            .fail((response: any) => {
+
+                if (!response || !response.responseJSON || !response.responseJSON.error) {
+                    return;
+                }
+
+                Dynamics.Crm.Diagnostics.log.Error(
+                    response.responseJSON.error.message,
+                    response.responseJSON.error.innererror || response.responseJSON.error);
             });
     }
 
@@ -145,6 +155,16 @@
                 var results = <any[]>data.value;
 
                 return results.map((o: any) => toEntity(entityName, attributes, o));
+            })
+            .fail((response: any) => {
+
+                if (!response || !response.responseJSON || !response.responseJSON.error) {
+                    return;
+                }
+
+                Dynamics.Crm.Diagnostics.log.Error(
+                    response.responseJSON.error.message,
+                    response.responseJSON.error.innererror || response.responseJSON.error);
             });
     }
 

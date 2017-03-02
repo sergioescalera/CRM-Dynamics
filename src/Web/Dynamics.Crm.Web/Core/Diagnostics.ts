@@ -5,6 +5,8 @@
     export interface IError extends Error {
         description?: string;
         stack?: string;
+        stacktrace?: string;
+        type?: string;
     }
 
     export interface ILogger {
@@ -77,7 +79,7 @@
         var source = ("JavaScript::{entityName}")
             .replace("{entityName}", entityName);
         var description = ("Stack: {stackTrace}\nDescription: {errorDescription}")
-            .replace("{stackTrace}", error.stack || "<none>")
+            .replace("{stackTrace}", error.stack || error.stacktrace ||  "<none>")
             .replace("{errorDescription}", error.description || "<none>");
 
         var entry = {
@@ -85,7 +87,7 @@
             attributes: {}
         };
 
-        entry.attributes[componentName("name")] = message;
+        entry.attributes[componentName("name")] = error.type ? (error.type + ":" + message) : message;
         entry.attributes[componentName("message")] = message === error.message ? message : (message + error.message);
         entry.attributes[componentName("description")] = description;
         entry.attributes[componentName("source")] = source;

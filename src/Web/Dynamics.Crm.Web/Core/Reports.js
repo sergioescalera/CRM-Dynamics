@@ -25,3 +25,4 @@ var Dynamics;
         })(Reports = Crm.Reports || (Crm.Reports = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
+//# sourceMappingURL=Reports.js.map

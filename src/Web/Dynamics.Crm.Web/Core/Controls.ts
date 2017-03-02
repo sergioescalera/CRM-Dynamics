@@ -69,34 +69,34 @@
 
     // show / hide
 
-    export function show(attributeNames: string[], condition: boolean = true): void {
+    export function show(attributeNames: string[], condition: boolean = true, applyToAll: boolean = true): void {
 
         if (condition) {
-            setVisible(attributeNames, true, true);
+            setVisible(attributeNames, true, applyToAll);
         }
     }
 
-    export function hide(attributeNames: string[], condition: boolean = true): void {
+    export function hide(attributeNames: string[], condition: boolean = true, applyToAll: boolean = true): void {
 
         if (condition) {
-            setVisible(attributeNames, false, true);
+            setVisible(attributeNames, false, applyToAll);
         }
     }
 
     export function setVisible(attributeNames: string[], value: boolean, applyToAll: boolean = true) {
 
-        Diagnostics.printArguments("setDisabled", attributeNames, value);
+        Diagnostics.printArguments("setVisible", attributeNames, value);
 
         if (Array.isArray(attributeNames)) {
 
             for (var i = 0; i < attributeNames.length; i++) {
 
-                if (applyToAll) {
-                    var attribute = Attributes.get(attributeNames[i], false);
+                var attribute = Attributes.get(attributeNames[i], false);
 
-                    if (attribute) {
-                        attribute.controls.forEach((c: Control) => c.setVisible(value));
-                    }
+                if (applyToAll && attribute) {
+                    
+                    attribute.controls.forEach((c: Control) => c.setVisible(value));
+                                        
                 } else {
 
                     var control = get(attributeNames[i], false);

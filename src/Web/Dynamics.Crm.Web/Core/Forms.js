@@ -32,6 +32,14 @@ var Dynamics;
                 return Xrm.Page.data.entity.getIsDirty();
             }
             Forms.getIsDirty = getIsDirty;
+            function isCreateForm() {
+                return getFormType() === Forms.FormType.Create;
+            }
+            Forms.isCreateForm = isCreateForm;
+            function isUpdateForm() {
+                return getFormType() === Forms.FormType.Update;
+            }
+            Forms.isUpdateForm = isUpdateForm;
             function supportsIFrames() {
                 return getIsDesktop();
             }
@@ -39,3 +47,4 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
+//# sourceMappingURL=Forms.js.map

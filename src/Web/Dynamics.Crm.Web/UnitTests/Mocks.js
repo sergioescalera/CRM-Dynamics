@@ -9,6 +9,8 @@ var Dynamics;
                 "use strict";
                 var PageMock = (function () {
                     function PageMock() {
+                        this.ageAttribute = new AttributeMock();
+                        this.attributes = { "age": this.ageAttribute };
                         this.mainTab = new TabMock();
                         this.tabs = { "mainTab": this.mainTab };
                         this.ui = {
@@ -23,9 +25,18 @@ var Dynamics;
                         }
                         return null;
                     };
+                    PageMock.prototype.getAttribute = function (name) {
+                        return this.attributes[name];
+                    };
                     return PageMock;
                 }());
                 Mocks.PageMock = PageMock;
+                var AttributeMock = (function () {
+                    function AttributeMock() {
+                    }
+                    return AttributeMock;
+                }());
+                Mocks.AttributeMock = AttributeMock;
                 var TabMock = (function () {
                     function TabMock() {
                     }
@@ -48,3 +59,4 @@ var Dynamics;
         })(UnitTests = Crm.UnitTests || (Crm.UnitTests = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
+//# sourceMappingURL=Mocks.js.map

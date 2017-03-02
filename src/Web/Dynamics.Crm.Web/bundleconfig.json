@@ -39,6 +39,7 @@
     "inputFiles": [
       "UnitTests/Setup.js",
       "UnitTests/Mocks.js",
+      "UnitTests/AttributesUnitTests.js",
       "UnitTests/TabsUnitTests.js",
       "UnitTests/TasksUnitTests.js"
     ],

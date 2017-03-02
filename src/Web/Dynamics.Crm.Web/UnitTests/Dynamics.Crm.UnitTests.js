@@ -11,6 +11,8 @@ var Dynamics;
                 "use strict";
                 var PageMock = (function () {
                     function PageMock() {
+                        this.ageAttribute = new AttributeMock();
+                        this.attributes = { "age": this.ageAttribute };
                         this.mainTab = new TabMock();
                         this.tabs = { "mainTab": this.mainTab };
                         this.ui = {
@@ -25,9 +27,18 @@ var Dynamics;
                         }
                         return null;
                     };
+                    PageMock.prototype.getAttribute = function (name) {
+                        return this.attributes[name];
+                    };
                     return PageMock;
                 }());
                 Mocks.PageMock = PageMock;
+                var AttributeMock = (function () {
+                    function AttributeMock() {
+                    }
+                    return AttributeMock;
+                }());
+                Mocks.AttributeMock = AttributeMock;
                 var TabMock = (function () {
                     function TabMock() {
                     }
@@ -47,6 +58,35 @@ var Dynamics;
                 }());
                 Mocks.TabMock = TabMock;
             })(Mocks = UnitTests.Mocks || (UnitTests.Mocks = {}));
+        })(UnitTests = Crm.UnitTests || (Crm.UnitTests = {}));
+    })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
+})(Dynamics || (Dynamics = {}));
+
+var Dynamics;
+(function (Dynamics) {
+    var Crm;
+    (function (Crm) {
+        var UnitTests;
+        (function (UnitTests) {
+            "use strict";
+            describe("Attributes.get", function () {
+                beforeEach(function () {
+                    window["Xrm"] = { Page: new UnitTests.Mocks.PageMock() };
+                });
+                afterEach(function () {
+                    window["Xrm"] = undefined;
+                });
+                it("Returns null for missing attribute when not required", function () {
+                    var attribute = Crm.Forms.Attributes.get("notAge", false);
+                    expect(attribute).toBeNull();
+                });
+                it("Throws error for missing attribute when required", function () {
+                    expect(function () { return Crm.Forms.Tabs.get("notAge", true); }).toThrowError(Error);
+                });
+                it("Throws error for missing attribute when required by default", function () {
+                    expect(function () { return Crm.Forms.Tabs.get("notAge"); }).toThrowError(Error);
+                });
+            });
         })(UnitTests = Crm.UnitTests || (Crm.UnitTests = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));

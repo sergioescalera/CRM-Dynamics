@@ -146,11 +146,13 @@
     <TypeScriptCompile Include="Core\Sections.ts" />
     <TypeScriptCompile Include="Core\Tabs.ts" />
     <TypeScriptCompile Include="Core\Tasks.ts" />
+    <TypeScriptCompile Include="Core\User.ts" />
     <TypeScriptCompile Include="Data\Interfaces.ts" />
     <TypeScriptCompile Include="Data\OData.ts" />
     <TypeScriptCompile Include="Data\Repositories.ts" />
     <TypeScriptCompile Include="Dialogs\BootstrapDialogs.ts" />
     <TypeScriptCompile Include="Dialogs\Dialogs.ts" />
+    <TypeScriptCompile Include="UnitTests\AttributesUnitTests.ts" />
     <TypeScriptCompile Include="UnitTests\Mocks.ts" />
     <TypeScriptCompile Include="UnitTests\Setup.ts" />
     <TypeScriptCompile Include="UnitTests\TabsUnitTests.ts" />

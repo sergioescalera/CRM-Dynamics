@@ -4,12 +4,15 @@
 
     export class PageMock {
 
-        mainTab: TabMock;
+        ageAttribute: AttributeMock;
+        attributes: any;
+        mainTab: TabMock;        
         tabs: any;
         ui: any;
 
         constructor() {
-
+            this.ageAttribute = new AttributeMock();
+            this.attributes = { "age": this.ageAttribute };
             this.mainTab = new TabMock();
             this.tabs = { "mainTab": this.mainTab };
             this.ui = {
@@ -28,6 +31,16 @@
 
             return null;
         }
+
+        getAttribute(name: string): AttributeMock {
+
+            return this.attributes[name];
+        }
+    }
+
+    export class AttributeMock {
+
+
     }
 
     export class TabMock {
