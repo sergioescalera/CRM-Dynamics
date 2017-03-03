@@ -100,7 +100,9 @@ declare interface ICrmDialogs {
     getUrl(
         dialogId: string,
         entityName?: string,
-        entityId?: string): string
+        entityId?: string): string;
+    alert(message: string, title: string): JQueryPromise<void>;
+    confirm(message: string, title: string): JQueryPromise<boolean>;
 }
 
 declare interface ICrmOData {

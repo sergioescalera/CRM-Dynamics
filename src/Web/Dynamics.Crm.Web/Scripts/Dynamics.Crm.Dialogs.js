@@ -153,9 +153,11 @@ var Dynamics;
                     this._content = content;
                     this._window = window;
                 }
-                BootstrapDialog.prototype.Hide = function () {
-                    debugger;
+                BootstrapDialog.prototype.Resolve = function () {
                     this.deferred.resolve();
+                };
+                BootstrapDialog.prototype.Reject = function () {
+                    this.deferred.reject();
                 };
                 BootstrapDialog.prototype.Show = function () {
                     this.dialog.modal("show");
@@ -170,7 +172,9 @@ var Dynamics;
                                 backdrop: false,
                                 show: false
                             });
-                            this._dialog.on("hide.bs.modal", this.Hide.bind(this));
+                            this._window.jQuery("button.btn-primary", this._dialog).click(this.Resolve.bind(this));
+                            this._window.jQuery("button.close", this._dialog).click(this.Reject.bind(this));
+                            this._window.jQuery("button.btn-default", this._dialog).click(this.Reject.bind(this));
                         }
                         return this._dialog;
                     },

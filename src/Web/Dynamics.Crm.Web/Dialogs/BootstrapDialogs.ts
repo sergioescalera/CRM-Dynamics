@@ -57,11 +57,14 @@
             this._window = window;
         }
 
-        Hide(): void {
-
-            debugger;
-
+        private Resolve(): void {
+            
             this.deferred.resolve();
+        }
+
+        private Reject(): void {
+
+            this.deferred.reject();
         }
 
         Show(): JQueryPromise<TResult> {
@@ -74,7 +77,7 @@
         get dialog(): Bootstrap {
 
             if (!this._dialog) {
-
+                
                 this._dialog = <Bootstrap>this._window.jQuery(this._content);
 
                 this._dialog.appendTo(this._window.jQuery("body"));
@@ -83,7 +86,9 @@
                     show: false
                 });
 
-                this._dialog.on("hide.bs.modal", this.Hide.bind(this));
+                this._window.jQuery("button.btn-primary", this._dialog).click(this.Resolve.bind(this));
+                this._window.jQuery("button.close", this._dialog).click(this.Reject.bind(this));                
+                this._window.jQuery("button.btn-default", this._dialog).click(this.Reject.bind(this));
             }
 
             return this._dialog;
