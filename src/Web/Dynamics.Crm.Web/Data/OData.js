@@ -35,13 +35,6 @@ var Dynamics;
                 }
                 throw new Error("Version not supported: {version}.".replace("{version}", version));
             }
-            function entitySetName(entityName) {
-                entityName = entityName.toLowerCase();
-                if (entityName[entityName.length - 1] === "y") {
-                    return entityName.substr(0, entityName.length - 1) + "ies";
-                }
-                return entityName + "s";
-            }
             function entityIdFieldName(entityName) {
                 return entityName + "id";
             }
@@ -52,27 +45,38 @@ var Dynamics;
                 var idFieldName = entityIdFieldName(entityName);
                 var entity = {
                     id: obj[idFieldName],
-                    type: entityName,
-                    attributes: {}
+                    type: entityName
                 };
-                attributes.forEach(function (a) {
-                    if (a === idFieldName) {
+                attributes.forEach(function (key) {
+                    if (key === idFieldName) {
                         return;
                     }
-                    var value = obj[a];
+                    var value = obj[key];
                     if (value !== undefined) {
-                        entity.attributes[a] = { value: value };
+                        entity[key] = value;
                     }
                 });
                 return entity;
             }
+            function stringifyEntity(entity) {
+                var data = {};
+                Object
+                    .keys(entity)
+                    .forEach(function (k) {
+                    if (k === "id" || k === "type") {
+                        return;
+                    }
+                    data[k] = entity[k];
+                });
+                return JSON.stringify(data);
+            }
             // entities CRUD
-            function retrieve(entityName, entityId, attributes, expand) {
+            function retrieve(entityName, entitySetName, entityId, attributes, expand) {
                 var baseUrl = getContext().getClientUrl();
                 var url = "{baseUrl}/api/data/{version}/{entitySetName}({entityId})?$select={select}"
                     .replace("{baseUrl}", baseUrl)
                     .replace("{version}", getVersion())
-                    .replace("{entitySetName}", entitySetName(entityName))
+                    .replace("{entitySetName}", entitySetName)
                     .replace("{entityId}", Crm.Core.parseIdentifier(entityId))
                     .replace("{select}", attributes.join(","));
                 if (expand) {
@@ -94,12 +98,12 @@ var Dynamics;
                 });
             }
             OData.retrieve = retrieve;
-            function retrieveMultiple(entityName, attributes, filters) {
+            function retrieveMultiple(entityName, entitySetName, attributes, filters) {
                 var baseUrl = getContext().getClientUrl();
                 var url = "{baseUrl}/api/data/{version}/{entitySetName}?$select={select}&$filter={filter}"
                     .replace("{baseUrl}", baseUrl)
                     .replace("{version}", getVersion())
-                    .replace("{entitySetName}", entitySetName(entityName))
+                    .replace("{entitySetName}", entitySetName)
                     .replace("{select}", attributes.join(","))
                     .replace("{filter}", filters.join(","));
                 return $
@@ -119,11 +123,11 @@ var Dynamics;
                 });
             }
             OData.retrieveMultiple = retrieveMultiple;
-            function deleteEntity(entityName, entityId) {
+            function deleteEntity(entityName, entitySetName, entityId) {
                 var baseUrl = getContext().getClientUrl();
                 var url = "{0}/api/data/v8.1/{1}({2})"
                     .replace("{0}", baseUrl)
-                    .replace("{1}", entitySetName(entityName))
+                    .replace("{1}", entitySetName)
                     .replace("{2}", entityId);
                 return $
                     .ajax({
@@ -133,12 +137,12 @@ var Dynamics;
                 });
             }
             OData.deleteEntity = deleteEntity;
-            function createEntity(entity) {
+            function createEntity(entity, entitySetName) {
                 var baseUrl = getContext().getClientUrl();
                 var url = "{0}/api/data/v8.1/{1}"
                     .replace("{0}", baseUrl)
-                    .replace("{1}", entitySetName(entity.type));
-                var data = JSON.stringify(entity.attributes);
+                    .replace("{1}", entitySetName);
+                var data = stringifyEntity(entity);
                 return $
                     .ajax({
                     url: url,
@@ -184,4 +188,3 @@ var Dynamics;
         })(OData = Crm.OData || (Crm.OData = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=OData.js.map

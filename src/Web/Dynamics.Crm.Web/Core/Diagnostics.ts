@@ -72,7 +72,7 @@
         }
     }
 
-    function createLogEntry(message: string, error: IError): Core.IEntity {
+    function createLogEntry(message: string, error: IError): Core.ILogEntry {
 
         var entityName = getEntityName();
 
@@ -83,15 +83,14 @@
             .replace("{errorDescription}", error.description || "<none>");
 
         var entry = {
-            type: Dynamics.Crm.publisherPrefix + "logentry",
-            attributes: {}
+            type: Data.Schema.LogEntryEntity.type,            
         };
 
-        entry.attributes[componentName("name")] = error.type ? (error.type + ":" + message) : message;
-        entry.attributes[componentName("message")] = message === error.message ? message : (message + error.message);
-        entry.attributes[componentName("description")] = description;
-        entry.attributes[componentName("source")] = source;
-        entry.attributes[componentName("type")] = Dynamics.Crm.Core.LogEntryType.Error;
+        entry[Data.Schema.LogEntryEntity.nameField] = error.type ? (error.type + ":" + message) : message;
+        entry[Data.Schema.LogEntryEntity.messageField] = message === error.message ? message : (message + error.message);
+        entry[Data.Schema.LogEntryEntity.descriptionField] = description;
+        entry[Data.Schema.LogEntryEntity.sourceField] = source;
+        entry[Data.Schema.LogEntryEntity.typeField] = Dynamics.Crm.Core.LogEntryType.Error;
 
         return entry;
     }

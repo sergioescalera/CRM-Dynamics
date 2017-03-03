@@ -45,4 +45,3 @@ var Dynamics;
         })(Dialogs = Crm.Dialogs || (Crm.Dialogs = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Dialogs.js.map

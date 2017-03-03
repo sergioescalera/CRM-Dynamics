@@ -46,19 +46,7 @@
 
         throw new Error("Version not supported: {version}.".replace("{version}", version));
     }
-
-    function entitySetName(entityName: string): string {
-
-        entityName = entityName.toLowerCase();
-
-        if (entityName[entityName.length - 1] === "y") {
-
-            return entityName.substr(0, entityName.length - 1) + "ies";
-        }
-
-        return entityName + "s";
-    }
-
+    
     function entityIdFieldName(entityName: string): string {
 
         return entityName + "id";
@@ -74,37 +62,58 @@
 
         var entity = {
             id: obj[idFieldName],
-            type: entityName,
-            attributes: {
-            }
+            type: entityName            
         };
 
-        attributes.forEach((a: string) => {
+        attributes.forEach((key: string) => {
 
-            if (a === idFieldName) {
+            if (key === idFieldName) {
                 return;
             }
 
-            var value = obj[a];
+            var value = obj[key];
 
             if (value !== undefined) {
-                entity.attributes[a] = { value: value };
+                entity[key] = value;
             }
         });
 
         return entity;
     }
 
+    function stringifyEntity(entity: Core.IEntity) {
+
+        var data = {};
+
+        Object
+            .keys(entity)
+            .forEach((k: string) => {
+
+                if (k === "id" || k === "type") {
+                    return;
+                }
+
+                data[k] = entity[k];
+            });
+
+        return JSON.stringify(data);
+    }
+    
     // entities CRUD
 
-    export function retrieve(entityName: string, entityId: string, attributes: string[], expand?: string[]): JQueryPromise<Core.IEntity> {
+    export function retrieve(
+        entityName: string,
+        entitySetName: string,
+        entityId: string,
+        attributes: string[],
+        expand?: string[]): JQueryPromise<Core.IEntity> {
 
         var baseUrl = getContext().getClientUrl();
 
         var url = "{baseUrl}/api/data/{version}/{entitySetName}({entityId})?$select={select}"
             .replace("{baseUrl}", baseUrl)
             .replace("{version}", getVersion())
-            .replace("{entitySetName}", entitySetName(entityName))
+            .replace("{entitySetName}", entitySetName)
             .replace("{entityId}", Core.parseIdentifier(entityId))
             .replace("{select}", attributes.join(","));
 
@@ -134,14 +143,18 @@
             });
     }
 
-    export function retrieveMultiple(entityName: string, attributes: string[], filters: string[]): JQueryPromise<Core.IEntity[]> {
+    export function retrieveMultiple(
+        entityName: string,
+        entitySetName: string,
+        attributes: string[],
+        filters: string[]): JQueryPromise<Core.IEntity[]> {
 
         var baseUrl = getContext().getClientUrl();
 
         var url = "{baseUrl}/api/data/{version}/{entitySetName}?$select={select}&$filter={filter}"
             .replace("{baseUrl}", baseUrl)
             .replace("{version}", getVersion())
-            .replace("{entitySetName}", entitySetName(entityName))
+            .replace("{entitySetName}", entitySetName)
             .replace("{select}", attributes.join(","))
             .replace("{filter}", filters.join(","));
 
@@ -168,13 +181,13 @@
             });
     }
 
-    export function deleteEntity(entityName: string, entityId: string): JQueryPromise<void> {
+    export function deleteEntity(entityName: string, entitySetName: string, entityId: string): JQueryPromise<void> {
 
         var baseUrl = getContext().getClientUrl();
 
         var url = "{0}/api/data/v8.1/{1}({2})"
             .replace("{0}", baseUrl)
-            .replace("{1}", entitySetName(entityName))
+            .replace("{1}", entitySetName)
             .replace("{2}", entityId);
 
         return $
@@ -185,15 +198,15 @@
             });
     }
 
-    export function createEntity(entity: Core.IEntity): JQueryPromise<void> {
+    export function createEntity(entity: Core.IEntity, entitySetName: string): JQueryPromise<void> {
         
         var baseUrl = getContext().getClientUrl();
 
         var url = "{0}/api/data/v8.1/{1}"
             .replace("{0}", baseUrl)
-            .replace("{1}", entitySetName(entity.type));
+            .replace("{1}", entitySetName);
 
-        var data = JSON.stringify(entity.attributes);
+        var data = stringifyEntity(entity);
 
         return $
             .ajax({

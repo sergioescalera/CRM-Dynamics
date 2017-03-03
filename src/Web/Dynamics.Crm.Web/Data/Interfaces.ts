@@ -1,7 +1,7 @@
 ﻿module Dynamics.Crm.Data {
 
     export interface ILogEntryRepository {
-        Create(logEntry: Core.IEntity): void;
+        Create(entry: Core.ILogEntry): void;
     }
 
     export interface IUnitOfWork {

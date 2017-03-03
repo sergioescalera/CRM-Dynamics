@@ -54,14 +54,13 @@ var Dynamics;
                     .replace("{stackTrace}", error.stack || error.stacktrace || "<none>")
                     .replace("{errorDescription}", error.description || "<none>");
                 var entry = {
-                    type: Dynamics.Crm.publisherPrefix + "logentry",
-                    attributes: {}
+                    type: Crm.Data.Schema.LogEntryEntity.type,
                 };
-                entry.attributes[Crm.componentName("name")] = error.type ? (error.type + ":" + message) : message;
-                entry.attributes[Crm.componentName("message")] = message === error.message ? message : (message + error.message);
-                entry.attributes[Crm.componentName("description")] = description;
-                entry.attributes[Crm.componentName("source")] = source;
-                entry.attributes[Crm.componentName("type")] = Dynamics.Crm.Core.LogEntryType.Error;
+                entry[Crm.Data.Schema.LogEntryEntity.nameField] = error.type ? (error.type + ":" + message) : message;
+                entry[Crm.Data.Schema.LogEntryEntity.messageField] = message === error.message ? message : (message + error.message);
+                entry[Crm.Data.Schema.LogEntryEntity.descriptionField] = description;
+                entry[Crm.Data.Schema.LogEntryEntity.sourceField] = source;
+                entry[Crm.Data.Schema.LogEntryEntity.typeField] = Dynamics.Crm.Core.LogEntryType.Error;
                 return entry;
             }
             function getEntityName() {
@@ -99,4 +98,3 @@ var Dynamics;
         })(Diagnostics = Crm.Diagnostics || (Crm.Diagnostics = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Diagnostics.js.map

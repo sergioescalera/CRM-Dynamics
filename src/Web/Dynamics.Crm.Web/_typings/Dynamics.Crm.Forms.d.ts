@@ -104,14 +104,22 @@ declare interface ICrmDialogs {
 }
 
 declare interface ICrmOData {
-    retrieve(entityName: string, entityId: string, attributes: string[], expand?: string[]): JQueryPromise<IEntity>;
-    retrieveMultiple(entityName: string, attributes: string[], filters: string[]): JQueryPromise<IEntity[]>;
+    retrieve(
+        entityName: string,
+        entitySetName: string,
+        entityId: string,
+        attributes: string[],
+        expand?: string[]): JQueryPromise<IEntity>
+    retrieveMultiple(
+        entityName: string,
+        entitySetName: string,
+        attributes: string[],
+        filters: string[]): JQueryPromise<IEntity[]>
 }
 
 declare interface IEntity {
     id?: string;
-    type: string;
-    attributes: any;
+    type: string;    
 }
 
 declare interface ICrmUser {

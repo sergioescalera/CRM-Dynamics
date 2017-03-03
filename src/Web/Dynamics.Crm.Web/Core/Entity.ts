@@ -4,15 +4,12 @@
 
     export interface IEntity {
         id?: string;
-        type: string;
-        attributes: any;
+        type: string;        
     }
 
-    export interface IAttribute {
-        type: string;
-        value: any;
+    export interface ILogEntry extends IEntity {
     }
-
+    
     export function parseIdentifier(idStr: string): string {
 
         if (idStr === undefined || idStr == null) {

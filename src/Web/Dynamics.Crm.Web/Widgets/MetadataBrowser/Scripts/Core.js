@@ -83,4 +83,3 @@ var MetadataBrower;
             .factory("metadataBrowser.core.navigationService", [NavigationServiceFactory]);
     })(Core = MetadataBrower.Core || (MetadataBrower.Core = {}));
 })(MetadataBrower || (MetadataBrower = {}));
-//# sourceMappingURL=Core.js.map

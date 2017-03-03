@@ -58,7 +58,9 @@
         }
 
         Hide(): void {
-            
+
+            debugger;
+
             this.deferred.resolve();
         }
 
@@ -110,7 +112,7 @@
             this.Init();
         }
 
-        private Init() {
+        private Init(): void {
 
             var baseUrl = "../WebResources/{prefix}/Libs/bootstrap/"
                 .replace("{prefix}", Dynamics.Crm.publisherPrefix);

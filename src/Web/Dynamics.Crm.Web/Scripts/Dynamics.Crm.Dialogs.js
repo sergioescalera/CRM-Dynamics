@@ -154,6 +154,7 @@ var Dynamics;
                     this._window = window;
                 }
                 BootstrapDialog.prototype.Hide = function () {
+                    debugger;
                     this.deferred.resolve();
                 };
                 BootstrapDialog.prototype.Show = function () {
