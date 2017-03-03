@@ -43,16 +43,36 @@
 
     }
 
-    export class TabMock {
+    class VisibleMock {
 
         private _visible: boolean;
-        private _displayState: string;
 
         getVisible(): boolean {
             return this._visible;
         }
         setVisible(value: boolean): void {
             this._visible = value;
+        }
+    }
+
+    export class TabMock extends VisibleMock {
+        
+        private _displayState: string;
+        private _sections: any;
+
+        mainSection: SectionMock;
+        sections: any;
+
+        constructor() {
+
+            super();
+
+            this.mainSection = new SectionMock();
+            this._sections = { "mainSection": this.mainSection };
+
+            this.sections = {
+                get: this.getSection.bind(this)
+            };
         }
 
         getDisplayState(): string {
@@ -61,5 +81,18 @@
         setDisplayState(value: string): void {
             this._displayState = value;
         }
+
+        getSection(param: any): SectionMock {
+
+            if (typeof param === "string") {
+
+                return this._sections[param];
+            }
+
+            return null;
+        }
+    }
+
+    export class SectionMock extends VisibleMock {        
     }
 }

@@ -38,6 +38,7 @@
       "UnitTests/Setup.js",
       "UnitTests/Mocks.js",
       "UnitTests/AttributesUnitTests.js",
+      "UnitTests/SectionsUnitTests.js",
       "UnitTests/TabsUnitTests.js",
       "UnitTests/TasksUnitTests.js"
     ]

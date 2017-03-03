@@ -160,6 +160,7 @@
     <TypeScriptCompile Include="Dialogs\Dialogs.ts" />
     <TypeScriptCompile Include="UnitTests\AttributesUnitTests.ts" />
     <TypeScriptCompile Include="UnitTests\Mocks.ts" />
+    <TypeScriptCompile Include="UnitTests\SectionsUnitTests.ts" />
     <TypeScriptCompile Include="UnitTests\Setup.ts" />
     <TypeScriptCompile Include="UnitTests\TabsUnitTests.ts" />
     <TypeScriptCompile Include="UnitTests\TasksUnitTests.ts" />
