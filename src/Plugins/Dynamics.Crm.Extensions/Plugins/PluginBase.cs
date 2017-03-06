@@ -6,7 +6,6 @@ using Microsoft.Xrm.Sdk;
 using System;
 using System.Diagnostics;
 using System.Linq;
-using System.ServiceModel;
 
 namespace Dynamics.Crm.Plugins
 {
@@ -27,7 +26,7 @@ namespace Dynamics.Crm.Plugins
             }            
             catch (Exception e)
             {
-                CreateLogEntry(context, e);
+                CreateFromException(context, e);
 
                 throw;
             }
@@ -65,18 +64,11 @@ namespace Dynamics.Crm.Plugins
             }
         }
 
-        protected virtual void CreateLogEntry(IPluginContext context, Exception exception)
+        protected virtual void CreateFromException(IPluginContext context, Exception exception)
         {
-            var repository = new LogEntryRepository(context);
+            var entry = LogEntry.CreateFromException(exception, name: GetType().FullName);
 
-            var entry = new LogEntry
-            {
-                Description = exception.ToString(),
-                Message = exception.Message,
-                Name = GetType().FullName,
-                Source = "Plugin",
-                Type = LogEntryType.Error                
-            };
+            var repository = new LogEntryRepository(context);
 
             repository.Create(entry);
         }

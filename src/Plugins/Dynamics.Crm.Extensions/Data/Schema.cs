@@ -109,6 +109,14 @@ namespace Dynamics.Crm.Data
             public static readonly String TypeFieldName = $"{publisherPrefix}type";
 
             public static readonly String UserFieldName = $"{publisherPrefix}user";
+
+            public static readonly Int32 NameFieldLength = 300;
+
+            public static readonly Int32 MessageFieldLength = 5000;
+
+            public static readonly Int32 DescriptionFieldLength = 1048576;
+
+            public static readonly Int32 SourceFieldLength = 500;
         }
 
         public static class SiteEntity

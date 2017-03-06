@@ -26,7 +26,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;WORKFLOWS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -34,7 +34,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;WORKFLOWS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -101,6 +101,7 @@
     <Compile Include="EnumerableFacts.cs" />
     <Compile Include="EnumFacts.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="LogEntryFacts.cs" />
     <Compile Include="OptionSetValueFacts.cs" />
     <Compile Include="PipelineStageAttributeFacts.cs" />
     <Compile Include="PipelineModeAttributeFacts.cs" />
@@ -109,6 +110,7 @@
     <Compile Include="PluginContextFacts.cs" />
     <Compile Include="PrimaryEntityAttributeFacts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StringFacts.cs" />
     <Compile Include="WorkflowActivityContextFacts.cs" />
   </ItemGroup>
   <ItemGroup>
