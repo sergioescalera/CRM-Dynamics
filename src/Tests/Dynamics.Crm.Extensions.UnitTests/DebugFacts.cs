@@ -1,6 +1,7 @@
 ﻿using Dynamics.Crm.Diagnostics;
 using Dynamics.Crm.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Xrm.Sdk;
 using Moq;
 using System;
 
@@ -21,23 +22,31 @@ namespace Dynamics.Crm.Extensions.UnitTests
             [TestMethod]            
             public void DoesNotLogMessageWhenConditionIsTrue()
             {
-                var mock = new Mock<IPluginContext>();
+                var context = new Mock<IPluginContext>();
+                var trace = new Mock<ITracingService>();
                 var message = "Hello world!";
-                
-                Debug.Assert(condition: true, message: message, localContext: mock.Object);
-                
-                mock.Verify(m => m.Trace(message), Times.Never);
+
+                context.Setup(o => o.TracingService).Returns(trace.Object);
+                trace.Setup(o => o.Trace(message)).Verifiable();
+
+                Debug.Assert(condition: true, message: message, localContext: context.Object);
+
+                trace.Verify(o => o.Trace(message), Times.Never);
             }
 
             [TestMethod]
             public void LogsMessageWhenConditionIsFalse()
             {
-                var mock = new Mock<IPluginContext>();
+                var context = new Mock<IPluginContext>();
+                var trace = new Mock<ITracingService>();
                 var message = "Hello world!";
 
-                Debug.Assert(condition: false, message: message, localContext: mock.Object);
+                context.Setup(o => o.TracingService).Returns(trace.Object);
+                trace.Setup(o => o.Trace(message)).Verifiable();
 
-                mock.Verify(m => m.Trace(message), Times.Once);
+                Debug.Assert(condition: false, message: message, localContext: context.Object);
+
+                trace.Verify(o => o.Trace(message), Times.Once);
             }
         }
     }

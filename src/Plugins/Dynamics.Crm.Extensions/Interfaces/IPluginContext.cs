@@ -1,5 +1,4 @@
-﻿using Dynamics.Crm.Core;
-using Microsoft.Xrm.Sdk;
+﻿using Microsoft.Xrm.Sdk;
 using System;
 
 namespace Dynamics.Crm.Interfaces
@@ -14,6 +13,6 @@ namespace Dynamics.Crm.Interfaces
 
         IServiceProvider ServiceProvider { get; }
 
-        void Trace(String message);
+        ITracingService TracingService { get; }
     }
 }

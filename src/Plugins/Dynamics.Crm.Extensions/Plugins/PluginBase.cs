@@ -70,7 +70,14 @@ namespace Dynamics.Crm.Plugins
 
             var repository = new LogEntryRepository(context);
 
-            repository.Create(entry);
+            try
+            {
+                repository.Create(entry);
+            }
+            catch (Exception ex)
+            {
+                context.TracingService.Trace(ex.ToString());
+            }            
         }
     }
 }

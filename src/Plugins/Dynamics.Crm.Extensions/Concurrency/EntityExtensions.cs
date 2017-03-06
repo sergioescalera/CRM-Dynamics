@@ -32,7 +32,7 @@ namespace Dynamics.Crm.Concurrency
                         
             if (!context.ExecutionContext.IsInTransaction)
             {
-                context.Trace($"Unable to lock {entityTypeName} record with id: {entityId}. Plug-in should run within the context of a transaction.");
+                context.TracingService.Trace($"Unable to lock {entityTypeName} record with id: {entityId}. Plug-in should run within the context of a transaction.");
 
                 return false;
             }
@@ -40,14 +40,14 @@ namespace Dynamics.Crm.Concurrency
             var update = new Entity(entityTypeName);
             var token = Guid.NewGuid();
 
-            context.Trace($"About to lock {entityTypeName} record with id: {entityId}. Concurrency token: {token}. {DateTime.Now.ToString(DateFormat)}");
+            context.TracingService.Trace($"About to lock {entityTypeName} record with id: {entityId}. Concurrency token: {token}. {DateTime.Now.ToString(DateFormat)}");
 
             update.Id = entityId;
             update[concurrencyTokenFieldName] = token.ToString();
 
             context.OrganizationService.Update(update);
 
-            context.Trace($"The {entityTypeName} record with id: {entityId} is locked. Concurrency token: {token}. {DateTime.Now.ToString(DateFormat)}");
+            context.TracingService.Trace($"The {entityTypeName} record with id: {entityId} is locked. Concurrency token: {token}. {DateTime.Now.ToString(DateFormat)}");
 
             return true;
         }

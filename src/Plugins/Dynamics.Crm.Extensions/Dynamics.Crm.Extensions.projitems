@@ -33,6 +33,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Diagnostics\Debug.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Diagnostics\PrettyPrintEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Diagnostics\PluginContextExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Diagnostics\TracingServiceWrapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\AddressExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\DateTimeExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityExtensions.cs" />

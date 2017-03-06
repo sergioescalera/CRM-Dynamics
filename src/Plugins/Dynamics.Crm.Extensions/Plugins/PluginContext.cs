@@ -15,7 +15,7 @@ namespace Dynamics.Crm.Plugins
             ExecutionContext = serviceProvider.GetService<IPluginExecutionContext>();
             OrganizationServiceFactory = serviceProvider.GetService<IOrganizationServiceFactory>();
             OrganizationService = OrganizationServiceFactory.CreateOrganizationService(ExecutionContext.UserId);
-            TracingService = serviceProvider.GetService<ITracingService>();            
+            TracingService = new Diagnostics.TracingServiceWrapper(serviceProvider.GetService<ITracingService>());            
         }
 
         public IPluginExecutionContext ExecutionContext
@@ -46,11 +46,6 @@ namespace Dynamics.Crm.Plugins
         {
             get;
             private set;
-        }
-
-        public virtual void Trace(String message)
-        {
-            TracingService?.Trace(message);
-        }
+        }        
     }
 }

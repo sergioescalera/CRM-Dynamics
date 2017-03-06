@@ -13,7 +13,7 @@ namespace Dynamics.Crm.Diagnostics
             
             if (condition) return;
 
-            localContext.Trace(message ?? String.Empty);
+            localContext.TracingService.Trace(message ?? String.Empty);
         }
     }
 }
