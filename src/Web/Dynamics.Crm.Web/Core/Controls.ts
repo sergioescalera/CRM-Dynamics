@@ -63,7 +63,7 @@
 
         } else {
 
-            console.warn("Controls.setDisabled: Invalid argument. An array was expected.");            
+            console.warn("Controls.setDisabled: Invalid argument. An array was expected.");
         }
     }
 
@@ -83,7 +83,7 @@
         }
     }
 
-    export function setVisible(attributeNames: string[], value: boolean, applyToAll: boolean = true) {
+    export function setVisible(attributeNames: string[], value: boolean, applyToAll: boolean = true): void {
 
         Diagnostics.printArguments("setVisible", attributeNames, value);
 
@@ -94,9 +94,9 @@
                 var attribute = Attributes.get(attributeNames[i], false);
 
                 if (applyToAll && attribute) {
-                    
+
                     attribute.controls.forEach((c: Control) => c.setVisible(value));
-                                        
+
                 } else {
 
                     var control = get(attributeNames[i], false);

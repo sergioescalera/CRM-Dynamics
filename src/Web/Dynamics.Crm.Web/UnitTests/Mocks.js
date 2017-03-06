@@ -12,10 +12,23 @@ var Dynamics;
             var Mocks;
             (function (Mocks) {
                 "use strict";
+                var VisibleObject = (function () {
+                    function VisibleObject() {
+                    }
+                    VisibleObject.prototype.getVisible = function () {
+                        return this._visible;
+                    };
+                    VisibleObject.prototype.setVisible = function (value) {
+                        this._visible = value;
+                    };
+                    return VisibleObject;
+                }());
                 var PageMock = (function () {
                     function PageMock() {
-                        this.ageAttribute = new AttributeMock();
-                        this.attributes = { "age": this.ageAttribute };
+                        this.ageAttribute = new AttributeMock("age", true);
+                        this.attributes = {};
+                        this.attributes[this.ageAttribute.name] = this.ageAttribute;
+                        this.controls = this.ageAttribute.controls;
                         this.mainTab = new TabMock();
                         this.tabs = { "mainTab": this.mainTab };
                         this.ui = {
@@ -33,26 +46,54 @@ var Dynamics;
                     PageMock.prototype.getAttribute = function (name) {
                         return this.attributes[name];
                     };
+                    PageMock.prototype.getControl = function (name) {
+                        return this.controls[name];
+                    };
                     return PageMock;
                 }());
                 Mocks.PageMock = PageMock;
                 var AttributeMock = (function () {
-                    function AttributeMock() {
+                    function AttributeMock(name, header, footer) {
+                        this.controls = {
+                            forEach: this.forEach.bind(this)
+                        };
+                        this.controls[name] = new ControlMock(name);
+                        if (header) {
+                            this.controls[name + "_header"] = new ControlMock(name + "_header");
+                        }
+                        if (footer) {
+                            this.controls[name + "_footer"] = new ControlMock(name + "_footer");
+                        }
+                        this.name = name;
                     }
+                    AttributeMock.prototype.forEach = function (func) {
+                        var keys = [this.name, this.name + "_header", this.name + "_footer"];
+                        for (var i = 0; i < keys.length; i++) {
+                            var control = this.controls[keys[i]];
+                            if (control) {
+                                debugger;
+                                func(control);
+                            }
+                        }
+                    };
                     return AttributeMock;
                 }());
                 Mocks.AttributeMock = AttributeMock;
-                var VisibleMock = (function () {
-                    function VisibleMock() {
+                var ControlMock = (function (_super) {
+                    __extends(ControlMock, _super);
+                    function ControlMock(name) {
+                        _super.call(this);
+                        this.name = name;
                     }
-                    VisibleMock.prototype.getVisible = function () {
-                        return this._visible;
+                    ControlMock.prototype.getDisabled = function () {
+                        return this._disabled;
                     };
-                    VisibleMock.prototype.setVisible = function (value) {
-                        this._visible = value;
+                    ControlMock.prototype.setDisabled = function (value) {
+                        this._disabled = value;
                     };
-                    return VisibleMock;
-                }());
+                    return ControlMock;
+                }(VisibleObject));
+                Mocks.ControlMock = ControlMock;
                 var TabMock = (function (_super) {
                     __extends(TabMock, _super);
                     function TabMock() {
@@ -76,7 +117,7 @@ var Dynamics;
                         return null;
                     };
                     return TabMock;
-                }(VisibleMock));
+                }(VisibleObject));
                 Mocks.TabMock = TabMock;
                 var SectionMock = (function (_super) {
                     __extends(SectionMock, _super);
@@ -84,9 +125,10 @@ var Dynamics;
                         _super.apply(this, arguments);
                     }
                     return SectionMock;
-                }(VisibleMock));
+                }(VisibleObject));
                 Mocks.SectionMock = SectionMock;
             })(Mocks = UnitTests.Mocks || (UnitTests.Mocks = {}));
         })(UnitTests = Crm.UnitTests || (Crm.UnitTests = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
+//# sourceMappingURL=Mocks.js.map

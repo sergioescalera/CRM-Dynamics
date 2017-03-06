@@ -143,7 +143,7 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
+//# sourceMappingURL=Attributes.js.map
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -189,7 +189,7 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
+//# sourceMappingURL=Constants.js.map
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -294,7 +294,7 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
+//# sourceMappingURL=Controls.js.map
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -395,7 +395,7 @@ var Dynamics;
         })(Diagnostics = Crm.Diagnostics || (Crm.Diagnostics = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
+//# sourceMappingURL=Diagnostics.js.map
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -428,7 +428,7 @@ var Dynamics;
         })(Dialogs = Crm.Dialogs || (Crm.Dialogs = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
+//# sourceMappingURL=Dialogs.js.map
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -453,7 +453,7 @@ var Dynamics;
         })(Core = Crm.Core || (Crm.Core = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
+//# sourceMappingURL=Entity.js.map
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -498,7 +498,7 @@ var Dynamics;
         })(Core = Crm.Core || (Crm.Core = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
+//# sourceMappingURL=Enums.js.map
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -548,7 +548,7 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
+//# sourceMappingURL=Forms.js.map
 
 var Dynamics;
 (function (Dynamics) {
@@ -606,7 +606,7 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
+//# sourceMappingURL=Navigation.js.map
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -634,7 +634,7 @@ var Dynamics;
         })(Reports = Crm.Reports || (Crm.Reports = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
+//# sourceMappingURL=Reports.js.map
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -689,7 +689,7 @@ var Dynamics;
         })(ScriptManager = Crm.ScriptManager || (Crm.ScriptManager = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
+//# sourceMappingURL=ScriptManager.js.map
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -757,7 +757,7 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
+//# sourceMappingURL=Sections.js.map
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -849,7 +849,7 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
+//# sourceMappingURL=Tabs.js.map
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -894,7 +894,7 @@ var Dynamics;
         })(Tasks = Crm.Tasks || (Crm.Tasks = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
+//# sourceMappingURL=Tasks.js.map
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -909,8 +909,8 @@ var Dynamics;
         })(User = Crm.User || (Crm.User = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
-
+//# sourceMappingURL=User.js.map
+//# sourceMappingURL=Interfaces.js.map
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -1101,7 +1101,7 @@ var Dynamics;
         })(OData = Crm.OData || (Crm.OData = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
+//# sourceMappingURL=OData.js.map
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -1156,3 +1156,4 @@ var Dynamics;
         })(Data = Crm.Data || (Crm.Data = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
+//# sourceMappingURL=Repositories.js.map

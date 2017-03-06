@@ -1,18 +1,34 @@
-﻿module Dynamics.Crm.UnitTests.Mocks {
+﻿
+module Dynamics.Crm.UnitTests.Mocks {
 
     "use strict";
+
+    class VisibleObject {
+
+        private _visible: boolean;
+
+        getVisible(): boolean {
+            return this._visible;
+        }
+        setVisible(value: boolean): void {
+            this._visible = value;
+        }
+    }
 
     export class PageMock {
 
         ageAttribute: AttributeMock;
         attributes: any;
-        mainTab: TabMock;        
+        controls: any;
+        mainTab: TabMock;
         tabs: any;
         ui: any;
 
         constructor() {
-            this.ageAttribute = new AttributeMock();
-            this.attributes = { "age": this.ageAttribute };
+            this.ageAttribute = new AttributeMock("age", true);
+            this.attributes = {};
+            this.attributes[this.ageAttribute.name] = this.ageAttribute;
+            this.controls = this.ageAttribute.controls;
             this.mainTab = new TabMock();
             this.tabs = { "mainTab": this.mainTab };
             this.ui = {
@@ -36,27 +52,72 @@
 
             return this.attributes[name];
         }
+
+        getControl(name: string): ControlMock {
+
+            return this.controls[name];
+        }
     }
 
     export class AttributeMock {
 
+        controls: any;
+        name: string;
 
+        constructor(name: string, header?: boolean, footer?: boolean) {
+
+            this.controls = {
+                forEach: this.forEach.bind(this)
+            };
+            this.controls[name] = new ControlMock(name);
+            if (header) {
+                this.controls[name + "_header"] = new ControlMock(name + "_header");
+            }
+            if (footer) {
+                this.controls[name + "_footer"] = new ControlMock(name + "_footer");
+            }
+            this.name = name;
+        }
+
+        forEach(func: (c: Control) => void): void {
+            
+            var keys = [this.name, this.name + "_header", this.name + "_footer"];
+
+            for (var i = 0; i < keys.length; i++) {
+
+                var control = this.controls[keys[i]];
+
+                if (control) {
+                    debugger;
+                    func(control);
+                }
+            }
+        }
     }
 
-    class VisibleMock {
+    export class ControlMock extends VisibleObject {
 
-        private _visible: boolean;
+        private _disabled: boolean;
 
-        getVisible(): boolean {
-            return this._visible;
+        name: string;
+
+        constructor(name: string) {
+
+            super();
+
+            this.name = name;
         }
-        setVisible(value: boolean): void {
-            this._visible = value;
+
+        getDisabled(): boolean {
+            return this._disabled;
+        }
+        setDisabled(value: boolean): void {
+            this._disabled = value;
         }
     }
 
-    export class TabMock extends VisibleMock {
-        
+    export class TabMock extends VisibleObject {
+
         private _displayState: string;
         private _sections: any;
 
@@ -93,6 +154,6 @@
         }
     }
 
-    export class SectionMock extends VisibleMock {        
+    export class SectionMock extends VisibleObject {
     }
 }

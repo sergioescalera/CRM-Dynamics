@@ -1,5 +1,5 @@
 Dynamics.Crm.Diagnostics.useConsoleLogger();
-
+//# sourceMappingURL=Setup.js.map
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -14,10 +14,23 @@ var Dynamics;
             var Mocks;
             (function (Mocks) {
                 "use strict";
+                var VisibleObject = (function () {
+                    function VisibleObject() {
+                    }
+                    VisibleObject.prototype.getVisible = function () {
+                        return this._visible;
+                    };
+                    VisibleObject.prototype.setVisible = function (value) {
+                        this._visible = value;
+                    };
+                    return VisibleObject;
+                }());
                 var PageMock = (function () {
                     function PageMock() {
-                        this.ageAttribute = new AttributeMock();
-                        this.attributes = { "age": this.ageAttribute };
+                        this.ageAttribute = new AttributeMock("age", true);
+                        this.attributes = {};
+                        this.attributes[this.ageAttribute.name] = this.ageAttribute;
+                        this.controls = this.ageAttribute.controls;
                         this.mainTab = new TabMock();
                         this.tabs = { "mainTab": this.mainTab };
                         this.ui = {
@@ -35,26 +48,54 @@ var Dynamics;
                     PageMock.prototype.getAttribute = function (name) {
                         return this.attributes[name];
                     };
+                    PageMock.prototype.getControl = function (name) {
+                        return this.controls[name];
+                    };
                     return PageMock;
                 }());
                 Mocks.PageMock = PageMock;
                 var AttributeMock = (function () {
-                    function AttributeMock() {
+                    function AttributeMock(name, header, footer) {
+                        this.controls = {
+                            forEach: this.forEach.bind(this)
+                        };
+                        this.controls[name] = new ControlMock(name);
+                        if (header) {
+                            this.controls[name + "_header"] = new ControlMock(name + "_header");
+                        }
+                        if (footer) {
+                            this.controls[name + "_footer"] = new ControlMock(name + "_footer");
+                        }
+                        this.name = name;
                     }
+                    AttributeMock.prototype.forEach = function (func) {
+                        var keys = [this.name, this.name + "_header", this.name + "_footer"];
+                        for (var i = 0; i < keys.length; i++) {
+                            var control = this.controls[keys[i]];
+                            if (control) {
+                                debugger;
+                                func(control);
+                            }
+                        }
+                    };
                     return AttributeMock;
                 }());
                 Mocks.AttributeMock = AttributeMock;
-                var VisibleMock = (function () {
-                    function VisibleMock() {
+                var ControlMock = (function (_super) {
+                    __extends(ControlMock, _super);
+                    function ControlMock(name) {
+                        _super.call(this);
+                        this.name = name;
                     }
-                    VisibleMock.prototype.getVisible = function () {
-                        return this._visible;
+                    ControlMock.prototype.getDisabled = function () {
+                        return this._disabled;
                     };
-                    VisibleMock.prototype.setVisible = function (value) {
-                        this._visible = value;
+                    ControlMock.prototype.setDisabled = function (value) {
+                        this._disabled = value;
                     };
-                    return VisibleMock;
-                }());
+                    return ControlMock;
+                }(VisibleObject));
+                Mocks.ControlMock = ControlMock;
                 var TabMock = (function (_super) {
                     __extends(TabMock, _super);
                     function TabMock() {
@@ -78,7 +119,7 @@ var Dynamics;
                         return null;
                     };
                     return TabMock;
-                }(VisibleMock));
+                }(VisibleObject));
                 Mocks.TabMock = TabMock;
                 var SectionMock = (function (_super) {
                     __extends(SectionMock, _super);
@@ -86,13 +127,13 @@ var Dynamics;
                         _super.apply(this, arguments);
                     }
                     return SectionMock;
-                }(VisibleMock));
+                }(VisibleObject));
                 Mocks.SectionMock = SectionMock;
             })(Mocks = UnitTests.Mocks || (UnitTests.Mocks = {}));
         })(UnitTests = Crm.UnitTests || (Crm.UnitTests = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
+//# sourceMappingURL=Mocks.js.map
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -112,16 +153,89 @@ var Dynamics;
                     expect(attribute).toBeNull();
                 });
                 it("Throws error for missing attribute when required", function () {
-                    expect(function () { return Crm.Forms.Tabs.get("notAge", true); }).toThrowError(Error);
+                    expect(function () { return Crm.Forms.Attributes.get("notAge", true); }).toThrowError(Error);
                 });
                 it("Throws error for missing attribute when required by default", function () {
-                    expect(function () { return Crm.Forms.Tabs.get("notAge"); }).toThrowError(Error);
+                    expect(function () { return Crm.Forms.Attributes.get("notAge"); }).toThrowError(Error);
                 });
             });
         })(UnitTests = Crm.UnitTests || (Crm.UnitTests = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
+//# sourceMappingURL=AttributesUnitTests.js.map
+var Dynamics;
+(function (Dynamics) {
+    var Crm;
+    (function (Crm) {
+        var UnitTests;
+        (function (UnitTests) {
+            "use strict";
+            describe("Controls.get", function () {
+                beforeEach(function () {
+                    window["Xrm"] = { Page: new UnitTests.Mocks.PageMock() };
+                });
+                afterEach(function () {
+                    window["Xrm"] = undefined;
+                });
+                it("Returns null for missing control when not required", function () {
+                    var control = Crm.Forms.Controls.get("notAge", false);
+                    expect(control).toBeNull();
+                });
+                it("Throws error for missing control when required", function () {
+                    expect(function () { return Crm.Forms.Controls.get("notAge", true); }).toThrowError(Error);
+                });
+                it("Throws error for missing control when required by default", function () {
+                    expect(function () { return Crm.Forms.Controls.get("notAge"); }).toThrowError(Error);
+                });
+            });
+            describe("Controls.setDisabled", function () {
+                beforeEach(function () {
+                    window["Xrm"] = { Page: new UnitTests.Mocks.PageMock() };
+                });
+                afterEach(function () {
+                    window["Xrm"] = undefined;
+                });
+                it("Does not throw error for missing control", function () {
+                    expect(function () { return Crm.Forms.Controls.setDisabled(["notAge"], true, true); }).not.toThrowError();
+                    expect(function () { return Crm.Forms.Controls.setDisabled(["notAge"], false, true); }).not.toThrowError();
+                    expect(function () { return Crm.Forms.Controls.setDisabled(["notAge"], true, false); }).not.toThrowError();
+                    expect(function () { return Crm.Forms.Controls.setDisabled(["notAge"], false, false); }).not.toThrowError();
+                });
+                it("Sets all disabled", function () {
+                    var control = window["Xrm"].Page.controls.age;
+                    var header = window["Xrm"].Page.controls.age_header;
+                    Crm.Forms.Controls.setDisabled(["age"], false, true);
+                    Crm.Forms.Controls.setDisabled(["age"], true, true);
+                    expect(control.getDisabled()).toBe(true);
+                    expect(header.getDisabled()).toBe(true);
+                });
+                it("Sets control in body disabled", function () {
+                    var control = window["Xrm"].Page.controls.age;
+                    var header = window["Xrm"].Page.controls.age_header;
+                    Crm.Forms.Controls.setDisabled(["age"], false, true);
+                    Crm.Forms.Controls.setDisabled(["age"], true, false);
+                    expect(control.getDisabled()).toBe(true);
+                    expect(header.getDisabled()).toBe(false);
+                });
+            });
+            describe("Controls.setVisible", function () {
+                beforeEach(function () {
+                    window["Xrm"] = { Page: new UnitTests.Mocks.PageMock() };
+                });
+                afterEach(function () {
+                    window["Xrm"] = undefined;
+                });
+                it("Does not throw error for missing control", function () {
+                    expect(function () { return Crm.Forms.Controls.setVisible(["notAge"], true, true); }).not.toThrowError();
+                    expect(function () { return Crm.Forms.Controls.setVisible(["notAge"], false, true); }).not.toThrowError();
+                    expect(function () { return Crm.Forms.Controls.setVisible(["notAge"], true, false); }).not.toThrowError();
+                    expect(function () { return Crm.Forms.Controls.setVisible(["notAge"], false, false); }).not.toThrowError();
+                });
+            });
+        })(UnitTests = Crm.UnitTests || (Crm.UnitTests = {}));
+    })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
+})(Dynamics || (Dynamics = {}));
+//# sourceMappingURL=ControlsUnitTests.js.map
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -201,7 +315,7 @@ var Dynamics;
         })(UnitTests = Crm.UnitTests || (Crm.UnitTests = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
+//# sourceMappingURL=SectionsUnitTests.js.map
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -315,7 +429,7 @@ var Dynamics;
         })(UnitTests = Crm.UnitTests || (Crm.UnitTests = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-
+//# sourceMappingURL=TabsUnitTests.js.map
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -377,3 +491,4 @@ var Dynamics;
         })(UnitTests = Crm.UnitTests || (Crm.UnitTests = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
+//# sourceMappingURL=TasksUnitTests.js.map

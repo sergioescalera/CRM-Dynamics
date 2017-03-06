@@ -17,12 +17,13 @@ var Dynamics;
                     expect(attribute).toBeNull();
                 });
                 it("Throws error for missing attribute when required", function () {
-                    expect(function () { return Crm.Forms.Tabs.get("notAge", true); }).toThrowError(Error);
+                    expect(function () { return Crm.Forms.Attributes.get("notAge", true); }).toThrowError(Error);
                 });
                 it("Throws error for missing attribute when required by default", function () {
-                    expect(function () { return Crm.Forms.Tabs.get("notAge"); }).toThrowError(Error);
+                    expect(function () { return Crm.Forms.Attributes.get("notAge"); }).toThrowError(Error);
                 });
             });
         })(UnitTests = Crm.UnitTests || (Crm.UnitTests = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
+//# sourceMappingURL=AttributesUnitTests.js.map

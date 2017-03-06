@@ -52,3 +52,4 @@ var Dynamics;
         })(ScriptManager = Crm.ScriptManager || (Crm.ScriptManager = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
+//# sourceMappingURL=ScriptManager.js.map

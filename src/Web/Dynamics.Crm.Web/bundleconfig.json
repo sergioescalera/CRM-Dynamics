@@ -6,13 +6,15 @@
       "Widgets/MetadataBrowser/Scripts/Config.js",
       "Widgets/MetadataBrowser/Scripts/Core.js",
       "Widgets/MetadataBrowser/Scripts/Controllers.js"
-    ]
+    ],
+    "sourceMap": false
   },
   {
     "outputFileName": "Scripts/Libs/SDK.MetaData.min.js",
     "inputFiles": [
       "Scripts/Libs/SDK.MetaData.js"
-    ]
+    ],
+    "sourceMap": false
   },
   {
     "outputFileName": "Scripts/Dynamics.Crm.Forms.js",
@@ -22,7 +24,8 @@
       "libs/lodash/lodash.min.js",
       "Core/*.js",
       "Data/*.js"
-    ]
+    ],
+    "sourceMap": false
   },
   {
     "outputFileName": "Scripts/Dynamics.Crm.Dialogs.js",
@@ -30,7 +33,8 @@
       "Core/Constants.js",
       "Core/ScriptManager.js",
       "Dialogs/*.js"
-    ]
+    ],
+    "sourceMap": false
   },
   {
     "outputFileName": "UnitTests/Dynamics.Crm.UnitTests.js",
@@ -38,33 +42,39 @@
       "UnitTests/Setup.js",
       "UnitTests/Mocks.js",
       "UnitTests/AttributesUnitTests.js",
+      "UnitTests/ControlsUnitTests.js",
       "UnitTests/SectionsUnitTests.js",
       "UnitTests/TabsUnitTests.js",
       "UnitTests/TasksUnitTests.js"
-    ]
+    ],
+    "sourceMap": false
   },
   {
     "outputFileName": "Libs/bootstrap/css/bootstrap.min.css",
     "inputFiles": [
       "Libs/bootstrap/css/bootstrap.css"
-    ]
+    ],
+    "sourceMap": false
   },
   {
     "outputFileName": "Libs/bootstrap/js/bootstrap.min.js",
     "inputFiles": [
       "Libs/bootstrap/js/bootstrap.js"
-    ]
+    ],
+    "sourceMap": false
   },
   {
     "outputFileName": "Libs/lodash/lodash.min.js",
     "inputFiles": [
       "Libs/lodash/lodash.js"
-    ]
+    ],
+    "sourceMap": false
   },
   {
     "outputFileName": "Libs/moment/moment.min.js",
     "inputFiles": [
       "Libs/moment/moment.js"
-    ]
+    ],
+    "sourceMap": false
   }
 ]

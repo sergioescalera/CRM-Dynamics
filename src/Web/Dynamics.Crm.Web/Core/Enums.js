@@ -42,3 +42,4 @@ var Dynamics;
         })(Core = Crm.Core || (Crm.Core = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
+//# sourceMappingURL=Enums.js.map

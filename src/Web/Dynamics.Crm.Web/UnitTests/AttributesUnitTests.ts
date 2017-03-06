@@ -21,12 +21,12 @@
 
         it("Throws error for missing attribute when required", () => {
 
-            expect(() => Forms.Tabs.get("notAge", true)).toThrowError(Error);
+            expect(() => Forms.Attributes.get("notAge", true)).toThrowError(Error);
         });
 
         it("Throws error for missing attribute when required by default", () => {
 
-            expect(() => Forms.Tabs.get("notAge")).toThrowError(Error);
+            expect(() => Forms.Attributes.get("notAge")).toThrowError(Error);
         });
     });
 }

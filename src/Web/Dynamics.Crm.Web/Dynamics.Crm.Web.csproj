@@ -159,6 +159,7 @@
     <TypeScriptCompile Include="Dialogs\BootstrapDialogs.ts" />
     <TypeScriptCompile Include="Dialogs\Dialogs.ts" />
     <TypeScriptCompile Include="UnitTests\AttributesUnitTests.ts" />
+    <TypeScriptCompile Include="UnitTests\ControlsUnitTests.ts" />
     <TypeScriptCompile Include="UnitTests\Mocks.ts" />
     <TypeScriptCompile Include="UnitTests\SectionsUnitTests.ts" />
     <TypeScriptCompile Include="UnitTests\Setup.ts" />
