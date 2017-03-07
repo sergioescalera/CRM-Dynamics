@@ -1,5 +1,7 @@
 ﻿declare var _: LodashStatic;
 
 interface LodashStatic {
-    remove(array: any[], predicate?: (o: any) => boolean): any[]
+    isNumber(value: any): boolean;
+    isString(value: any): boolean;
+    remove(array: any[], predicate?: (o: any) => boolean): any[];
 }

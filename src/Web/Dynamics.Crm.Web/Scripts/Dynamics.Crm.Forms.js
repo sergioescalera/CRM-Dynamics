@@ -353,10 +353,12 @@ var Dynamics;
                 var entry = {
                     type: Crm.Data.Schema.LogEntryEntity.type,
                 };
-                entry[Crm.Data.Schema.LogEntryEntity.nameField] = error.type ? (error.type + ":" + message) : message;
-                entry[Crm.Data.Schema.LogEntryEntity.messageField] = message === error.message ? message : (message + error.message);
-                entry[Crm.Data.Schema.LogEntryEntity.descriptionField] = description;
-                entry[Crm.Data.Schema.LogEntryEntity.sourceField] = source;
+                var name = error.type ? (error.type + ":" + message) : message;
+                var message = message === error.message ? message : (message + error.message);
+                entry[Crm.Data.Schema.LogEntryEntity.nameField] = Validation.Strings.left(name, 300);
+                entry[Crm.Data.Schema.LogEntryEntity.messageField] = Validation.Strings.left(message, 5000);
+                entry[Crm.Data.Schema.LogEntryEntity.descriptionField] = Validation.Strings.right(description, 1048576);
+                entry[Crm.Data.Schema.LogEntryEntity.sourceField] = Validation.Strings.left(source, 500);
                 entry[Crm.Data.Schema.LogEntryEntity.typeField] = Dynamics.Crm.Core.LogEntryType.Error;
                 return entry;
             }
@@ -910,6 +912,69 @@ var Dynamics;
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
 //# sourceMappingURL=User.js.map
+var Validation;
+(function (Validation) {
+    "use strict";
+    function ensureNotNullOrUndefined(value, label) {
+        if (value === undefined || value === null) {
+            throw new Error(Resources.Strings.NullArgumentMessageFormat(label));
+        }
+    }
+    Validation.ensureNotNullOrUndefined = ensureNotNullOrUndefined;
+    function ensureNotNullOrEmpty(str, label) {
+        if (str === undefined || str === null) {
+            throw new Error(Resources.Strings.NullArgumentMessageFormat(label));
+        }
+        if (!_.isString(str)) {
+            throw new Error(Resources.Strings.InvalidTypeMessageFormat("string", typeof str));
+        }
+        if (str === "") {
+            throw new Error(Resources.Strings.NullArgumentMessageFormat(label));
+        }
+    }
+    Validation.ensureNotNullOrEmpty = ensureNotNullOrEmpty;
+    function ensureNumberInRange(value, min, max, paramName) {
+        if (min === void 0) { min = null; }
+        if (max === void 0) { max = null; }
+        if (paramName === void 0) { paramName = null; }
+        if (!_.isNumber(value)) {
+            throw new Error(Resources.Strings.InvalidTypeMessageFormat("number", typeof value));
+        }
+        if (_.isNumber(min) && value < min) {
+            throw new Error(Resources.Strings.OutOfRangeMessageFormat(paramName));
+        }
+        if (_.isNumber(max) && value > max) {
+            throw new Error(Resources.Strings.OutOfRangeMessageFormat(paramName));
+        }
+    }
+    Validation.ensureNumberInRange = ensureNumberInRange;
+})(Validation || (Validation = {}));
+var Validation;
+(function (Validation) {
+    var Strings;
+    (function (Strings) {
+        "use strict";
+        function left(str, length) {
+            Validation.ensureNumberInRange(length, 0);
+            if (str === null || str === undefined)
+                return str;
+            if (str.length <= length)
+                return str;
+            return str.substr(0, length);
+        }
+        Strings.left = left;
+        function right(str, length) {
+            Validation.ensureNumberInRange(length, 0);
+            if (str === null || str === undefined)
+                return str;
+            if (str.length <= length)
+                return str;
+            return str.substr(str.length - length, length);
+        }
+        Strings.right = right;
+    })(Strings = Validation.Strings || (Validation.Strings = {}));
+})(Validation || (Validation = {}));
+//# sourceMappingURL=Validation.js.map
 //# sourceMappingURL=Interfaces.js.map
 var Dynamics;
 (function (Dynamics) {
@@ -1007,7 +1072,7 @@ var Dynamics;
                     if (!response || !response.responseJSON || !response.responseJSON.error) {
                         return;
                     }
-                    Dynamics.Crm.Diagnostics.log.Error(response.responseJSON.error.message, response.responseJSON.error.innererror || response.responseJSON.error);
+                    Crm.Diagnostics.log.Error(response.responseJSON.error.message, response.responseJSON.error.innererror || response.responseJSON.error);
                 });
             }
             OData.retrieve = retrieve;
@@ -1032,7 +1097,7 @@ var Dynamics;
                     if (!response || !response.responseJSON || !response.responseJSON.error) {
                         return;
                     }
-                    Dynamics.Crm.Diagnostics.log.Error(response.responseJSON.error.message, response.responseJSON.error.innererror || response.responseJSON.error);
+                    Crm.Diagnostics.log.Error(response.responseJSON.error.message, response.responseJSON.error.innererror || response.responseJSON.error);
                 });
             }
             OData.retrieveMultiple = retrieveMultiple;

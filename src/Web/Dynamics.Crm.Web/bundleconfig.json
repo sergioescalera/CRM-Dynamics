@@ -2,6 +2,8 @@
   {
     "outputFileName": "Widgets/MetadataBrowser/Scripts/Bundle.js",
     "inputFiles": [
+      "Core/Diagnostics.js",
+      "Core/Validation.js",
       "Data/OData.js",
       "Widgets/MetadataBrowser/Scripts/Config.js",
       "Widgets/MetadataBrowser/Scripts/Core.js",
@@ -45,7 +47,8 @@
       "UnitTests/ControlsUnitTests.js",
       "UnitTests/SectionsUnitTests.js",
       "UnitTests/TabsUnitTests.js",
-      "UnitTests/TasksUnitTests.js"
+      "UnitTests/TasksUnitTests.js",
+      "UnitTests/ValidationUnitTests.js"
     ],
     "sourceMap": false
   },

@@ -86,10 +86,13 @@
             type: Data.Schema.LogEntryEntity.type,            
         };
 
-        entry[Data.Schema.LogEntryEntity.nameField] = error.type ? (error.type + ":" + message) : message;
-        entry[Data.Schema.LogEntryEntity.messageField] = message === error.message ? message : (message + error.message);
-        entry[Data.Schema.LogEntryEntity.descriptionField] = description;
-        entry[Data.Schema.LogEntryEntity.sourceField] = source;
+        var name = error.type ? (error.type + ":" + message) : message;
+        var message = message === error.message ? message : (message + error.message);
+
+        entry[Data.Schema.LogEntryEntity.nameField] = Validation.Strings.left(name, 300);
+        entry[Data.Schema.LogEntryEntity.messageField] = Validation.Strings.left(message, 5000);
+        entry[Data.Schema.LogEntryEntity.descriptionField] = Validation.Strings.right(description, 1048576);
+        entry[Data.Schema.LogEntryEntity.sourceField] = Validation.Strings.left(source, 500);
         entry[Data.Schema.LogEntryEntity.typeField] = Dynamics.Crm.Core.LogEntryType.Error;
 
         return entry;

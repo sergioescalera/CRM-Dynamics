@@ -94,7 +94,7 @@ var Dynamics;
                     if (!response || !response.responseJSON || !response.responseJSON.error) {
                         return;
                     }
-                    Dynamics.Crm.Diagnostics.log.Error(response.responseJSON.error.message, response.responseJSON.error.innererror || response.responseJSON.error);
+                    Crm.Diagnostics.log.Error(response.responseJSON.error.message, response.responseJSON.error.innererror || response.responseJSON.error);
                 });
             }
             OData.retrieve = retrieve;
@@ -119,7 +119,7 @@ var Dynamics;
                     if (!response || !response.responseJSON || !response.responseJSON.error) {
                         return;
                     }
-                    Dynamics.Crm.Diagnostics.log.Error(response.responseJSON.error.message, response.responseJSON.error.innererror || response.responseJSON.error);
+                    Crm.Diagnostics.log.Error(response.responseJSON.error.message, response.responseJSON.error.innererror || response.responseJSON.error);
                 });
             }
             OData.retrieveMultiple = retrieveMultiple;

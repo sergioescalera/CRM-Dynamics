@@ -153,11 +153,13 @@
     <TypeScriptCompile Include="Core\Tabs.ts" />
     <TypeScriptCompile Include="Core\Tasks.ts" />
     <TypeScriptCompile Include="Core\User.ts" />
+    <TypeScriptCompile Include="Core\Validation.ts" />
     <TypeScriptCompile Include="Data\Interfaces.ts" />
     <TypeScriptCompile Include="Data\OData.ts" />
     <TypeScriptCompile Include="Data\Repositories.ts" />
     <TypeScriptCompile Include="Dialogs\BootstrapDialogs.ts" />
     <TypeScriptCompile Include="Dialogs\Dialogs.ts" />
+    <TypeScriptCompile Include="Resources\Strings.ts" />
     <TypeScriptCompile Include="UnitTests\AttributesUnitTests.ts" />
     <TypeScriptCompile Include="UnitTests\ControlsUnitTests.ts" />
     <TypeScriptCompile Include="UnitTests\Mocks.ts" />
@@ -165,6 +167,7 @@
     <TypeScriptCompile Include="UnitTests\Setup.ts" />
     <TypeScriptCompile Include="UnitTests\TabsUnitTests.ts" />
     <TypeScriptCompile Include="UnitTests\TasksUnitTests.ts" />
+    <TypeScriptCompile Include="UnitTests\ValidationUnitTests.ts" />
     <TypeScriptCompile Include="Widgets\MetadataBrowser\Scripts\Config.ts" />
     <TypeScriptCompile Include="Widgets\MetadataBrowser\Scripts\Controllers.ts" />
     <TypeScriptCompile Include="Widgets\MetadataBrowser\Scripts\Core.ts" />

@@ -71,7 +71,6 @@ var Dynamics;
                         for (var i = 0; i < keys.length; i++) {
                             var control = this.controls[keys[i]];
                             if (control) {
-                                debugger;
                                 func(control);
                             }
                         }

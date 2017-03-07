@@ -87,8 +87,7 @@ module Dynamics.Crm.UnitTests.Mocks {
 
                 var control = this.controls[keys[i]];
 
-                if (control) {
-                    debugger;
+                if (control) {                    
                     func(control);
                 }
             }

@@ -34,6 +34,7 @@ namespace Dynamics.Crm.Extensions.UnitTests
                 Assert.AreEqual("a", "abc".Left(1));
                 Assert.AreEqual("ab", "abc".Left(2));
                 Assert.AreEqual("abc", "abc".Left(3));
+                Assert.AreEqual("abc", "abc".Left(5));
             }
         }
 
@@ -65,6 +66,7 @@ namespace Dynamics.Crm.Extensions.UnitTests
                 Assert.AreEqual("c", "abc".Right(1));
                 Assert.AreEqual("bc", "abc".Right(2));
                 Assert.AreEqual("abc", "abc".Right(3));
+                Assert.AreEqual("abc", "abc".Right(5));
             }
         }
     }

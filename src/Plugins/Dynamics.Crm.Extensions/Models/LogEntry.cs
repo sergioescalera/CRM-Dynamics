@@ -16,7 +16,7 @@ namespace Dynamics.Crm.Models
         {
             Name = name?.Left(Schema.LogEntryEntity.NameFieldLength);
             Message = message?.Left(Schema.LogEntryEntity.MessageFieldLength);
-            Description = description?.Left(Schema.LogEntryEntity.DescriptionFieldLength);
+            Description = description?.Right(Schema.LogEntryEntity.DescriptionFieldLength);
             Source = source?.Left(Schema.LogEntryEntity.SourceFieldLength);
             Type = type;
         }

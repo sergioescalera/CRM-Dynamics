@@ -21,17 +21,10 @@ namespace Dynamics.Crm.Activities
                 stopwatch.Start();
                 Execute(context);
                 stopwatch.Stop();
-            }
-            catch (InvalidPluginExecutionException)
+            }            
+            catch (Exception)
             {
-                throw;
-            }
-            catch (FaultException<OrganizationServiceFault> e)
-            {
-                throw;
-            }
-            catch (Exception e)
-            {
+                // TODO
                 throw;
             }
         }

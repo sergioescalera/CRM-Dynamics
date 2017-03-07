@@ -2,6 +2,172 @@ var Dynamics;
 (function (Dynamics) {
     var Crm;
     (function (Crm) {
+        var Diagnostics;
+        (function (Diagnostics) {
+            "use strict";
+            Diagnostics.debug = true;
+            Diagnostics.trace = true;
+            var ConsoleLogger = (function () {
+                function ConsoleLogger() {
+                }
+                ConsoleLogger.prototype.Error = function (message, error) {
+                    if (Diagnostics.debug) {
+                        debugger;
+                    }
+                    var entry = createLogEntry(message, error);
+                    console.error(entry);
+                };
+                ConsoleLogger.prototype.Message = function (message) {
+                    console.log(message);
+                };
+                ConsoleLogger.prototype.Warning = function (message) {
+                    console.log(message);
+                };
+                return ConsoleLogger;
+            }());
+            var LogEntryLogger = (function () {
+                function LogEntryLogger() {
+                }
+                LogEntryLogger.prototype.Error = function (message, error) {
+                    if (Diagnostics.debug) {
+                        debugger;
+                    }
+                    var entry = createLogEntry(message, error);
+                    console.error(entry);
+                    Dynamics.Crm.Data.unitOfWork
+                        .GetLogEntryRepository()
+                        .Create(entry);
+                };
+                LogEntryLogger.prototype.Message = function (message) {
+                    console.log(message);
+                };
+                LogEntryLogger.prototype.Warning = function (message) {
+                    console.log(message);
+                };
+                return LogEntryLogger;
+            }());
+            function createLogEntry(message, error) {
+                var entityName = getEntityName();
+                var source = ("JavaScript::{entityName}")
+                    .replace("{entityName}", entityName);
+                var description = ("Stack: {stackTrace}\nDescription: {errorDescription}")
+                    .replace("{stackTrace}", error.stack || error.stacktrace || "<none>")
+                    .replace("{errorDescription}", error.description || "<none>");
+                var entry = {
+                    type: Crm.Data.Schema.LogEntryEntity.type,
+                };
+                var name = error.type ? (error.type + ":" + message) : message;
+                var message = message === error.message ? message : (message + error.message);
+                entry[Crm.Data.Schema.LogEntryEntity.nameField] = Validation.Strings.left(name, 300);
+                entry[Crm.Data.Schema.LogEntryEntity.messageField] = Validation.Strings.left(message, 5000);
+                entry[Crm.Data.Schema.LogEntryEntity.descriptionField] = Validation.Strings.right(description, 1048576);
+                entry[Crm.Data.Schema.LogEntryEntity.sourceField] = Validation.Strings.left(source, 500);
+                entry[Crm.Data.Schema.LogEntryEntity.typeField] = Dynamics.Crm.Core.LogEntryType.Error;
+                return entry;
+            }
+            function getEntityName() {
+                try {
+                    return Xrm.Page.data.entity.getEntityName();
+                }
+                catch (e) {
+                    console.warn(e);
+                    return "UnknownEntity";
+                }
+            }
+            function useLogEntryLogger() {
+                Diagnostics.log = new LogEntryLogger();
+            }
+            Diagnostics.useLogEntryLogger = useLogEntryLogger;
+            function useConsoleLogger() {
+                Diagnostics.log = new ConsoleLogger();
+            }
+            Diagnostics.useConsoleLogger = useConsoleLogger;
+            // trace arguments
+            function printArguments() {
+                var args = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    args[_i - 0] = arguments[_i];
+                }
+                console.log("Function " + arguments[0] + " called with arguments: {");
+                for (var i = 1; i < arguments.length; i++) {
+                    console.log(arguments[i]);
+                }
+                console.log("}");
+            }
+            Diagnostics.printArguments = printArguments;
+            // variables
+            useLogEntryLogger();
+        })(Diagnostics = Crm.Diagnostics || (Crm.Diagnostics = {}));
+    })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
+})(Dynamics || (Dynamics = {}));
+
+var Validation;
+(function (Validation) {
+    "use strict";
+    function ensureNotNullOrUndefined(value, label) {
+        if (value === undefined || value === null) {
+            throw new Error(Resources.Strings.NullArgumentMessageFormat(label));
+        }
+    }
+    Validation.ensureNotNullOrUndefined = ensureNotNullOrUndefined;
+    function ensureNotNullOrEmpty(str, label) {
+        if (str === undefined || str === null) {
+            throw new Error(Resources.Strings.NullArgumentMessageFormat(label));
+        }
+        if (!_.isString(str)) {
+            throw new Error(Resources.Strings.InvalidTypeMessageFormat("string", typeof str));
+        }
+        if (str === "") {
+            throw new Error(Resources.Strings.NullArgumentMessageFormat(label));
+        }
+    }
+    Validation.ensureNotNullOrEmpty = ensureNotNullOrEmpty;
+    function ensureNumberInRange(value, min, max, paramName) {
+        if (min === void 0) { min = null; }
+        if (max === void 0) { max = null; }
+        if (paramName === void 0) { paramName = null; }
+        if (!_.isNumber(value)) {
+            throw new Error(Resources.Strings.InvalidTypeMessageFormat("number", typeof value));
+        }
+        if (_.isNumber(min) && value < min) {
+            throw new Error(Resources.Strings.OutOfRangeMessageFormat(paramName));
+        }
+        if (_.isNumber(max) && value > max) {
+            throw new Error(Resources.Strings.OutOfRangeMessageFormat(paramName));
+        }
+    }
+    Validation.ensureNumberInRange = ensureNumberInRange;
+})(Validation || (Validation = {}));
+var Validation;
+(function (Validation) {
+    var Strings;
+    (function (Strings) {
+        "use strict";
+        function left(str, length) {
+            Validation.ensureNumberInRange(length, 0);
+            if (str === null || str === undefined)
+                return str;
+            if (str.length <= length)
+                return str;
+            return str.substr(0, length);
+        }
+        Strings.left = left;
+        function right(str, length) {
+            Validation.ensureNumberInRange(length, 0);
+            if (str === null || str === undefined)
+                return str;
+            if (str.length <= length)
+                return str;
+            return str.substr(str.length - length, length);
+        }
+        Strings.right = right;
+    })(Strings = Validation.Strings || (Validation.Strings = {}));
+})(Validation || (Validation = {}));
+
+var Dynamics;
+(function (Dynamics) {
+    var Crm;
+    (function (Crm) {
         var OData;
         (function (OData) {
             "use strict";
@@ -94,7 +260,7 @@ var Dynamics;
                     if (!response || !response.responseJSON || !response.responseJSON.error) {
                         return;
                     }
-                    Dynamics.Crm.Diagnostics.log.Error(response.responseJSON.error.message, response.responseJSON.error.innererror || response.responseJSON.error);
+                    Crm.Diagnostics.log.Error(response.responseJSON.error.message, response.responseJSON.error.innererror || response.responseJSON.error);
                 });
             }
             OData.retrieve = retrieve;
@@ -119,7 +285,7 @@ var Dynamics;
                     if (!response || !response.responseJSON || !response.responseJSON.error) {
                         return;
                     }
-                    Dynamics.Crm.Diagnostics.log.Error(response.responseJSON.error.message, response.responseJSON.error.innererror || response.responseJSON.error);
+                    Crm.Diagnostics.log.Error(response.responseJSON.error.message, response.responseJSON.error.innererror || response.responseJSON.error);
                 });
             }
             OData.retrieveMultiple = retrieveMultiple;
@@ -188,7 +354,7 @@ var Dynamics;
         })(OData = Crm.OData || (Crm.OData = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=OData.js.map
+
 var MetadataBrower;
 (function (MetadataBrower) {
     var Config;
@@ -200,7 +366,7 @@ var MetadataBrower;
         ]);
     })(Config = MetadataBrower.Config || (MetadataBrower.Config = {}));
 })(MetadataBrower || (MetadataBrower = {}));
-//# sourceMappingURL=Config.js.map
+
 var MetadataBrower;
 (function (MetadataBrower) {
     var Core;
@@ -286,7 +452,7 @@ var MetadataBrower;
             .factory("metadataBrowser.core.navigationService", [NavigationServiceFactory]);
     })(Core = MetadataBrower.Core || (MetadataBrower.Core = {}));
 })(MetadataBrower || (MetadataBrower = {}));
-//# sourceMappingURL=Core.js.map
+
 var MetadataBrower;
 (function (MetadataBrower) {
     var Controllers;
@@ -499,4 +665,3 @@ var MetadataBrower;
             .directive("tsPropertyBrowser", propertyBrowser);
     })(Controllers = MetadataBrower.Controllers || (MetadataBrower.Controllers = {}));
 })(MetadataBrower || (MetadataBrower = {}));
-//# sourceMappingURL=Controllers.js.map

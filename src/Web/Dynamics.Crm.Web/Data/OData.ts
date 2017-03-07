@@ -137,7 +137,7 @@
                     return;
                 }
 
-                Dynamics.Crm.Diagnostics.log.Error(
+                Diagnostics.log.Error(
                     response.responseJSON.error.message,
                     response.responseJSON.error.innererror || response.responseJSON.error);
             });
@@ -175,7 +175,7 @@
                     return;
                 }
 
-                Dynamics.Crm.Diagnostics.log.Error(
+                Diagnostics.log.Error(
                     response.responseJSON.error.message,
                     response.responseJSON.error.innererror || response.responseJSON.error);
             });
