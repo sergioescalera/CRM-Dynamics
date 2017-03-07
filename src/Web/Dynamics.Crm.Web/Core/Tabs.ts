@@ -56,7 +56,7 @@
 
         } else {
 
-            console.warn("Tabs.setVisible: Invalid argument. An array was expected.");
+            Diagnostics.log.Warning("Tabs.setVisible: Invalid argument. An array was expected.");
         }
     }
 
@@ -95,7 +95,7 @@
 
         } else {
 
-            console.warn("Tabs.expandCollapse: Invalid argument. An array was expected.");
+            Diagnostics.log.Warning("Tabs.expandCollapse: Invalid argument. An array was expected.");
         }
     }
 }

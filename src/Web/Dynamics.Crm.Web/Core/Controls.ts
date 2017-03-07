@@ -63,7 +63,7 @@
 
         } else {
 
-            console.warn("Controls.setDisabled: Invalid argument. An array was expected.");
+            Diagnostics.log.Warning("Controls.setDisabled: Invalid argument. An array was expected.");
         }
     }
 
@@ -85,7 +85,9 @@
 
     export function setVisible(attributeNames: string[], value: boolean, applyToAll: boolean = true): void {
 
-        Diagnostics.printArguments("setVisible", attributeNames, value);
+        if (Diagnostics.trace) {
+            Diagnostics.printArguments("setVisible", attributeNames, value);
+        }
 
         if (Array.isArray(attributeNames)) {
 
@@ -109,8 +111,7 @@
 
         } else {
 
-            console.warn("Invalid argument. An array was expected.");
-            console.log(attributeNames);
+            Diagnostics.log.Warning("Invalid argument. An array was expected.");            
         }
     }
 }

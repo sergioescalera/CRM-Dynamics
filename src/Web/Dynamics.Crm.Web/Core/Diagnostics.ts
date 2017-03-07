@@ -40,7 +40,7 @@
 
         Warning(message: string): void {
 
-            console.log(message);
+            console.warn(message);
         }
     }
 
@@ -68,9 +68,32 @@
 
         Warning(message: string): void {
 
-            console.log(message);
+            console.warn(message);
         }
     }
+
+    // public functions
+
+    export function useLogEntryLogger(): void {
+
+        log = new LogEntryLogger();
+    }
+
+    export function useConsoleLogger(): void {
+
+        log = new ConsoleLogger();
+    }
+
+    export function printArguments(...args: any[]): void {
+
+        console.log("Function " + arguments[0] + " called with arguments: {");
+        for (var i = 1; i < arguments.length; i++) {
+            console.log(arguments[i]);
+        }
+        console.log("}");
+    }
+
+    // private function
 
     function createLogEntry(message: string, error: IError): Core.ILogEntry {
 
@@ -79,18 +102,18 @@
         var source = ("JavaScript::{entityName}")
             .replace("{entityName}", entityName);
         var description = ("Stack: {stackTrace}\nDescription: {errorDescription}")
-            .replace("{stackTrace}", error.stack || error.stacktrace ||  "<none>")
+            .replace("{stackTrace}", error.stack || error.stacktrace || "<none>")
             .replace("{errorDescription}", error.description || "<none>");
 
-        var entry = {
-            type: Data.Schema.LogEntryEntity.type,            
+        var entry: Core.ILogEntry = {
+            type: Data.Schema.LogEntryEntity.type
         };
 
         var name = error.type ? (error.type + ":" + message) : message;
-        var message = message === error.message ? message : (message + error.message);
+        var msg = message === error.message ? message : (message + error.message);
 
         entry[Data.Schema.LogEntryEntity.nameField] = Validation.Strings.left(name, 300);
-        entry[Data.Schema.LogEntryEntity.messageField] = Validation.Strings.left(message, 5000);
+        entry[Data.Schema.LogEntryEntity.messageField] = Validation.Strings.left(msg, 5000);
         entry[Data.Schema.LogEntryEntity.descriptionField] = Validation.Strings.right(description, 1048576);
         entry[Data.Schema.LogEntryEntity.sourceField] = Validation.Strings.left(source, 500);
         entry[Data.Schema.LogEntryEntity.typeField] = Dynamics.Crm.Core.LogEntryType.Error;
@@ -106,31 +129,10 @@
 
         } catch (e) {
 
-            console.warn(e);
+            log && log.Warning(e);
 
             return "UnknownEntity";
         }
-    }
-
-    export function useLogEntryLogger(): void {
-
-        log = new LogEntryLogger();
-    }
-
-    export function useConsoleLogger(): void {
-
-        log = new ConsoleLogger();
-    }
-
-    // trace arguments
-
-    export function printArguments(...args: any[]): void {
-
-        console.log("Function " + arguments[0] + " called with arguments: {");
-        for (var i = 1; i < arguments.length; i++) {
-            console.log(arguments[i]);
-        }
-        console.log("}");
     }
 
     // variables

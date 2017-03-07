@@ -28,7 +28,7 @@
 
         if (version === undefined) {
 
-            console.warn("getContext().getVersion() is undefined");
+            Diagnostics.log.Warning("getContext().getVersion() is undefined");
             return "v8.0";
         }
 

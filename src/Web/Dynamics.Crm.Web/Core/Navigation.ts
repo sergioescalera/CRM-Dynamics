@@ -55,7 +55,7 @@
 
         } else {
 
-            console.warn("Navigation.setVisible: Invalid argument. An array was expected.");
+            Diagnostics.log.Warning("Navigation.setVisible: Invalid argument. An array was expected.");
         }
     }
 }

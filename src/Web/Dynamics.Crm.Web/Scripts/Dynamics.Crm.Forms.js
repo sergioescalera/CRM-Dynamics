@@ -66,7 +66,7 @@ var Dynamics;
                         }
                     }
                     else {
-                        console.warn("Attributes.setRequirementLevel: Invalid argument. An array was expected.");
+                        Crm.Diagnostics.log.Warning("Attributes.setRequirementLevel: Invalid argument. An array was expected.");
                     }
                 }
                 Attributes.setRequiredLevel = setRequiredLevel;
@@ -143,7 +143,7 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Attributes.js.map
+
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -189,7 +189,7 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Constants.js.map
+
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -246,7 +246,7 @@ var Dynamics;
                         }
                     }
                     else {
-                        console.warn("Controls.setDisabled: Invalid argument. An array was expected.");
+                        Crm.Diagnostics.log.Warning("Controls.setDisabled: Invalid argument. An array was expected.");
                     }
                 }
                 Controls.setDisabled = setDisabled;
@@ -269,7 +269,9 @@ var Dynamics;
                 Controls.hide = hide;
                 function setVisible(attributeNames, value, applyToAll) {
                     if (applyToAll === void 0) { applyToAll = true; }
-                    Crm.Diagnostics.printArguments("setVisible", attributeNames, value);
+                    if (Crm.Diagnostics.trace) {
+                        Crm.Diagnostics.printArguments("setVisible", attributeNames, value);
+                    }
                     if (Array.isArray(attributeNames)) {
                         for (var i = 0; i < attributeNames.length; i++) {
                             var attribute = Forms.Attributes.get(attributeNames[i], false);
@@ -285,8 +287,7 @@ var Dynamics;
                         }
                     }
                     else {
-                        console.warn("Invalid argument. An array was expected.");
-                        console.log(attributeNames);
+                        Crm.Diagnostics.log.Warning("Invalid argument. An array was expected.");
                     }
                 }
                 Controls.setVisible = setVisible;
@@ -294,7 +295,7 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Controls.js.map
+
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -318,7 +319,7 @@ var Dynamics;
                     console.log(message);
                 };
                 ConsoleLogger.prototype.Warning = function (message) {
-                    console.log(message);
+                    console.warn(message);
                 };
                 return ConsoleLogger;
             }());
@@ -339,38 +340,11 @@ var Dynamics;
                     console.log(message);
                 };
                 LogEntryLogger.prototype.Warning = function (message) {
-                    console.log(message);
+                    console.warn(message);
                 };
                 return LogEntryLogger;
             }());
-            function createLogEntry(message, error) {
-                var entityName = getEntityName();
-                var source = ("JavaScript::{entityName}")
-                    .replace("{entityName}", entityName);
-                var description = ("Stack: {stackTrace}\nDescription: {errorDescription}")
-                    .replace("{stackTrace}", error.stack || error.stacktrace || "<none>")
-                    .replace("{errorDescription}", error.description || "<none>");
-                var entry = {
-                    type: Crm.Data.Schema.LogEntryEntity.type,
-                };
-                var name = error.type ? (error.type + ":" + message) : message;
-                var message = message === error.message ? message : (message + error.message);
-                entry[Crm.Data.Schema.LogEntryEntity.nameField] = Validation.Strings.left(name, 300);
-                entry[Crm.Data.Schema.LogEntryEntity.messageField] = Validation.Strings.left(message, 5000);
-                entry[Crm.Data.Schema.LogEntryEntity.descriptionField] = Validation.Strings.right(description, 1048576);
-                entry[Crm.Data.Schema.LogEntryEntity.sourceField] = Validation.Strings.left(source, 500);
-                entry[Crm.Data.Schema.LogEntryEntity.typeField] = Dynamics.Crm.Core.LogEntryType.Error;
-                return entry;
-            }
-            function getEntityName() {
-                try {
-                    return Xrm.Page.data.entity.getEntityName();
-                }
-                catch (e) {
-                    console.warn(e);
-                    return "UnknownEntity";
-                }
-            }
+            // public functions
             function useLogEntryLogger() {
                 Diagnostics.log = new LogEntryLogger();
             }
@@ -379,7 +353,6 @@ var Dynamics;
                 Diagnostics.log = new ConsoleLogger();
             }
             Diagnostics.useConsoleLogger = useConsoleLogger;
-            // trace arguments
             function printArguments() {
                 var args = [];
                 for (var _i = 0; _i < arguments.length; _i++) {
@@ -392,12 +365,41 @@ var Dynamics;
                 console.log("}");
             }
             Diagnostics.printArguments = printArguments;
+            // private function
+            function createLogEntry(message, error) {
+                var entityName = getEntityName();
+                var source = ("JavaScript::{entityName}")
+                    .replace("{entityName}", entityName);
+                var description = ("Stack: {stackTrace}\nDescription: {errorDescription}")
+                    .replace("{stackTrace}", error.stack || error.stacktrace || "<none>")
+                    .replace("{errorDescription}", error.description || "<none>");
+                var entry = {
+                    type: Crm.Data.Schema.LogEntryEntity.type
+                };
+                var name = error.type ? (error.type + ":" + message) : message;
+                var msg = message === error.message ? message : (message + error.message);
+                entry[Crm.Data.Schema.LogEntryEntity.nameField] = Validation.Strings.left(name, 300);
+                entry[Crm.Data.Schema.LogEntryEntity.messageField] = Validation.Strings.left(msg, 5000);
+                entry[Crm.Data.Schema.LogEntryEntity.descriptionField] = Validation.Strings.right(description, 1048576);
+                entry[Crm.Data.Schema.LogEntryEntity.sourceField] = Validation.Strings.left(source, 500);
+                entry[Crm.Data.Schema.LogEntryEntity.typeField] = Dynamics.Crm.Core.LogEntryType.Error;
+                return entry;
+            }
+            function getEntityName() {
+                try {
+                    return Xrm.Page.data.entity.getEntityName();
+                }
+                catch (e) {
+                    Diagnostics.log && Diagnostics.log.Warning(e);
+                    return "UnknownEntity";
+                }
+            }
             // variables
             useLogEntryLogger();
         })(Diagnostics = Crm.Diagnostics || (Crm.Diagnostics = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Diagnostics.js.map
+
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -430,7 +432,7 @@ var Dynamics;
         })(Dialogs = Crm.Dialogs || (Crm.Dialogs = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Dialogs.js.map
+
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -455,7 +457,7 @@ var Dynamics;
         })(Core = Crm.Core || (Crm.Core = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Entity.js.map
+
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -500,7 +502,7 @@ var Dynamics;
         })(Core = Crm.Core || (Crm.Core = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Enums.js.map
+
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -550,7 +552,7 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Forms.js.map
+
 
 var Dynamics;
 (function (Dynamics) {
@@ -600,7 +602,7 @@ var Dynamics;
                         }
                     }
                     else {
-                        console.warn("Navigation.setVisible: Invalid argument. An array was expected.");
+                        Crm.Diagnostics.log.Warning("Navigation.setVisible: Invalid argument. An array was expected.");
                     }
                 }
                 Navigation.setVisible = setVisible;
@@ -608,7 +610,7 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Navigation.js.map
+
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -636,7 +638,7 @@ var Dynamics;
         })(Reports = Crm.Reports || (Crm.Reports = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Reports.js.map
+
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -691,7 +693,7 @@ var Dynamics;
         })(ScriptManager = Crm.ScriptManager || (Crm.ScriptManager = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=ScriptManager.js.map
+
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -751,7 +753,7 @@ var Dynamics;
                         }
                     }
                     else {
-                        console.warn("Sections.setVisible: Invalid argument. An array was expected.");
+                        Crm.Diagnostics.log.Warning("Sections.setVisible: Invalid argument. An array was expected.");
                     }
                 }
                 Sections.setVisible = setVisible;
@@ -759,7 +761,7 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Sections.js.map
+
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -811,7 +813,7 @@ var Dynamics;
                         }
                     }
                     else {
-                        console.warn("Tabs.setVisible: Invalid argument. An array was expected.");
+                        Crm.Diagnostics.log.Warning("Tabs.setVisible: Invalid argument. An array was expected.");
                     }
                 }
                 Tabs.setVisible = setVisible;
@@ -843,7 +845,7 @@ var Dynamics;
                         }
                     }
                     else {
-                        console.warn("Tabs.expandCollapse: Invalid argument. An array was expected.");
+                        Crm.Diagnostics.log.Warning("Tabs.expandCollapse: Invalid argument. An array was expected.");
                     }
                 }
                 Tabs.expandCollapse = expandCollapse;
@@ -851,7 +853,7 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Tabs.js.map
+
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -866,7 +868,7 @@ var Dynamics;
                 }
                 var results = [];
                 if (!Array.isArray(tasks)) {
-                    console.warn("Tasks.run: Invalid argument. An array was expected.");
+                    Crm.Diagnostics.log.Warning("Tasks.run: Invalid argument. An array was expected.");
                 }
                 else {
                     for (var i = 0; i < tasks.length; i++) {
@@ -896,7 +898,7 @@ var Dynamics;
         })(Tasks = Crm.Tasks || (Crm.Tasks = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Tasks.js.map
+
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -911,7 +913,7 @@ var Dynamics;
         })(User = Crm.User || (Crm.User = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=User.js.map
+
 var Validation;
 (function (Validation) {
     "use strict";
@@ -974,8 +976,8 @@ var Validation;
         Strings.right = right;
     })(Strings = Validation.Strings || (Validation.Strings = {}));
 })(Validation || (Validation = {}));
-//# sourceMappingURL=Validation.js.map
-//# sourceMappingURL=Interfaces.js.map
+
+
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -999,7 +1001,7 @@ var Dynamics;
             function getVersion() {
                 var version = getContext().getVersion(); // 8.2.0.780
                 if (version === undefined) {
-                    console.warn("getContext().getVersion() is undefined");
+                    Crm.Diagnostics.log.Warning("getContext().getVersion() is undefined");
                     return "v8.0";
                 }
                 if (version >= "8.2") {
@@ -1166,7 +1168,7 @@ var Dynamics;
         })(OData = Crm.OData || (Crm.OData = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=OData.js.map
+
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -1221,4 +1223,3 @@ var Dynamics;
         })(Data = Crm.Data || (Crm.Data = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Repositories.js.map

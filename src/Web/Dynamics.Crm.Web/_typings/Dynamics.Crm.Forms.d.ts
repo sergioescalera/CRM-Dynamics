@@ -175,4 +175,5 @@ declare interface IError extends Error {
 declare interface ILogger {
     Error(message: string, error: IError): void;
     Message(message: string): void;
+    Warning(message: string): void;
 }

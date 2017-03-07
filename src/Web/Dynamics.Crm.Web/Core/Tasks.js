@@ -12,7 +12,7 @@ var Dynamics;
                 }
                 var results = [];
                 if (!Array.isArray(tasks)) {
-                    console.warn("Tasks.run: Invalid argument. An array was expected.");
+                    Crm.Diagnostics.log.Warning("Tasks.run: Invalid argument. An array was expected.");
                 }
                 else {
                     for (var i = 0; i < tasks.length; i++) {
@@ -42,4 +42,3 @@ var Dynamics;
         })(Tasks = Crm.Tasks || (Crm.Tasks = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Tasks.js.map

@@ -56,7 +56,7 @@
 
         } else {
 
-            console.warn("Attributes.setRequirementLevel: Invalid argument. An array was expected.");
+            Diagnostics.log.Warning("Attributes.setRequirementLevel: Invalid argument. An array was expected.");
         }
     }
 

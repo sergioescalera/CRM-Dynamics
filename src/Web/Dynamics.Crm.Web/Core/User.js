@@ -12,4 +12,3 @@ var Dynamics;
         })(User = Crm.User || (Crm.User = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=User.js.map

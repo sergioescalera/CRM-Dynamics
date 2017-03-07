@@ -21,7 +21,7 @@ var Dynamics;
             function getVersion() {
                 var version = getContext().getVersion(); // 8.2.0.780
                 if (version === undefined) {
-                    console.warn("getContext().getVersion() is undefined");
+                    Crm.Diagnostics.log.Warning("getContext().getVersion() is undefined");
                     return "v8.0";
                 }
                 if (version >= "8.2") {
@@ -188,4 +188,3 @@ var Dynamics;
         })(OData = Crm.OData || (Crm.OData = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=OData.js.map

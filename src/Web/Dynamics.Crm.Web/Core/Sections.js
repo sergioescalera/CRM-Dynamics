@@ -57,7 +57,7 @@ var Dynamics;
                         }
                     }
                     else {
-                        console.warn("Sections.setVisible: Invalid argument. An array was expected.");
+                        Crm.Diagnostics.log.Warning("Sections.setVisible: Invalid argument. An array was expected.");
                     }
                 }
                 Sections.setVisible = setVisible;
@@ -65,4 +65,3 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Sections.js.map

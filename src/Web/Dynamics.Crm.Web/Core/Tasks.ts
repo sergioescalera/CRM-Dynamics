@@ -17,7 +17,7 @@
 
         if (!Array.isArray(tasks)) {
 
-            console.warn("Tasks.run: Invalid argument. An array was expected.");
+            Diagnostics.log.Warning("Tasks.run: Invalid argument. An array was expected.");
 
         } else {
 

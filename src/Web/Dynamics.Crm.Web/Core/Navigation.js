@@ -46,7 +46,7 @@ var Dynamics;
                         }
                     }
                     else {
-                        console.warn("Navigation.setVisible: Invalid argument. An array was expected.");
+                        Crm.Diagnostics.log.Warning("Navigation.setVisible: Invalid argument. An array was expected.");
                     }
                 }
                 Navigation.setVisible = setVisible;
@@ -54,4 +54,3 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Navigation.js.map

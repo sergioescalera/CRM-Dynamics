@@ -54,7 +54,7 @@ var Dynamics;
                         }
                     }
                     else {
-                        console.warn("Controls.setDisabled: Invalid argument. An array was expected.");
+                        Crm.Diagnostics.log.Warning("Controls.setDisabled: Invalid argument. An array was expected.");
                     }
                 }
                 Controls.setDisabled = setDisabled;
@@ -77,7 +77,9 @@ var Dynamics;
                 Controls.hide = hide;
                 function setVisible(attributeNames, value, applyToAll) {
                     if (applyToAll === void 0) { applyToAll = true; }
-                    Crm.Diagnostics.printArguments("setVisible", attributeNames, value);
+                    if (Crm.Diagnostics.trace) {
+                        Crm.Diagnostics.printArguments("setVisible", attributeNames, value);
+                    }
                     if (Array.isArray(attributeNames)) {
                         for (var i = 0; i < attributeNames.length; i++) {
                             var attribute = Forms.Attributes.get(attributeNames[i], false);
@@ -93,8 +95,7 @@ var Dynamics;
                         }
                     }
                     else {
-                        console.warn("Invalid argument. An array was expected.");
-                        console.log(attributeNames);
+                        Crm.Diagnostics.log.Warning("Invalid argument. An array was expected.");
                     }
                 }
                 Controls.setVisible = setVisible;
@@ -102,4 +103,3 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Controls.js.map

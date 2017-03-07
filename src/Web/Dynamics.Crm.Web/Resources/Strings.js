@@ -24,4 +24,3 @@ var Resources;
     }());
     Resources.Strings = Strings;
 })(Resources || (Resources = {}));
-//# sourceMappingURL=Strings.js.map

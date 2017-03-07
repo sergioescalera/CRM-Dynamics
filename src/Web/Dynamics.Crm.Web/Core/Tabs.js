@@ -49,7 +49,7 @@ var Dynamics;
                         }
                     }
                     else {
-                        console.warn("Tabs.setVisible: Invalid argument. An array was expected.");
+                        Crm.Diagnostics.log.Warning("Tabs.setVisible: Invalid argument. An array was expected.");
                     }
                 }
                 Tabs.setVisible = setVisible;
@@ -81,7 +81,7 @@ var Dynamics;
                         }
                     }
                     else {
-                        console.warn("Tabs.expandCollapse: Invalid argument. An array was expected.");
+                        Crm.Diagnostics.log.Warning("Tabs.expandCollapse: Invalid argument. An array was expected.");
                     }
                 }
                 Tabs.expandCollapse = expandCollapse;
@@ -89,4 +89,3 @@ var Dynamics;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Tabs.js.map

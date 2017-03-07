@@ -66,7 +66,7 @@
 
         } else {
 
-            console.warn("Sections.setVisible: Invalid argument. An array was expected.");
+            Diagnostics.log.Warning("Sections.setVisible: Invalid argument. An array was expected.");
         }
     }
 }
