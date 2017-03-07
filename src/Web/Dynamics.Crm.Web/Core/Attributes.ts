@@ -135,6 +135,8 @@
 
     export function showNotification(attribute: Attribute, message: string, messageId: string): void {
 
+        Validation.ensureNotNullOrUndefined(attribute, "attribute");
+
         attribute
             .controls
             .forEach(function (c: Control) {
@@ -144,6 +146,8 @@
     }
 
     export function hideNotification(attribute: Attribute, messageId: string): void {
+
+        Validation.ensureNotNullOrUndefined(attribute, "attribute");
 
         attribute
             .controls

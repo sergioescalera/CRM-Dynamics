@@ -64,6 +64,8 @@ module Dynamics.Crm.UnitTests.Mocks {
         controls: any;
         name: string;
 
+        private _requiredLevel: string;
+
         constructor(name: string, header?: boolean, footer?: boolean) {
 
             this.controls = {
@@ -92,12 +94,22 @@ module Dynamics.Crm.UnitTests.Mocks {
                 }
             }
         }
+
+        getRequiredLevel(): string {
+
+            return this._requiredLevel;
+        }
+        setRequiredLevel(value: string): void {
+
+            this._requiredLevel = value;
+        }        
     }
 
     export class ControlMock extends VisibleObject {
 
         private _disabled: boolean;
 
+        notifications: any;
         name: string;
 
         constructor(name: string) {
@@ -105,6 +117,7 @@ module Dynamics.Crm.UnitTests.Mocks {
             super();
 
             this.name = name;
+            this.notifications = {};
         }
 
         getDisabled(): boolean {
@@ -112,6 +125,13 @@ module Dynamics.Crm.UnitTests.Mocks {
         }
         setDisabled(value: boolean): void {
             this._disabled = value;
+        }
+
+        clearNotification(id: string): void {
+            this.setNotification(null, id);
+        }
+        setNotification(msg: string, id: string): void {
+            this.notifications[id] = msg;
         }
     }
 

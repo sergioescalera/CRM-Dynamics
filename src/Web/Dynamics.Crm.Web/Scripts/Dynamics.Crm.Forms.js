@@ -124,6 +124,7 @@ var Dynamics;
                 Attributes.setLookupValue = setLookupValue;
                 // notifications
                 function showNotification(attribute, message, messageId) {
+                    Validation.ensureNotNullOrUndefined(attribute, "attribute");
                     attribute
                         .controls
                         .forEach(function (c) {
@@ -132,6 +133,7 @@ var Dynamics;
                 }
                 Attributes.showNotification = showNotification;
                 function hideNotification(attribute, messageId) {
+                    Validation.ensureNotNullOrUndefined(attribute, "attribute");
                     attribute
                         .controls
                         .forEach(function (c) {

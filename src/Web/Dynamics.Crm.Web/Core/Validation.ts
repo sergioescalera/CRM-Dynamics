@@ -24,7 +24,11 @@
         }
     }
 
-    export function ensureNumberInRange(value: number, min: number = null, max: number = null, paramName: string = null)
+    export function ensureNumberInRange(
+        value: number,
+        min: number = null,
+        max: number = null,
+        paramName: string = null): void
     {
         if (!_.isNumber(value)) {
             throw new Error(Resources.Strings.InvalidTypeMessageFormat("number", typeof value));
@@ -44,7 +48,7 @@ module Validation.Strings {
 
     "use strict";
 
-    export function left(str: string, length: number) {
+    export function left(str: string, length: number): string {
 
         Validation.ensureNumberInRange(length, 0);
 
@@ -57,7 +61,7 @@ module Validation.Strings {
         return str.substr(0, length);
     }
 
-    export function right(str: string, length: number) {
+    export function right(str: string, length: number): string {
 
         Validation.ensureNumberInRange(length, 0);
 

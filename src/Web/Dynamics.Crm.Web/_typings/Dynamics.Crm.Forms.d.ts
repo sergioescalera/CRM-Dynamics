@@ -177,3 +177,19 @@ declare interface ILogger {
     Message(message: string): void;
     Warning(message: string): void;
 }
+
+declare interface IValidation {
+    ensureNotNullOrUndefined(value: any, label: string): void;
+    ensureNotNullOrEmpty(str: string, label: string): void;
+    ensureNumberInRange(
+        value: number,
+        min?: number,
+        max?: number,
+        paramName?: string): void;
+    Strings: IStringsValidation;
+}
+
+declare interface IStringsValidation {
+    left(str: string, length: number): string;
+    right(str: string, length: number): string;
+}

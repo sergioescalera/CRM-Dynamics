@@ -75,6 +75,12 @@ var Dynamics;
                             }
                         }
                     };
+                    AttributeMock.prototype.getRequiredLevel = function () {
+                        return this._requiredLevel;
+                    };
+                    AttributeMock.prototype.setRequiredLevel = function (value) {
+                        this._requiredLevel = value;
+                    };
                     return AttributeMock;
                 }());
                 Mocks.AttributeMock = AttributeMock;
@@ -83,12 +89,19 @@ var Dynamics;
                     function ControlMock(name) {
                         _super.call(this);
                         this.name = name;
+                        this.notifications = {};
                     }
                     ControlMock.prototype.getDisabled = function () {
                         return this._disabled;
                     };
                     ControlMock.prototype.setDisabled = function (value) {
                         this._disabled = value;
+                    };
+                    ControlMock.prototype.clearNotification = function (id) {
+                        this.setNotification(null, id);
+                    };
+                    ControlMock.prototype.setNotification = function (msg, id) {
+                        this.notifications[id] = msg;
                     };
                     return ControlMock;
                 }(VisibleObject));
