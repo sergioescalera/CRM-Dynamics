@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Dynamics.Crm.Extensions</id>
+    <version>0.0.1-alpha</version>
+    <authors>Sergio Escalera</authors>
+    <owners>Sergio Escalera</owners>    
+    <projectUrl>https://github.com/sergioescalera/CRM-Dynamics/</projectUrl>    
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <title>CRM Dynamics Extensions</title>
+    <description>CRM Dynamics Extensions</description>
+    <tags>CRM Dynamics .NET C# Plugin</tags>    
+  </metadata>  
+  <files>
+    <file src="..\Plugins\Dynamics.Crm.Extensions\bin\Release\Dynamics.Crm.Extensions.dll"
+          target="lib\Dynamics.Crm.Extensions\net452" />
+  </files>
+</package>

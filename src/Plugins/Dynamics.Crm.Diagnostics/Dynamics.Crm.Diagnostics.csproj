@@ -33,7 +33,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>SiboneyCrmKey.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>Dynamics.Crm.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Crm.Sdk.Proxy, Version=8.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -70,8 +70,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Dynamics.Crm.snk" />
     <None Include="packages.config" />
-    <None Include="SiboneyCrmKey.pfx" />
   </ItemGroup>
   <Import Project="..\Dynamics.Crm.Extensions.Shared\Dynamics.Crm.Extensions.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

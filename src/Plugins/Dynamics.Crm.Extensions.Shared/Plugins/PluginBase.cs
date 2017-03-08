@@ -1,5 +1,6 @@
 ﻿using Dynamics.Crm.Attributes;
 using Dynamics.Crm.Data;
+using Dynamics.Crm.Extensions;
 using Dynamics.Crm.Interfaces;
 using Dynamics.Crm.Models;
 using Microsoft.Xrm.Sdk;
@@ -26,7 +27,7 @@ namespace Dynamics.Crm.Plugins
             }            
             catch (Exception e)
             {
-                CreateFromException(context, e);
+                CreateLogEntryFromException(context, e);
 
                 throw;
             }
@@ -64,20 +65,18 @@ namespace Dynamics.Crm.Plugins
             }
         }
 
-        protected virtual void CreateFromException(IPluginContext context, Exception exception)
+        protected virtual void CreateLogEntryFromException(IPluginContext context, Exception exception)
         {
-            var entry = LogEntry.CreateFromException(exception, name: GetType().FullName);
-
-            var repository = new LogEntryRepository(context);
-
-            try
+            var action = (Action)(() =>
             {
+                var entry = LogEntry.CreateFromException(exception, name: GetType().FullName);
+
+                var repository = new LogEntryRepository(context);
+
                 repository.Create(entry);
-            }
-            catch (Exception ex)
-            {
-                context.TracingService.Trace(ex.ToString());
-            }            
+            });
+
+            action.Catch(ex => context.TracingService.Trace(ex.ToString()));                     
         }
     }
 }

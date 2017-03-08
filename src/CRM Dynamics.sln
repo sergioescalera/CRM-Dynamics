@@ -21,6 +21,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dynamics.Crm.Security", "Pl
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{81A679CE-C3D9-4E8C-A1B5-7B518814995A}"
 	ProjectSection(SolutionItems) = preProject
+		Nuget\Dynamics.Crm.Extensions.nuspec = Nuget\Dynamics.Crm.Extensions.nuspec
 		Nuget\Dynamics.Crm.Web.nuspec = Nuget\Dynamics.Crm.Web.nuspec
 		Nuget\nuget.exe = Nuget\nuget.exe
 	EndProjectSection
