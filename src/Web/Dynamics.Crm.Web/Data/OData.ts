@@ -2,6 +2,11 @@
 
     "use strict";
 
+    export enum FilterType {
+        And = 0,
+        Or = 0
+    }
+
     function getContext(): Context {
 
         var context;
@@ -108,6 +113,10 @@
         attributes: string[],
         expand?: string[]): JQueryPromise<Core.IEntity> {
 
+        Validation.ensureNotNullOrEmpty(entityName, "entityName");
+        Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
+        Validation.ensureNotNullOrEmpty(entityId, "entityId");
+
         var baseUrl = getContext().getClientUrl();
 
         var url = "{baseUrl}/api/data/{version}/{entitySetName}({entityId})?$select={select}"
@@ -147,16 +156,28 @@
         entityName: string,
         entitySetName: string,
         attributes: string[],
-        filters: string[]): JQueryPromise<Core.IEntity[]> {
+        filters: string[],
+        filterType: FilterType = FilterType.And,
+        orderBy: string[] = null): JQueryPromise<Core.IEntity[]> {
+
+        Validation.ensureNotNullOrEmpty(entityName, "entityName");
+        Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
 
         var baseUrl = getContext().getClientUrl();
+
+        var filterJoin = filterType === FilterType.And ? " and " : " or ";
 
         var url = "{baseUrl}/api/data/{version}/{entitySetName}?$select={select}&$filter={filter}"
             .replace("{baseUrl}", baseUrl)
             .replace("{version}", getVersion())
             .replace("{entitySetName}", entitySetName)
             .replace("{select}", attributes.join(","))
-            .replace("{filter}", filters.join(","));
+            .replace("{filter}", filters.join(filterJoin));
+
+        if (orderBy) {
+
+            url += "&$orderby={orderby}".replace("{orderby}", orderBy.join(","))
+        }
 
         return $
             .ajax({
@@ -183,6 +204,10 @@
 
     export function deleteEntity(entityName: string, entitySetName: string, entityId: string): JQueryPromise<void> {
 
+        Validation.ensureNotNullOrEmpty(entityName, "entityName");
+        Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
+        Validation.ensureNotNullOrEmpty(entityId, "entityId");
+
         var baseUrl = getContext().getClientUrl();
 
         var url = "{0}/api/data/v8.1/{1}({2})"
@@ -199,7 +224,10 @@
     }
 
     export function createEntity(entity: Core.IEntity, entitySetName: string): JQueryPromise<void> {
-        
+
+        Validation.ensureNotNullOrUndefined(entity, "entity");
+        Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
+
         var baseUrl = getContext().getClientUrl();
 
         var url = "{0}/api/data/v8.1/{1}"
@@ -240,6 +268,8 @@
     }
 
     export function entityAttributesDefinition(metadataId: string): JQueryPromise<IAttributeDefinition[]> {
+
+        Validation.ensureNotNullOrEmpty(metadataId, "metadataId");
 
         var baseUrl = getContext().getClientUrl();
 

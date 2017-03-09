@@ -22,7 +22,9 @@ declare interface ICrmCore {
 declare interface ICrmForms {
     Attributes: ICrmAttributes;
     Controls: ICrmControls;
+    FormNotificationType: IFormNotificationType;
     Navigation: ICrmNavigation;
+    Notifications: ICrmNotifications;
     Tabs: ICrmTabs;
     Sections: ICrmSections;
     getClientType(): string;
@@ -72,6 +74,17 @@ declare interface ICrmNavigation {
     setVisible(items: Array<string>, visible: boolean): void;
 }
 
+declare interface ICrmNotifications {
+    show(message: string, id: string, level?: string): void;
+    hide(id: string, afterSeconds?: number): void;
+}
+
+declare interface IFormNotificationType {
+    Error: string;
+    Warning: string;
+    Information: string;
+}
+
 declare interface ICrmTabs {
     get(tabName: string, required?: boolean): Tab;
     show(tabNames: string[], condition?: boolean): void;
@@ -116,7 +129,14 @@ declare interface ICrmOData {
         entityName: string,
         entitySetName: string,
         attributes: string[],
-        filters: string[]): JQueryPromise<IEntity[]>
+        filters: string[],
+        filterType?: ODataFilterType,
+        orderBy?: string[]): JQueryPromise<IEntity[]>
+}
+
+declare enum ODataFilterType {
+    And = 0,
+    Or = 0
 }
 
 declare interface IEntity {

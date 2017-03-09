@@ -160,6 +160,7 @@
     <TypeScriptCompile Include="Core\Forms.ts" />
     <TypeScriptCompile Include="Core\Entity.ts" />
     <TypeScriptCompile Include="Core\Navigation.ts" />
+    <TypeScriptCompile Include="Core\Notifications.ts" />
     <TypeScriptCompile Include="Core\Reports.ts" />
     <TypeScriptCompile Include="Core\ScriptManager.ts" />
     <TypeScriptCompile Include="Core\Sections.ts" />

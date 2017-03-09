@@ -617,6 +617,35 @@ var Dynamics;
 (function (Dynamics) {
     var Crm;
     (function (Crm) {
+        var Forms;
+        (function (Forms) {
+            var Notifications;
+            (function (Notifications) {
+                "use strict";
+                function show(message, id, level) {
+                    if (level === void 0) { level = Dynamics.Crm.Forms.FormNotificationType.Information; }
+                    Xrm.Page.ui.setFormNotification(message, level, id);
+                }
+                Notifications.show = show;
+                function hide(id, afterSeconds) {
+                    if (afterSeconds === void 0) { afterSeconds = null; }
+                    if (_.isNumber(afterSeconds) && afterSeconds > 0) {
+                        setTimeout(function () { return Xrm.Page.ui.clearFormNotification(id); }, afterSeconds * 1000);
+                    }
+                    else {
+                        Xrm.Page.ui.clearFormNotification(id);
+                    }
+                }
+                Notifications.hide = hide;
+            })(Notifications = Forms.Notifications || (Forms.Notifications = {}));
+        })(Forms = Crm.Forms || (Crm.Forms = {}));
+    })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
+})(Dynamics || (Dynamics = {}));
+
+var Dynamics;
+(function (Dynamics) {
+    var Crm;
+    (function (Crm) {
         var Reports;
         (function (Reports) {
             "use strict";
@@ -987,6 +1016,11 @@ var Dynamics;
         var OData;
         (function (OData) {
             "use strict";
+            (function (FilterType) {
+                FilterType[FilterType["And"] = 0] = "And";
+                FilterType[FilterType["Or"] = 0] = "Or";
+            })(OData.FilterType || (OData.FilterType = {}));
+            var FilterType = OData.FilterType;
             function getContext() {
                 var context;
                 if (Xrm && Xrm.Page && Xrm.Page.context) {
@@ -1054,6 +1088,9 @@ var Dynamics;
             }
             // entities CRUD
             function retrieve(entityName, entitySetName, entityId, attributes, expand) {
+                Validation.ensureNotNullOrEmpty(entityName, "entityName");
+                Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
+                Validation.ensureNotNullOrEmpty(entityId, "entityId");
                 var baseUrl = getContext().getClientUrl();
                 var url = "{baseUrl}/api/data/{version}/{entitySetName}({entityId})?$select={select}"
                     .replace("{baseUrl}", baseUrl)
@@ -1080,14 +1117,22 @@ var Dynamics;
                 });
             }
             OData.retrieve = retrieve;
-            function retrieveMultiple(entityName, entitySetName, attributes, filters) {
+            function retrieveMultiple(entityName, entitySetName, attributes, filters, filterType, orderBy) {
+                if (filterType === void 0) { filterType = FilterType.And; }
+                if (orderBy === void 0) { orderBy = null; }
+                Validation.ensureNotNullOrEmpty(entityName, "entityName");
+                Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
                 var baseUrl = getContext().getClientUrl();
+                var filterJoin = filterType === FilterType.And ? " and " : " or ";
                 var url = "{baseUrl}/api/data/{version}/{entitySetName}?$select={select}&$filter={filter}"
                     .replace("{baseUrl}", baseUrl)
                     .replace("{version}", getVersion())
                     .replace("{entitySetName}", entitySetName)
                     .replace("{select}", attributes.join(","))
-                    .replace("{filter}", filters.join(","));
+                    .replace("{filter}", filters.join(filterJoin));
+                if (orderBy) {
+                    url += "&$orderby={orderby}".replace("{orderby}", orderBy.join(","));
+                }
                 return $
                     .ajax({
                     url: url,
@@ -1106,6 +1151,9 @@ var Dynamics;
             }
             OData.retrieveMultiple = retrieveMultiple;
             function deleteEntity(entityName, entitySetName, entityId) {
+                Validation.ensureNotNullOrEmpty(entityName, "entityName");
+                Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
+                Validation.ensureNotNullOrEmpty(entityId, "entityId");
                 var baseUrl = getContext().getClientUrl();
                 var url = "{0}/api/data/v8.1/{1}({2})"
                     .replace("{0}", baseUrl)
@@ -1120,6 +1168,8 @@ var Dynamics;
             }
             OData.deleteEntity = deleteEntity;
             function createEntity(entity, entitySetName) {
+                Validation.ensureNotNullOrUndefined(entity, "entity");
+                Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
                 var baseUrl = getContext().getClientUrl();
                 var url = "{0}/api/data/v8.1/{1}"
                     .replace("{0}", baseUrl)
@@ -1152,6 +1202,7 @@ var Dynamics;
             }
             OData.entityDefinitions = entityDefinitions;
             function entityAttributesDefinition(metadataId) {
+                Validation.ensureNotNullOrEmpty(metadataId, "metadataId");
                 var baseUrl = getContext().getClientUrl();
                 var url = "{baseUrl}/api/data/{version}/EntityDefinitions({metadataId})/Attributes"
                     .replace("{baseUrl}", baseUrl)
