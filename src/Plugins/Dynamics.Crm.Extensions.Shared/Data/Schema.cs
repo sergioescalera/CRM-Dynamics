@@ -61,7 +61,7 @@ namespace Dynamics.Crm.Data
                          
             public const String FullNameFieldName = "fullname";
                          
-            public const String ParentAccountFieldName = "parentcustomerid";
+            public const String ParentCustomerFieldName = "parentcustomerid";
 
             public const String Address1Name = "address1_";
 
@@ -117,6 +117,17 @@ namespace Dynamics.Crm.Data
             public static readonly Int32 DescriptionFieldLength = 1048576;
 
             public static readonly Int32 SourceFieldLength = 500;
+        }
+
+        public class OpportunityEntity
+        {
+            public const String TypeName = "opportunity";
+
+            public const String IdFieldName = "opportunityid";
+
+            public const String ParentAccountFieldName = "parentaccountid";
+
+            public const String ParentContactFieldName = "parentcontactid";
         }
 
         public static class SiteEntity

@@ -2,6 +2,12 @@
 {
     public static class ValidationHelper
     {
+        public static void EnsureNotEmpty(Guid guid)
+        {
+            if (guid == Guid.Empty)
+                throw new ArgumentException();
+        }
+
         public static void EnsureNotNull(this Object obj, Object value, String paramName = null)
         {
             EnsureNotNull(value, paramName);
