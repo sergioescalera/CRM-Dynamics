@@ -179,10 +179,12 @@ var Dynamics;
             var FilterType = OData.FilterType;
             function getContext() {
                 var context;
-                if (Xrm && Xrm.Page && Xrm.Page.context) {
+                if (typeof Xrm !== "undefined" &&
+                    typeof Xrm.Page !== "undefined" &&
+                    typeof Xrm.Page.context !== "undefined") {
                     context = Xrm.Page.context;
                 }
-                else if (GetGlobalContext) {
+                else if (typeof GetGlobalContext !== "undefined") {
                     context = GetGlobalContext();
                 }
                 if (!context) {
