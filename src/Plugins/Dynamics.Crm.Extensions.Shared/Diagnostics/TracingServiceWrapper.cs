@@ -23,5 +23,10 @@ namespace Dynamics.Crm.Diagnostics
             StringBuilder.AppendFormat(format, args);
             StringBuilder.AppendLine();
         }
+
+        public override string ToString()
+        {
+            return StringBuilder?.ToString();
+        }
     }
 }

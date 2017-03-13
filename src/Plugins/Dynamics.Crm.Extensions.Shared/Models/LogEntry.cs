@@ -67,6 +67,7 @@ namespace Dynamics.Crm.Models
         public static LogEntry CreateFromException(
             Exception exception,
             String name,
+            String trace,
             String source = "Plugin",
             LogEntryType type = LogEntryType.Error)
         {
@@ -74,7 +75,7 @@ namespace Dynamics.Crm.Models
             ValidationHelper.EnsureNotNull(name);
 
             var message = exception.Message;
-            var description = exception.ToString();
+            var description = $"EXCEPTION:{exception.ToString()}\nTRACE:{trace}";
 
             var entry = new LogEntry(name, message, description, source, type);
             

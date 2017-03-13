@@ -69,7 +69,10 @@ namespace Dynamics.Crm.Plugins
         {
             var action = (Action)(() =>
             {
-                var entry = LogEntry.CreateFromException(exception, name: GetType().FullName);
+                var name = GetType().FullName;
+                var trace = context.TracingService.ToString();
+
+                var entry = LogEntry.CreateFromException(exception, name, trace);
 
                 var repository = new LogEntryRepository(context);
 
