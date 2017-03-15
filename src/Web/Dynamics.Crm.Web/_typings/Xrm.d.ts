@@ -81,13 +81,15 @@ interface ui {
     getViewPortHeight(): number; // Returns the height of the viewport in pixels. 
     getViewPortWidth(): number; //  Returns the width of the viewport in pixels. 
     refreshRibbon(): void; // Causes the ribbon to re-evaluate data that controls what is displayed in it.
-    controls: ControlsCollection<Control>;
+    controls: Collection<Control>;
     navigation: Navigation;
     formSelector: FormSelector;
     tabs: TabsCollection;
+    process: ProcessUI;
 }
+
 interface FormSelector {
-    items: ControlsCollection<FormSelectorItem>;
+    items: Collection<FormSelectorItem>;
     getCurrentItem(): FormSelectorItem; // Returns a reference to the form currently being shown.
 
 }
@@ -152,7 +154,7 @@ interface Section {
     getVisible(): boolean;
     setLabel(arg: string): void; //Sets the label for the section.
     setVisible(arg: boolean): void; //Sets a value that indicates whether the section is visible.
-    controls: ControlsCollection<Control>;
+    controls: Collection<Control>;
 
 }
 interface TabSections {
@@ -163,21 +165,21 @@ interface TabSections {
     get(argument: AttributeFunctionCallback): Section[]; // Return Value The tab where the index matches the number
     getLength(): number; // Returns the number of controls in the collection
 }
-interface ControlArray<T> {
-    [index: number]: T;
-    [index: string]: T;
-    (index: string): T;
-    (index: number): T;
-}
-interface ControlsCollection<T> {
-    forEach(argument: ControlFunctionCallback): void; // Applies the action contained within a delegate function.    
-    forEach(argument: ControlFunctionCallback, filter: ControlFunctionCallback): void; // Applies the action contained within a delegate function.    
-    get(): ControlArray<T>; // Returns one or more controls depending on the arguments passed. 
-    get(argument: string): T; // Returns The control where the name matches the argument
-    get(argument: Number): T; // Returns The control where the index matches the number
-    get(argument: AttributeFunctionCallback): ControlArray<T>; // Return Value The tab where the index matches the number
-    getLength(): number; // Returns the number of controls in the collection
-}
+//interface ControlArray<T> {
+//    [index: number]: T;
+//    [index: string]: T;
+//    (index: string): T;
+//    (index: number): T;
+//}
+//interface ControlsCollection<T> {
+//    forEach(argument: ControlFunctionCallback): void; // Applies the action contained within a delegate function.    
+//    forEach(argument: ControlFunctionCallback, filter: ControlFunctionCallback): void; // Applies the action contained within a delegate function.    
+//    get(): ControlArray<T>; // Returns one or more controls depending on the arguments passed. 
+//    get(argument: string): T; // Returns The control where the name matches the argument
+//    get(argument: Number): T; // Returns The control where the index matches the number
+//    get(argument: AttributeFunctionCallback): ControlArray<T>; // Return Value The tab where the index matches the number
+//    getLength(): number; // Returns the number of controls in the collection
+//}
 
 interface NavigationArray {
     [index: number]: NavigationItem;
@@ -233,6 +235,7 @@ interface data {
       */
     save(): DataRefreshResult;
     entity: Entity;
+    process: ProcessData;
 }
 
 interface DataRefreshError {
@@ -286,7 +289,7 @@ interface AttributeCollection {
 interface Attribute {
     addOnChange(ev: any): void;
     fireOnChange(): void;
-    controls: ControlsCollection<Control>;
+    controls: Collection<Control>;
     getAttributeType(): string;
     getFormat(): string;
     getInitialValue(): number;
@@ -386,4 +389,123 @@ interface LookupControlItem {
     id: string;
     name: string;
     type: string;
+}
+
+interface ProcessData {
+    getActiveProcess(): ProcessFlow;
+    setActiveProcess(processId: string, callbackFunction: (result: "success" | "invalid") => void): void;
+
+    getProcessInstances(callbackFunction: (processInstances) => void): void;
+    setActiveProcessInstance(
+        processId: string,
+        callbackFunction: (result: "success" | "invalid") => void): void;
+
+    getActiveStage(): ProcessFlowStage;
+    setActiveStage(
+        stageId: string,
+        callbackFunction: (result: "success" | "crossEntity" | "invalid" | "unreachable" | "dirtyForm") => void): void;
+
+    getActivePath(): Collection<ProcessFlowStage>;
+    getEnabledProcesses(callbackFunction: (enabledProcesses) => void): void;
+    getSelectedStage(): ProcessFlowStage;
+
+    addOnStageChange(handler: (ctx: StageChangedContext) => void): void;
+    removeOnStageChange(handler: (ctx: StageChangedContext) => void): void;
+
+    addOnStageSelected(handler: (ctx: StageSelectedContext) => void): void;
+    removeOnStageSelected(handler: (ctx: StageSelectedContext) => void): void;
+
+    addOnProcessStatusChange(handler: (ctx: ProcessStatusChangeContext) => void): void;
+    removeOnProcessStatusChange(handler: (ctx: ProcessStatusChangeContext) => void): void;
+
+    moveNext(callbackFunction: (result: "success" | "crossEntity" | "end" | "invalid" | "dirtyForm") => void): void;
+    movePrevious(callbackFunction: (result: "success" | "crossEntity" | "beginning" | "invalid" | "dirtyForm") => void): void;
+}
+
+interface ProcessFlow {
+    getId(): string;
+    getName(): string;
+    getStages(): Collection<ProcessFlowStage>;
+    isRendered(): boolean;
+}
+
+interface ProcessFlowStage {
+    getCategory(): ProcessFlowStageCategory;
+    getEntityName(): string;
+    getId(): string;
+    getName(): string;
+    getStatus(): "active" | "inactive";
+    getSteps(): ProcessFlowStageStep[];
+}
+
+interface ProcessFlowStageCategory {
+    getValue(): ProcessFlowStageCategoryValue;    
+}
+
+declare enum ProcessFlowStageCategoryValue {
+    Qualify = 0,
+    Develop = 1,
+    Propose = 2,
+    Close = 3,
+    Identify = 4,
+    Research = 5,
+    Resolve = 6
+}
+
+interface ProcessFlowInstance {
+    getInstanceId(): string;
+    getInstanceName(): string;
+    getStatus(): "active" | "abandoned" | "finish";
+    setStatus(
+        status: "active" | "abandoned" | "finish",
+        callbackFunction: (newStatus: "active" | "abandoned" | "finish") => void): void;
+}
+
+interface ProcessFlowStageStep {
+    getAttribute(): string;
+    getName(): string;
+    isRequired(): boolean;
+}
+
+interface StageChangedContext {
+    getEventArgs(): StageChangedEventArgs;
+}
+
+interface StageChangedEventArgs {
+    getDirection(): "next" | "previous";
+    getStage(): ProcessFlowStage;
+}
+
+interface StageSelectedContext {
+    getEventArgs(): StageSelectedEventArgs;
+}
+
+interface StageSelectedEventArgs {
+    getStage(): ProcessFlowStage;
+}
+
+interface ProcessStatusChangeContext {
+}
+
+interface Collection<T> {
+    forEach(handler: CollectionForEachFunctionCallback<T>): void;
+    get(): T[];
+    get(argument: string): T;
+    get(argument: number): T;
+    getByIndex(argument: string): T;
+    getByName(argument: number): T;
+    getAll(): T[];
+    getLength(): number;
+}
+
+interface CollectionForEachFunctionCallback<T> {
+    (item: T, index: number): any;
+}
+
+interface ProcessUI {
+    getDisplayState(): "expanded" | "collapsed";
+    setDisplayState(state: "expanded" | "collapsed"): void;
+
+    getVisible(): boolean;
+    setVisible(visible: boolean): void;
 }
