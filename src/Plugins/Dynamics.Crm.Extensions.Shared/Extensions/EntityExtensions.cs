@@ -58,5 +58,16 @@ namespace Dynamics.Crm.Extensions
         }
 
         #endregion
+
+        #region IEntity
+
+        public static EntityReference ToEntityReference(this IEntity entity)
+        {
+            ValidationHelper.EnsureNotNull(entity);
+
+            return new EntityReference(entity.TypeName, entity.Id);
+        }
+
+        #endregion
     }
 }

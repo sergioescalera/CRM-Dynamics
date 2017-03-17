@@ -27,6 +27,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Concurrency\EntityExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\Enums.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\Messages.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\AccountRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ContactRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\LogEntryRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Repository.cs" />
@@ -57,6 +58,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IWorkflowActivityContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IPluginContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Account.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Address.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Contact.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Enums.cs" />

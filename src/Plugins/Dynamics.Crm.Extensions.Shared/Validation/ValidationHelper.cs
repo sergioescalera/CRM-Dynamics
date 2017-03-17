@@ -8,6 +8,11 @@
                 throw new ArgumentException();
         }
 
+        public static void EnsureNotEmpty(this Object obj, Guid guid)
+        {
+            EnsureNotEmpty(guid);
+        }
+
         public static void EnsureNotNull(this Object obj, Object value, String paramName = null)
         {
             EnsureNotNull(value, paramName);

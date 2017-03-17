@@ -30,6 +30,8 @@ namespace Dynamics.Crm.Data
             public const String Address1Name = "address1_";
 
             public const String Address2Name = "address2_";
+
+            public const String ParentAccountFieldName = "parentaccountid";
         }
 
         public static class AddressStruct
