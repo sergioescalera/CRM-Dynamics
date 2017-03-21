@@ -78,11 +78,14 @@ namespace Dynamics.Crm.Plugins
         
         protected virtual void Dispose(bool disposing)
         {
-            if (disposing && OrganizationServiceContext.IsValueCreated && !_disposed)            
-                OrganizationServiceContext.Value.Dispose();                
-            
-            if (!_disposed)
+            if (_disposed)
+                return;
+
+            if (disposing)
                 _disposed = true;
+
+            if (disposing && OrganizationServiceContext.IsValueCreated)            
+                OrganizationServiceContext.Value.Dispose();                
         }
     }
 }
