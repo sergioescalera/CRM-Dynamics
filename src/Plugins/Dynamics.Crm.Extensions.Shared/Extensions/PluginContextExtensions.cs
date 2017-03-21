@@ -1,4 +1,5 @@
 ﻿using Dynamics.Crm.Core;
+using Dynamics.Crm.Plugins;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
 using System;
@@ -14,6 +15,9 @@ namespace Dynamics.Crm.Interfaces
         {
             ValidationHelper.EnsureNotNull(pluginContext);
 
+            if (pluginContext is PluginContext)            
+                return ((PluginContext)pluginContext).OrganizationServiceContext.Value;
+            
             return new OrganizationServiceContext(pluginContext.OrganizationService);
         }
 

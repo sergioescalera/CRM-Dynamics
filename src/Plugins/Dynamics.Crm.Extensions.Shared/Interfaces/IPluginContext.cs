@@ -3,7 +3,7 @@ using System;
 
 namespace Dynamics.Crm.Interfaces
 {
-    public interface IPluginContext
+    public interface IPluginContext : IDisposable
     {
         IPluginExecutionContext ExecutionContext { get; }
 
@@ -13,6 +13,6 @@ namespace Dynamics.Crm.Interfaces
 
         IServiceProvider ServiceProvider { get; }
 
-        ITracingService TracingService { get; }
+        ITracingService TracingService { get; }        
     }
 }

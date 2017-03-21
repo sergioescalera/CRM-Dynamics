@@ -16,20 +16,22 @@ namespace Dynamics.Crm.Plugins
         {
             var stopwatch = new Stopwatch();
             var pluginType = GetType();
-            var context = GetPluginContext(serviceProvider);
-            
-            try
-            {
-                Validate(context, pluginType);
-                stopwatch.Start();
-                Execute(context);
-                stopwatch.Stop();
-            }            
-            catch (Exception e)
-            {
-                CreateLogEntryFromException(context, e);
 
-                throw;
+            using (var context = GetPluginContext(serviceProvider))
+            {
+                try
+                {
+                    Validate(context, pluginType);
+                    stopwatch.Start();
+                    Execute(context);
+                    stopwatch.Stop();
+                }
+                catch (Exception e)
+                {
+                    CreateLogEntryFromException(context, e);
+
+                    throw;
+                }
             }
         }
 
