@@ -3,8 +3,8 @@
     "use strict";
 
     export enum FilterType {
-        And = 0,
-        Or = 0
+        And = 1,
+        Or = 2
     }
 
     function getContext(): Context {
@@ -53,7 +53,7 @@
 
         throw new Error("Version not supported: {version}.".replace("{version}", version));
     }
-    
+
     function entityIdFieldName(entityName: string): string {
 
         return entityName + "id";
@@ -69,7 +69,7 @@
 
         var entity = {
             id: obj[idFieldName],
-            type: entityName            
+            type: entityName
         };
 
         attributes.forEach((key: string) => {
@@ -88,7 +88,7 @@
         return entity;
     }
 
-    function stringifyEntity(entity: Core.IEntity) {
+    function stringifyEntity(entity: Core.IEntity): string {
 
         var data = {};
 
@@ -105,7 +105,7 @@
 
         return JSON.stringify(data);
     }
-    
+
     // entities CRUD
 
     export function retrieve(
@@ -139,7 +139,7 @@
                 dataType: "json"
             })
             .then((data: any) => {
-                
+
                 return toEntity(entityName, attributes, data);
             })
             .fail((response: any) => {
@@ -159,15 +159,16 @@
         entitySetName: string,
         attributes: string[],
         filters: string[],
-        filterType: FilterType = FilterType.And,
-        orderBy: string[] = null): JQueryPromise<Core.IEntity[]> {
+        filterType: FilterType = null,
+        orderBy: string[] = null,
+        expand: string[] = null): JQueryPromise<Core.IEntity[]> {
 
         Validation.ensureNotNullOrEmpty(entityName, "entityName");
         Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
 
         var baseUrl = getContext().getClientUrl();
 
-        var filterJoin = filterType === FilterType.And ? " and " : " or ";
+        var filterJoin = !filterType || filterType === FilterType.And ? " and " : " or ";
 
         var url = "{baseUrl}/api/data/{version}/{entitySetName}?$select={select}&$filter={filter}"
             .replace("{baseUrl}", baseUrl)
@@ -178,7 +179,12 @@
 
         if (orderBy) {
 
-            url += "&$orderby={orderby}".replace("{orderby}", orderBy.join(","))
+            url += "&$orderby={orderby}".replace("{orderby}", orderBy.join(","));
+        }
+
+        if (expand) {
+
+            url += "&$expand={$expand}".replace("{$expand}", expand.join(","));
         }
 
         return $
@@ -212,10 +218,11 @@
 
         var baseUrl = getContext().getClientUrl();
 
-        var url = "{0}/api/data/v8.1/{1}({2})"
-            .replace("{0}", baseUrl)
-            .replace("{1}", entitySetName)
-            .replace("{2}", entityId);
+        var url = "{baseUrl}/api/data/{version}/{entitySetName}({entityId})"
+            .replace("{baseUrl}", baseUrl)
+            .replace("{version}", getVersion())
+            .replace("{entitySetName}", entitySetName)
+            .replace("{entityId}", entityId);
 
         return $
             .ajax({
@@ -232,9 +239,10 @@
 
         var baseUrl = getContext().getClientUrl();
 
-        var url = "{0}/api/data/v8.1/{1}"
-            .replace("{0}", baseUrl)
-            .replace("{1}", entitySetName);
+        var url = "{baseUrl}/api/data/{version}/{entitySetName}"
+            .replace("{baseUrl}", baseUrl)
+            .replace("{version}", getVersion())
+            .replace("{entitySetName}", entitySetName);
 
         var data = stringifyEntity(entity);
 
@@ -247,7 +255,7 @@
                 data: data
             });
     }
-
+    
     // meta-data
 
     export function entityDefinitions(): JQueryPromise<IEntityDefinition[]> {

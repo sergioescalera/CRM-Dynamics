@@ -1,5 +1,5 @@
 ﻿declare interface IDynamics {
-    Crm: ICrmDynamics
+    Crm: ICrmDynamics;
 }
 
 declare interface ICrmDynamics {
@@ -46,7 +46,7 @@ declare interface ICrmAttributes {
     setRequiredLevel(attributeNames: string[], requirementLevel: string): void;
     setRequiredOrOptional(attributeName: string, required: boolean, attributeRequired?: boolean): void;
 
-    hideOptions(attribute: Attribute, hide?: (o: number) => boolean);
+    hideOptions(attribute: Attribute, hide?: (o: number) => boolean): void;
 
     getLookupValue(attributeName: string, required?: boolean): LookupControlItem;
     setLookupValue(attributeName: string, entityType: string, name: string, id: string, required?: boolean): void;
@@ -63,8 +63,8 @@ declare interface ICrmControls {
     setDisabled(attributeNames: string[], disabled: boolean, applyToAll?: boolean): void;
 
     show(attributeNames: string[], condition?: boolean, applyToAll?: boolean): void;
-    hide(attributeNames: string[], condition?: boolean, applyToAll?: boolean): void
-    setVisible(attributeNames: string[], value: boolean, applyToAll?: boolean);
+    hide(attributeNames: string[], condition?: boolean, applyToAll?: boolean): void;
+    setVisible(attributeNames: string[], value: boolean, applyToAll?: boolean): void;
 }
 
 declare interface ICrmNavigation {
@@ -124,14 +124,21 @@ declare interface ICrmOData {
         entitySetName: string,
         entityId: string,
         attributes: string[],
-        expand?: string[]): JQueryPromise<IEntity>
+        expand?: string[]): JQueryPromise<IEntity>;
     retrieveMultiple(
         entityName: string,
         entitySetName: string,
         attributes: string[],
         filters: string[],
         filterType?: ODataFilterType,
-        orderBy?: string[]): JQueryPromise<IEntity[]>
+        orderBy?: string[],
+        expand?: string[]): JQueryPromise<IEntity[]>;
+    executeEntityAction(
+        entityId: string,
+        entitySetName: string,
+        actionName: string,
+        data?: any): JQueryPromise<any>;
+    executeGlobalAction(actionName: string, data?: any): JQueryPromise<any>;
 }
 
 declare enum ODataFilterType {
@@ -141,7 +148,7 @@ declare enum ODataFilterType {
 
 declare interface IEntity {
     id?: string;
-    type: string;    
+    type: string;
 }
 
 declare interface ICrmUser {
@@ -175,7 +182,7 @@ declare interface IScriptManager {
         document?: Document): void;
     loadStylesheet(
         stylesheet: string,
-        document?: Document): void
+        document?: Document): void;
 }
 
 declare interface ITasks {

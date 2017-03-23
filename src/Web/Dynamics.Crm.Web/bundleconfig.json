@@ -25,7 +25,8 @@
       "libs/moment/moment.min.js",
       "libs/lodash/lodash.min.js",
       "Core/*.js",
-      "Data/*.js"
+      "Data/*.js",
+      "Resources/Strings.js"
     ],
     "sourceMap": false
   },

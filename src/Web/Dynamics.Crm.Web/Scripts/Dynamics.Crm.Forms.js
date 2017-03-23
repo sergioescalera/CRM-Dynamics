@@ -1017,8 +1017,8 @@ var Dynamics;
         (function (OData) {
             "use strict";
             (function (FilterType) {
-                FilterType[FilterType["And"] = 0] = "And";
-                FilterType[FilterType["Or"] = 0] = "Or";
+                FilterType[FilterType["And"] = 1] = "And";
+                FilterType[FilterType["Or"] = 2] = "Or";
             })(OData.FilterType || (OData.FilterType = {}));
             var FilterType = OData.FilterType;
             function getContext() {
@@ -1119,13 +1119,14 @@ var Dynamics;
                 });
             }
             OData.retrieve = retrieve;
-            function retrieveMultiple(entityName, entitySetName, attributes, filters, filterType, orderBy) {
-                if (filterType === void 0) { filterType = FilterType.And; }
+            function retrieveMultiple(entityName, entitySetName, attributes, filters, filterType, orderBy, expand) {
+                if (filterType === void 0) { filterType = null; }
                 if (orderBy === void 0) { orderBy = null; }
+                if (expand === void 0) { expand = null; }
                 Validation.ensureNotNullOrEmpty(entityName, "entityName");
                 Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
                 var baseUrl = getContext().getClientUrl();
-                var filterJoin = filterType === FilterType.And ? " and " : " or ";
+                var filterJoin = !filterType || filterType === FilterType.And ? " and " : " or ";
                 var url = "{baseUrl}/api/data/{version}/{entitySetName}?$select={select}&$filter={filter}"
                     .replace("{baseUrl}", baseUrl)
                     .replace("{version}", getVersion())
@@ -1134,6 +1135,9 @@ var Dynamics;
                     .replace("{filter}", filters.join(filterJoin));
                 if (orderBy) {
                     url += "&$orderby={orderby}".replace("{orderby}", orderBy.join(","));
+                }
+                if (expand) {
+                    url += "&$expand={$expand}".replace("{$expand}", expand.join(","));
                 }
                 return $
                     .ajax({
@@ -1157,10 +1161,11 @@ var Dynamics;
                 Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
                 Validation.ensureNotNullOrEmpty(entityId, "entityId");
                 var baseUrl = getContext().getClientUrl();
-                var url = "{0}/api/data/v8.1/{1}({2})"
-                    .replace("{0}", baseUrl)
-                    .replace("{1}", entitySetName)
-                    .replace("{2}", entityId);
+                var url = "{baseUrl}/api/data/{version}/{entitySetName}({entityId})"
+                    .replace("{baseUrl}", baseUrl)
+                    .replace("{version}", getVersion())
+                    .replace("{entitySetName}", entitySetName)
+                    .replace("{entityId}", entityId);
                 return $
                     .ajax({
                     url: url,
@@ -1173,9 +1178,10 @@ var Dynamics;
                 Validation.ensureNotNullOrUndefined(entity, "entity");
                 Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
                 var baseUrl = getContext().getClientUrl();
-                var url = "{0}/api/data/v8.1/{1}"
-                    .replace("{0}", baseUrl)
-                    .replace("{1}", entitySetName);
+                var url = "{baseUrl}/api/data/{version}/{entitySetName}"
+                    .replace("{baseUrl}", baseUrl)
+                    .replace("{version}", getVersion())
+                    .replace("{entitySetName}", entitySetName);
                 var data = stringifyEntity(entity);
                 return $
                     .ajax({
@@ -1278,3 +1284,30 @@ var Dynamics;
         })(Data = Crm.Data || (Crm.Data = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
+
+var Resources;
+(function (Resources) {
+    "use strict";
+    var nullArgumentMessageFormat = "Argument cannot be null or undefined '{paramName}'.";
+    var nullOrEmptyArgumentMessageFormat = "Argument cannot be null or empty string '{paramName}'.";
+    var invalidTypeMessageFormat = "Invalid argument type '{actualType}' expecting type '{expectedType}'.";
+    var outOfRangeMessageFormat = "Argument '{paramName}' was out of the range of valid values.";
+    var Strings = (function () {
+        function Strings() {
+        }
+        Strings.NullArgumentMessageFormat = function (paramName) { return nullArgumentMessageFormat
+            .replace("{paramName}", paramName || ""); };
+        Strings.NullOrEmptyArgumentMessageFormat = function (paramName) { return nullOrEmptyArgumentMessageFormat
+            .replace("{paramName}", paramName || ""); };
+        Strings.InvalidTypeMessageFormat = function (expectedType, actualType) { return invalidTypeMessageFormat
+            .replace("{expectedType}", expectedType || "")
+            .replace("{actualType}", actualType || ""); };
+        Strings.OutOfRangeMessageFormat = function (paramName) { return outOfRangeMessageFormat
+            .replace("{paramName}", paramName || ""); };
+        Strings.NotSupportedMessage = "Not supported.";
+        Strings.No = "No";
+        Strings.Yes = "Yes";
+        return Strings;
+    }());
+    Resources.Strings = Strings;
+})(Resources || (Resources = {}));
