@@ -15,14 +15,19 @@ namespace Dynamics.Crm.Plugins
         public virtual void Execute(IServiceProvider serviceProvider)
         {
             var stopwatch = new Stopwatch();
+            var baseType = typeof(PluginBase);
             var pluginType = GetType();
-
+            
             using (var context = GetPluginContext(serviceProvider))
             {
                 try
                 {
+                    context.TracingService.Trace($"{baseType.FullName}.Execute");
+
+                    TraceExecutionContext(context);
                     Validate(context, pluginType);
                     stopwatch.Start();
+                    context.TracingService.Trace($"{pluginType.FullName}.Execute");
                     Execute(context);
                     stopwatch.Stop();
                 }
@@ -40,6 +45,21 @@ namespace Dynamics.Crm.Plugins
         protected virtual IPluginContext GetPluginContext(IServiceProvider serviceProvider)
         {
             return new PluginContext(serviceProvider);
+        }
+
+        protected virtual void TraceExecutionContext(IPluginContext context)
+        {
+            var executionContext = context.ExecutionContext;
+
+            context.TracingService.Trace($"BusinessUnitId: {executionContext?.BusinessUnitId}");
+            context.TracingService.Trace($"CorrelationId: {executionContext?.CorrelationId}");
+            context.TracingService.Trace($"Depth: {executionContext?.Depth}");
+            context.TracingService.Trace($"InitiatingUserId: {executionContext?.InitiatingUserId}");
+            context.TracingService.Trace($"MessageName: {executionContext?.MessageName}");
+            context.TracingService.Trace($"Mode: {executionContext?.Mode}");
+            context.TracingService.Trace($"PrimaryEntityId: {executionContext?.PrimaryEntityId}");
+            context.TracingService.Trace($"PrimaryEntityName: {executionContext?.PrimaryEntityName}");
+            context.TracingService.Trace($"UserId: {executionContext?.UserId}");
         }
 
         protected virtual void Validate(IPluginContext context, Type pluginType)
@@ -67,14 +87,17 @@ namespace Dynamics.Crm.Plugins
             }
         }
 
-        protected virtual void CreateLogEntryFromException(IPluginContext context, Exception exception)
+        protected virtual void CreateLogEntryFromException(
+            IPluginContext context,
+            Exception exception,
+            LogEntryType type = LogEntryType.Error)
         {
             var action = (Action)(() =>
             {
                 var name = GetType().FullName;
                 var trace = context.TracingService.ToString();
 
-                var entry = LogEntry.CreateFromException(exception, name, trace);
+                var entry = LogEntry.CreateFromException(exception, name, trace, type: type);
 
                 var repository = new LogEntryRepository(context);
 
