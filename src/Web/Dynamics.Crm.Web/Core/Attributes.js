@@ -96,7 +96,7 @@ var Dynamics;
                         return;
                     }
                     var value = !id ? null : [{
-                            id: "{id}".replace("id", Crm.Core.parseIdentifier(id)),
+                            id: "{" + Crm.Core.parseIdentifier(id) + "}",
                             name: name,
                             entityType: entityType
                         }];

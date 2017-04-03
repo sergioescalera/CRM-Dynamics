@@ -78,13 +78,28 @@ interface Moment {
     isValid(): boolean;
 
     year(y: number): Moment;
+    year(): number;
+
     month(M: number): Moment;
+    month(): number;
+
     day(d: number): Moment;
+    day(): number;
+
     date(d: number): Moment;
+    date(number): number;
+
     hours(h: number): Moment;
+    hours(number): number;
+
     minutes(m: number): Moment;
+    minutes(number): number;
+
     seconds(s: number): Moment;
+    seconds(): number;
+
     milliseconds(ms: number): Moment;
+    milliseconds(number): number;
 
     sod(): Moment; // Start of Day
     eod(): Moment; // End of Day

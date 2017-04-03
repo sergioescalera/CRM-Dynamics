@@ -9,7 +9,7 @@ var Dynamics;
                 if (idStr === undefined || idStr == null) {
                     return "";
                 }
-                return idStr.replace("{", "").replace("}", "").toLowerCase();
+                return idStr.replace("{", "").replace("}", "").toUpperCase();
             }
             Core.parseIdentifier = parseIdentifier;
             function identifiersAreEqual(id, otherId) {

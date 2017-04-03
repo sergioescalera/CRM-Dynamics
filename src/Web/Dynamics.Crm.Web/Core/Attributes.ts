@@ -123,7 +123,7 @@
         }
 
         var value = !id ? null : [{
-            id: "{id}".replace("id", Core.parseIdentifier(id)),
+            id: `{${Core.parseIdentifier(id)}}`,
             name: name,
             entityType: entityType
         }];

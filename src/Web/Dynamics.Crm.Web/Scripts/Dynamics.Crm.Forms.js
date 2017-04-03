@@ -115,7 +115,7 @@ var Dynamics;
                         return;
                     }
                     var value = !id ? null : [{
-                            id: "{id}".replace("id", Crm.Core.parseIdentifier(id)),
+                            id: "{" + Crm.Core.parseIdentifier(id) + "}",
                             name: name,
                             entityType: entityType
                         }];
@@ -446,7 +446,7 @@ var Dynamics;
                 if (idStr === undefined || idStr == null) {
                     return "";
                 }
-                return idStr.replace("{", "").replace("}", "").toLowerCase();
+                return idStr.replace("{", "").replace("}", "").toUpperCase();
             }
             Core.parseIdentifier = parseIdentifier;
             function identifiersAreEqual(id, otherId) {

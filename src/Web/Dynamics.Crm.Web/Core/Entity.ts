@@ -16,7 +16,7 @@
             return "";
         }
 
-        return idStr.replace("{", "").replace("}", "").toLowerCase();
+        return idStr.replace("{", "").replace("}", "").toUpperCase();
     }
 
     export function identifiersAreEqual(id: string, otherId: string): boolean {
