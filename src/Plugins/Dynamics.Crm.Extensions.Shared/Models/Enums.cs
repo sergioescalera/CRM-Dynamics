@@ -8,6 +8,22 @@
         Info = 3,
     }
 
+    public enum OpportunityStateCode
+    {
+        Open = 0,
+        Won = 1,
+        Lost = 2
+    }
+
+    public enum OpportunityStatusCode
+    {
+        InProgress = 1,
+        OnHold = 2,
+        Won = 3,
+        Canceled = 4,
+        OutSold = 5
+    }
+
     public enum StateCode
     {
         Active = 0, Inactive = 1
