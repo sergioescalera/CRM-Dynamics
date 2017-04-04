@@ -1,4 +1,7 @@
-﻿using Microsoft.Xrm.Sdk;
+﻿using Dynamics.Crm.Interfaces;
+using Dynamics.Crm.Models;
+using Microsoft.Crm.Sdk.Messages;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
 using System;
@@ -96,6 +99,66 @@ namespace Dynamics.Crm.Extensions
             }
 
             return list;
-        }        
+        }
+
+        public static SetStateResponse SetStatus(
+            this IOrganizationService service, IEntity entity, StateCode state, StatusCode status)
+        {
+            return service.SetStatus(entity, (Int32)state, (Int32)status);
+        }
+
+        public static SetStateResponse SetStatus(
+            this IOrganizationService service, IEntity entity, Int32 state, Int32 status)
+        {
+            ValidationHelper.EnsureNotNull(service);
+            ValidationHelper.EnsureNotNull(entity);
+
+            var request = new SetStateRequest
+            {
+                EntityMoniker = entity.ToEntityReference(),
+                State = new OptionSetValue(state),
+                Status = new OptionSetValue(status)
+            };
+
+            var response = service.Execute<SetStateResponse>(request);
+
+            return response;
+        }
+
+        public static SetStateResponse SetStatus(
+            this IOrganizationService service, EntityReference entity, StateCode state, StatusCode status)
+        {
+            return service.SetStatus(entity, (Int32)state, (Int32)status);
+        }
+
+        public static SetStateResponse SetStatus(
+            this IOrganizationService service, EntityReference entity, Int32 state, Int32 status)
+        {
+            ValidationHelper.EnsureNotNull(service);
+            ValidationHelper.EnsureNotNull(entity);
+
+            var request = new SetStateRequest
+            {
+                EntityMoniker = entity.Clone(),
+                State = new OptionSetValue(state),
+                Status = new OptionSetValue(status)
+            };
+
+            var response = service.Execute<SetStateResponse>(request);
+
+            return response;
+        }
+
+        public static SetStateResponse SetStatus(
+            this IOrganizationService service, Entity entity, StateCode state, StatusCode status)
+        {
+            return service.SetStatus(entity?.ToEntityReference(), (Int32)state, (Int32)status);
+        }
+
+        public static SetStateResponse SetStatus(
+            this IOrganizationService service, Entity entity, Int32 state, Int32 status)
+        {
+            return service.SetStatus(entity?.ToEntityReference(), (Int32)state, (Int32)status);
+        }
     }
 }
