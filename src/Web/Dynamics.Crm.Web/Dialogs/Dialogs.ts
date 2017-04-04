@@ -13,12 +13,13 @@ module Dynamics.Crm.Dialogs {
         Custom = 2
     }
 
-    export interface IDialog<TResult> {        
+    export interface IDialog<TResult> {
         Show(): JQueryPromise<TResult>;
     }
 
-    export interface IDialogConfig {
-        Message?: string;
+    export interface IDialogConfig<TResult> {
+        Done: () => TResult;
+        Init?: (dialog: JQuery) => void;
         Template?: string;
         Title?: string;
         Width?: string;
@@ -27,7 +28,7 @@ module Dynamics.Crm.Dialogs {
     export interface IDialogProvider {
         Alert(message: string, title: string): JQueryPromise<IDialog<void>>;
         Confirm(message: string, title: string): JQueryPromise<IDialog<boolean>>;
-        Create<TResult>(config: IDialogConfig): JQueryPromise<IDialog<TResult>>;
+        Create<TResult>(config: IDialogConfig<TResult>): JQueryPromise<IDialog<TResult>>;
     }
 
     var provider: IDialogProvider;
@@ -43,8 +44,8 @@ module Dynamics.Crm.Dialogs {
 
     export function alert(message: string, title: string): JQueryPromise<void> {
 
-        var deferred = $.Deferred<void>();
-        
+        var deferred: JQueryDeferred<void> = $.Deferred<void>();
+
         getProvider()
             .Alert(message, title)
             .done((d: IDialog<void>) => d
@@ -58,13 +59,33 @@ module Dynamics.Crm.Dialogs {
 
     export function confirm(message: string, title: string): JQueryPromise<boolean> {
 
-        var deferred = $.Deferred<boolean>();
-        
+        var deferred: JQueryDeferred<boolean> = $.Deferred<boolean>();
+
         getProvider()
             .Confirm(message, title)
             .done((d: IDialog<void>) => d
                 .Show()
-                .done((r: boolean) => deferred.resolve(r))
+                .done(() => deferred.resolve(true))
+                .fail(() => deferred.reject()))
+            .fail(() => deferred.reject());
+
+        return deferred;
+    }
+
+    export function create<TResult>(config: IDialogConfig<TResult>): JQueryPromise<TResult> {
+
+        var deferred: JQueryDeferred<TResult> = $.Deferred<TResult>();
+
+        getProvider()
+            .Create(config)
+            .done((d: IDialog<TResult>) => d
+                .Show()
+                .done(() => {
+
+                    var result: TResult = config.Done();
+
+                    deferred.resolve(result);
+                })
                 .fail(() => deferred.reject()))
             .fail(() => deferred.reject());
 

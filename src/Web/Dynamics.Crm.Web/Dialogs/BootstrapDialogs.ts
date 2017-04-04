@@ -4,44 +4,40 @@
 
     class BootstrapDialogTemplates {
 
-        static alert = (message: string, title: string) => ("" +
-            "<div class='modal fade' tabindex='-1' role='dialog'>" +
-            "<div class='modal-dialog' role='document'>" +
-            "   <div class='modal-content'>" +
-            "       <div class='modal-header'>" +
-            "           <button type='button' class='close' data-dismiss='modal' aria-label='Close'>" +
-            "               <span aria-hidden='true' >&times;</span></button>" +
-            "           <h4 class='modal-title'>{title}</h4>" +
-            "       </div>" +
-            "       <div class='modal-body'>{content}</div>" +
-            "       <div class='modal-footer'>" +
-            "           <button type='button' class='btn btn-primary' data-dismiss='modal'>OK</button>" +
-            "       </div>" +
-            "   </div>" + // modal-content
-            "</div>" + // modal-dialog
-            "</div>") // modal
-            .replace("{content}", message)
-            .replace("{title}", title);
+        static alert = (message: string, title: string) => `
+            <div class='modal fade' tabindex='-1' role='dialog'>
+            <div class='modal-dialog' role='document'>
+               <div class='modal-content'>
+                   <div class='modal-header'>
+                       <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+                           <span aria-hidden='true' >&times;</span></button>
+                       <h4 class='modal-title'>${title}</h4>
+                   </div>
+                   <div class='modal-body'>${message}</div>
+                   <div class='modal-footer'>
+                       <button type='button' class='btn btn-primary' data-dismiss='modal'>OK</button>
+                   </div>
+               </div>
+            </div>
+            </div>`;
 
-        static confirm = (message: string, title: string) => ("" +
-            "<div class='modal fade' tabindex='-1' role='dialog'>" +
-            "<div class='modal-dialog' role='document'>" +
-            "   <div class='modal-content'>" +
-            "       <div class='modal-header'>" +
-            "           <button type='button' class='close' data-dismiss='modal' aria-label='Close'>" +
-            "               <span aria-hidden='true' >&times;</span></button>" +
-            "           <h4 class='modal-title'>{title}</h4>" +
-            "       </div>" +
-            "       <div class='modal-body'>{content}</div>" +
-            "       <div class='modal-footer'>" +
-            "           <button type='button' class='btn btn-primary' data-dismiss='modal'>OK</button>" +
-            "           <button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>" +
-            "       </div>" +
-            "   </div>" + // modal-content
-            "</div>" + // modal-dialog
-            "</div>") // modal
-            .replace("{content}", message)
-            .replace("{title}", title);
+        static confirm = (message: string, title: string) => `
+            <div class='modal fade' tabindex='-1' role='dialog'>
+            <div class='modal-dialog' role='document'>
+               <div class='modal-content'>
+                   <div class='modal-header'>
+                       <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+                           <span aria-hidden='true' >&times;</span></button>
+                       <h4 class='modal-title'>${title}</h4>
+                   </div>
+                   <div class='modal-body'>${message}</div>
+                   <div class='modal-footer'>
+                       <button type='button' class='btn btn-primary' data-dismiss='modal'>OK</button>
+                       <button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>
+                   </div>
+               </div>
+            </div>
+            </div>`;
     }
 
     export class BootstrapDialog<TResult> implements IDialog<TResult> {
@@ -50,15 +46,17 @@
         private _window: IXrmWindow;
         private _dialog: Bootstrap;
         private _deferred: JQueryDeferred<TResult>;
-        
-        constructor(window: IXrmWindow, content: string) {
+        private _init: (dialog: JQuery) => void;
+
+        constructor(window: IXrmWindow, content: string, init?: (dialog: JQuery) => void) {
 
             this._content = content;
             this._window = window;
+            this._init = init;
         }
 
         private Resolve(): void {
-            
+
             this.deferred.resolve();
         }
 
@@ -77,7 +75,7 @@
         get dialog(): Bootstrap {
 
             if (!this._dialog) {
-                
+
                 this._dialog = <Bootstrap>this._window.jQuery(this._content);
 
                 this._dialog.appendTo(this._window.jQuery("body"));
@@ -87,8 +85,12 @@
                 });
 
                 this._window.jQuery("button.btn-primary", this._dialog).click(this.Resolve.bind(this));
-                this._window.jQuery("button.close", this._dialog).click(this.Reject.bind(this));                
+                this._window.jQuery("button.close", this._dialog).click(this.Reject.bind(this));
                 this._window.jQuery("button.btn-default", this._dialog).click(this.Reject.bind(this));
+
+                if (this._init) {
+                    this._init(this._dialog);
+                }
             }
 
             return this._dialog;
@@ -119,8 +121,7 @@
 
         private Init(): void {
 
-            var baseUrl = "../WebResources/{prefix}/Libs/bootstrap/"
-                .replace("{prefix}", Dynamics.Crm.publisherPrefix);
+            var baseUrl: string = `../WebResources/${Dynamics.Crm.publisherPrefix}/Libs/bootstrap/`;
 
             this._loading = ScriptManager.loadScript(baseUrl + "js/bootstrap.min.js", this._window.document);
 
@@ -141,11 +142,11 @@
                 .then(() => new BootstrapDialog<boolean>(this._window, BootstrapDialogTemplates.confirm(message, title)));
         }
 
-        Create<TResult>(config: IDialogConfig): JQueryPromise<IDialog<TResult>> {
+        Create<TResult>(config: IDialogConfig<TResult>): JQueryPromise<IDialog<TResult>> {
 
             return this
                 ._loading
-                .then(() => new BootstrapDialog<TResult>(this._window, config.Template));
+                .then(() => new BootstrapDialog<TResult>(this._window, config.Template, config.Init));
         }
     }
 }

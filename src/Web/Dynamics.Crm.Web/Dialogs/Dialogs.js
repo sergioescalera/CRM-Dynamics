@@ -36,12 +36,27 @@ var Dynamics;
                     .Confirm(message, title)
                     .done(function (d) { return d
                     .Show()
-                    .done(function (r) { return deferred.resolve(r); })
+                    .done(function () { return deferred.resolve(true); })
                     .fail(function () { return deferred.reject(); }); })
                     .fail(function () { return deferred.reject(); });
                 return deferred;
             }
             Dialogs.confirm = confirm;
+            function create(config) {
+                var deferred = $.Deferred();
+                getProvider()
+                    .Create(config)
+                    .done(function (d) { return d
+                    .Show()
+                    .done(function () {
+                    var result = config.Done();
+                    deferred.resolve(result);
+                })
+                    .fail(function () { return deferred.reject(); }); })
+                    .fail(function () { return deferred.reject(); });
+                return deferred;
+            }
+            Dialogs.create = create;
         })(Dialogs = Crm.Dialogs || (Crm.Dialogs = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));

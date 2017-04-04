@@ -8,49 +8,15 @@ var Dynamics;
             var BootstrapDialogTemplates = (function () {
                 function BootstrapDialogTemplates() {
                 }
-                BootstrapDialogTemplates.alert = function (message, title) { return ("" +
-                    "<div class='modal fade' tabindex='-1' role='dialog'>" +
-                    "<div class='modal-dialog' role='document'>" +
-                    "   <div class='modal-content'>" +
-                    "       <div class='modal-header'>" +
-                    "           <button type='button' class='close' data-dismiss='modal' aria-label='Close'>" +
-                    "               <span aria-hidden='true' >&times;</span></button>" +
-                    "           <h4 class='modal-title'>{title}</h4>" +
-                    "       </div>" +
-                    "       <div class='modal-body'>{content}</div>" +
-                    "       <div class='modal-footer'>" +
-                    "           <button type='button' class='btn btn-primary' data-dismiss='modal'>OK</button>" +
-                    "       </div>" +
-                    "   </div>" +
-                    "</div>" +
-                    "</div>") // modal
-                    .replace("{content}", message)
-                    .replace("{title}", title); };
-                BootstrapDialogTemplates.confirm = function (message, title) { return ("" +
-                    "<div class='modal fade' tabindex='-1' role='dialog'>" +
-                    "<div class='modal-dialog' role='document'>" +
-                    "   <div class='modal-content'>" +
-                    "       <div class='modal-header'>" +
-                    "           <button type='button' class='close' data-dismiss='modal' aria-label='Close'>" +
-                    "               <span aria-hidden='true' >&times;</span></button>" +
-                    "           <h4 class='modal-title'>{title}</h4>" +
-                    "       </div>" +
-                    "       <div class='modal-body'>{content}</div>" +
-                    "       <div class='modal-footer'>" +
-                    "           <button type='button' class='btn btn-primary' data-dismiss='modal'>OK</button>" +
-                    "           <button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>" +
-                    "       </div>" +
-                    "   </div>" +
-                    "</div>" +
-                    "</div>") // modal
-                    .replace("{content}", message)
-                    .replace("{title}", title); };
+                BootstrapDialogTemplates.alert = function (message, title) { return ("\n            <div class='modal fade' tabindex='-1' role='dialog'>\n            <div class='modal-dialog' role='document'>\n               <div class='modal-content'>\n                   <div class='modal-header'>\n                       <button type='button' class='close' data-dismiss='modal' aria-label='Close'>\n                           <span aria-hidden='true' >&times;</span></button>\n                       <h4 class='modal-title'>" + title + "</h4>\n                   </div>\n                   <div class='modal-body'>" + message + "</div>\n                   <div class='modal-footer'>\n                       <button type='button' class='btn btn-primary' data-dismiss='modal'>OK</button>\n                   </div>\n               </div>\n            </div>\n            </div>"); };
+                BootstrapDialogTemplates.confirm = function (message, title) { return ("\n            <div class='modal fade' tabindex='-1' role='dialog'>\n            <div class='modal-dialog' role='document'>\n               <div class='modal-content'>\n                   <div class='modal-header'>\n                       <button type='button' class='close' data-dismiss='modal' aria-label='Close'>\n                           <span aria-hidden='true' >&times;</span></button>\n                       <h4 class='modal-title'>" + title + "</h4>\n                   </div>\n                   <div class='modal-body'>" + message + "</div>\n                   <div class='modal-footer'>\n                       <button type='button' class='btn btn-primary' data-dismiss='modal'>OK</button>\n                       <button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>\n                   </div>\n               </div>\n            </div>\n            </div>"); };
                 return BootstrapDialogTemplates;
             }());
             var BootstrapDialog = (function () {
-                function BootstrapDialog(window, content) {
+                function BootstrapDialog(window, content, init) {
                     this._content = content;
                     this._window = window;
+                    this._init = init;
                 }
                 BootstrapDialog.prototype.Resolve = function () {
                     this.deferred.resolve();
@@ -74,6 +40,9 @@ var Dynamics;
                             this._window.jQuery("button.btn-primary", this._dialog).click(this.Resolve.bind(this));
                             this._window.jQuery("button.close", this._dialog).click(this.Reject.bind(this));
                             this._window.jQuery("button.btn-default", this._dialog).click(this.Reject.bind(this));
+                            if (this._init) {
+                                this._init(this._dialog);
+                            }
                         }
                         return this._dialog;
                     },
@@ -99,8 +68,7 @@ var Dynamics;
                     this.Init();
                 }
                 BootstrapDialogProvider.prototype.Init = function () {
-                    var baseUrl = "../WebResources/{prefix}/Libs/bootstrap/"
-                        .replace("{prefix}", Dynamics.Crm.publisherPrefix);
+                    var baseUrl = "../WebResources/" + Dynamics.Crm.publisherPrefix + "/Libs/bootstrap/";
                     this._loading = Crm.ScriptManager.loadScript(baseUrl + "js/bootstrap.min.js", this._window.document);
                     Crm.ScriptManager.loadStylesheet(baseUrl + "css/bootstrap.min.css", this._window.document);
                 };
@@ -120,7 +88,7 @@ var Dynamics;
                     var _this = this;
                     return this
                         ._loading
-                        .then(function () { return new BootstrapDialog(_this._window, config.Template); });
+                        .then(function () { return new BootstrapDialog(_this._window, config.Template, config.Init); });
                 };
                 return BootstrapDialogProvider;
             }());
