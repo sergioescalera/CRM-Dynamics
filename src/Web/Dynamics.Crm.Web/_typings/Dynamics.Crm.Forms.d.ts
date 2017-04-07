@@ -162,6 +162,7 @@ declare interface IEntity {
 
 declare interface ICrmUser {
     getId(): string;
+    hasRole(roleId: string): boolean;
 }
 
 declare interface ICrmDiagnostics {

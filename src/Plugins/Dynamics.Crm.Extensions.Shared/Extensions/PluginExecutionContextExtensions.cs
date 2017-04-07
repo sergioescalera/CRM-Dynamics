@@ -47,7 +47,7 @@ namespace Dynamics.Crm.Extensions
             if (context == null)
                 return 0;
 
-            var padding = context.ParentContext.Print(trace);
+            var padding = context.ParentContext.PrintSharedVariables(trace);
 
             var prefix = String.Empty.PadLeft(padding, '-');
 

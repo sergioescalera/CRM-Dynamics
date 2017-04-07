@@ -30,23 +30,13 @@ namespace Dynamics.Crm.Plugins
                     context.TracingService.Trace($"{pluginType.FullName}.Execute");
                     Execute(context);
                     stopwatch.Stop();
-                }
-                catch (InvalidPluginExecutionException e)
-                {
-                    context.TracingService?.Trace(e.StackTrace);
-                    
-                    if (CreateLogEntryForInvalidPluginExecutionException)
-                    {
-                        CreateLogEntryFromException(context, e);
-                    }
-
-                    throw;
-                }
+                }                
                 catch (Exception e)
                 {
                     context.TracingService?.Trace(e.StackTrace);
 
-                    CreateLogEntryFromException(context, e);
+                    if (ShouldCreateLogEntry(e))
+                        CreateLogEntryFromException(context, e);
 
                     throw;
                 }
@@ -120,12 +110,9 @@ namespace Dynamics.Crm.Plugins
             action.Catch(ex => context.TracingService.Trace(ex.ToString()));                     
         }
 
-        protected virtual Boolean CreateLogEntryForInvalidPluginExecutionException
+        protected virtual Boolean ShouldCreateLogEntry(Exception exception)
         {
-            get
-            {
-                return true;
-            }
+            return true;
         }
     }
 }
