@@ -1,5 +1,6 @@
 ﻿using Dynamics.Crm.Core;
 using Dynamics.Crm.Plugins;
+using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
 using System;
@@ -179,6 +180,26 @@ namespace Dynamics.Crm.Interfaces
         private static void InvalidPluginRegistration(String name, Object value)
         {
             throw new InvalidPluginExecutionException($"Invalid plug-in registration. {name} ({value}) not supported. Please verify the plug-in registration.");
+        }
+
+        #endregion
+
+        #region Roll-up
+
+        public static CalculateRollupFieldResponse Calculate(
+            this IPluginContext context,
+            String entityName,
+            Guid entityId,
+            String attributeName)
+        {
+            var request = new CalculateRollupFieldRequest
+            {
+                Target = new EntityReference(entityName, entityId),
+                FieldName = attributeName
+            };
+            var response = (CalculateRollupFieldResponse)context.OrganizationService.Execute(request);
+
+            return response;
         }
 
         #endregion

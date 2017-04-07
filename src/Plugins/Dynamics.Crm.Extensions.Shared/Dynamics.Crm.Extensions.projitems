@@ -48,6 +48,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\OptionSetValueExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\OrganizationServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\PluginContextExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\PluginExecutionContextExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ServiceProviderExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\WorkflowActivityContextExtensions.cs" />
