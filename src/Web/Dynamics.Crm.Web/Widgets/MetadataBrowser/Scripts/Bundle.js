@@ -271,7 +271,7 @@ var Dynamics;
                     if (!response || !response.responseJSON || !response.responseJSON.error) {
                         return;
                     }
-                    Crm.Diagnostics.log.Error(response.responseJSON.error.message, response.responseJSON.error.innererror || response.responseJSON.error);
+                    Crm.Diagnostics.log.Error(response.responseJSON.error.message + " retrieve " + url, response.responseJSON.error.innererror || response.responseJSON.error);
                 });
             }
             OData.retrieve = retrieve;
@@ -308,7 +308,7 @@ var Dynamics;
                     if (!response || !response.responseJSON || !response.responseJSON.error) {
                         return;
                     }
-                    Crm.Diagnostics.log.Error(response.responseJSON.error.message, response.responseJSON.error.innererror || response.responseJSON.error);
+                    Crm.Diagnostics.log.Error(response.responseJSON.error.message + " retrieve multiple " + url, response.responseJSON.error.innererror || response.responseJSON.error);
                 });
             }
             OData.retrieveMultiple = retrieveMultiple;

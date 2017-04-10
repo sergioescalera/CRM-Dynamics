@@ -149,7 +149,7 @@
                 }
 
                 Diagnostics.log.Error(
-                    response.responseJSON.error.message,
+                    `${response.responseJSON.error.message} retrieve ${url}`,
                     response.responseJSON.error.innererror || response.responseJSON.error);
             });
     }
@@ -205,7 +205,7 @@
                 }
 
                 Diagnostics.log.Error(
-                    response.responseJSON.error.message,
+                    `${response.responseJSON.error.message} retrieve multiple ${url}`,
                     response.responseJSON.error.innererror || response.responseJSON.error);
             });
     }

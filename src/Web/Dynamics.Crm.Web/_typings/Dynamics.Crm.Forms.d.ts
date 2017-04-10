@@ -139,7 +139,7 @@ declare interface ICrmOData {
         entitySetName: string,
         attributes: string[],
         filters: string[],
-        filterType?: ODataFilterType,
+        filterType?: number,
         orderBy?: string[],
         expand?: string[]): JQueryPromise<IEntity[]>;
     executeEntityAction(
@@ -148,11 +148,6 @@ declare interface ICrmOData {
         actionName: string,
         data?: any): JQueryPromise<any>;
     executeGlobalAction(actionName: string, data?: any): JQueryPromise<any>;
-}
-
-declare enum ODataFilterType {
-    And = 0,
-    Or = 0
 }
 
 declare interface IEntity {
