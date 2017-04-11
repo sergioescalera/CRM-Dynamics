@@ -58,13 +58,12 @@
 
         var filter = _stylesheets.filter((s: string) => s === stylesheet);
 
-        if (filter.length === 0) {
-
-            jQuery("head", document)
-                .append("<link rel='stylesheet' href='{path}' />"
-                    .replace("{path}", stylesheet));
-
-            _stylesheets.push(stylesheet);
+        if (filter.length > 0) {
+            return;
         }
+
+        jQuery("head", document).append(`<link rel='stylesheet' href='${stylesheet}' />`;
+
+        _stylesheets.push(stylesheet);
     }
 }

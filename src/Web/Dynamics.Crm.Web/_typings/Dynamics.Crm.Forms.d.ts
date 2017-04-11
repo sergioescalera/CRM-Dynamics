@@ -117,6 +117,7 @@ declare interface ICrmDialogs {
     alert(message: string, title: string): JQueryPromise<void>;
     confirm(message: string, title: string): JQueryPromise<boolean>;
     create<TResult>(config: ICrmDialogConfig<TResult>): JQueryPromise<TResult>;
+    init(): void;
 }
 
 declare interface ICrmDialogConfig<TResult> {

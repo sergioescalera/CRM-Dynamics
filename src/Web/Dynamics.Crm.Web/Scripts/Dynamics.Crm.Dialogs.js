@@ -87,12 +87,11 @@ var Dynamics;
                 if (document === void 0) { document = window.document; }
                 console.log("Dynamics.Crm.ScriptManager.loadStylesheet: " + stylesheet);
                 var filter = _stylesheets.filter(function (s) { return s === stylesheet; });
-                if (filter.length === 0) {
-                    jQuery("head", document)
-                        .append("<link rel='stylesheet' href='{path}' />"
-                        .replace("{path}", stylesheet));
-                    _stylesheets.push(stylesheet);
+                if (filter.length > 0) {
+                    return;
                 }
+                jQuery("head", document).append("<link rel='stylesheet' href='" + stylesheet + "' />");
+                _stylesheets.push(stylesheet);
             }
             ScriptManager.loadStylesheet = loadStylesheet;
         })(ScriptManager = Crm.ScriptManager || (Crm.ScriptManager = {}));
@@ -257,6 +256,10 @@ var Dynamics;
                 return deferred;
             }
             Dialogs.create = create;
+            function init() {
+                getProvider();
+            }
+            Dialogs.init = init;
         })(Dialogs = Crm.Dialogs || (Crm.Dialogs = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));

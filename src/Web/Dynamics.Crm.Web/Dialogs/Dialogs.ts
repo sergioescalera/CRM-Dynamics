@@ -91,4 +91,9 @@ module Dynamics.Crm.Dialogs {
 
         return deferred;
     }
+
+    export function init(): void {
+
+        getProvider();
+    }
 }

@@ -57,6 +57,10 @@ var Dynamics;
                 return deferred;
             }
             Dialogs.create = create;
+            function init() {
+                getProvider();
+            }
+            Dialogs.init = init;
         })(Dialogs = Crm.Dialogs || (Crm.Dialogs = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
