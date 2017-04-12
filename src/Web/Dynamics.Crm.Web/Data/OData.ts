@@ -121,16 +121,11 @@
 
         var baseUrl = getContext().getClientUrl();
 
-        var url = "{baseUrl}/api/data/{version}/{entitySetName}({entityId})?$select={select}"
-            .replace("{baseUrl}", baseUrl)
-            .replace("{version}", getVersion())
-            .replace("{entitySetName}", entitySetName)
-            .replace("{entityId}", Core.parseIdentifier(entityId))
-            .replace("{select}", attributes.join(","));
+        var url = `${baseUrl}/api/data/${getVersion()}/${entitySetName}(${Core.parseIdentifier(entityId)})?$select=${attributes.join(",") }`;
 
         if (expand) {
 
-            url += "&$expand=" + expand.join(",");
+            url += `&$expand=${expand.join(",")}`;
         }
 
         return $
@@ -170,21 +165,16 @@
 
         var filterJoin = !filterType || filterType === FilterType.And ? " and " : " or ";
 
-        var url = "{baseUrl}/api/data/{version}/{entitySetName}?$select={select}&$filter={filter}"
-            .replace("{baseUrl}", baseUrl)
-            .replace("{version}", getVersion())
-            .replace("{entitySetName}", entitySetName)
-            .replace("{select}", attributes.join(","))
-            .replace("{filter}", filters.join(filterJoin));
+        var url = `${baseUrl}/api/data/${getVersion()}/${entitySetName}?$select=${attributes.join(",")}&$filter=${filters.join(filterJoin)}`;
 
         if (orderBy) {
 
-            url += "&$orderby={orderby}".replace("{orderby}", orderBy.join(","));
+            url += `&$orderby=${orderBy.join(",")}`;
         }
 
         if (expand) {
 
-            url += "&$expand={$expand}".replace("{$expand}", expand.join(","));
+            url += `&$expand=${expand.join(",")}`;
         }
 
         return $
@@ -210,7 +200,10 @@
             });
     }
 
-    export function deleteEntity(entityName: string, entitySetName: string, entityId: string): JQueryPromise<void> {
+    export function deleteEntity(
+        entityName: string,
+        entitySetName: string,
+        entityId: string): JQueryPromise<void> {
 
         Validation.ensureNotNullOrEmpty(entityName, "entityName");
         Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
@@ -218,17 +211,23 @@
 
         var baseUrl = getContext().getClientUrl();
 
-        var url = "{baseUrl}/api/data/{version}/{entitySetName}({entityId})"
-            .replace("{baseUrl}", baseUrl)
-            .replace("{version}", getVersion())
-            .replace("{entitySetName}", entitySetName)
-            .replace("{entityId}", entityId);
+        var url = `${baseUrl}/api/data/${getVersion()}/${entitySetName}(${Core.parseIdentifier(entityId)})`;
 
         return $
             .ajax({
                 url: url,
                 dataType: "json",
                 type: "DELETE"
+            })
+            .fail((response: any) => {
+
+                if (!response || !response.responseJSON || !response.responseJSON.error) {
+                    return;
+                }
+
+                Diagnostics.log.Error(
+                    `${response.responseJSON.error.message} delete ${url}`,
+                    response.responseJSON.error.innererror || response.responseJSON.error);
             });
     }
 
@@ -239,10 +238,7 @@
 
         var baseUrl = getContext().getClientUrl();
 
-        var url = "{baseUrl}/api/data/{version}/{entitySetName}"
-            .replace("{baseUrl}", baseUrl)
-            .replace("{version}", getVersion())
-            .replace("{entitySetName}", entitySetName);
+        var url = `${baseUrl}/api/data/${getVersion()}/${entitySetName}`;
 
         var data = stringifyEntity(entity);
 
@@ -253,9 +249,50 @@
                 dataType: "json",
                 type: "POST",
                 data: data
+            })
+            .fail((response: any) => {
+
+                if (!response || !response.responseJSON || !response.responseJSON.error) {
+                    return;
+                }
+
+                Diagnostics.log.Error(
+                    `${response.responseJSON.error.message} create ${url}`,
+                    response.responseJSON.error.innererror || response.responseJSON.error);
             });
     }
-    
+
+    export function updateEntity(entity: Core.IEntity, entitySetName: string): JQueryPromise<void> {
+
+        Validation.ensureNotNullOrUndefined(entity, "entity");
+        Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
+
+        var baseUrl = getContext().getClientUrl();
+
+        var url = `${baseUrl}/api/data/${getVersion()}/${entitySetName}(${Core.parseIdentifier(entity.id)})`;
+
+        var data = stringifyEntity(entity);
+
+        return $
+            .ajax({
+                url: url,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                type: "PATCH",
+                data: data
+            })
+            .fail((response: any) => {
+
+                if (!response || !response.responseJSON || !response.responseJSON.error) {
+                    return;
+                }
+
+                Diagnostics.log.Error(
+                    `${response.responseJSON.error.message} update ${url}`,
+                    response.responseJSON.error.innererror || response.responseJSON.error);
+            });
+    }
+
     // meta-data
 
     export function entityDefinitions(): JQueryPromise<IEntityDefinition[]> {

@@ -27,13 +27,13 @@
         }
 
         _scripts[script] = promise = jQuery.Deferred<void>();
-        
+
         var element = document.createElement("script");
 
         element.defer = true;
         element.type = "text/javascript";
         element.src = script;
-        element.addEventListener("load", function onLoaded() {
+        element.addEventListener("load", function onLoaded(): void {
 
             promise.resolveWith(element);
         });
@@ -62,7 +62,7 @@
             return;
         }
 
-        jQuery("head", document).append(`<link rel='stylesheet' href='${stylesheet}' />`;
+        jQuery("head", document).append(`<link rel='stylesheet' href='${stylesheet}' />`);
 
         _stylesheets.push(stylesheet);
     }
