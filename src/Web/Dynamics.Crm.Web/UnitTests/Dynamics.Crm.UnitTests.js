@@ -1,6 +1,6 @@
 Dynamics.Crm.Diagnostics.debug = false;
 Dynamics.Crm.Diagnostics.useConsoleLogger();
-//# sourceMappingURL=Setup.js.map
+
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -146,7 +146,7 @@ var Dynamics;
         })(UnitTests = Crm.UnitTests || (Crm.UnitTests = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=Mocks.js.map
+
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -268,7 +268,7 @@ var Dynamics;
         })(UnitTests = Crm.UnitTests || (Crm.UnitTests = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=AttributesUnitTests.js.map
+
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -341,7 +341,7 @@ var Dynamics;
         })(UnitTests = Crm.UnitTests || (Crm.UnitTests = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=ControlsUnitTests.js.map
+
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -421,7 +421,7 @@ var Dynamics;
         })(UnitTests = Crm.UnitTests || (Crm.UnitTests = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=SectionsUnitTests.js.map
+
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -535,7 +535,7 @@ var Dynamics;
         })(UnitTests = Crm.UnitTests || (Crm.UnitTests = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=TabsUnitTests.js.map
+
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -597,7 +597,7 @@ var Dynamics;
         })(UnitTests = Crm.UnitTests || (Crm.UnitTests = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=TasksUnitTests.js.map
+
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -714,4 +714,3 @@ var Dynamics;
         })(UnitTests = Crm.UnitTests || (Crm.UnitTests = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-//# sourceMappingURL=ValidationUnitTests.js.map

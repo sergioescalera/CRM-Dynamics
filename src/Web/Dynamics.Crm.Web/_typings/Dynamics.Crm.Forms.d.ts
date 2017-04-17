@@ -189,16 +189,16 @@ declare interface ICrmReports {
 declare interface IScriptManager {
     loadScripts(
         scripts: string[],
-        document?: Document): JQueryPromise<JQueryPromise<void>[]>;
+        window: Window): JQueryPromise<void>;
     loadScript(
         script: string,
-        document?: Document): JQueryPromise<void>;
+        window: Window): JQueryPromise<void>;
     loadStylesheets(
         stylesheets: string[],
-        document?: Document): void;
+        window: Window): void;
     loadStylesheet(
         stylesheet: string,
-        document?: Document): void;
+        window: Window): void;
 }
 
 declare interface ITasks {

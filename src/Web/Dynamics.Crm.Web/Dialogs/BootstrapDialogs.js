@@ -31,15 +31,15 @@ var Dynamics;
                 Object.defineProperty(BootstrapDialog.prototype, "dialog", {
                     get: function () {
                         if (!this._dialog) {
-                            this._dialog = this._window.jQuery(this._content);
-                            this._dialog.appendTo(this._window.jQuery("body"));
+                            this._dialog = this._window.$(this._content);
+                            this._dialog.appendTo(this._window.$("body"));
                             this._dialog.modal({
                                 backdrop: false,
                                 show: false
                             });
-                            this._window.jQuery("button.btn-primary", this._dialog).click(this.Resolve.bind(this));
-                            this._window.jQuery("button.close", this._dialog).click(this.Reject.bind(this));
-                            this._window.jQuery("button.btn-default", this._dialog).click(this.Reject.bind(this));
+                            this._window.$("button.btn-primary", this._dialog).click(this.Resolve.bind(this));
+                            this._window.$("button.close", this._dialog).click(this.Reject.bind(this));
+                            this._window.$("button.btn-default", this._dialog).click(this.Reject.bind(this));
                             if (this._init) {
                                 this._init(this._dialog);
                             }
@@ -69,8 +69,8 @@ var Dynamics;
                 }
                 BootstrapDialogProvider.prototype.Init = function () {
                     var baseUrl = "../WebResources/" + Dynamics.Crm.publisherPrefix + "/Libs/bootstrap/";
-                    this._loading = Crm.ScriptManager.loadScript(baseUrl + "js/bootstrap.min.js", this._window.document);
-                    Crm.ScriptManager.loadStylesheet(baseUrl + "css/bootstrap.min.css", this._window.document);
+                    this._loading = Crm.ScriptManager.loadScript(baseUrl + "js/bootstrap.min.js", this._window);
+                    Crm.ScriptManager.loadStylesheet(baseUrl + "css/bootstrap.min.css", this._window);
                 };
                 BootstrapDialogProvider.prototype.Alert = function (message, title) {
                     var _this = this;

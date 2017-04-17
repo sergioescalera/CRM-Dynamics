@@ -7,44 +7,40 @@ var Dynamics;
             "use strict";
             var _scripts = {};
             var _stylesheets = [];
-            function loadScripts(scripts, document) {
-                if (document === void 0) { document = window.document; }
-                var deferreds = scripts.map(function (s) { return loadScript(s, document); });
-                return jQuery.when(deferreds);
+            function loadScripts(scripts, win) {
+                var deferreds = scripts.map(function (s) { return loadScript(s, win); });
+                return win.$.when.apply(win.$, deferreds);
             }
             ScriptManager.loadScripts = loadScripts;
-            function loadScript(script, document) {
-                if (document === void 0) { document = window.document; }
+            function loadScript(script, win) {
                 console.log("Dynamics.Crm.ScriptManager.loadScript: " + script);
                 var promise = _scripts[script];
                 if (!!promise) {
                     return promise;
                 }
-                _scripts[script] = promise = jQuery.Deferred();
-                var element = document.createElement("script");
+                _scripts[script] = promise = win.$.Deferred();
+                var element = win.document.createElement("script");
                 element.defer = true;
                 element.type = "text/javascript";
                 element.src = script;
                 element.addEventListener("load", function onLoaded() {
                     promise.resolveWith(element);
                 });
-                document.body.appendChild(element);
+                win.document.body.appendChild(element);
                 return promise;
             }
             ScriptManager.loadScript = loadScript;
-            function loadStylesheets(stylesheets, document) {
-                if (document === void 0) { document = window.document; }
-                stylesheets.forEach(function (s) { return loadStylesheet(s, document); });
+            function loadStylesheets(stylesheets, win) {
+                stylesheets.forEach(function (s) { return loadStylesheet(s, win); });
             }
             ScriptManager.loadStylesheets = loadStylesheets;
-            function loadStylesheet(stylesheet, document) {
-                if (document === void 0) { document = window.document; }
+            function loadStylesheet(stylesheet, win) {
                 console.log("Dynamics.Crm.ScriptManager.loadStylesheet: " + stylesheet);
                 var filter = _stylesheets.filter(function (s) { return s === stylesheet; });
                 if (filter.length > 0) {
                     return;
                 }
-                jQuery("head", document).append("<link rel='stylesheet' href='" + stylesheet + "' />");
+                win.$("head", win.document).append("<link rel='stylesheet' href='" + stylesheet + "' />");
                 _stylesheets.push(stylesheet);
             }
             ScriptManager.loadStylesheet = loadStylesheet;

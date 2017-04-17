@@ -14,12 +14,14 @@ var Dynamics;
             var provider;
             function getProvider() {
                 if (!provider) {
-                    provider = new Dialogs.BootstrapDialogProvider(window.top);
+                    var win = window.top;
+                    provider = new Dialogs.BootstrapDialogProvider(win);
                 }
                 return provider;
             }
             function alert(message, title) {
-                var deferred = $.Deferred();
+                var win = window.top;
+                var deferred = win.$.Deferred();
                 getProvider()
                     .Alert(message, title)
                     .done(function (d) { return d
@@ -31,7 +33,8 @@ var Dynamics;
             }
             Dialogs.alert = alert;
             function confirm(message, title) {
-                var deferred = $.Deferred();
+                var win = window.top;
+                var deferred = win.$.Deferred();
                 getProvider()
                     .Confirm(message, title)
                     .done(function (d) { return d
@@ -43,7 +46,8 @@ var Dynamics;
             }
             Dialogs.confirm = confirm;
             function create(config) {
-                var deferred = $.Deferred();
+                var win = window.top;
+                var deferred = win.$.Deferred();
                 getProvider()
                     .Create(config)
                     .done(function (d) { return d

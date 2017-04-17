@@ -1,4 +1,9 @@
-﻿module Dynamics.Crm.ScriptManager {
+﻿interface IJQueryWindow extends Window {
+    jQuery: JQueryStatic;
+    $: JQueryStatic;
+}
+
+module Dynamics.Crm.ScriptManager {
 
     "use strict";
 
@@ -7,16 +12,16 @@
 
     export function loadScripts(
         scripts: string[],
-        document: Document = window.document): JQueryPromise<JQueryPromise<void>[]> {
+        win: IJQueryWindow): JQueryPromise<JQueryPromise<void>[]> {
 
-        var deferreds = scripts.map((s: string) => loadScript(s, document));
+        var deferreds = scripts.map((s: string) => loadScript(s, win));
 
-        return jQuery.when(deferreds);
+        return win.$.when.apply(win.$, deferreds);
     }
 
     export function loadScript(
         script: string,
-        document: Document = window.document): JQueryPromise<void> {
+        win: IJQueryWindow): JQueryPromise<void> {
 
         console.log("Dynamics.Crm.ScriptManager.loadScript: " + script);
 
@@ -26,9 +31,9 @@
             return promise;
         }
 
-        _scripts[script] = promise = jQuery.Deferred<void>();
+        _scripts[script] = promise = win.$.Deferred<void>();
 
-        var element = document.createElement("script");
+        var element = win.document.createElement("script");
 
         element.defer = true;
         element.type = "text/javascript";
@@ -38,21 +43,21 @@
             promise.resolveWith(element);
         });
 
-        document.body.appendChild(element);
+        win.document.body.appendChild(element);
 
         return promise;
     }
 
     export function loadStylesheets(
         stylesheets: string[],
-        document: Document = window.document): void {
+        win: IJQueryWindow): void {
 
-        stylesheets.forEach((s: string) => loadStylesheet(s, document));
+        stylesheets.forEach((s: string) => loadStylesheet(s, win));
     }
 
     export function loadStylesheet(
         stylesheet: string,
-        document: Document = window.document): void {
+        win: IJQueryWindow): void {
 
         console.log("Dynamics.Crm.ScriptManager.loadStylesheet: " + stylesheet);
 
@@ -62,7 +67,7 @@
             return;
         }
 
-        jQuery("head", document).append(`<link rel='stylesheet' href='${stylesheet}' />`);
+        win.$("head", win.document).append(`<link rel='stylesheet' href='${stylesheet}' />`);
 
         _stylesheets.push(stylesheet);
     }

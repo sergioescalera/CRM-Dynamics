@@ -33,8 +33,6 @@
   {
     "outputFileName": "Scripts/Dynamics.Crm.Dialogs.js",
     "inputFiles": [
-      "Core/Constants.js",
-      "Core/ScriptManager.js",
       "Dialogs/*.js"
     ],
     "sourceMap": false

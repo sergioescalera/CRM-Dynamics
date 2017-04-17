@@ -43,12 +43,12 @@
     export class BootstrapDialog<TResult> implements IDialog<TResult> {
 
         private _content: string;
-        private _window: IXrmWindow;
+        private _window: IJQueryWindow;
         private _dialog: Bootstrap;
         private _deferred: JQueryDeferred<TResult>;
         private _init: (dialog: JQuery) => void;
 
-        constructor(window: IXrmWindow, content: string, init?: (dialog: JQuery) => void) {
+        constructor(window: IJQueryWindow, content: string, init?: (dialog: JQuery) => void) {
 
             this._content = content;
             this._window = window;
@@ -76,17 +76,17 @@
 
             if (!this._dialog) {
 
-                this._dialog = <Bootstrap>this._window.jQuery(this._content);
+                this._dialog = <Bootstrap>this._window.$(this._content);
 
-                this._dialog.appendTo(this._window.jQuery("body"));
+                this._dialog.appendTo(this._window.$("body"));
                 this._dialog.modal({
                     backdrop: false,
                     show: false
                 });
 
-                this._window.jQuery("button.btn-primary", this._dialog).click(this.Resolve.bind(this));
-                this._window.jQuery("button.close", this._dialog).click(this.Reject.bind(this));
-                this._window.jQuery("button.btn-default", this._dialog).click(this.Reject.bind(this));
+                this._window.$("button.btn-primary", this._dialog).click(this.Resolve.bind(this));
+                this._window.$("button.close", this._dialog).click(this.Reject.bind(this));
+                this._window.$("button.btn-default", this._dialog).click(this.Reject.bind(this));
 
                 if (this._init) {
                     this._init(this._dialog);
@@ -109,10 +109,10 @@
 
     export class BootstrapDialogProvider implements IDialogProvider {
 
-        private _window: IXrmWindow;
+        private _window: IJQueryWindow;
         private _loading: JQueryPromise<any>;
 
-        constructor(window: IXrmWindow) {
+        constructor(window: IJQueryWindow) {
 
             this._window = window;
 
@@ -123,9 +123,9 @@
 
             var baseUrl: string = `../WebResources/${Dynamics.Crm.publisherPrefix}/Libs/bootstrap/`;
 
-            this._loading = ScriptManager.loadScript(baseUrl + "js/bootstrap.min.js", this._window.document);
+            this._loading = ScriptManager.loadScript(baseUrl + "js/bootstrap.min.js", this._window);
 
-            ScriptManager.loadStylesheet(baseUrl + "css/bootstrap.min.css", this._window.document);
+            ScriptManager.loadStylesheet(baseUrl + "css/bootstrap.min.css", this._window);
         }
 
         Alert(message: string, title: string): JQueryPromise<IDialog<void>> {

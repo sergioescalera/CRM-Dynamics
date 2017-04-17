@@ -1,9 +1,4 @@
-﻿interface IXrmWindow extends Window {
-    jQuery: JQueryStatic;
-    $: JQueryStatic;
-}
-
-module Dynamics.Crm.Dialogs {
+﻿module Dynamics.Crm.Dialogs {
 
     "use strict";
 
@@ -36,7 +31,8 @@ module Dynamics.Crm.Dialogs {
     function getProvider(): IDialogProvider {
 
         if (!provider) {
-            provider = new BootstrapDialogProvider(<IXrmWindow>window.top);
+            var win = <IJQueryWindow>window.top;
+            provider = new BootstrapDialogProvider(win);
         }
 
         return provider;
@@ -44,7 +40,8 @@ module Dynamics.Crm.Dialogs {
 
     export function alert(message: string, title: string): JQueryPromise<void> {
 
-        var deferred: JQueryDeferred<void> = $.Deferred<void>();
+        var win = <IJQueryWindow>window.top;
+        var deferred: JQueryDeferred<void> = win.$.Deferred<void>();
 
         getProvider()
             .Alert(message, title)
@@ -59,7 +56,8 @@ module Dynamics.Crm.Dialogs {
 
     export function confirm(message: string, title: string): JQueryPromise<boolean> {
 
-        var deferred: JQueryDeferred<boolean> = $.Deferred<boolean>();
+        var win = <IJQueryWindow>window.top;
+        var deferred: JQueryDeferred<boolean> = win.$.Deferred<boolean>();
 
         getProvider()
             .Confirm(message, title)
@@ -74,7 +72,8 @@ module Dynamics.Crm.Dialogs {
 
     export function create<TResult>(config: IDialogConfig<TResult>): JQueryPromise<TResult> {
 
-        var deferred: JQueryDeferred<TResult> = $.Deferred<TResult>();
+        var win = <IJQueryWindow>window.top;
+        var deferred: JQueryDeferred<TResult> = win.$.Deferred<TResult>();
 
         getProvider()
             .Create(config)

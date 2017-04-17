@@ -2,106 +2,6 @@ var Dynamics;
 (function (Dynamics) {
     var Crm;
     (function (Crm) {
-        Crm.publisherPrefix = "sib_";
-        Crm.componentName = function (name) { return Crm.publisherPrefix + name; };
-    })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
-})(Dynamics || (Dynamics = {}));
-var Dynamics;
-(function (Dynamics) {
-    var Crm;
-    (function (Crm) {
-        var Forms;
-        (function (Forms) {
-            "use strict";
-            var FormNotificationType = (function () {
-                function FormNotificationType() {
-                }
-                FormNotificationType.Error = "ERROR";
-                FormNotificationType.Warning = "WARNING";
-                FormNotificationType.Information = "INFO";
-                return FormNotificationType;
-            }());
-            Forms.FormNotificationType = FormNotificationType;
-            var ClientType = (function () {
-                function ClientType() {
-                }
-                ClientType.Browser = "Web";
-                ClientType.Outlook = "Outlook";
-                ClientType.Mobile = "Mobile";
-                return ClientType;
-            }());
-            Forms.ClientType = ClientType;
-            var AttributeRequiredLevel = (function () {
-                function AttributeRequiredLevel() {
-                }
-                AttributeRequiredLevel.None = "none";
-                AttributeRequiredLevel.Required = "required";
-                AttributeRequiredLevel.Recommended = "recommended";
-                return AttributeRequiredLevel;
-            }());
-            Forms.AttributeRequiredLevel = AttributeRequiredLevel;
-        })(Forms = Crm.Forms || (Crm.Forms = {}));
-    })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
-})(Dynamics || (Dynamics = {}));
-
-var Dynamics;
-(function (Dynamics) {
-    var Crm;
-    (function (Crm) {
-        var ScriptManager;
-        (function (ScriptManager) {
-            "use strict";
-            var _scripts = {};
-            var _stylesheets = [];
-            function loadScripts(scripts, document) {
-                if (document === void 0) { document = window.document; }
-                var deferreds = scripts.map(function (s) { return loadScript(s, document); });
-                return jQuery.when(deferreds);
-            }
-            ScriptManager.loadScripts = loadScripts;
-            function loadScript(script, document) {
-                if (document === void 0) { document = window.document; }
-                console.log("Dynamics.Crm.ScriptManager.loadScript: " + script);
-                var promise = _scripts[script];
-                if (!!promise) {
-                    return promise;
-                }
-                _scripts[script] = promise = jQuery.Deferred();
-                var element = document.createElement("script");
-                element.defer = true;
-                element.type = "text/javascript";
-                element.src = script;
-                element.addEventListener("load", function onLoaded() {
-                    promise.resolveWith(element);
-                });
-                document.body.appendChild(element);
-                return promise;
-            }
-            ScriptManager.loadScript = loadScript;
-            function loadStylesheets(stylesheets, document) {
-                if (document === void 0) { document = window.document; }
-                stylesheets.forEach(function (s) { return loadStylesheet(s, document); });
-            }
-            ScriptManager.loadStylesheets = loadStylesheets;
-            function loadStylesheet(stylesheet, document) {
-                if (document === void 0) { document = window.document; }
-                console.log("Dynamics.Crm.ScriptManager.loadStylesheet: " + stylesheet);
-                var filter = _stylesheets.filter(function (s) { return s === stylesheet; });
-                if (filter.length > 0) {
-                    return;
-                }
-                jQuery("head", document).append("<link rel='stylesheet' href='" + stylesheet + "' />");
-                _stylesheets.push(stylesheet);
-            }
-            ScriptManager.loadStylesheet = loadStylesheet;
-        })(ScriptManager = Crm.ScriptManager || (Crm.ScriptManager = {}));
-    })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
-})(Dynamics || (Dynamics = {}));
-
-var Dynamics;
-(function (Dynamics) {
-    var Crm;
-    (function (Crm) {
         var Dialogs;
         (function (Dialogs) {
             "use strict";
@@ -131,15 +31,15 @@ var Dynamics;
                 Object.defineProperty(BootstrapDialog.prototype, "dialog", {
                     get: function () {
                         if (!this._dialog) {
-                            this._dialog = this._window.jQuery(this._content);
-                            this._dialog.appendTo(this._window.jQuery("body"));
+                            this._dialog = this._window.$(this._content);
+                            this._dialog.appendTo(this._window.$("body"));
                             this._dialog.modal({
                                 backdrop: false,
                                 show: false
                             });
-                            this._window.jQuery("button.btn-primary", this._dialog).click(this.Resolve.bind(this));
-                            this._window.jQuery("button.close", this._dialog).click(this.Reject.bind(this));
-                            this._window.jQuery("button.btn-default", this._dialog).click(this.Reject.bind(this));
+                            this._window.$("button.btn-primary", this._dialog).click(this.Resolve.bind(this));
+                            this._window.$("button.close", this._dialog).click(this.Reject.bind(this));
+                            this._window.$("button.btn-default", this._dialog).click(this.Reject.bind(this));
                             if (this._init) {
                                 this._init(this._dialog);
                             }
@@ -169,8 +69,8 @@ var Dynamics;
                 }
                 BootstrapDialogProvider.prototype.Init = function () {
                     var baseUrl = "../WebResources/" + Dynamics.Crm.publisherPrefix + "/Libs/bootstrap/";
-                    this._loading = Crm.ScriptManager.loadScript(baseUrl + "js/bootstrap.min.js", this._window.document);
-                    Crm.ScriptManager.loadStylesheet(baseUrl + "css/bootstrap.min.css", this._window.document);
+                    this._loading = Crm.ScriptManager.loadScript(baseUrl + "js/bootstrap.min.js", this._window);
+                    Crm.ScriptManager.loadStylesheet(baseUrl + "css/bootstrap.min.css", this._window);
                 };
                 BootstrapDialogProvider.prototype.Alert = function (message, title) {
                     var _this = this;
@@ -213,12 +113,14 @@ var Dynamics;
             var provider;
             function getProvider() {
                 if (!provider) {
-                    provider = new Dialogs.BootstrapDialogProvider(window.top);
+                    var win = window.top;
+                    provider = new Dialogs.BootstrapDialogProvider(win);
                 }
                 return provider;
             }
             function alert(message, title) {
-                var deferred = $.Deferred();
+                var win = window.top;
+                var deferred = win.$.Deferred();
                 getProvider()
                     .Alert(message, title)
                     .done(function (d) { return d
@@ -230,7 +132,8 @@ var Dynamics;
             }
             Dialogs.alert = alert;
             function confirm(message, title) {
-                var deferred = $.Deferred();
+                var win = window.top;
+                var deferred = win.$.Deferred();
                 getProvider()
                     .Confirm(message, title)
                     .done(function (d) { return d
@@ -242,7 +145,8 @@ var Dynamics;
             }
             Dialogs.confirm = confirm;
             function create(config) {
-                var deferred = $.Deferred();
+                var win = window.top;
+                var deferred = win.$.Deferred();
                 getProvider()
                     .Create(config)
                     .done(function (d) { return d
