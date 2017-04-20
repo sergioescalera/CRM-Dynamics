@@ -12,7 +12,7 @@ var Dynamics;
                 }
                 var results = [];
                 if (!Array.isArray(tasks)) {
-                    Crm.Diagnostics.log.Warning("Tasks.run: Invalid argument. An array was expected.");
+                    Crm.Diagnostics.log.Warning("Tasks.execute: Invalid argument. An array was expected.");
                 }
                 else {
                     for (var i = 0; i < tasks.length; i++) {
@@ -25,7 +25,7 @@ var Dynamics;
                             }
                         }
                         catch (e) {
-                            Crm.Diagnostics.log.Error("Tasks.execute: An error has occurred.", e);
+                            Crm.Diagnostics.log.Error(("Tasks.execute: An error has occurred in " + typeof task + " " + getTaskName(task)).trim(), e);
                             results.push(e);
                             if (!config.continueOnError) {
                                 return results;
@@ -37,7 +37,11 @@ var Dynamics;
             }
             Tasks.execute = execute;
             function getTaskName(task) {
-                return "";
+                if (typeof task !== "function") {
+                    return "";
+                }
+                var result = /^function\s+([\w\$]+)\s*\(/.exec(task.toString());
+                return result ? result[1] : "";
             }
         })(Tasks = Crm.Tasks || (Crm.Tasks = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));

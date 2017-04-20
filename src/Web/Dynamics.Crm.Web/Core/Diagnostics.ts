@@ -98,19 +98,20 @@
     function createLogEntry(message: string, error: IError): Core.ILogEntry {
 
         var entityName = getEntityName();
+        var entityId = getEntityId();
+        var formType = getFormType();
+        var stack = error.stack || error.stacktrace || "<none>";
+        var desc = error.description || "<none>";
 
-        var source = ("JavaScript::{entityName}")
-            .replace("{entityName}", entityName);
-        var description = ("Stack: {stackTrace}\nDescription: {errorDescription}")
-            .replace("{stackTrace}", error.stack || error.stacktrace || "<none>")
-            .replace("{errorDescription}", error.description || "<none>");
+        var source = `JavaScript::${formType}:${entityName}(${entityId})`;
+        var description = `Stack: ${stack}\nDescription: ${desc}`;
 
         var entry: Core.ILogEntry = {
             type: Data.Schema.LogEntryEntity.type
         };
 
-        var name = error.type ? (error.type + ":" + message) : message;
-        var msg = message === error.message ? message : (message + error.message);
+        var name = error.type ? `${error.type}:${message}` : message;
+        var msg = message === error.message ? message : (`${message}. ${error.message}`.trim());
 
         entry[Data.Schema.LogEntryEntity.nameField] = Validation.Strings.left(name, 300);
         entry[Data.Schema.LogEntryEntity.messageField] = Validation.Strings.left(msg, 5000);
@@ -129,9 +130,37 @@
 
         } catch (e) {
 
-            log && log.Warning(e);
+            trace && log && log.Warning(e);
 
             return "UnknownEntity";
+        }
+    }
+
+    function getEntityId(): string {
+
+        try {
+
+            return Xrm.Page.data.entity.getId();
+
+        } catch (e) {
+
+            trace && log && log.Warning(e);
+
+            return "";
+        }
+    }
+
+    function getFormType(): string {
+
+        try {
+
+            return Xrm.Page.ui.getFormType().toString();
+
+        } catch (e) {
+
+            trace && log && log.Warning(e);
+
+            return "";
         }
     }
 

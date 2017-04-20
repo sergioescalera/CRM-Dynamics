@@ -17,7 +17,7 @@
 
         if (!Array.isArray(tasks)) {
 
-            Diagnostics.log.Warning("Tasks.run: Invalid argument. An array was expected.");
+            Diagnostics.log.Warning("Tasks.execute: Invalid argument. An array was expected.");
 
         } else {
 
@@ -28,7 +28,7 @@
                 try {
 
                     var result: boolean = task();
-
+                    
                     results.push(result);
 
                     if (!config.executeAll && !!result) {
@@ -38,7 +38,7 @@
                 } catch (e) {
 
                     Diagnostics.log.Error(
-                        "Tasks.execute: An error has occurred.", e);
+                        `Tasks.execute: An error has occurred in ${typeof task} ${getTaskName(task)}`.trim(), e);
 
                     results.push(e);
 
@@ -54,6 +54,12 @@
 
     function getTaskName(task: () => boolean): string {
 
-        return "";
+        if (typeof task !== "function") {
+            return "";
+        }
+
+        var result = /^function\s+([\w\$]+)\s*\(/.exec(task.toString());
+
+        return result ? result[1] : "";
     }
 }
