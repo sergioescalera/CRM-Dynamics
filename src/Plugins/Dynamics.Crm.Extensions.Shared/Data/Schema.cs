@@ -132,6 +132,19 @@ namespace Dynamics.Crm.Data
             public const String ParentContactFieldName = "parentcontactid";
         }
 
+        public class ProductEntity
+        {
+            public const String TypeName = "product";
+
+            public const String IdFieldName = "productid";
+
+            public const String NumberFieldName = "productnumber";
+
+            public const String UnitGroupFieldName = "defaultuomscheduleid";
+
+            public const String DefaultUnitFieldName = "defaultuomid";
+        }
+
         public static class SiteEntity
         {
             public const String TypeName = "site";
@@ -145,5 +158,21 @@ namespace Dynamics.Crm.Data
 
             public const String IdFieldName = "systemuserid";
         }
+
+        public static class UnitEntity
+        {
+            public const String TypeName = "uom";
+
+            public const String IdFieldName = "uomid";
+
+            public const String UnitGroupFieldName = "uomscheduleid";
+        }
+
+        public static class UnitGroupEntity
+        {
+            public const String TypeName = "uomschedule";
+
+            public const String IdFieldName = "uomscheduleid";
+        }        
     }
 }

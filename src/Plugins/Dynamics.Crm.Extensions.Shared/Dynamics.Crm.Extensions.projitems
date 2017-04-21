@@ -30,8 +30,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\AccountRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ContactRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\LogEntryRepository.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\ProductRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Repository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Schema.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\UnitGroupRepository.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\UnitRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Diagnostics\Debug.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Diagnostics\PrettyPrintEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Diagnostics\PluginContextExtensions.cs" />
@@ -64,6 +67,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Contact.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Enums.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\LogEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Product.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Unit.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\UnitGroup.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Plugins\PluginBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Plugins\PluginContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Validation\ValidationHelper.cs" />
