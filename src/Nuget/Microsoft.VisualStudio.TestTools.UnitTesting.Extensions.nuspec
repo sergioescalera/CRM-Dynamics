@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Microsoft.VisualStudio.TestTools.UnitTesting.Extensions</id>
+    <version>0.0.3-alpha</version>
+    <authors>Sergio Escalera</authors>
+    <owners>Sergio Escalera</owners>    
+    <projectUrl>https://github.com/sergioescalera/CRM-Dynamics/</projectUrl>    
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <title>Visual Studio Unit Testing Extensions</title>
+    <description>Visual Studio Unit Testing Extensions</description>
+    <tags>.NET C# VisualStudio Testing</tags>    
+  </metadata>
+  <files>
+    <file src="..\Tests\Microsoft.VisualStudio.TestTools.UnitTesting.Extensions\bin\Release\Microsoft.VisualStudio.TestTools.UnitTesting.Extensions.dll"
+          target="lib\Microsoft.VisualStudio.TestTools.UnitTesting.Extensions\net452" />
+  </files>
+</package>

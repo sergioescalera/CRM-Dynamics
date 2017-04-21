@@ -23,6 +23,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{81A679CE
 	ProjectSection(SolutionItems) = preProject
 		Nuget\Dynamics.Crm.Extensions.nuspec = Nuget\Dynamics.Crm.Extensions.nuspec
 		Nuget\Dynamics.Crm.Web.nuspec = Nuget\Dynamics.Crm.Web.nuspec
+		Nuget\Microsoft.VisualStudio.TestTools.UnitTesting.Extensions.nuspec = Nuget\Microsoft.VisualStudio.TestTools.UnitTesting.Extensions.nuspec
 		Nuget\nuget.exe = Nuget\nuget.exe
 	EndProjectSection
 EndProject

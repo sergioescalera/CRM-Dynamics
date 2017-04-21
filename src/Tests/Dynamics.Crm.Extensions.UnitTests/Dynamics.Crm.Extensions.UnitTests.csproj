@@ -100,7 +100,6 @@
     <Compile Include="EntityReferenceFacts.cs" />
     <Compile Include="EnumerableFacts.cs" />
     <Compile Include="EnumFacts.cs" />
-    <Compile Include="Extensions.cs" />
     <Compile Include="LogEntryFacts.cs" />
     <Compile Include="OptionSetValueFacts.cs" />
     <Compile Include="PipelineStageAttributeFacts.cs" />
@@ -121,6 +120,10 @@
     <ProjectReference Include="..\..\Plugins\SamplePluginLibrary\SamplePluginLibrary.csproj">
       <Project>{59514EC6-4B9B-45F6-B64B-B5685BF69A32}</Project>
       <Name>SamplePluginLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Microsoft.VisualStudio.TestTools.UnitTesting.Extensions\Microsoft.VisualStudio.TestTools.UnitTesting.Extensions.csproj">
+      <Project>{e68fd44d-8cf1-4a56-b5bd-95b62d8cf081}</Project>
+      <Name>Microsoft.VisualStudio.TestTools.UnitTesting.Extensions</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
