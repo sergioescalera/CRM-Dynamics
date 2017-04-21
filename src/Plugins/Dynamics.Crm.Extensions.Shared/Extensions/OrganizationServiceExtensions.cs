@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
+using static Dynamics.Crm.Data.Schema;
 
 namespace Dynamics.Crm.Extensions
 {
@@ -159,6 +160,31 @@ namespace Dynamics.Crm.Extensions
             this IOrganizationService service, Entity entity, Int32 state, Int32 status)
         {
             return service.SetStatus(entity?.ToEntityReference(), (Int32)state, (Int32)status);
+        }
+
+        public static WinOpportunityResponse WinOpportunity(
+            this IOrganizationService service,
+            EntityReference opportunity, 
+            DateTime? actualEnd = null, 
+            Decimal? actualRevenue = null)
+        {
+            var opportunityClose = new Entity(OpportunityCloseMessage.Name);
+
+            opportunityClose.AddOrUpdateAttribute(OpportunityCloseMessage.OpportunityFieldName, opportunity);
+            opportunityClose.AddOrUpdateAttribute(OpportunityCloseMessage.ActualEndFieldName, actualEnd ?? DateTime.Now);
+
+            if (actualRevenue != null)
+                opportunityClose.AddOrUpdateAttribute(OpportunityCloseMessage.ActualRevenueFieldName, new Money(actualRevenue.Value));
+
+            var request = new WinOpportunityRequest
+            {
+                OpportunityClose = opportunityClose,
+                Status = OpportunityStatusCode.Won.ToOptionSetValue()
+            };
+
+            var response = service.Execute<WinOpportunityResponse>(request);
+
+            return response;
         }
     }
 }

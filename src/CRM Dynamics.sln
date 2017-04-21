@@ -32,6 +32,8 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Dynamics.Crm.Extensions.Sha
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dynamics.Crm.Extensions", "Plugins\Dynamics.Crm.Extensions\Dynamics.Crm.Extensions.csproj", "{B8F74789-D7E3-4DDB-BE1A-13A8C44DB72F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.VisualStudio.TestTools.UnitTesting.Extensions", "Tests\Microsoft.VisualStudio.TestTools.UnitTesting.Extensions\Microsoft.VisualStudio.TestTools.UnitTesting.Extensions.csproj", "{E68FD44D-8CF1-4A56-B5BD-95B62D8CF081}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Plugins\Dynamics.Crm.Extensions.Shared\Dynamics.Crm.Extensions.projitems*{59514ec6-4b9b-45f6-b64b-b5685bf69a32}*SharedItemsImports = 4
@@ -74,6 +76,10 @@ Global
 		{B8F74789-D7E3-4DDB-BE1A-13A8C44DB72F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8F74789-D7E3-4DDB-BE1A-13A8C44DB72F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8F74789-D7E3-4DDB-BE1A-13A8C44DB72F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E68FD44D-8CF1-4A56-B5BD-95B62D8CF081}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E68FD44D-8CF1-4A56-B5BD-95B62D8CF081}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E68FD44D-8CF1-4A56-B5BD-95B62D8CF081}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E68FD44D-8CF1-4A56-B5BD-95B62D8CF081}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -87,5 +93,6 @@ Global
 		{89EBDA3C-B9EB-455A-85B9-5BD830E10794} = {68AFE417-E02E-472E-850B-8DC8C3FC3C37}
 		{614D943A-4CE3-483D-8718-30186C3D18C4} = {68AFE417-E02E-472E-850B-8DC8C3FC3C37}
 		{B8F74789-D7E3-4DDB-BE1A-13A8C44DB72F} = {68AFE417-E02E-472E-850B-8DC8C3FC3C37}
+		{E68FD44D-8CF1-4A56-B5BD-95B62D8CF081} = {6EF24300-1F5B-4620-9629-D3AC36D89139}
 	EndGlobalSection
 EndGlobal

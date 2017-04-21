@@ -11,13 +11,13 @@ namespace Dynamics.Crm.Data
             public const String ConcurrencyTokenFieldName = Schema.publisherPrefix + "concurrencytoken";
 
             public const String NameFieldName = "name";
-                         
+
             public const String OwnerFieldName = "ownerid";
-                         
+
             public const String StateFieldName = "statecode";
-                         
+
             public const String StatusFieldName = "statuscode";
-                         
+
             public const String TransactionCurrencyFieldName = "transactioncurrencyid";
         }
 
@@ -58,11 +58,11 @@ namespace Dynamics.Crm.Data
         public static class ContactEntity
         {
             public const String TypeName = "contact";
-                         
+
             public const String IdFieldName = "contactid";
-                         
+
             public const String FullNameFieldName = "fullname";
-                         
+
             public const String ParentCustomerFieldName = "parentcustomerid";
 
             public const String Address1Name = "address1_";
@@ -80,17 +80,17 @@ namespace Dynamics.Crm.Data
         public static class EmailEntity
         {
             public const String TypeName = "email";
-                         
+
             public const String IdFieldName = "activityid";
-                         
+
             public const String FromFieldName = "from";
-                         
+
             public const String ToFieldName = "to";
-                         
+
             public const String SubjectFieldName = "subject";
-                         
+
             public const String DescriptionFieldName = "description";
-                         
+
             public const String DirectionCodeFieldName = "directioncode";
         }
 
@@ -132,6 +132,17 @@ namespace Dynamics.Crm.Data
             public const String ParentContactFieldName = "parentcontactid";
         }
 
+        public class OpportunityCloseMessage
+        {
+            public const String Name = "opportunityclose";
+
+            public const String OpportunityFieldName = "opportunityid";
+
+            public const String ActualEndFieldName = "actualend";
+
+            public const String ActualRevenueFieldName = "actualrevenue";
+        }
+
         public class ProductEntity
         {
             public const String TypeName = "product";
@@ -148,8 +159,8 @@ namespace Dynamics.Crm.Data
         public static class SiteEntity
         {
             public const String TypeName = "site";
-                         
-            public const String IdFieldName = "siteid";            
+
+            public const String IdFieldName = "siteid";
         }
 
         public static class SystemUserEntity
@@ -173,6 +184,6 @@ namespace Dynamics.Crm.Data
             public const String TypeName = "uomschedule";
 
             public const String IdFieldName = "uomscheduleid";
-        }        
+        }
     }
 }
