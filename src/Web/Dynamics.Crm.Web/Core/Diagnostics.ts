@@ -86,7 +86,7 @@
 
     export function printArguments(...args: any[]): void {
 
-        console.log("Function " + arguments[0] + " called with arguments: {");
+        console.log(`Function ${arguments[0]} called with arguments: {`);
         for (var i = 1; i < arguments.length; i++) {
             console.log(arguments[i]);
         }

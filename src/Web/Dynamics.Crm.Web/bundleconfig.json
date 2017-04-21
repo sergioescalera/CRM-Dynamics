@@ -33,7 +33,9 @@
   {
     "outputFileName": "Scripts/Dynamics.Crm.Dialogs.js",
     "inputFiles": [
-      "Dialogs/*.js"
+      "Dialogs/Dialogs.js",
+      "Dialogs/BootstrapDialogs.js",
+      "Dialogs/CrmDialogs.js"
     ],
     "sourceMap": false
   },

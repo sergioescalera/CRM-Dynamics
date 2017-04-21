@@ -32,7 +32,7 @@
 
         if (!provider) {
             var win = <IJQueryWindow>window.top;
-            provider = new BootstrapDialogProvider(win);
+            provider = bootstrapEnabled ? new BootstrapDialogProvider(win) : new CrmDialogProvider(win);
         }
 
         return provider;
@@ -90,6 +90,8 @@
 
         return deferred;
     }
+
+    export var bootstrapEnabled: boolean = true;
 
     export function init(): void {
 

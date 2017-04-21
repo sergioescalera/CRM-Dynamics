@@ -118,6 +118,7 @@ declare interface ICrmDialogs {
     confirm(message: string, title: string): JQueryPromise<boolean>;
     create<TResult>(config: ICrmDialogConfig<TResult>): JQueryPromise<TResult>;
     init(): void;
+    bootstrapEnabled: boolean;
 }
 
 declare interface ICrmDialogConfig<TResult> {

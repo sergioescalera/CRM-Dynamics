@@ -15,7 +15,7 @@ var Dynamics;
             function getProvider() {
                 if (!provider) {
                     var win = window.top;
-                    provider = new Dialogs.BootstrapDialogProvider(win);
+                    provider = Dialogs.bootstrapEnabled ? new Dialogs.BootstrapDialogProvider(win) : new Dialogs.CrmDialogProvider(win);
                 }
                 return provider;
             }
@@ -61,6 +61,7 @@ var Dynamics;
                 return deferred;
             }
             Dialogs.create = create;
+            Dialogs.bootstrapEnabled = true;
             function init() {
                 getProvider();
             }
