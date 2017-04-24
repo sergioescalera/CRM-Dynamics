@@ -28,6 +28,11 @@ var Dynamics;
                     this.dialog.modal("show");
                     return this.deferred;
                 };
+                BootstrapDialog.prototype.Destroy = function () {
+                    if (this._dialog) {
+                        this._dialog.remove();
+                    }
+                };
                 Object.defineProperty(BootstrapDialog.prototype, "dialog", {
                     get: function () {
                         if (!this._dialog) {

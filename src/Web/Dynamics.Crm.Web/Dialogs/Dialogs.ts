@@ -9,6 +9,7 @@
     }
 
     export interface IDialog<TResult> {
+        Destroy(): void;
         Show(): JQueryPromise<TResult>;
     }
 
@@ -50,7 +51,8 @@
             .done((d: IDialog<void>) => d
                 .Show()
                 .done(() => deferred.resolve())
-                .fail(() => deferred.reject()))
+                .fail(() => deferred.reject())
+                .always(() => d.Destroy()))      
             .fail(() => deferred.reject());
 
         return deferred;
@@ -66,7 +68,8 @@
             .done((d: IDialog<void>) => d
                 .Show()
                 .done(() => deferred.resolve(true))
-                .fail(() => deferred.reject()))
+                .fail(() => deferred.reject())
+                .always(() => d.Destroy()))
             .fail(() => deferred.reject());
 
         return deferred;

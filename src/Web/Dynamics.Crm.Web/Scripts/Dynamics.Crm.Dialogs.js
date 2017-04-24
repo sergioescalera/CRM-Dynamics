@@ -29,7 +29,8 @@ var Dynamics;
                     .done(function (d) { return d
                     .Show()
                     .done(function () { return deferred.resolve(); })
-                    .fail(function () { return deferred.reject(); }); })
+                    .fail(function () { return deferred.reject(); })
+                    .always(function () { return d.Destroy(); }); })
                     .fail(function () { return deferred.reject(); });
                 return deferred;
             }
@@ -42,7 +43,8 @@ var Dynamics;
                     .done(function (d) { return d
                     .Show()
                     .done(function () { return deferred.resolve(true); })
-                    .fail(function () { return deferred.reject(); }); })
+                    .fail(function () { return deferred.reject(); })
+                    .always(function () { return d.Destroy(); }); })
                     .fail(function () { return deferred.reject(); });
                 return deferred;
             }
@@ -101,6 +103,11 @@ var Dynamics;
                 BootstrapDialog.prototype.Show = function () {
                     this.dialog.modal("show");
                     return this.deferred;
+                };
+                BootstrapDialog.prototype.Destroy = function () {
+                    if (this._dialog) {
+                        this._dialog.remove();
+                    }
                 };
                 Object.defineProperty(BootstrapDialog.prototype, "dialog", {
                     get: function () {
@@ -190,6 +197,8 @@ var Dynamics;
                     });
                     return deferred;
                 };
+                CrmAlertDialog.prototype.Destroy = function () {
+                };
                 return CrmAlertDialog;
             }());
             Dialogs.CrmAlertDialog = CrmAlertDialog;
@@ -206,6 +215,8 @@ var Dynamics;
                         deferred.reject();
                     });
                     return deferred;
+                };
+                CrmConfirmDialog.prototype.Destroy = function () {
                 };
                 return CrmConfirmDialog;
             }());

@@ -29,7 +29,8 @@ var Dynamics;
                     .done(function (d) { return d
                     .Show()
                     .done(function () { return deferred.resolve(); })
-                    .fail(function () { return deferred.reject(); }); })
+                    .fail(function () { return deferred.reject(); })
+                    .always(function () { return d.Destroy(); }); })
                     .fail(function () { return deferred.reject(); });
                 return deferred;
             }
@@ -42,7 +43,8 @@ var Dynamics;
                     .done(function (d) { return d
                     .Show()
                     .done(function () { return deferred.resolve(true); })
-                    .fail(function () { return deferred.reject(); }); })
+                    .fail(function () { return deferred.reject(); })
+                    .always(function () { return d.Destroy(); }); })
                     .fail(function () { return deferred.reject(); });
                 return deferred;
             }

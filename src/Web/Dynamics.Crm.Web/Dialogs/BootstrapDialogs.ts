@@ -72,6 +72,12 @@
             return this.deferred;
         }
 
+        Destroy(): void {
+            if (this._dialog) {
+                this._dialog.remove();
+            }
+        }
+
         get dialog(): Bootstrap {
 
             if (!this._dialog) {

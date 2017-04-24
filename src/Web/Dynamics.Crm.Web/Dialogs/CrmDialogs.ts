@@ -23,6 +23,9 @@
 
             return deferred;
         }
+
+        Destroy(): void {
+        }
     }
 
     export class CrmConfirmDialog implements IDialog<boolean> {
@@ -47,6 +50,9 @@
             });
 
             return deferred;
+        }
+
+        Destroy(): void {
         }
     }
 
