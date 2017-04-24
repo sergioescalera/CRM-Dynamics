@@ -76,7 +76,10 @@ declare interface ICrmNavigation {
 
 declare interface ICrmNotifications {
     show(message: string, id: string, level?: string): void;
+    showHtml(message: string, id: string, level?: string): void;
     hide(id: string, afterSeconds?: number): void;
+    supported(): boolean;
+    htmlSupported(): boolean;
 }
 
 declare interface IFormNotificationType {

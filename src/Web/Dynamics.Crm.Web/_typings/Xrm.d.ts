@@ -75,6 +75,8 @@ interface ui {
       */
     setFormNotification(message: string, level: string, uniqueId: string): boolean;
 
+    setFormHtmlNotification(message: string, level: string, uniqueId: string): boolean;
+
     close(): void; // Closes the form.
     getCurrentControl(): Object; //  Returns the control object that currently has focus on the form.
     getFormType(): number;  // Indicates the form context for the record.

@@ -641,11 +641,17 @@ var Dynamics;
             var Notifications;
             (function (Notifications) {
                 "use strict";
+                var undefinedstr = "undefined";
                 function show(message, id, level) {
                     if (level === void 0) { level = Dynamics.Crm.Forms.FormNotificationType.Information; }
                     Xrm.Page.ui.setFormNotification(message, level, id);
                 }
                 Notifications.show = show;
+                function showHtml(message, id, level) {
+                    if (level === void 0) { level = Dynamics.Crm.Forms.FormNotificationType.Information; }
+                    Xrm.Page.ui.setFormHtmlNotification(message, level, id);
+                }
+                Notifications.showHtml = showHtml;
                 function hide(id, afterSeconds) {
                     if (afterSeconds === void 0) { afterSeconds = null; }
                     if (_.isNumber(afterSeconds) && afterSeconds > 0) {
@@ -656,6 +662,27 @@ var Dynamics;
                     }
                 }
                 Notifications.hide = hide;
+                function htmlSupported() {
+                    if (typeof Xrm !== undefinedstr &&
+                        typeof Xrm.Page !== undefinedstr &&
+                        typeof Xrm.Page.ui !== undefinedstr &&
+                        typeof Xrm.Page.ui.setFormHtmlNotification !== undefinedstr) {
+                        return true;
+                    }
+                    return false;
+                }
+                Notifications.htmlSupported = htmlSupported;
+                function supported() {
+                    if (typeof Xrm !== undefinedstr &&
+                        typeof Xrm.Page !== undefinedstr &&
+                        typeof Xrm.Page.ui !== undefinedstr &&
+                        typeof Xrm.Page.ui.setFormNotification !== undefinedstr &&
+                        typeof Xrm.Page.ui.clearFormNotification !== undefinedstr) {
+                        return true;
+                    }
+                    return false;
+                }
+                Notifications.supported = supported;
             })(Notifications = Forms.Notifications || (Forms.Notifications = {}));
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
@@ -906,12 +933,21 @@ var Dynamics;
         var Tasks;
         (function (Tasks) {
             "use strict";
+            var executeTaskErrorHtmlMessage = "Something went wrong.<br />\nClearing your browser's cache <u>(using Ctrl + F5)</u> may help solve the problem.";
+            var executeTaskErrorMessage = "Something went wrong. Clearing your browser's cache (using Ctrl + F5) may help solve the problem.";
+            var executeTaskErrorNotificationId = "ExecuteTaskErrorNotification";
             function execute(tasks, config) {
-                if (config === void 0) { config = {}; }
+                if (config === void 0) { config = {
+                    displayGenericMessageOnError: true
+                }; }
+                if (Crm.Forms.Notifications.supported()) {
+                    Crm.Forms.Notifications.hide(executeTaskErrorNotificationId);
+                }
                 if (Crm.Diagnostics.trace) {
                     Crm.Diagnostics.printArguments("Tasks.execute", tasks, config);
                 }
                 var results = [];
+                var errors = [];
                 if (!Array.isArray(tasks)) {
                     Crm.Diagnostics.log.Warning("Tasks.execute: Invalid argument. An array was expected.");
                 }
@@ -922,21 +958,39 @@ var Dynamics;
                             var result = task();
                             results.push(result);
                             if (!config.executeAll && !!result) {
-                                return results;
+                                break;
                             }
                         }
                         catch (e) {
                             Crm.Diagnostics.log.Error(("Tasks.execute: An error has occurred in " + typeof task + " " + getTaskName(task)).trim(), e);
+                            errors.push(e);
                             results.push(e);
                             if (!config.continueOnError) {
-                                return results;
+                                break;
                             }
                         }
                     }
                 }
+                if (errors.length > 0) {
+                    displayErrors(config, errors);
+                }
                 return results;
             }
             Tasks.execute = execute;
+            function displayErrors(config, errors) {
+                if (!errors || !errors.length) {
+                    return;
+                }
+                if (!config || !config.displayGenericMessageOnError) {
+                    return;
+                }
+                if (Crm.Forms.Notifications.htmlSupported()) {
+                    Crm.Forms.Notifications.showHtml(executeTaskErrorHtmlMessage, executeTaskErrorNotificationId, Crm.Forms.FormNotificationType.Warning);
+                }
+                else if (Crm.Forms.Notifications.supported()) {
+                    Crm.Forms.Notifications.show(executeTaskErrorMessage, executeTaskErrorNotificationId, Crm.Forms.FormNotificationType.Warning);
+                }
+            }
             function getTaskName(task) {
                 if (typeof task !== "function") {
                     return "";
