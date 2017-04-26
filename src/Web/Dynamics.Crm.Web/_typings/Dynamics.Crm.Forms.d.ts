@@ -135,7 +135,8 @@ declare interface ICrmDialogConfig<TResult> {
 declare interface ICrmOData {
     createEntity(
         entity: IEntity,
-        entitySetName: string): JQueryPromise<void>;
+        entitySetName: string,
+        attributes?: string[]): JQueryPromise<IEntity>
     deleteEntity(
         entityName: string,
         entitySetName: string,

@@ -56,7 +56,7 @@
 
     function entityIdFieldName(entityName: string): string {
 
-        return entityName + "id";
+        return `${entityName}id`;
     }
 
     function toEntity(entityName: string, attributes: string[], obj: any): Core.IEntity {
@@ -231,15 +231,24 @@
             });
     }
 
-    export function createEntity(entity: Core.IEntity, entitySetName: string): JQueryPromise<void> {
+    export function createEntity(
+        entity: Core.IEntity,
+        entitySetName: string,
+        attributes: string[] = null): JQueryPromise<Core.IEntity> {
 
         Validation.ensureNotNullOrUndefined(entity, "entity");
         Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
 
         var baseUrl = getContext().getClientUrl();
+        var idFieldName = entityIdFieldName(entity.type);
 
-        var url = `${baseUrl}/api/data/${getVersion()}/${entitySetName}`;
+        attributes = attributes || [];
+        if (attributes.indexOf(idFieldName) < 0) {
+            attributes.push(idFieldName);
+        }
 
+        var url = `${baseUrl}/api/data/${getVersion()}/${entitySetName}?$select=${attributes.join(",")}`;
+        
         var data = stringifyEntity(entity);
 
         return $
@@ -248,7 +257,14 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 type: "POST",
-                data: data
+                data: data,
+                headers: {
+                    Prefer: "return=representation"
+                }
+            })
+            .then((data: any) => {
+
+                return toEntity(entity.type, attributes, data);
             })
             .fail((response: any) => {
 

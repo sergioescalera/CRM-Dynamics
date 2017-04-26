@@ -35,7 +35,7 @@ namespace Dynamics.Crm.Plugins
                 {
                     context.TracingService?.Trace(e.StackTrace);
 
-                    if (ShouldCreateLogEntry(e))
+                    if (ShouldCreateLogEntry(context, e))
                         CreateLogEntryFromException(context, e);
 
                     throw;
@@ -110,7 +110,7 @@ namespace Dynamics.Crm.Plugins
             action.Catch(ex => context.TracingService.Trace(ex.ToString()));                     
         }
 
-        protected virtual Boolean ShouldCreateLogEntry(Exception exception)
+        protected virtual Boolean ShouldCreateLogEntry(IPluginContext context, Exception exception)
         {
             return true;
         }

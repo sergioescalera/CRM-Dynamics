@@ -341,11 +341,17 @@ var Dynamics;
                 });
             }
             OData.deleteEntity = deleteEntity;
-            function createEntity(entity, entitySetName) {
+            function createEntity(entity, entitySetName, attributes) {
+                if (attributes === void 0) { attributes = null; }
                 Validation.ensureNotNullOrUndefined(entity, "entity");
                 Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
                 var baseUrl = getContext().getClientUrl();
-                var url = baseUrl + "/api/data/" + getVersion() + "/" + entitySetName;
+                var idFieldName = entityIdFieldName(entity.type);
+                attributes = attributes || [];
+                if (attributes.indexOf(idFieldName) < 0) {
+                    attributes.push(idFieldName);
+                }
+                var url = baseUrl + "/api/data/" + getVersion() + "/" + entitySetName + "?$select=" + attributes.join(",");
                 var data = stringifyEntity(entity);
                 return $
                     .ajax({
@@ -353,7 +359,13 @@ var Dynamics;
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     type: "POST",
-                    data: data
+                    data: data,
+                    headers: {
+                        Prefer: "return=representation"
+                    }
+                })
+                    .then(function (data) {
+                    return toEntity(entity.type, attributes, data);
                 })
                     .fail(function (response) {
                     if (!response || !response.responseJSON || !response.responseJSON.error) {
