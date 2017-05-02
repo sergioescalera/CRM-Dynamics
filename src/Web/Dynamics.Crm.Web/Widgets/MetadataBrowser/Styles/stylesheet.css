@@ -2,48 +2,26 @@
   display: none !important;
 }
 
-.title .fa {
-    margin: 0 13px;
+pre {
+    background-color: #ccc;
+    padding: 20px;
 }
 
-.crm-metadata-browser {
-    padding: 0;
+table {
+    border-spacing: 0;
+    width: 100%;
 }
 
-    .crm-metadata-browser .nav-tabs .fa {
-        margin: 0 7px;
-    }
+table th {
+    background-color: #4c9ef0;
+    color: #fff;
+    padding: 12px 16px;
+    text-align: left;
+}
 
-    .crm-metadata-browser .tab-pane {
-        padding: 20px 0;
-    }
-
-    .crm-metadata-browser .accordion-toggle {
-        display: block;
-        text-decoration: none;
-    }
-
-    .crm-metadata-browser .crm-server-configuration-form .accordion-toggle .fa {
-        margin: 0 5px;
-    }
-
-    .crm-metadata-browser .crm-server-configuration-form form button .fa {
-        margin: 0 5px;
-    }
-
-    .crm-metadata-browser .crm-server-configuration-list .accordion-toggle .fa {
-        margin: 0 5px;
-    }
-
-    .crm-metadata-browser .crm-entity-list form {
-        padding: 10px 0;
-    }
-
-    .crm-metadata-browser .crm-entity-details form {
-        padding: 10px 0;
-    }
-
-    .crm-metadata-browser .splash {
-        padding: 100px;
-        text-align: center;
-    }
+table td {
+    background-color: #e3ecf5;
+    color: hsla(0, 0%, 0%, 0.87);
+    padding: 12px 16px;
+    text-align: left;
+}

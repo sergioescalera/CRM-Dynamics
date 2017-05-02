@@ -6,8 +6,10 @@
       "Core/Validation.js",
       "Data/OData.js",
       "Widgets/MetadataBrowser/Scripts/Config.js",
-      "Widgets/MetadataBrowser/Scripts/Core.js",
-      "Widgets/MetadataBrowser/Scripts/Controllers.js"
+      "Widgets/MetadataBrowser/Scripts/Core/.js",
+      "Widgets/MetadataBrowser/Scripts/Services/*.js",
+      "Widgets/MetadataBrowser/Scripts/Directives/*.js",
+      "Widgets/MetadataBrowser/Scripts/Controllers/*.js"
     ],
     "sourceMap": false
   },

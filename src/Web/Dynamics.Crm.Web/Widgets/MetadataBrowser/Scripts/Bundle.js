@@ -440,9 +440,17 @@ var MetadataBrower;
     (function (Config) {
         "use strict";
         Config.moduleName = "metadata-browser";
+        function init() {
+            angular.bootstrap(document, [
+                Config.moduleName
+            ]);
+        }
         angular.module(Config.moduleName, [
-            "ui.bootstrap"
+            "ngMaterial",
+            "ngMessages"
         ]);
+        angular.element(document)
+            .ready(init);
     })(Config = MetadataBrower.Config || (MetadataBrower.Config = {}));
 })(MetadataBrower || (MetadataBrower = {}));
 
@@ -451,8 +459,37 @@ var MetadataBrower;
     var Core;
     (function (Core) {
         "use strict";
+        var NavigationService = (function () {
+            function NavigationService() {
+                this.EntityTabs = [];
+            }
+            NavigationService.prototype.AddEntityTab = function (entity) {
+                var filtered = this.EntityTabs
+                    .filter(function (x) { return x.entity.LogicalName === entity.LogicalName; });
+                if (filtered.length > 0) {
+                    this.SelectedIndex = this.EntityTabs.indexOf(filtered[0]) + 1;
+                }
+                else {
+                    this.EntityTabs.push({
+                        entity: entity,
+                        title: entity.SchemaName
+                    });
+                    this.SelectedIndex = this.EntityTabs.length;
+                }
+            };
+            NavigationService.prototype.DeleteEntityTab = function (tab) {
+                _.remove(this.EntityTabs, function (t) { return t.entity.LogicalName === tab.entity.LogicalName; });
+            };
+            return NavigationService;
+        }());
+        function NavigationServiceFactory() {
+            return new NavigationService();
+        }
+        angular.module(MetadataBrower.Config.moduleName)
+            .factory("metadataBrowser.core.navigationService", [NavigationServiceFactory]);
     })(Core = MetadataBrower.Core || (MetadataBrower.Core = {}));
 })(MetadataBrower || (MetadataBrower = {}));
+
 var MetadataBrower;
 (function (MetadataBrower) {
     var Core;
@@ -479,7 +516,6 @@ var MetadataBrower;
                 Dynamics.Crm.OData
                     .entityAttributesDefinition(entityDefinition.MetadataId)
                     .done(function (array) {
-                    debugger;
                     defer.resolve(array);
                 })
                     .fail(function () {
@@ -490,46 +526,102 @@ var MetadataBrower;
             return ODataService;
         }());
         function DataServiceFactory($q) {
-            // return new DataService($q);
             return new ODataService($q);
         }
         angular.module(MetadataBrower.Config.moduleName)
             .factory("metadataBrowser.core.dataService", ["$q", DataServiceFactory]);
     })(Core = MetadataBrower.Core || (MetadataBrower.Core = {}));
 })(MetadataBrower || (MetadataBrower = {}));
+
 var MetadataBrower;
 (function (MetadataBrower) {
-    var Core;
-    (function (Core) {
+    var Controller;
+    (function (Controller) {
         "use strict";
-        var NavigationService = (function () {
-            function NavigationService() {
-                this.EntityTabs = new Array();
-            }
-            NavigationService.prototype.AddEntityTab = function (entity) {
-                var filter = this.EntityTabs.filter(function (x) { return x.entity.LogicalName === entity.LogicalName; });
-                if (!!filter.length) {
-                    filter[0].active = true;
-                }
-                else {
-                    this.EntityTabs.push({
-                        active: true,
-                        entity: entity,
-                        title: entity.SchemaName
-                    });
-                }
+        function entityDetailsFactory() {
+            return {
+                controller: EntityDetails,
+                restrict: "A",
+                scope: {
+                    entity: "="
+                },
+                templateUrl: "templates/entity_details.html"
             };
-            NavigationService.prototype.DeleteEntityTab = function (tab) {
-                _.remove(this.EntityTabs, function (t) { return t.entity.LogicalName === tab.entity.LogicalName; });
-            };
-            return NavigationService;
-        }());
-        function NavigationServiceFactory() {
-            return new NavigationService();
         }
+        var EntityDetails = (function () {
+            function EntityDetails(scope, dataService) {
+                this._dataService = dataService;
+                scope.vm = {
+                    advancedView: false,
+                    attributes: [],
+                    currentPage: 1,
+                    entity: scope.entity,
+                    entityAttributes: [],
+                    isBusy: false,
+                    filter: "",
+                    pageSize: 20,
+                    total: 0
+                };
+                scope.clear = this.clear.bind(this);
+                scope.search = this.search.bind(this);
+                scope.export = this.export.bind(this);
+                this.vm = scope.vm;
+                this.loadEntityMetadata();
+                scope.$watch("vm.currentPage", this.filterAttributes.bind(this));
+            }
+            EntityDetails.prototype.clear = function () {
+                this.vm.currentPage = 1;
+                this.vm.filter = "";
+                this.showAttributes();
+            };
+            EntityDetails.prototype.export = function () {
+                console.warn("Not implemented");
+            };
+            EntityDetails.prototype.filterAttributes = function () {
+                var filter = this.vm.filter;
+                var attributes = this.vm.entityAttributes.filter(function (att) {
+                    return att.LogicalName.indexOf(filter) >= 0;
+                });
+                this.showAttributes(attributes);
+            };
+            EntityDetails.prototype.loadEntityMetadata = function () {
+                var _this = this;
+                this.vm.isBusy = true;
+                return this._dataService.GetAttributes(this.vm.entity)
+                    .then((function (array) {
+                    _this.vm.entityAttributes = array.sort(function (a1, a2) {
+                        if (a1.SchemaName < a2.SchemaName) {
+                            return -1;
+                        }
+                        if (a1.SchemaName > a2.SchemaName) {
+                            return 1;
+                        }
+                        return 0;
+                    });
+                    _this.showAttributes();
+                }).bind(this))
+                    .finally(this.loadEntityMetadataCompleted.bind(this));
+            };
+            EntityDetails.prototype.loadEntityMetadataCompleted = function () {
+                this.vm.isBusy = false;
+            };
+            EntityDetails.prototype.search = function () {
+                this.vm.currentPage = 1;
+                this.filterAttributes();
+            };
+            EntityDetails.prototype.showAttributes = function (attributes) {
+                attributes = attributes || this.vm.entityAttributes;
+                var pageSize = this.vm.pageSize;
+                var skip = (this.vm.currentPage - 1) * pageSize;
+                this.vm.total = attributes.length;
+                this.vm.attributes = attributes.filter(function (a, index) { return index >= skip && index < skip + pageSize; });
+            };
+            EntityDetails.$inject = ["$scope", "metadataBrowser.core.dataService"];
+            return EntityDetails;
+        }());
         angular.module(MetadataBrower.Config.moduleName)
-            .factory("metadataBrowser.core.navigationService", [NavigationServiceFactory]);
-    })(Core = MetadataBrower.Core || (MetadataBrower.Core = {}));
+            .directive("entityDetails", entityDetailsFactory);
+    })(Controller = MetadataBrower.Controller || (MetadataBrower.Controller = {}));
 })(MetadataBrower || (MetadataBrower = {}));
 
 var MetadataBrower;
@@ -537,18 +629,20 @@ var MetadataBrower;
     var Controllers;
     (function (Controllers) {
         "use strict";
-        var MetadataBrowserController = (function () {
-            function MetadataBrowserController(navigationService) {
-                var vm = this;
-                vm.navigationService = navigationService;
-            }
-            MetadataBrowserController.$inject = ["metadataBrowser.core.navigationService"];
-            return MetadataBrowserController;
-        }());
+        function propertyBrowser() {
+            return {
+                restrict: "A",
+                scope: {
+                    object: "="
+                },
+                templateUrl: "templates/property_browser.html"
+            };
+        }
         angular.module(MetadataBrower.Config.moduleName)
-            .controller("metadataBrowser.ui.controllers.crmMetadataBrowser", MetadataBrowserController);
+            .directive("propertyBrowser", propertyBrowser);
     })(Controllers = MetadataBrower.Controllers || (MetadataBrower.Controllers = {}));
 })(MetadataBrower || (MetadataBrower = {}));
+
 var MetadataBrower;
 (function (MetadataBrower) {
     var Controllers;
@@ -633,114 +727,21 @@ var MetadataBrower;
             .controller("metadataBrowser.ui.controllers.entityList", EntityListController);
     })(Controllers = MetadataBrower.Controllers || (MetadataBrower.Controllers = {}));
 })(MetadataBrower || (MetadataBrower = {}));
-var MetadataBrower;
-(function (MetadataBrower) {
-    var Controller;
-    (function (Controller) {
-        "use strict";
-        function entityDetailsFactory() {
-            return {
-                controller: EntityDetails,
-                restrict: "A",
-                scope: {
-                    entity: "="
-                },
-                templateUrl: "templates/entity_details.html"
-            };
-        }
-        var EntityDetails = (function () {
-            function EntityDetails(scope, dataService) {
-                this._dataService = dataService;
-                scope.vm = {
-                    advancedView: false,
-                    attributes: [],
-                    currentPage: 1,
-                    entity: scope.entity,
-                    entityAttributes: [],
-                    isBusy: false,
-                    filter: "",
-                    pageSize: 20,
-                    total: 0
-                };
-                scope.clear = this.clear.bind(this);
-                scope.search = this.search.bind(this);
-                scope.export = this.export.bind(this);
-                this.vm = scope.vm;
-                this.loadEntityMetadata();
-                scope.$watch("vm.currentPage", this.filterAttributes.bind(this));
-            }
-            EntityDetails.prototype.clear = function () {
-                this.vm.currentPage = 1;
-                this.vm.filter = "";
-                this.showAttributes();
-            };
-            EntityDetails.prototype.export = function () {
-                console.warn("Not implemented");
-            };
-            EntityDetails.prototype.filterAttributes = function () {
-                var filter = this.vm.filter;
-                var attributes = this.vm.entityAttributes.filter(function (att) {
-                    return att.LogicalName.indexOf(filter) >= 0;
-                });
-                this.showAttributes(attributes);
-            };
-            EntityDetails.prototype.loadEntityMetadata = function () {
-                var _this = this;
-                this.vm.isBusy = true;
-                debugger;
-                return this._dataService.GetAttributes(this.vm.entity)
-                    .then((function (array) {
-                    debugger;
-                    _this.vm.entityAttributes = array.sort(function (a1, a2) {
-                        if (a1.SchemaName < a2.SchemaName) {
-                            return -1;
-                        }
-                        if (a1.SchemaName > a2.SchemaName) {
-                            return 1;
-                        }
-                        return 0;
-                    });
-                    _this.showAttributes();
-                })
-                    .bind(this))
-                    .finally(this.loadEntityMetadataCompleted.bind(this));
-            };
-            EntityDetails.prototype.loadEntityMetadataCompleted = function () {
-                this.vm.isBusy = false;
-            };
-            EntityDetails.prototype.search = function () {
-                this.vm.currentPage = 1;
-                this.filterAttributes();
-            };
-            EntityDetails.prototype.showAttributes = function (attributes) {
-                attributes = attributes || this.vm.entityAttributes;
-                var pageSize = this.vm.pageSize;
-                var skip = (this.vm.currentPage - 1) * pageSize;
-                this.vm.total = attributes.length;
-                this.vm.attributes = attributes.filter(function (a, index) { return index >= skip && index < skip + pageSize; });
-            };
-            EntityDetails.$inject = ["$scope", "metadataBrowser.core.dataService"];
-            return EntityDetails;
-        }());
-        angular.module(MetadataBrower.Config.moduleName)
-            .directive("tsEntityDetails", entityDetailsFactory);
-    })(Controller = MetadataBrower.Controller || (MetadataBrower.Controller = {}));
-})(MetadataBrower || (MetadataBrower = {}));
+
 var MetadataBrower;
 (function (MetadataBrower) {
     var Controllers;
     (function (Controllers) {
         "use strict";
-        function propertyBrowser() {
-            return {
-                restrict: "A",
-                scope: {
-                    object: "="
-                },
-                templateUrl: "templates/property_browser.html"
-            };
-        }
+        var MetadataBrowserController = (function () {
+            function MetadataBrowserController(navigationService) {
+                var vm = this;
+                vm.navigationService = navigationService;
+            }
+            MetadataBrowserController.$inject = ["metadataBrowser.core.navigationService"];
+            return MetadataBrowserController;
+        }());
         angular.module(MetadataBrower.Config.moduleName)
-            .directive("tsPropertyBrowser", propertyBrowser);
+            .controller("metadataBrowser.ui.controllers.crmMetadataBrowser", MetadataBrowserController);
     })(Controllers = MetadataBrower.Controllers || (MetadataBrower.Controllers = {}));
 })(MetadataBrower || (MetadataBrower = {}));

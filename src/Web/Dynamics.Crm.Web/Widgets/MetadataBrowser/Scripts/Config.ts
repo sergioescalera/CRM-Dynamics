@@ -4,7 +4,17 @@
 
     export var moduleName = "metadata-browser";
 
+    function init() {
+        angular.bootstrap(document, [
+            moduleName
+        ]);
+    }
+
     angular.module(moduleName, [
-        "ui.bootstrap"
+        "ngMaterial",
+        "ngMessages"
     ]);
+
+    angular.element(document)
+        .ready(init);
 }
