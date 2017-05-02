@@ -36,7 +36,8 @@ namespace Dynamics.Crm.Data
                         {
                             Id = o.GetAttributeValue<Guid>(AccountEntity.IdFieldName),
                             Name = o.GetAttributeValue<String>(Common.NameFieldName),
-                            ParentAccount = o.GetAttributeValue<EntityReference>(AccountEntity.ParentAccountFieldName)
+                            ParentAccount = o.GetAttributeValue<EntityReference>(AccountEntity.ParentAccountFieldName),
+                            PrimaryContact = o.GetAttributeValue<EntityReference>(AccountEntity.PrimaryContactFieldName)
                         };
 
             var array = query.ToArray();
@@ -45,7 +46,8 @@ namespace Dynamics.Crm.Data
             {
                 Id = array[0].Id,
                 Name = array[0].Name,
-                ParentAccount = array[0].ParentAccount
+                ParentAccount = array[0].ParentAccount,
+                PrimaryContact = array[0].PrimaryContact
             } : null;
         }
     }

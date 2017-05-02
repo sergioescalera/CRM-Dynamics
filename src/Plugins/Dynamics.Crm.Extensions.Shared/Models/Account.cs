@@ -30,5 +30,10 @@ namespace Dynamics.Crm.Models
         {
             get; set;
         }
+
+        public EntityReference PrimaryContact
+        {
+            get; set;
+        }
     }
 }
