@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Dynamics.Crm.Web</id>
-    <version>1.3.8.1-alpha</version>
+    <version>1.3.8.2-alpha</version>
     <authors>Sergio Escalera</authors>
     <owners>Sergio Escalera</owners>    
     <projectUrl>https://github.com/sergioescalera/CRM-Dynamics/</projectUrl>    
@@ -22,5 +22,10 @@
     <file src="..\Web\Dynamics.Crm.Web\_typings\moment.d.ts" target="content\_typings" />
     <file src="..\Web\Dynamics.Crm.Web\Libs\bootstrap\css\*.css" target="content\Libs\bootstrap\css" />
     <file src="..\Web\Dynamics.Crm.Web\Libs\bootstrap\js\*.js" target="content\Libs\bootstrap\js" />
+    <file src="..\Web\Dynamics.Crm.Web\Widgets\MetadataBrowser\Html\*.html" target="content\Widgets\MetadataBrowser\Html" />
+    <file src="..\Web\Dynamics.Crm.Web\Widgets\MetadataBrowser\Html\templates\*.html" target="content\Widgets\MetadataBrowser\Html\templates" />
+    <file src="..\Web\Dynamics.Crm.Web\Widgets\MetadataBrowser\Images\*.*" target="content\Widgets\MetadataBrowser\Images" />
+    <file src="..\Web\Dynamics.Crm.Web\Widgets\MetadataBrowser\Scripts\Bundle*.js" target="content\Widgets\MetadataBrowser\Scripts" />
+    <file src="..\Web\Dynamics.Crm.Web\Widgets\MetadataBrowser\Styles\stylesheet*.css" target="content\Widgets\MetadataBrowser\Styles" />
   </files>
 </package>
