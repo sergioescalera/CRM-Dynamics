@@ -129,6 +129,8 @@
     </Content>
     <Content Include="UnitTests\Index.html" />
     <Content Include="Web.config" />
+    <Content Include="Widgets\LookupLink\Html\Index.html" />
+    <Content Include="Widgets\LookupLink\Images\Icon.png" />
     <Content Include="Widgets\MetadataBrowser\Html\config.html" />
     <Content Include="Widgets\MetadataBrowser\Html\main.html" />
     <Content Include="Widgets\MetadataBrowser\Html\templates\entity_details.html" />
@@ -196,6 +198,7 @@
     <TypeScriptCompile Include="UnitTests\TabsUnitTests.ts" />
     <TypeScriptCompile Include="UnitTests\TasksUnitTests.ts" />
     <TypeScriptCompile Include="UnitTests\ValidationUnitTests.ts" />
+    <TypeScriptCompile Include="Widgets\LookupLink\Scripts\LookupLink.ts" />
     <TypeScriptCompile Include="Widgets\MetadataBrowser\Scripts\Config.ts" />
     <TypeScriptCompile Include="Widgets\MetadataBrowser\Scripts\Directives\EntityDetails.ts" />
     <TypeScriptCompile Include="Widgets\MetadataBrowser\Scripts\Controllers\EntityListController.ts" />

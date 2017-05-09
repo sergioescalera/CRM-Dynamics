@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Arial;
+            margin: 0;
+            padding: 0;
+        }
+
+        a {
+            color: #1160B7;
+            display: inline-block;
+            font-size: 11px;
+            text-decoration: none;
+        }
+
+            a:hover {
+                text-decoration: underline;
+            }
+
+            a img {
+                border: none;
+            }
+
+        p {
+            display: inline-block;
+            font-size: 11px;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body onload="LookupLink.init()">
+    <a id="lookup-link"
+       href="javascript:void(0);"
+       style="display: none;"
+       title="Open entity in a new window">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFbSURBVDhPnZIhT8NQEMfv3hYyVypIEAgckskJBMg2E/0AJC3hC4AggJsENfgEbRUWEugmEQgsDkECAkECSZlbCOtxr31r2u6tEH7Je313vfvfvctDqGB6kQ+AnjJ/ZUbAcG8cAaKtzPkgrPPuzAgUWXKvl7+g0VJmzmi19Wq8jLcFgi+UT8s3igsOeq4uTl5RIdDM7lyGED8+fesAKDlNoBFKHyLscrsbaUAB7kAODB0+b+aLoCN/xmF3OAqtgCUXZTIBPUp/kWa6E5zHod1LzxUMN9oTiH0+nhHhA3dS6rh2BsXkOLD2M2+ZuQK6ZAGTN273dgEmY2lLtAKGO/B0leVM4sDeeg+7LJShFeAKQyA6Liab3qBvutGRMnO0ArICD/VEmQpq8+tbUwYIQU/sC2qHWEfs23d8nZ1/C0xBvhvx9zIhuMpcehDpkB/TvayqXClTgT9CQVkA4AfRZ3j7qkEW9gAAAABJRU5ErkJggg=="
+             alt="Open" />
+    </a>
+    <p id="message"
+       style="display: none;">Open</p>
+    <script src="../Scripts/LookupLink.js"></script>
+</body>
+</html>
