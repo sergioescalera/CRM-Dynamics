@@ -2,12 +2,12 @@
     <table>
         <thead></thead>
         <tbody>
-            <tr data-ng-repeat="(propertyName, value) in object">
+            <tr ng-repeat="(propertyName, value) in object">
                 <td>
-                    <span data-ng-bind="propertyName"></span>
+                    <span ng-bind="propertyName"></span>
                 </td>
                 <td>
-                    <pre data-ng-bind="value | json"></pre>
+                    <pre ng-bind="value | json"></pre>
                 </td>
             </tr>
         </tbody>

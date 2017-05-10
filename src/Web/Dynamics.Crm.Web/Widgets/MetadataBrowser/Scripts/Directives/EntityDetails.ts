@@ -6,7 +6,7 @@
 
         return {
             controller: EntityDetails,
-            restrict: "A",
+            restrict: "E",
             scope: {
                 entity: "="
             },
@@ -85,7 +85,7 @@
 
             var filter: string = this.vm.filter;
 
-            var attributes: Core.IAttribute[] = this.vm.entityAttributes.filter((att: Core.IAttribute) => {
+            var attributes: IAttributeDefinition[] = this.vm.entityAttributes.filter((att: IAttributeDefinition) => {
 
                 return att.LogicalName.indexOf(filter) >= 0;
             });
@@ -97,14 +97,16 @@
 
             this.vm.isBusy = true;
 
-            return this._dataService.GetAttributes(this.vm.entity)
+            return this._dataService
+                .GetAttributes(this.vm.entity)
                 .then(((array: IAttributeDefinition[]) => {
 
-                    this.vm.entityAttributes = array.sort((a1: Core.IAttribute, a2: Core.IAttribute) => {
-                        if (a1.SchemaName < a2.SchemaName) {
+                    this.vm.entityAttributes = array.sort((a1: IAttributeDefinition, a2: IAttributeDefinition) => {
+
+                        if (a1.LogicalName < a2.LogicalName) {
                             return -1;
                         }
-                        if (a1.SchemaName > a2.SchemaName) {
+                        if (a1.LogicalName > a2.LogicalName) {
                             return 1;
                         }
                         return 0;
@@ -126,7 +128,7 @@
             this.filterAttributes();
         }
 
-        showAttributes(attributes?: Core.IAttribute[]): void {
+        showAttributes(attributes?: IAttributeDefinition[]): void {
 
             attributes = attributes || this.vm.entityAttributes;
 
@@ -134,8 +136,8 @@
             var skip: number = (this.vm.currentPage - 1) * pageSize;
 
             this.vm.total = attributes.length;
-            this.vm.attributes = attributes.filter(
-                (a: Core.IAttribute, index: number) => index >= skip && index < skip + pageSize);
+            this.vm.attributes = attributes
+                .filter((a: Core.IAttribute, index: number) => index >= skip && index < skip + pageSize);
         }
     }
 

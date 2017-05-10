@@ -311,13 +311,20 @@
 
     // meta-data
 
-    export function entityDefinitions(): JQueryPromise<IEntityDefinition[]> {
+    var entityDefinitionAttributes: string[] = [
+        "MetadataId",
+        "DisplayName",
+        "LogicalName",
+        "ObjectTypeCode",
+        "SchemaName"
+    ];
+
+    export function entityDefinitions(
+        attributes: string[] = entityDefinitionAttributes): JQueryPromise<IEntityDefinition[]> {
 
         var baseUrl = getContext().getClientUrl();
 
-        var url = "{baseUrl}/api/data/{version}/EntityDefinitions"
-            .replace("{baseUrl}", baseUrl)
-            .replace("{version}", getVersion());
+        var url = `${baseUrl}/api/data/${getVersion()}/EntityDefinitions?$select=${attributes.join(",")}`;
 
         return $
             .ajax({
@@ -330,16 +337,23 @@
             });
     }
 
-    export function entityAttributesDefinition(metadataId: string): JQueryPromise<IAttributeDefinition[]> {
+    var entityAttributeDefinitionAttributes: string[] = [
+        "MetadataId",
+        "DisplayName",
+        "LogicalName",
+        "AttributeType",
+        "Description"
+    ];
+
+    export function entityAttributesDefinition(
+        metadataId: string,
+        attributes: string[] = entityAttributeDefinitionAttributes): JQueryPromise<IAttributeDefinition[]> {
 
         Validation.ensureNotNullOrEmpty(metadataId, "metadataId");
 
         var baseUrl = getContext().getClientUrl();
 
-        var url = "{baseUrl}/api/data/{version}/EntityDefinitions({metadataId})/Attributes"
-            .replace("{baseUrl}", baseUrl)
-            .replace("{version}", getVersion())
-            .replace("{metadataId}", metadataId);
+        var url = `${baseUrl}/api/data/${getVersion()}/EntityDefinitions(${metadataId})/Attributes?$select=${attributes.join(",")}`;
 
         return $
             .ajax({
@@ -349,6 +363,27 @@
             .then((data: IODataResponse<IAttributeDefinition[]>) => {
 
                 return data.value;
+            });
+    }
+
+    export function entityAttributeOptionSetDefinition(
+        metadataId: string,
+        attributeMetadataId: string): JQueryPromise<IOptionSetValueDefinition[]> {
+
+        Validation.ensureNotNullOrEmpty(metadataId, "metadataId");
+        Validation.ensureNotNullOrEmpty(attributeMetadataId, "attributeMetadataId");
+
+        var baseUrl = getContext().getClientUrl();
+
+        var url = `${baseUrl}/api/data/v8.0/EntityDefinitions(${metadataId})/Attributes(${attributeMetadataId})/Microsoft.Dynamics.CRM.PicklistAttributeMetadata/OptionSet?$select=Options`;
+
+        return $
+            .ajax({
+                url: url,
+                dataType: "json"
+            })
+            .then((data: any) => {
+                return data.Options;
             });
     }
 }
@@ -366,12 +401,24 @@ interface IEntityDefinition {
 }
 
 interface IAttributeDefinition {
+    AttributeType?: string;
+    Description?: ILocalizedName;
+    DisplayName?: ILocalizedName;
+    LogicalName?: string;
+    MetadataId?: string;
+}
+
+interface IOptionSetValueDefinition {
+    Description?: ILocalizedName;
+    Label?: ILocalizedName;
+    Value?: number;
 }
 
 interface ILocalizedName {
-    LocalizedLabels: ILocalizedLabel[];
+    LocalizedLabels?: ILocalizedLabel[];
+    UserLocalizedLabel?: ILocalizedLabel;
 }
 
 interface ILocalizedLabel {
-    Label: string;
+    Label?: string;
 }

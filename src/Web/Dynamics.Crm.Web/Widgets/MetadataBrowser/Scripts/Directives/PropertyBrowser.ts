@@ -5,7 +5,7 @@
     function propertyBrowser(): ng.IDirective {
 
         return {
-            restrict: "A",
+            restrict: "E",
             scope: {
                 object: "="
             },

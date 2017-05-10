@@ -398,11 +398,17 @@ var Dynamics;
             }
             OData.updateEntity = updateEntity;
             // meta-data
-            function entityDefinitions() {
+            var entityDefinitionAttributes = [
+                "MetadataId",
+                "DisplayName",
+                "LogicalName",
+                "ObjectTypeCode",
+                "SchemaName"
+            ];
+            function entityDefinitions(attributes) {
+                if (attributes === void 0) { attributes = entityDefinitionAttributes; }
                 var baseUrl = getContext().getClientUrl();
-                var url = "{baseUrl}/api/data/{version}/EntityDefinitions"
-                    .replace("{baseUrl}", baseUrl)
-                    .replace("{version}", getVersion());
+                var url = baseUrl + "/api/data/" + getVersion() + "/EntityDefinitions?$select=" + attributes.join(",");
                 return $
                     .ajax({
                     url: url,
@@ -413,13 +419,18 @@ var Dynamics;
                 });
             }
             OData.entityDefinitions = entityDefinitions;
-            function entityAttributesDefinition(metadataId) {
+            var entityAttributeDefinitionAttributes = [
+                "MetadataId",
+                "DisplayName",
+                "LogicalName",
+                "AttributeType",
+                "Description"
+            ];
+            function entityAttributesDefinition(metadataId, attributes) {
+                if (attributes === void 0) { attributes = entityAttributeDefinitionAttributes; }
                 Validation.ensureNotNullOrEmpty(metadataId, "metadataId");
                 var baseUrl = getContext().getClientUrl();
-                var url = "{baseUrl}/api/data/{version}/EntityDefinitions({metadataId})/Attributes"
-                    .replace("{baseUrl}", baseUrl)
-                    .replace("{version}", getVersion())
-                    .replace("{metadataId}", metadataId);
+                var url = baseUrl + "/api/data/" + getVersion() + "/EntityDefinitions(" + metadataId + ")/Attributes?$select=" + attributes.join(",");
                 return $
                     .ajax({
                     url: url,
@@ -430,6 +441,21 @@ var Dynamics;
                 });
             }
             OData.entityAttributesDefinition = entityAttributesDefinition;
+            function entityAttributeOptionSetDefinition(metadataId, attributeMetadataId) {
+                Validation.ensureNotNullOrEmpty(metadataId, "metadataId");
+                Validation.ensureNotNullOrEmpty(attributeMetadataId, "attributeMetadataId");
+                var baseUrl = getContext().getClientUrl();
+                var url = baseUrl + "/api/data/v8.0/EntityDefinitions(" + metadataId + ")/Attributes(" + attributeMetadataId + ")/Microsoft.Dynamics.CRM.PicklistAttributeMetadata/OptionSet?$select=Options";
+                return $
+                    .ajax({
+                    url: url,
+                    dataType: "json"
+                })
+                    .then(function (data) {
+                    return data.Options;
+                });
+            }
+            OData.entityAttributeOptionSetDefinition = entityAttributeOptionSetDefinition;
         })(OData = Crm.OData || (Crm.OData = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
@@ -523,6 +549,18 @@ var MetadataBrower;
                 });
                 return defer.promise;
             };
+            ODataService.prototype.GetOptionSets = function (entityDefinition, attributeDefinition) {
+                var defer = this._$q.defer();
+                Dynamics.Crm.OData
+                    .entityAttributeOptionSetDefinition(entityDefinition.MetadataId, attributeDefinition.MetadataId)
+                    .done(function (array) {
+                    defer.resolve(array);
+                })
+                    .fail(function () {
+                    defer.reject();
+                });
+                return defer.promise;
+            };
             return ODataService;
         }());
         function DataServiceFactory($q) {
@@ -541,7 +579,7 @@ var MetadataBrower;
         function entityDetailsFactory() {
             return {
                 controller: EntityDetails,
-                restrict: "A",
+                restrict: "E",
                 scope: {
                     entity: "="
                 },
@@ -587,13 +625,14 @@ var MetadataBrower;
             EntityDetails.prototype.loadEntityMetadata = function () {
                 var _this = this;
                 this.vm.isBusy = true;
-                return this._dataService.GetAttributes(this.vm.entity)
+                return this._dataService
+                    .GetAttributes(this.vm.entity)
                     .then((function (array) {
                     _this.vm.entityAttributes = array.sort(function (a1, a2) {
-                        if (a1.SchemaName < a2.SchemaName) {
+                        if (a1.LogicalName < a2.LogicalName) {
                             return -1;
                         }
-                        if (a1.SchemaName > a2.SchemaName) {
+                        if (a1.LogicalName > a2.LogicalName) {
                             return 1;
                         }
                         return 0;
@@ -614,7 +653,8 @@ var MetadataBrower;
                 var pageSize = this.vm.pageSize;
                 var skip = (this.vm.currentPage - 1) * pageSize;
                 this.vm.total = attributes.length;
-                this.vm.attributes = attributes.filter(function (a, index) { return index >= skip && index < skip + pageSize; });
+                this.vm.attributes = attributes
+                    .filter(function (a, index) { return index >= skip && index < skip + pageSize; });
             };
             EntityDetails.$inject = ["$scope", "metadataBrowser.core.dataService"];
             return EntityDetails;
@@ -629,9 +669,51 @@ var MetadataBrower;
     var Controllers;
     (function (Controllers) {
         "use strict";
+        function picklistFactory() {
+            return {
+                controller: PicklistController,
+                restrict: "E",
+                scope: {
+                    entity: "=",
+                    attribute: "="
+                },
+                template: "\n<a href=\"javascript:void(0);\" class=\"picklist-toggle\" ng-click=\"load()\">+\n    <md-tooltip md-direction=\"right\" class=\"picklist\">\n        <span ng-if=\"!options\">Click to load options</span>\n        <span ng-if=\"options && !options.length\">Loading...</span>\n        <ul class=\"options\" ng-if=\"options && options.length\">\n            <li class=\"option\" ng-repeat=\"option in options\">\n                <span ng-bind=\"option.Label.UserLocalizedLabel.Label\"></span>\n                <span>&nbsp;=&nbsp;</span>\n                <span ng-bind=\"option.Value\"></span>\n            </li>\n        </ul>\n    </md-tooltip>\n</a>"
+            };
+        }
+        var PicklistController = (function () {
+            function PicklistController(scope, dataService) {
+                scope.load = function () {
+                    if (scope.options) {
+                        return;
+                    }
+                    scope.options = [];
+                    dataService
+                        .GetOptionSets(scope.entity, scope.attribute)
+                        .then(function (optionSets) {
+                        scope.options = optionSets;
+                    })
+                        .catch(function () {
+                        debugger;
+                        scope.options = null;
+                    });
+                };
+            }
+            PicklistController.$inject = ["$scope", "metadataBrowser.core.dataService"];
+            return PicklistController;
+        }());
+        angular.module(MetadataBrower.Config.moduleName)
+            .directive("picklist", picklistFactory);
+    })(Controllers = MetadataBrower.Controllers || (MetadataBrower.Controllers = {}));
+})(MetadataBrower || (MetadataBrower = {}));
+
+var MetadataBrower;
+(function (MetadataBrower) {
+    var Controllers;
+    (function (Controllers) {
+        "use strict";
         function propertyBrowser() {
             return {
-                restrict: "A",
+                restrict: "E",
                 scope: {
                     object: "="
                 },

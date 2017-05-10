@@ -1300,11 +1300,17 @@ var Dynamics;
             }
             OData.updateEntity = updateEntity;
             // meta-data
-            function entityDefinitions() {
+            var entityDefinitionAttributes = [
+                "MetadataId",
+                "DisplayName",
+                "LogicalName",
+                "ObjectTypeCode",
+                "SchemaName"
+            ];
+            function entityDefinitions(attributes) {
+                if (attributes === void 0) { attributes = entityDefinitionAttributes; }
                 var baseUrl = getContext().getClientUrl();
-                var url = "{baseUrl}/api/data/{version}/EntityDefinitions"
-                    .replace("{baseUrl}", baseUrl)
-                    .replace("{version}", getVersion());
+                var url = baseUrl + "/api/data/" + getVersion() + "/EntityDefinitions?$select=" + attributes.join(",");
                 return $
                     .ajax({
                     url: url,
@@ -1315,13 +1321,18 @@ var Dynamics;
                 });
             }
             OData.entityDefinitions = entityDefinitions;
-            function entityAttributesDefinition(metadataId) {
+            var entityAttributeDefinitionAttributes = [
+                "MetadataId",
+                "DisplayName",
+                "LogicalName",
+                "AttributeType",
+                "Description"
+            ];
+            function entityAttributesDefinition(metadataId, attributes) {
+                if (attributes === void 0) { attributes = entityAttributeDefinitionAttributes; }
                 Validation.ensureNotNullOrEmpty(metadataId, "metadataId");
                 var baseUrl = getContext().getClientUrl();
-                var url = "{baseUrl}/api/data/{version}/EntityDefinitions({metadataId})/Attributes"
-                    .replace("{baseUrl}", baseUrl)
-                    .replace("{version}", getVersion())
-                    .replace("{metadataId}", metadataId);
+                var url = baseUrl + "/api/data/" + getVersion() + "/EntityDefinitions(" + metadataId + ")/Attributes?$select=" + attributes.join(",");
                 return $
                     .ajax({
                     url: url,
@@ -1332,6 +1343,21 @@ var Dynamics;
                 });
             }
             OData.entityAttributesDefinition = entityAttributesDefinition;
+            function entityAttributeOptionSetDefinition(metadataId, attributeMetadataId) {
+                Validation.ensureNotNullOrEmpty(metadataId, "metadataId");
+                Validation.ensureNotNullOrEmpty(attributeMetadataId, "attributeMetadataId");
+                var baseUrl = getContext().getClientUrl();
+                var url = baseUrl + "/api/data/v8.0/EntityDefinitions(" + metadataId + ")/Attributes(" + attributeMetadataId + ")/Microsoft.Dynamics.CRM.PicklistAttributeMetadata/OptionSet?$select=Options";
+                return $
+                    .ajax({
+                    url: url,
+                    dataType: "json"
+                })
+                    .then(function (data) {
+                    return data.Options;
+                });
+            }
+            OData.entityAttributeOptionSetDefinition = entityAttributeOptionSetDefinition;
         })(OData = Crm.OData || (Crm.OData = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));

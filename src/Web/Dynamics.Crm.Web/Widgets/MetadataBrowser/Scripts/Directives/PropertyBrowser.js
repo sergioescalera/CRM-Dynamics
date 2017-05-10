@@ -5,7 +5,7 @@ var MetadataBrower;
         "use strict";
         function propertyBrowser() {
             return {
-                restrict: "A",
+                restrict: "E",
                 scope: {
                     object: "="
                 },

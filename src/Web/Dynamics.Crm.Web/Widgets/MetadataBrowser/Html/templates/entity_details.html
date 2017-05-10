@@ -30,6 +30,7 @@
                                  layout-align="end center">
 
                     <md-button class="md-raised md-primary"
+                               type="submit"
                                ng-disabled="SearchForm.$invalid || vm.isBusy"
                                ng-click="search()"
                                title="Search">
@@ -65,15 +66,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="attribute in vm.attributes | orderBy:'LogicalName'">
+                    <tr ng-repeat="attribute in vm.attributes">
                         <td><span ng-bind="attribute.DisplayName.UserLocalizedLabel.Label || 'N/A'"></span></td>
                         <td><span ng-bind="attribute.LogicalName"></span></td>
                         <td>
                             <span ng-bind="attribute.AttributeType"></span>
-                            <br />
-                            <span ng-repeat="option in attribute.OptionSet.Options"><span ng-show="$index !== 0">,&nbsp;</span><span ng-bind="option.Label.UserLocalizedLabel.Label"></span>: <span ng-bind="option.Value"></span></span>
+                            <picklist ng-if="attribute.AttributeType === 'Picklist'"
+                                      data-entity="vm.entity"
+                                      data-attribute="attribute"></picklist>
                         </td>
-                        <td><span data-ng-bind="attribute.Description.UserLocalizedLabel.Label"></span></td>
+                        <td>
+                            <span data-ng-bind="attribute.Description.UserLocalizedLabel.Label"></span>
+                        </td>
                     </tr>
                 </tbody>
                 <tfoot>
@@ -88,18 +92,18 @@
 
         <div class="advanced-view" ng-if="vm.attributes.length && vm.advancedView">
 
-            <div ng-repeat="attribute in vm.attributes | orderBy:'LogicalName'"
+            <div class="advanced-view-item"
+                 ng-repeat="attribute in vm.attributes"
                  ng-init="expanded=false;">
                 <md-toolbar>
                     <div class="md-toolbar-tools" ng-click="expanded=!expanded;">
-                        <span ng-bind="attribute.DisplayName.UserLocalizedLabel.Label || 'N/A'"></span>
-                        &nbsp;-&nbsp;
-                        <span ng-bind="attribute.LogicalName"></span>
+                        <span ng-bind="attribute.DisplayName.UserLocalizedLabel.Label"></span>                        
+                        <span ng-bind="attribute.LogicalName"
+                              ng-hide="attribute.DisplayName.UserLocalizedLabel.Label"></span>
                     </div>
                 </md-toolbar>
-                <div data-property-browser=""
-                     data-object="attribute"
-                     ng-if="expanded"></div>
+                <property-browser data-object="attribute"
+                                  ng-if="expanded"></property-browser>
             </div>
             <!--<span data-pager=""
                     data-align="false"

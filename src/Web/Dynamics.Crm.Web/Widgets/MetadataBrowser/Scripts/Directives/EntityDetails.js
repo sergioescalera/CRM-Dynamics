@@ -6,7 +6,7 @@ var MetadataBrower;
         function entityDetailsFactory() {
             return {
                 controller: EntityDetails,
-                restrict: "A",
+                restrict: "E",
                 scope: {
                     entity: "="
                 },
@@ -52,13 +52,14 @@ var MetadataBrower;
             EntityDetails.prototype.loadEntityMetadata = function () {
                 var _this = this;
                 this.vm.isBusy = true;
-                return this._dataService.GetAttributes(this.vm.entity)
+                return this._dataService
+                    .GetAttributes(this.vm.entity)
                     .then((function (array) {
                     _this.vm.entityAttributes = array.sort(function (a1, a2) {
-                        if (a1.SchemaName < a2.SchemaName) {
+                        if (a1.LogicalName < a2.LogicalName) {
                             return -1;
                         }
-                        if (a1.SchemaName > a2.SchemaName) {
+                        if (a1.LogicalName > a2.LogicalName) {
                             return 1;
                         }
                         return 0;
@@ -79,7 +80,8 @@ var MetadataBrower;
                 var pageSize = this.vm.pageSize;
                 var skip = (this.vm.currentPage - 1) * pageSize;
                 this.vm.total = attributes.length;
-                this.vm.attributes = attributes.filter(function (a, index) { return index >= skip && index < skip + pageSize; });
+                this.vm.attributes = attributes
+                    .filter(function (a, index) { return index >= skip && index < skip + pageSize; });
             };
             EntityDetails.$inject = ["$scope", "metadataBrowser.core.dataService"];
             return EntityDetails;

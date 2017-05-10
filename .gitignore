@@ -253,3 +253,8 @@ paket-files/
 *.map
 *.nupkg
 *.user
+
+# XrmToolkit files
+*.xrm
+*.xrmcache
+*.xrmsuo

@@ -31,6 +31,18 @@ var MetadataBrower;
                 });
                 return defer.promise;
             };
+            ODataService.prototype.GetOptionSets = function (entityDefinition, attributeDefinition) {
+                var defer = this._$q.defer();
+                Dynamics.Crm.OData
+                    .entityAttributeOptionSetDefinition(entityDefinition.MetadataId, attributeDefinition.MetadataId)
+                    .done(function (array) {
+                    defer.resolve(array);
+                })
+                    .fail(function () {
+                    defer.reject();
+                });
+                return defer.promise;
+            };
             return ODataService;
         }());
         function DataServiceFactory($q) {

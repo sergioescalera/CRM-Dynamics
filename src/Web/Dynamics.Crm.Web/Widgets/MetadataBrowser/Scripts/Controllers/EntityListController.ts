@@ -75,6 +75,7 @@
                 .then(((data: IEntityDefinition[]) => {
 
                     this.entities = data.sort((e1: IEntityDefinition, e2: IEntityDefinition) => {
+
                         if (e1.SchemaName < e2.SchemaName) {
                             return -1;
                         }

@@ -44,6 +44,27 @@
 
             return defer.promise;
         }
+
+        GetOptionSets(
+            entityDefinition: IEntityDefinition,
+            attributeDefinition: IAttributeDefinition): ng.IPromise<IOptionSetValueDefinition[]> {
+
+            var defer: ng.IDeferred<IOptionSetValueDefinition[]> = this._$q.defer<IOptionSetValueDefinition[]>();
+
+            Dynamics.Crm.OData
+                .entityAttributeOptionSetDefinition(
+                    entityDefinition.MetadataId,
+                    attributeDefinition.MetadataId)
+                .done((array: IAttributeDefinition[]) => {
+
+                    defer.resolve(array);
+                })
+                .fail(() => {
+                    defer.reject();
+                });
+
+            return defer.promise;
+        }
     }
 
     function DataServiceFactory($q: ng.IQService): IDataService {

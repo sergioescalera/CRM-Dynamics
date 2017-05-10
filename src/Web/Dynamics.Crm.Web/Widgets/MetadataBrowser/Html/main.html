@@ -29,8 +29,7 @@
             </md-tab>
             <md-tab label="{{ entityTab.title }}"
                     ng-repeat="entityTab in vm.navigationService.EntityTabs">
-                <div data-entity-details=""
-                     data-entity="entityTab.entity"></div>
+                <entity-details data-entity="entityTab.entity"></entity-details>
             </md-tab>
         </md-tabs>        
         <!--<a href="javascript:void(0);" ng-click="vm.navigationService.DeleteEntityTab(entityTab)"><i class="fa fa-remove"></i></a>-->

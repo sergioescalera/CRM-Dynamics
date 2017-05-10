@@ -30,6 +30,7 @@
                                  layout-align="end center">
 
                     <md-button class="md-raised md-primary"
+                               type="submit"
                                ng-disabled="SearchForm.$invalid || vm.isBusy"
                                ng-click="vm.search()"
                                title="Search">
@@ -99,17 +100,20 @@
             </table>
         </div>
 
-        <div class="advanced-view" ng-if="!vm.isBusy && vm.entities.length && vm.advancedView">
-            <div ng-repeat="entity in vm.entitiesToShow"
+        <div class="advanced-view"
+             ng-if="!vm.isBusy && vm.entities.length && vm.advancedView">
+            <div class="advanced-view-item"
+                 ng-repeat="entity in vm.entitiesToShow"
                  ng-init="expanded=false;">
                 <md-toolbar>
                     <div class="md-toolbar-tools" ng-click="expanded=!expanded;">
-                        <span ng-bind="entity.SchemaName || entity.LogicalName"></span>
+                        <span ng-bind="entity.DisplayName.UserLocalizedLabel.Label"></span>
+                        <span ng-bind="entity.SchemaName || entity.LogicalName"
+                              ng-hide="entity.DisplayName.UserLocalizedLabel.Label"></span>
                     </div>
                 </md-toolbar>
-                <div data-property-browser=""
-                     data-object="entity"
-                     ng-if="expanded"></div>
+                <property-browser data-object="entity"
+                                  ng-if="expanded"></property-browser>
             </div>
             <!--<span data-pager=""
                   data-align="false"
