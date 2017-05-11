@@ -44,10 +44,10 @@ var MetadataBrower;
                 this.dataService.GetEntities()
                     .then((function (data) {
                     _this.entities = data.sort(function (e1, e2) {
-                        if (e1.SchemaName < e2.SchemaName) {
+                        if (e1.LogicalName < e2.LogicalName) {
                             return -1;
                         }
-                        if (e1.SchemaName > e2.SchemaName) {
+                        if (e1.LogicalName > e2.LogicalName) {
                             return 1;
                         }
                         return 0;

@@ -7,12 +7,18 @@
 
             <md-card>
 
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">Filter Attributes</span>
+                    </md-card-title-text>
+                </md-card-title>
+
                 <md-card-content layout="column">
 
                     <md-input-container class="md-block">
                         <input ng-model="vm.filter"
                                type="text"
-                               placeholder="Filter attributes"
+                               placeholder="Logical Name"
                                required />
                     </md-input-container>
 
@@ -83,7 +89,9 @@
                 <tfoot>
                     <tr>
                         <td colspan="4">
-                            <span data-pager="" data-align="false" ng-model="vm.currentPage" data-total-items="vm.total" data-items-per-page="vm.pageSize"></span>
+                            <pager data-current-page="vm.currentPage"
+                                   data-total="vm.total"
+                                   data-page-size="vm.pageSize"></pager>
                         </td>
                     </tr>
                 </tfoot>
@@ -105,11 +113,9 @@
                 <property-browser data-object="attribute"
                                   ng-if="expanded"></property-browser>
             </div>
-            <!--<span data-pager=""
-                    data-align="false"
-                    ng-model="vm.currentPage"
-                    data-total-items="vm.total"
-                    data-items-per-page="vm.pageSize"></span>-->
+            <pager data-current-page="vm.currentPage"
+                   data-total="vm.total"
+                   data-page-size="vm.pageSize"></pager>
         </div>
 
     </md-content>

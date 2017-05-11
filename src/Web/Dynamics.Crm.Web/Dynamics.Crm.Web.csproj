@@ -200,6 +200,7 @@
     <TypeScriptCompile Include="UnitTests\ValidationUnitTests.ts" />
     <TypeScriptCompile Include="Widgets\LookupLink\Scripts\LookupLink.ts" />
     <TypeScriptCompile Include="Widgets\MetadataBrowser\Scripts\Config.ts" />
+    <TypeScriptCompile Include="Widgets\MetadataBrowser\Scripts\Directives\Pager.ts" />
     <TypeScriptCompile Include="Widgets\MetadataBrowser\Scripts\Directives\Picklist.ts" />
     <TypeScriptCompile Include="Widgets\MetadataBrowser\Scripts\Directives\EntityDetails.ts" />
     <TypeScriptCompile Include="Widgets\MetadataBrowser\Scripts\Controllers\EntityListController.ts" />

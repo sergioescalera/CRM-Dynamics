@@ -266,7 +266,7 @@ var Dynamics;
                     dataType: "json"
                 })
                     .then(function (data) {
-                    return data.Options;
+                    return data ? data.Options : [];
                 });
             }
             OData.entityAttributeOptionSetDefinition = entityAttributeOptionSetDefinition;

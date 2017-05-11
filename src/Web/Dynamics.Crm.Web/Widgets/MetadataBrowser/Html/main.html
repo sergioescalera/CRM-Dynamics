@@ -24,15 +24,26 @@
         <md-tabs md-selected="vm.navigationService.SelectedIndex"
                  md-dynamic-height
                  md-border-bottom>
-            <md-tab label="Entities">
-                <div ng-include="'templates/entity_list.html'"></div>
+            <md-tab>
+                <md-tab-label>
+                    <span>Entities</span>
+                </md-tab-label>
+                <md-tab-body>
+                    <div ng-include="'templates/entity_list.html'"></div>
+                </md-tab-body>
             </md-tab>
-            <md-tab label="{{ entityTab.title }}"
-                    ng-repeat="entityTab in vm.navigationService.EntityTabs">
-                <entity-details data-entity="entityTab.entity"></entity-details>
+            <md-tab ng-repeat="entityTab in vm.navigationService.EntityTabs">
+                <md-tab-label>
+                    <span ng-bind="entityTab.title"></span>&nbsp;
+                    <md-button ng-click="vm.navigationService.DeleteEntityTab(entityTab)">
+                        <md-icon>clear</md-icon>
+                    </md-button>
+                </md-tab-label>
+                <md-tab-body>
+                    <entity-details data-entity="entityTab.entity"></entity-details>
+                </md-tab-body>
             </md-tab>
-        </md-tabs>        
-        <!--<a href="javascript:void(0);" ng-click="vm.navigationService.DeleteEntityTab(entityTab)"><i class="fa fa-remove"></i></a>-->
+        </md-tabs>
     </section>
     <footer></footer>
     <script src="../../../../ClientGlobalContext.js.aspx"></script>

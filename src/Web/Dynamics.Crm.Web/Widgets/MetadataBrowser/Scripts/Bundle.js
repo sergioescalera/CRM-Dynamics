@@ -452,7 +452,7 @@ var Dynamics;
                     dataType: "json"
                 })
                     .then(function (data) {
-                    return data.Options;
+                    return data ? data.Options : [];
                 });
             }
             OData.entityAttributeOptionSetDefinition = entityAttributeOptionSetDefinition;
@@ -669,6 +669,57 @@ var MetadataBrower;
     var Controllers;
     (function (Controllers) {
         "use strict";
+        function pagerFactory() {
+            return {
+                controller: PagerController,
+                restrict: "E",
+                scope: {
+                    currentPage: '=',
+                    pageSize: '=',
+                    total: '='
+                },
+                template: "<span class=\"pager\">\n    <span ng-bind=\"currentPage\"></span> of <span ng-bind=\"pages\"></span>\n    <md-button ng-click=\"prev()\">Prev</md-button>\n    <md-button ng-click=\"next()\">Next</md-button>\n</span>"
+            };
+        }
+        var PagerController = (function () {
+            function PagerController(scope) {
+                this._scope = scope;
+                this._scope.$watch("total", this.updatePages.bind(this));
+                this._scope.$watch("pageSize", this.updatePages.bind(this));
+                this._scope.next = this.next.bind(this);
+                this._scope.prev = this.prev.bind(this);
+            }
+            PagerController.prototype.updatePages = function () {
+                if (this._scope.pageSize === 0) {
+                    this._scope.pageSize = 10;
+                }
+                this._scope.pages = Math.ceil(this._scope.total / this._scope.pageSize);
+            };
+            PagerController.prototype.next = function () {
+                if (this._scope.currentPage >= this._scope.pages) {
+                    return;
+                }
+                this._scope.currentPage++;
+            };
+            PagerController.prototype.prev = function () {
+                if (this._scope.currentPage <= 1) {
+                    return;
+                }
+                this._scope.currentPage--;
+            };
+            PagerController.$inject = ["$scope"];
+            return PagerController;
+        }());
+        angular.module(MetadataBrower.Config.moduleName)
+            .directive("pager", pagerFactory);
+    })(Controllers = MetadataBrower.Controllers || (MetadataBrower.Controllers = {}));
+})(MetadataBrower || (MetadataBrower = {}));
+
+var MetadataBrower;
+(function (MetadataBrower) {
+    var Controllers;
+    (function (Controllers) {
+        "use strict";
         function picklistFactory() {
             return {
                 controller: PicklistController,
@@ -677,7 +728,7 @@ var MetadataBrower;
                     entity: "=",
                     attribute: "="
                 },
-                template: "\n<a href=\"javascript:void(0);\" class=\"picklist-toggle\" ng-click=\"load()\">+\n    <md-tooltip md-direction=\"right\" class=\"picklist\">\n        <span ng-if=\"!options\">Click to load options</span>\n        <span ng-if=\"options && !options.length\">Loading...</span>\n        <ul class=\"options\" ng-if=\"options && options.length\">\n            <li class=\"option\" ng-repeat=\"option in options\">\n                <span ng-bind=\"option.Label.UserLocalizedLabel.Label\"></span>\n                <span>&nbsp;=&nbsp;</span>\n                <span ng-bind=\"option.Value\"></span>\n            </li>\n        </ul>\n    </md-tooltip>\n</a>"
+                template: "\n<a href=\"javascript:void(0);\" class=\"picklist-toggle\" ng-click=\"load()\">+\n    <md-tooltip md-direction=\"right\" class=\"picklist\">\n        <span ng-if=\"!options\">Click to load options</span>\n        <span ng-if=\"options && !options.length\">Loading...</span>\n        <ul class=\"options\" ng-if=\"options && options.length\">\n            <li class=\"option\" ng-repeat=\"option in options\">\n                <span ng-bind=\"option.Label.UserLocalizedLabel.Label\"></span>\n                <span ng-if=\"option.Value !== null\">&nbsp;=&nbsp;</span>\n                <span ng-bind=\"option.Value\"></span>\n            </li>\n        </ul>\n    </md-tooltip>\n</a>"
             };
         }
         var PicklistController = (function () {
@@ -691,9 +742,18 @@ var MetadataBrower;
                         .GetOptionSets(scope.entity, scope.attribute)
                         .then(function (optionSets) {
                         scope.options = optionSets;
+                        if (!scope.options.length) {
+                            scope.options.push({
+                                Label: {
+                                    UserLocalizedLabel: {
+                                        Label: "No values"
+                                    }
+                                },
+                                Value: null
+                            });
+                        }
                     })
                         .catch(function () {
-                        debugger;
                         scope.options = null;
                     });
                 };
@@ -771,10 +831,10 @@ var MetadataBrower;
                 this.dataService.GetEntities()
                     .then((function (data) {
                     _this.entities = data.sort(function (e1, e2) {
-                        if (e1.SchemaName < e2.SchemaName) {
+                        if (e1.LogicalName < e2.LogicalName) {
                             return -1;
                         }
-                        if (e1.SchemaName > e2.SchemaName) {
+                        if (e1.LogicalName > e2.LogicalName) {
                             return 1;
                         }
                         return 0;

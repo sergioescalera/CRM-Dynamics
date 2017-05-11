@@ -76,10 +76,10 @@
 
                     this.entities = data.sort((e1: IEntityDefinition, e2: IEntityDefinition) => {
 
-                        if (e1.SchemaName < e2.SchemaName) {
+                        if (e1.LogicalName < e2.LogicalName) {
                             return -1;
                         }
-                        if (e1.SchemaName > e2.SchemaName) {
+                        if (e1.LogicalName > e2.LogicalName) {
                             return 1;
                         }
                         return 0;

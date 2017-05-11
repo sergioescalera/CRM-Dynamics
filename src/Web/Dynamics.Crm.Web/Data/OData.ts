@@ -383,7 +383,7 @@
                 dataType: "json"
             })
             .then((data: any) => {
-                return data.Options;
+                return data ? data.Options : [];
             });
     }
 }

@@ -11,7 +11,7 @@ var MetadataBrower;
                     entity: "=",
                     attribute: "="
                 },
-                template: "\n<a href=\"javascript:void(0);\" class=\"picklist-toggle\" ng-click=\"load()\">+\n    <md-tooltip md-direction=\"right\" class=\"picklist\">\n        <span ng-if=\"!options\">Click to load options</span>\n        <span ng-if=\"options && !options.length\">Loading...</span>\n        <ul class=\"options\" ng-if=\"options && options.length\">\n            <li class=\"option\" ng-repeat=\"option in options\">\n                <span ng-bind=\"option.Label.UserLocalizedLabel.Label\"></span>\n                <span>&nbsp;=&nbsp;</span>\n                <span ng-bind=\"option.Value\"></span>\n            </li>\n        </ul>\n    </md-tooltip>\n</a>"
+                template: "\n<a href=\"javascript:void(0);\" class=\"picklist-toggle\" ng-click=\"load()\">+\n    <md-tooltip md-direction=\"right\" class=\"picklist\">\n        <span ng-if=\"!options\">Click to load options</span>\n        <span ng-if=\"options && !options.length\">Loading...</span>\n        <ul class=\"options\" ng-if=\"options && options.length\">\n            <li class=\"option\" ng-repeat=\"option in options\">\n                <span ng-bind=\"option.Label.UserLocalizedLabel.Label\"></span>\n                <span ng-if=\"option.Value !== null\">&nbsp;=&nbsp;</span>\n                <span ng-bind=\"option.Value\"></span>\n            </li>\n        </ul>\n    </md-tooltip>\n</a>"
             };
         }
         var PicklistController = (function () {
@@ -25,9 +25,18 @@ var MetadataBrower;
                         .GetOptionSets(scope.entity, scope.attribute)
                         .then(function (optionSets) {
                         scope.options = optionSets;
+                        if (!scope.options.length) {
+                            scope.options.push({
+                                Label: {
+                                    UserLocalizedLabel: {
+                                        Label: "No values"
+                                    }
+                                },
+                                Value: null
+                            });
+                        }
                     })
                         .catch(function () {
-                        debugger;
                         scope.options = null;
                     });
                 };

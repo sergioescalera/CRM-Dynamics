@@ -19,7 +19,7 @@
         <ul class="options" ng-if="options && options.length">
             <li class="option" ng-repeat="option in options">
                 <span ng-bind="option.Label.UserLocalizedLabel.Label"></span>
-                <span>&nbsp;=&nbsp;</span>
+                <span ng-if="option.Value !== null">&nbsp;=&nbsp;</span>
                 <span ng-bind="option.Value"></span>
             </li>
         </ul>
@@ -53,9 +53,18 @@
                     .GetOptionSets(scope.entity, scope.attribute)
                     .then((optionSets: IOptionSetValueDefinition[]) => {
                         scope.options = optionSets;
+                        if (!scope.options.length) {
+                            scope.options.push({
+                                Label: {
+                                    UserLocalizedLabel: {
+                                        Label: "No values"
+                                    }
+                                },
+                                Value: null
+                            });
+                        }
                     })
                     .catch(() => {
-                        debugger;
                         scope.options = null;
                     });
             }
