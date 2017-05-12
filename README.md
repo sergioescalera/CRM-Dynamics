@@ -16,7 +16,7 @@ Pass the target attribute as a custom parameter.
 
 ### Custom Lookup
 
-For advanced users.
+Convert any text type attribute into an advanced lookup field (recommended for advanced users only).
 
 ![Lookup Link Configuration](./doc/Images/custom-lookup.png "Custom Lookup")
 ![Lookup Link Configuration](./doc/Images/custom-lookup-popup.png "Custom Lookup Popup")
