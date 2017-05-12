@@ -1,8 +1,6 @@
-﻿declare interface ICrmWindow extends Window {
-    Xrm: Xrm;
-}
+﻿module LookupLink {
 
-module LookupLink {
+    "use strict";
 
     var xrm: Xrm;
     var link: HTMLAnchorElement;

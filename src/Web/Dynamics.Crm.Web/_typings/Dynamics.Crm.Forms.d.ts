@@ -1,4 +1,14 @@
-﻿declare interface IDynamics {
+﻿declare interface ICrmWindow extends Window {
+    Mscrm: any;
+    Xrm: Xrm;
+}
+
+interface Xrm {
+    DialogOptions: any;
+    Internal: any;
+}
+
+declare interface IDynamics {
     Crm: ICrmDynamics;
 }
 

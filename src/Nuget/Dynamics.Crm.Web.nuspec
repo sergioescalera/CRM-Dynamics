@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Dynamics.Crm.Web</id>
-    <version>1.3.8.5-alpha</version>
+    <version>1.3.8.6-alpha</version>
     <authors>Sergio Escalera</authors>
     <owners>Sergio Escalera</owners>    
     <projectUrl>https://github.com/sergioescalera/CRM-Dynamics/</projectUrl>    
@@ -29,5 +29,7 @@
     <file src="..\Web\Dynamics.Crm.Web\Widgets\MetadataBrowser\Styles\stylesheet*.css" target="content\Widgets\MetadataBrowser\Styles" />
     <file src="..\Web\Dynamics.Crm.Web\Widgets\LookupLink\Html\*.html" target="content\Widgets\LookupLink\Html" />
     <file src="..\Web\Dynamics.Crm.Web\Widgets\LookupLink\Scripts\*.js" target="content\Widgets\LookupLink\Scripts" />
+    <file src="..\Web\Dynamics.Crm.Web\Widgets\CustomLookup\Html\*.html" target="content\Widgets\CustomLookup\Html" />
+    <file src="..\Web\Dynamics.Crm.Web\Widgets\CustomLookup\Scripts\*.js" target="content\Widgets\CustomLookup\Scripts" />
   </files>
 </package>

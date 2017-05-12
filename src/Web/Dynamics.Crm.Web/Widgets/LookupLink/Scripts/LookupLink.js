@@ -1,5 +1,6 @@
 var LookupLink;
 (function (LookupLink) {
+    "use strict";
     var xrm;
     var link;
     var message;

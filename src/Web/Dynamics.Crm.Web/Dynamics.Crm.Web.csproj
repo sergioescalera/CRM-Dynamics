@@ -129,6 +129,7 @@
     </Content>
     <Content Include="UnitTests\Index.html" />
     <Content Include="Web.config" />
+    <Content Include="Widgets\CustomLookup\Html\Index.html" />
     <Content Include="Widgets\LookupLink\Html\Index.html" />
     <Content Include="Widgets\LookupLink\Images\Icon.png" />
     <Content Include="Widgets\MetadataBrowser\Html\config.html" />
@@ -198,6 +199,7 @@
     <TypeScriptCompile Include="UnitTests\TabsUnitTests.ts" />
     <TypeScriptCompile Include="UnitTests\TasksUnitTests.ts" />
     <TypeScriptCompile Include="UnitTests\ValidationUnitTests.ts" />
+    <TypeScriptCompile Include="Widgets\CustomLookup\Scripts\CustomLookupWidget.ts" />
     <TypeScriptCompile Include="Widgets\LookupLink\Scripts\LookupLink.ts" />
     <TypeScriptCompile Include="Widgets\MetadataBrowser\Scripts\Config.ts" />
     <TypeScriptCompile Include="Widgets\MetadataBrowser\Scripts\Directives\Pager.ts" />
