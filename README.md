@@ -38,6 +38,8 @@ For advanced users.
 
 ![Metadata Browser](./doc/Images/metadata-browser.png "Metadata Browser")
 
+![Metadata Browser Entity](./doc/Images/metadata-browser-entity.png "Metadata Browser Entity")
+
 
 
 
