@@ -51,9 +51,18 @@ Ribbon Configuration
 ```xml
 <RibbonDiffXml>
   <CustomActions>    
-    <CustomAction Id="[your prefix].ApplicationRibbon.MetadataBrowserButton.CustomAction" Location="Mscrm.BasicHomeTab.Tools.Controls._children" Sequence="7">
+    <CustomAction Id="[your prefix].ApplicationRibbon.MetadataBrowserButton.CustomAction"
+                  Location="Mscrm.BasicHomeTab.Tools.Controls._children" Sequence="7">
       <CommandUIDefinition>
-        <Button Alt="$LocLabels:[your prefix].ApplicationRibbon.MetadataBrowserButton.Alt" Command="[your prefix].ApplicationRibbon.MetadataBrowserCommand" Description="Launch Metadata Browser" Id="[your prefix].ApplicationRibbon.MetadataBrowserButton" Image32by32="$webresource:[your prefix]_/Widgets/MetadataBrowser/Images/icon_32.png" Image16by16="$webresource:[your prefix]_/Widgets/MetadataBrowser/Images/icon_16.png" LabelText="$LocLabels:[your prefix].ApplicationRibbon.MetadataBrowserButton.LabelText" Sequence="7" TemplateAlias="o1" ToolTipTitle="$LocLabels:[your prefix].ApplicationRibbon.MetadataBrowserButton.ToolTipTitle" ToolTipDescription="$LocLabels:[your prefix].ApplicationRibbon.MetadataBrowserButton.ToolTipDescription" />
+        <Button Alt="$LocLabels:[your prefix].ApplicationRibbon.MetadataBrowserButton.Alt"
+                Command="[your prefix].ApplicationRibbon.MetadataBrowserCommand"
+                Description="Launch Metadata Browser" Id="[your prefix].ApplicationRibbon.MetadataBrowserButton"
+                Image32by32="$webresource:[your prefix]_/Widgets/MetadataBrowser/Images/icon_32.png"
+                Image16by16="$webresource:[your prefix]_/Widgets/MetadataBrowser/Images/icon_16.png"
+                LabelText="$LocLabels:[your prefix].ApplicationRibbon.MetadataBrowserButton.LabelText"
+                Sequence="7"
+                TemplateAlias="o1" ToolTipTitle="$LocLabels:[your prefix].ApplicationRibbon.MetadataBrowserButton.ToolTipTitle"
+                ToolTipDescription="$LocLabels:[your prefix].ApplicationRibbon.MetadataBrowserButton.ToolTipDescription" />
       </CommandUIDefinition>
     </CustomAction>
   </CustomActions>
