@@ -309,6 +309,30 @@
             });
     }
 
+    // fetch
+
+    export function fetch(entitySetName: string, fetchXml: string): JQueryPromise<any> {
+
+        var baseUrl = getContext().getClientUrl();
+
+        var url = `${baseUrl}/api/data/${getVersion()}/${entitySetName}?fetchXml=${encodeURIComponent(fetchXml)}`;
+
+        return $.ajax({
+            url: url,
+            dataType: "json",
+        })
+            .fail((response: any) => {
+
+                if (!response || !response.responseJSON || !response.responseJSON.error) {
+                    return;
+                }
+
+                Diagnostics.log.Error(
+                    `${response.responseJSON.error.message} create ${url}`,
+                    response.responseJSON.error.innererror || response.responseJSON.error);
+            });
+    }
+
     // meta-data
 
     var entityDefinitionAttributes: string[] = [

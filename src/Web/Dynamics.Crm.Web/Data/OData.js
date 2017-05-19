@@ -211,6 +211,22 @@ var Dynamics;
                 });
             }
             OData.updateEntity = updateEntity;
+            // fetch
+            function fetch(entitySetName, fetchXml) {
+                var baseUrl = getContext().getClientUrl();
+                var url = baseUrl + "/api/data/" + getVersion() + "/" + entitySetName + "?fetchXml=" + encodeURIComponent(fetchXml);
+                return $.ajax({
+                    url: url,
+                    dataType: "json",
+                })
+                    .fail(function (response) {
+                    if (!response || !response.responseJSON || !response.responseJSON.error) {
+                        return;
+                    }
+                    Crm.Diagnostics.log.Error(response.responseJSON.error.message + " create " + url, response.responseJSON.error.innererror || response.responseJSON.error);
+                });
+            }
+            OData.fetch = fetch;
             // meta-data
             var entityDefinitionAttributes = [
                 "MetadataId",

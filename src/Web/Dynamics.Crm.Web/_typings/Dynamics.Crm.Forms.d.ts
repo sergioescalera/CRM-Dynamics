@@ -174,6 +174,7 @@ declare interface ICrmOData {
         actionName: string,
         data?: any): JQueryPromise<any>;
     executeGlobalAction(actionName: string, data?: any): JQueryPromise<any>;
+    fetch(entitySetName: string, fetchXml: string): JQueryPromise<any>;
 }
 
 declare interface IEntity {
