@@ -167,6 +167,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Cache\CacheService.ts" />
+    <TypeScriptCompile Include="Cache\ICacheEntry.ts" />
+    <TypeScriptCompile Include="Cache\ICacheService.ts" />
     <TypeScriptCompile Include="Core\Attributes.ts" />
     <TypeScriptCompile Include="Core\Constants.ts" />
     <TypeScriptCompile Include="Core\Controls.ts" />
@@ -192,6 +195,7 @@
     <TypeScriptCompile Include="Dialogs\Dialogs.ts" />
     <TypeScriptCompile Include="Resources\Strings.ts" />
     <TypeScriptCompile Include="UnitTests\AttributesUnitTests.ts" />
+    <TypeScriptCompile Include="UnitTests\CacheServiceUnitTests.ts" />
     <TypeScriptCompile Include="UnitTests\ControlsUnitTests.ts" />
     <TypeScriptCompile Include="UnitTests\Mocks.ts" />
     <TypeScriptCompile Include="UnitTests\SectionsUnitTests.ts" />

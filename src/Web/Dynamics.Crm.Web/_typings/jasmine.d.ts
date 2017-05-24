@@ -1,5 +1,5 @@
 ﻿declare var describe: (suiteTitle: string, suite: () => void) => void;
-declare var it: (specTitle: string, spec: () => void) => void;
+declare var it: (specTitle: string, spec: (done?: () => void) => void) => void;
 declare var expect: (actual: any) => IExpectation;
 declare var beforeEach: (action: () => void) => void;
 declare var afterEach: (action: () => void) => void;

@@ -27,6 +27,7 @@
       "libs/moment/moment.min.js",
       "libs/lodash/lodash.min.js",
       "Core/*.js",
+      "Cache/*.js",
       "Data/*.js",
       "Resources/Strings.js"
     ],
@@ -47,6 +48,7 @@
       "UnitTests/Setup.js",
       "UnitTests/Mocks.js",
       "UnitTests/AttributesUnitTests.js",
+      "UnitTests/CacheServiceUnitTests.js",
       "UnitTests/ControlsUnitTests.js",
       "UnitTests/SectionsUnitTests.js",
       "UnitTests/TabsUnitTests.js",
