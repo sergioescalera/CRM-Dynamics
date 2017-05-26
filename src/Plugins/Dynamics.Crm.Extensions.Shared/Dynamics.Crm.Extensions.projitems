@@ -72,6 +72,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\UnitGroup.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Plugins\PluginBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Plugins\PluginContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SharePoint\DocumentLocation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SharePoint\DocumentLocationRepository.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SharePoint\DocumentSite.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SharePoint\DocumentSiteRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Validation\ValidationHelper.cs" />
   </ItemGroup>
 </Project>

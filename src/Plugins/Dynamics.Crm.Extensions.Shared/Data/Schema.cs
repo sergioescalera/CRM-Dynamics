@@ -127,7 +127,7 @@ namespace Dynamics.Crm.Data
             public static readonly Int32 SourceFieldLength = 500;
         }
 
-        public class OpportunityEntity
+        public static class OpportunityEntity
         {
             public const String TypeName = "opportunity";
 
@@ -138,7 +138,7 @@ namespace Dynamics.Crm.Data
             public const String ParentContactFieldName = "parentcontactid";
         }
 
-        public class OpportunityCloseMessage
+        public static class OpportunityCloseMessage
         {
             public const String Name = "opportunityclose";
 
@@ -149,7 +149,7 @@ namespace Dynamics.Crm.Data
             public const String ActualRevenueFieldName = "actualrevenue";
         }
 
-        public class ProductEntity
+        public static class ProductEntity
         {
             public const String TypeName = "product";
 
@@ -167,6 +167,36 @@ namespace Dynamics.Crm.Data
             public const String TypeName = "site";
 
             public const String IdFieldName = "siteid";
+        }
+
+        public static class SPDocumentLocationEntity
+        {
+            public const String TypeName = "sharepointdocumentlocation";
+
+            public const String IdFieldName = "sharepointdocumentlocationid";
+
+            public const String AbsoluteUrlFieldName = "absoluteurl";
+
+            public const String ParentSiteOrLocationFieldName = "parentsiteorlocation";
+
+            public const String RegardingObjectFieldName = "regardingobjectid";
+
+            public const String RelativeUrlFieldName = "relativeurl";
+        }
+
+        public static class SPDocumentSiteEntity
+        {
+            public const String TypeName = "sharepointsite";
+
+            public const String IdFieldName = "sharepointsiteid";
+
+            public const String AbsoluteUrlFieldName = "absoluteurl";
+
+            public const String IsDefaultFieldName = "isdefault";
+
+            public const String ParentSiteFieldName = "parentsite";
+
+            public const String RelativeUrlFieldName = "relativeurl";
         }
 
         public static class SystemUserEntity
