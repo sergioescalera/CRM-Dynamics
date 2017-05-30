@@ -79,6 +79,18 @@ var Dynamics;
                         done();
                     }, 500);
                 });
+                it("Overrides cached item", function () {
+                    var cache = new Caching.CacheService();
+                    var key = "key";
+                    var sec = 1;
+                    cache.set(key, 1, sec);
+                    cache.set(key, 2, sec);
+                    var cached = cache.get(key);
+                    expect(cached).toBeDefined();
+                    expect(cached).not.toBeNull();
+                    expect(cached).not.toBe(1);
+                    expect(cached).toBe(2);
+                });
             });
         })(UnitTests = Crm.UnitTests || (Crm.UnitTests = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
