@@ -167,21 +167,6 @@ interface TabSections {
     get(argument: AttributeFunctionCallback): Section[]; // Return Value The tab where the index matches the number
     getLength(): number; // Returns the number of controls in the collection
 }
-//interface ControlArray<T> {
-//    [index: number]: T;
-//    [index: string]: T;
-//    (index: string): T;
-//    (index: number): T;
-//}
-//interface ControlsCollection<T> {
-//    forEach(argument: ControlFunctionCallback): void; // Applies the action contained within a delegate function.    
-//    forEach(argument: ControlFunctionCallback, filter: ControlFunctionCallback): void; // Applies the action contained within a delegate function.    
-//    get(): ControlArray<T>; // Returns one or more controls depending on the arguments passed. 
-//    get(argument: string): T; // Returns The control where the name matches the argument
-//    get(argument: Number): T; // Returns The control where the index matches the number
-//    get(argument: AttributeFunctionCallback): ControlArray<T>; // Return Value The tab where the index matches the number
-//    getLength(): number; // Returns the number of controls in the collection
-//}
 
 interface NavigationArray {
     [index: number]: NavigationItem;
@@ -354,7 +339,7 @@ interface Control {
     clearNotification(uniqueId: string): void; // Remove a message already displayed for a control.
     clearOptions(): void; //  Clears all options from an Option Set control.
     getAttribute(): Attribute; //  Returns the attribute that the control is bound to.
-    getControlType(): string; //  Returns a value that categorizes controls.
+    getControlType(): "standard" | "iframe" | "lookup" | "optionset" | "subgrid" | "webresource" | "notes" | "timercontrol" | "kbsearch" | "customcontrol" | "customsubgrid";
     getData(): string; //  Returns the value of the data query string parameter passed to a Silverlight Web resource. 
     getDefaultView(): string; //  Returns the ID value of the default lookup dialog view.
     getDisabled(): boolean; // Returns a value that indicates whether the control is disabled.
@@ -375,6 +360,46 @@ interface Control {
     setNotification(message: string, uniqueId: string): void; // Display a message near the control to indicate that data isn’t valid.
     setSrc(value: string): void; //  Sets the URL to be displayed in an IFrame.
     setVisible(value: boolean): void; //  Sets a value that indicates whether the control is visible.
+
+    addNotification(options: ControlNotificationOptions): void;
+
+    addOnLoad(func: Function): void; // Add event handlers to a Sub-Grid
+    removeOnLoad(func: Function): void; // Remove event handlers to a Sub-Grid
+    getGrid(): Grid;
+    getEntityName(): string;
+}
+
+interface Grid {
+    getRows(): Collection<GridRow>;
+    getSelectedRows(): Collection<GridRow>;
+    getTotalRecordCount(): number;
+}
+
+interface GridRow {
+    getData(): GridRowData;
+}
+
+interface GridRowData {
+    getEntity(): GridEntity;
+}
+
+interface GridEntity {
+    getEntityName(): string;
+    getEntityReference(): Lookup;
+    getId(): string;
+    getPrimaryAttributeValue(): string;
+}
+
+interface ControlNotificationOptions {
+    messages: string[];
+    notificationLevel?: "ERROR" | "RECOMMENDATION";
+    uniqueId?: string;
+    actions?: NotificationAction[];
+}
+
+interface NotificationAction {
+    message: string;
+    actions: (() => void)[];
 }
 
 interface NavigationItem {
