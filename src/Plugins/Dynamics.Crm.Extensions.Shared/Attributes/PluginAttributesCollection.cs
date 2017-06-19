@@ -38,7 +38,7 @@ namespace Dynamics.Crm.Attributes
             ExecutionModes = mode?.ExecutionModes ?? Enumerable.Empty<ExecutionMode>();
             PipelineStages = stage?.PipelineStages ?? Enumerable.Empty<PipelineStage>();
 
-            PrimaryEntityLogicalName = entity.EntityLogicalName;
+            PrimaryEntityLogicalName = entity?.EntityLogicalName ?? String.Empty;
             
             this.AddRange(
                 attributes.Where(a => a != null));
