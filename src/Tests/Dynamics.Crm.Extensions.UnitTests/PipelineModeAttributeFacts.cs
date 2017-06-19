@@ -14,28 +14,28 @@ namespace Dynamics.Crm.Extensions.UnitTests
             [ExpectedException(typeof(ArgumentNullException))]
             public void ThrowsErrorForNullArgument()
             {
-                var attribute = new PipelineModeAttribute(null);
+                var attribute = new PipelineExecutionModeAttribute(null);
             }
 
             [TestMethod]
             public void InitializesNewObjectWithValidArgument()
             {
-                var attribute = default(PipelineModeAttribute);
+                var attribute = default(PipelineExecutionModeAttribute);
                 
-                attribute = new PipelineModeAttribute();
+                attribute = new PipelineExecutionModeAttribute();
 
                 Assert.IsNotNull(attribute);
-                Assert.IsNotNull(attribute.SupportedModes);
-                Assert.AreEqual(0, attribute.SupportedModes.Length);
+                Assert.IsNotNull(attribute.ExecutionModes);
+                Assert.AreEqual(0, attribute.ExecutionModes.Length);
 
-                var mode = MessageProcessingStepMode.Synchronous;
+                var mode = ExecutionMode.Synchronous;
 
-                attribute = new PipelineModeAttribute(mode);
+                attribute = new PipelineExecutionModeAttribute(mode);
 
                 Assert.IsNotNull(attribute);
-                Assert.IsNotNull(attribute.SupportedModes);
-                Assert.AreEqual(1, attribute.SupportedModes.Length);
-                CollectionAssert.AreEqual(new [] { mode }, attribute.SupportedModes);
+                Assert.IsNotNull(attribute.ExecutionModes);
+                Assert.AreEqual(1, attribute.ExecutionModes.Length);
+                CollectionAssert.AreEqual(new [] { mode }, attribute.ExecutionModes);
             }
         }
     }

@@ -25,17 +25,17 @@ namespace Dynamics.Crm.Extensions.UnitTests
                 attribute = new PipelineStageAttribute();
 
                 Assert.IsNotNull(attribute);
-                Assert.IsNotNull(attribute.SupportedStages);
-                Assert.AreEqual(0, attribute.SupportedStages.Length);
+                Assert.IsNotNull(attribute.PipelineStages);
+                Assert.AreEqual(0, attribute.PipelineStages.Length);
 
                 var stage = PipelineStage.PostOperation;
 
                 attribute = new PipelineStageAttribute(stage);
 
                 Assert.IsNotNull(attribute);
-                Assert.IsNotNull(attribute.SupportedStages);
-                Assert.AreEqual(1, attribute.SupportedStages.Length);
-                CollectionAssert.AreEqual(new [] { stage }, attribute.SupportedStages);
+                Assert.IsNotNull(attribute.PipelineStages);
+                Assert.AreEqual(1, attribute.PipelineStages.Length);
+                CollectionAssert.AreEqual(new [] { stage }, attribute.PipelineStages);
             }
         }
     }

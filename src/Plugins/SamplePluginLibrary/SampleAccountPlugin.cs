@@ -11,7 +11,7 @@ namespace SamplePluginLibrary
     [PrimaryEntity(Schema.AccountEntity.TypeName)]
     [PipelineMessage(Messages.Create)]
     [PipelineStage(PipelineStage.PreOperation)]
-    [PipelineMode(MessageProcessingStepMode.Synchronous)]
+    [PipelineExecutionMode(ExecutionMode.Synchronous)]
     public class SampleAccountPlugin : PluginBase
     {
         protected override void Execute(IPluginContext context)

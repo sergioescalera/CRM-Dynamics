@@ -11,7 +11,7 @@ namespace Dynamics.Crm.Diagnostics
     [PrimaryEntity(Schema.LogEntryEntity.TypeName)]
     [PipelineMessage(Messages.Create)]
     [PipelineStage(PipelineStage.PreOperation)]
-    [PipelineMode(MessageProcessingStepMode.Synchronous)]
+    [PipelineExecutionMode(ExecutionMode.Synchronous)]
     public class SetLogEntryUser : PluginBase
     {
         protected override void Execute(IPluginContext context)

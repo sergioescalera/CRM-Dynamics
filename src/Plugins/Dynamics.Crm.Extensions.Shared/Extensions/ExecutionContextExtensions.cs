@@ -5,11 +5,11 @@ namespace Microsoft.Xrm.Sdk
 {
     public static class ExecutionContextExtensions
     {
-        public static MessageProcessingStepMode GetStepMode(this IExecutionContext context)
+        public static ExecutionMode GetStepMode(this IExecutionContext context)
         {
             ValidationHelper.EnsureNotNull(context);
             
-            return (MessageProcessingStepMode)context.Mode;
+            return (ExecutionMode)context.Mode;
         }
 
         public static PipelineStage GetPipelineStage(this IPluginExecutionContext context)

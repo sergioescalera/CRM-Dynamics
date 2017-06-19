@@ -6,17 +6,17 @@ namespace Dynamics.Crm.Attributes
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
     public sealed class PipelineMessageAttribute : Attribute
     {
-        public String[] SupportedMessages
+        public String[] Messages
         {
             get;
             private set;
         }
 
-        public PipelineMessageAttribute(params String[] supportedMessages)
+        public PipelineMessageAttribute(params String[] messages)
         {
-            this.EnsureNotNull(supportedMessages);
+            this.EnsureNotNull(messages);
 
-            SupportedMessages = supportedMessages.ToArray();
+            Messages = messages.ToArray();
         }
     }
 }

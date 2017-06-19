@@ -1,6 +1,5 @@
 ﻿using Dynamics.Crm.Core;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Dynamics.Crm.Attributes
@@ -8,17 +7,17 @@ namespace Dynamics.Crm.Attributes
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
     public sealed class PipelineStageAttribute : Attribute
     {
-        public PipelineStage[] SupportedStages
+        public PipelineStage[] PipelineStages
         {
             get;
             private set;
         }
 
-        public PipelineStageAttribute(params PipelineStage[] supportedStages)
+        public PipelineStageAttribute(params PipelineStage[] pipelineStages)
         {
-            this.EnsureNotNull(supportedStages);
+            this.EnsureNotNull(pipelineStages);
 
-            SupportedStages = supportedStages.ToArray();
+            PipelineStages = pipelineStages.ToArray();
         }
     }
 }

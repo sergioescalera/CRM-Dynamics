@@ -5,7 +5,7 @@ namespace Dynamics.Crm.Attributes
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
     public sealed class PrimaryEntityAttribute : Attribute
     {
-        public String SupportedEntity
+        public String EntityLogicalName
         {
             get;
             private set;
@@ -16,7 +16,7 @@ namespace Dynamics.Crm.Attributes
             this.EnsureNotNull(entityLogicalName);
             this.EnsureNotNullOrEmpty(entityLogicalName);
 
-            SupportedEntity = entityLogicalName;
+            EntityLogicalName = entityLogicalName;
         }
     }    
 }

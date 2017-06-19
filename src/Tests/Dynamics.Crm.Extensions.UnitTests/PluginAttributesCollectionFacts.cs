@@ -26,26 +26,15 @@ namespace Dynamics.Crm.Extensions.UnitTests
             [TestMethod]
             public void InitializesCollectionWithValidType()
             {
-                /*
-                 * 
-                 * [PrimaryEntity(Schema.AccountEntity.TypeName)]
-                 * [PipelineMessage(Messages.Create)]
-                 * [PipelineStage(PipelineStage.PreOperation)]
-                 * [PipelineMode(MessageProcessingStepMode.Synchronous)]
-                 * public class SampleAccountPlugin ...
-                 * 
-                 */
-
                 var type = typeof(SampleAccountPlugin);
                 var attributes = new PluginAttributesCollection(type);
 
                 Assert.IsNotNull(attributes);
-                Assert.IsNotNull(attributes.Attributes);
-                Assert.AreEqual(4, attributes.Attributes.Count());
+                Assert.AreEqual(4, attributes.Count());
                 Assert.AreEqual(Schema.AccountEntity.TypeName, attributes.PrimaryEntityLogicalName);
                 CollectionAssert.AreEqual(new[] { Messages.Create }, attributes.PipelineMessages.ToArray());
                 CollectionAssert.AreEqual(new[] { PipelineStage.PreOperation }, attributes.PipelineStages.ToArray());
-                CollectionAssert.AreEqual(new[] { MessageProcessingStepMode.Synchronous }, attributes.MessageProcessingStepModes.ToArray());
+                CollectionAssert.AreEqual(new[] { ExecutionMode.Synchronous }, attributes.ExecutionModes.ToArray());
             }
         }
     }

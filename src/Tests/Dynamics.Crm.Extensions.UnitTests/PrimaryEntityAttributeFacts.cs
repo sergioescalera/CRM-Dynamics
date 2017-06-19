@@ -30,8 +30,8 @@ namespace Dynamics.Crm.Extensions.UnitTests
                 var attribute = new PrimaryEntityAttribute(Schema.AccountEntity.TypeName);
 
                 Assert.IsNotNull(attribute);
-                Assert.IsNotNull(attribute.SupportedEntity);
-                Assert.AreEqual(Schema.AccountEntity.TypeName, attribute.SupportedEntity);                
+                Assert.IsNotNull(attribute.EntityLogicalName);
+                Assert.AreEqual(Schema.AccountEntity.TypeName, attribute.EntityLogicalName);                
             }
         }
     }

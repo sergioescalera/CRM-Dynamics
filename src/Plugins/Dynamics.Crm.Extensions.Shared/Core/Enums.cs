@@ -10,10 +10,10 @@ namespace Dynamics.Crm.Core
         PostImage = 1
     }
 
-    public enum MessageProcessingStepMode
+    public enum ExecutionMode
     {        
         Synchronous = 0,        
-        Asynchronous = 1,
+        Asynchronous = 1
     }
 
     public enum PipelineStage
@@ -26,7 +26,7 @@ namespace Dynamics.Crm.Core
 
     public enum TargetType
     {
-        Undefined = 0,
+        Unknown = 0,
         Entity = 1,
         EntityReference = 2
     }    

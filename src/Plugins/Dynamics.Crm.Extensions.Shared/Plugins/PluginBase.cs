@@ -54,24 +54,26 @@ namespace Dynamics.Crm.Plugins
         {
             var executionContext = context.ExecutionContext;
 
-            context.TracingService.Trace($"BusinessUnitId: {executionContext?.BusinessUnitId}");
-            context.TracingService.Trace($"CorrelationId: {executionContext?.CorrelationId}");
-            context.TracingService.Trace($"Depth: {executionContext?.Depth}");
-            context.TracingService.Trace($"InitiatingUserId: {executionContext?.InitiatingUserId}");
-            context.TracingService.Trace($"MessageName: {executionContext?.MessageName}");
-            context.TracingService.Trace($"Mode: {executionContext?.Mode}");
-            context.TracingService.Trace($"PrimaryEntityId: {executionContext?.PrimaryEntityId}");
-            context.TracingService.Trace($"PrimaryEntityName: {executionContext?.PrimaryEntityName}");
-            context.TracingService.Trace($"UserId: {executionContext?.UserId}");
+            var message = $@"BusinessUnitId: {executionContext?.BusinessUnitId}
+CorrelationId: {executionContext?.CorrelationId}
+Depth: {executionContext?.Depth}
+InitiatingUserId: {executionContext?.InitiatingUserId}
+MessageName: {executionContext?.MessageName}
+Mode: {executionContext?.Mode}
+PrimaryEntityId: {executionContext?.PrimaryEntityId}
+PrimaryEntityName: {executionContext?.PrimaryEntityName}
+UserId: {executionContext?.UserId}";
+
+            context.TracingService.Trace(message);
         }
 
         protected virtual void Validate(IPluginContext context, Type pluginType)
         {
             var attributes = new PluginAttributesCollection(pluginType);
 
-            if (attributes.MessageProcessingStepModes.Any())
+            if (attributes.ExecutionModes.Any())
             {
-                context.EnsureSupportedExecutionMode(attributes.MessageProcessingStepModes.ToArray());
+                context.EnsureSupportedExecutionMode(attributes.ExecutionModes.ToArray());
             }
 
             if (attributes.PipelineStages.Any())

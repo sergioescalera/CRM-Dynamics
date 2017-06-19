@@ -24,17 +24,17 @@ namespace Dynamics.Crm.Extensions.UnitTests
                 attribute = new PipelineMessageAttribute();
 
                 Assert.IsNotNull(attribute);
-                Assert.IsNotNull(attribute.SupportedMessages);
-                Assert.AreEqual(0, attribute.SupportedMessages.Length);
+                Assert.IsNotNull(attribute.Messages);
+                Assert.AreEqual(0, attribute.Messages.Length);
 
                 var message = "message";
 
                 attribute = new PipelineMessageAttribute(message);
 
                 Assert.IsNotNull(attribute);
-                Assert.IsNotNull(attribute.SupportedMessages);
-                Assert.AreEqual(1, attribute.SupportedMessages.Length);
-                CollectionAssert.AreEqual(new [] { message }, attribute.SupportedMessages);
+                Assert.IsNotNull(attribute.Messages);
+                Assert.AreEqual(1, attribute.Messages.Length);
+                CollectionAssert.AreEqual(new [] { message }, attribute.Messages);
             }
         }
     }

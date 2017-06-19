@@ -11,7 +11,7 @@ using System.Text;
 namespace Dynamics.Crm.Validation.Plugins
 {
     [PipelineStage(PipelineStage.PreOperation)]
-    [PipelineMode(MessageProcessingStepMode.Synchronous)]
+    [PipelineExecutionMode(ExecutionMode.Synchronous)]
     [PipelineMessage(Messages.Create, Messages.Update)]
     public class RequiredAttributesPlugin : PluginBase
     {
@@ -49,7 +49,7 @@ namespace Dynamics.Crm.Validation.Plugins
             }
 
             if (messages.Length > 0)
-                throw new InvalidPluginExecutionException(messages.ToString());
+                throw new InvalidPluginExecutionException(messages.ToString().TrimEnd('\r', '\n'));
         }
     }
 }

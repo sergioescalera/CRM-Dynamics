@@ -1,16 +1,18 @@
 ﻿using Dynamics.Crm.Core;
+using Dynamics.Crm.Linq;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Reflection;
 
 namespace Dynamics.Crm.Attributes
 {
-    public class PluginAttributesCollection
+    public class PluginAttributesCollection : Collection<Attribute>
     {
-        public IEnumerable<Attribute> Attributes { get; private set; }
-
         public IEnumerable<String> PipelineMessages { get; private set; }
 
-        public IEnumerable<MessageProcessingStepMode> MessageProcessingStepModes { get; private set; }
+        public IEnumerable<ExecutionMode> ExecutionModes { get; private set; }
 
         public IEnumerable<PipelineStage> PipelineStages { get; private set; }
 
@@ -25,47 +27,21 @@ namespace Dynamics.Crm.Attributes
 
         private void LoadAttributesFromType(Type pluginType)
         {
-            PipelineMessages = new String[0];
-            MessageProcessingStepModes = new MessageProcessingStepMode[0];
-            PipelineStages = new PipelineStage[0];
+            var message = pluginType.GetCustomAttribute<PipelineMessageAttribute>();
+            var mode = pluginType.GetCustomAttribute<PipelineExecutionModeAttribute>();
+            var stage = pluginType.GetCustomAttribute<PipelineStageAttribute>();
+            var entity = pluginType.GetCustomAttribute<PrimaryEntityAttribute>();
 
-            var attributes = new List<Attribute>();
+            var attributes = new Attribute[] { message, mode, stage, entity };
 
-            var message = GetCustomAttribute<PipelineMessageAttribute>(pluginType);
-            if (message != null)
-            {
-                attributes.Add(message);
-                PipelineMessages = message.SupportedMessages;
-            }
+            PipelineMessages = message?.Messages ?? Enumerable.Empty<String>();
+            ExecutionModes = mode?.ExecutionModes ?? Enumerable.Empty<ExecutionMode>();
+            PipelineStages = stage?.PipelineStages ?? Enumerable.Empty<PipelineStage>();
 
-            var mode = GetCustomAttribute<PipelineModeAttribute>(pluginType);
-            if (mode != null)
-            {
-                attributes.Add(mode);                
-                MessageProcessingStepModes = mode.SupportedModes;
-            }
-
-            var stage = GetCustomAttribute<PipelineStageAttribute>(pluginType);
-            if (stage != null)
-            {
-                attributes.Add(stage);                
-                PipelineStages = stage.SupportedStages;
-            }
-
-            var entityName = GetCustomAttribute<PrimaryEntityAttribute>(pluginType);
-            if (entityName != null)
-            {
-                attributes.Add(entityName);
-                PrimaryEntityLogicalName = entityName.SupportedEntity;
-            }
+            PrimaryEntityLogicalName = entity.EntityLogicalName;
             
-            Attributes = attributes.ToArray();
-        }
-
-        private TAttribute GetCustomAttribute<TAttribute>(Type pluginType)
-            where TAttribute : Attribute
-        {
-            return (TAttribute)Attribute.GetCustomAttribute(pluginType, typeof(TAttribute));
+            this.AddRange(
+                attributes.Where(a => a != null));
         }
     }
 }

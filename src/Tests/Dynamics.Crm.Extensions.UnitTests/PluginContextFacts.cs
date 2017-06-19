@@ -16,7 +16,7 @@ namespace Dynamics.Crm.Extensions.UnitTests
             String messageName = null,
             Entity preImage = null,
             Entity postImage = null,
-            MessageProcessingStepMode stepMode = MessageProcessingStepMode.Synchronous,
+            ExecutionMode stepMode = ExecutionMode.Synchronous,
             PipelineStage stage = PipelineStage.PostOperation)
         {
             var serviceProvider = new Mock<IServiceProvider>();
@@ -46,7 +46,7 @@ namespace Dynamics.Crm.Extensions.UnitTests
             String messageName = null,
             Entity preImage = null,
             Entity postImage = null,
-            MessageProcessingStepMode stepMode = MessageProcessingStepMode.Synchronous,
+            ExecutionMode stepMode = ExecutionMode.Synchronous,
             PipelineStage stage = PipelineStage.PostOperation)
         {
             var userId = Guid.NewGuid();
@@ -292,7 +292,7 @@ namespace Dynamics.Crm.Extensions.UnitTests
 
                 var type = context.GetTargetEntityType();
 
-                Assert.AreEqual(TargetType.Undefined, type);
+                Assert.AreEqual(TargetType.Unknown, type);
             }
         }
 
@@ -499,7 +499,7 @@ namespace Dynamics.Crm.Extensions.UnitTests
             {
                 var context = default(IPluginContext);
 
-                context.EnsureSupportedExecutionMode(MessageProcessingStepMode.Synchronous);
+                context.EnsureSupportedExecutionMode(ExecutionMode.Synchronous);
             }
 
             [TestMethod]
@@ -510,18 +510,18 @@ namespace Dynamics.Crm.Extensions.UnitTests
 
                 this.ExpectedException<InvalidPluginExecutionException>(() =>
                 {
-                    serviceProvider = CreateServiceProvider(stepMode: MessageProcessingStepMode.Asynchronous);
+                    serviceProvider = CreateServiceProvider(stepMode: ExecutionMode.Asynchronous);
                     context = new PluginContext(serviceProvider);
 
-                    context.EnsureSupportedExecutionMode(MessageProcessingStepMode.Synchronous);
+                    context.EnsureSupportedExecutionMode(ExecutionMode.Synchronous);
                 });
 
                 this.ExpectedException<InvalidPluginExecutionException>(() =>
                 {
-                    serviceProvider = CreateServiceProvider(stepMode: MessageProcessingStepMode.Asynchronous);
+                    serviceProvider = CreateServiceProvider(stepMode: ExecutionMode.Asynchronous);
                     context = new PluginContext(serviceProvider);
 
-                    context.EnsureSupportedExecutionMode(MessageProcessingStepMode.Synchronous);
+                    context.EnsureSupportedExecutionMode(ExecutionMode.Synchronous);
                 });          
             }
 
@@ -531,15 +531,15 @@ namespace Dynamics.Crm.Extensions.UnitTests
                 var serviceProvider = default(IServiceProvider);
                 var context = default(IPluginContext);
 
-                serviceProvider = CreateServiceProvider(stepMode: MessageProcessingStepMode.Asynchronous);
+                serviceProvider = CreateServiceProvider(stepMode: ExecutionMode.Asynchronous);
                 context = new PluginContext(serviceProvider);
 
-                context.EnsureSupportedExecutionMode(MessageProcessingStepMode.Asynchronous);
+                context.EnsureSupportedExecutionMode(ExecutionMode.Asynchronous);
 
-                serviceProvider = CreateServiceProvider(stepMode: MessageProcessingStepMode.Synchronous);
+                serviceProvider = CreateServiceProvider(stepMode: ExecutionMode.Synchronous);
                 context = new PluginContext(serviceProvider);
 
-                context.EnsureSupportedExecutionMode(MessageProcessingStepMode.Synchronous);
+                context.EnsureSupportedExecutionMode(ExecutionMode.Synchronous);
             }
         }
 

@@ -57,7 +57,7 @@ namespace Dynamics.Crm.Interfaces
             var executionContext = pluginContext.ExecutionContext;
 
             if (!executionContext.InputParameters.Contains("Target"))
-                return TargetType.Undefined;
+                return TargetType.Unknown;
 
             var target = executionContext.InputParameters["Target"];
 
@@ -67,7 +67,7 @@ namespace Dynamics.Crm.Interfaces
             if (target is EntityReference)
                 return TargetType.EntityReference;
 
-            return TargetType.Undefined;            
+            return TargetType.Unknown;            
         }
 
         #endregion
@@ -137,7 +137,7 @@ namespace Dynamics.Crm.Interfaces
 
         #region Plugin Validation
 
-        public static void EnsureSupportedExecutionMode(this IPluginContext pluginContext, params MessageProcessingStepMode[] supportedProcessingSteps)
+        public static void EnsureSupportedExecutionMode(this IPluginContext pluginContext, params ExecutionMode[] supportedProcessingSteps)
         {
             ValidationHelper.EnsureNotNull(pluginContext);
 

@@ -20,7 +20,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Activities\WorkflowActivityBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Activities\WorkflowActivityContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\PipelineMessageAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Attributes\PipelineModeAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\PipelineExecutionModeAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\PipelineStageAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\PluginAttributesCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\PrimaryEntityAttribute.cs" />
@@ -62,6 +62,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IWorkflowActivityContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IPluginContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Linq\EnumerableExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Account.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Address.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Contact.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\UnitGroup.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Plugins\PluginBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Plugins\PluginContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Reflection\TypeExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SharePoint\DocumentLocation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SharePoint\DocumentLocationRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SharePoint\DocumentSite.cs" />
