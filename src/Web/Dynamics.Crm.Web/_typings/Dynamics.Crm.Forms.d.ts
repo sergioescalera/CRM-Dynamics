@@ -75,6 +75,12 @@ declare interface ICrmControls {
     show(attributeNames: string[], condition?: boolean, applyToAll?: boolean): void;
     hide(attributeNames: string[], condition?: boolean, applyToAll?: boolean): void;
     setVisible(attributeNames: string[], value: boolean, applyToAll?: boolean): void;
+
+    autoComplete(
+        controlName: string,
+        query: (input: any) => JQueryPromise<any[]>,
+        commands?: AutoCompleteCommand,
+        required?: boolean): void;
 }
 
 declare interface ICrmNavigation {
@@ -146,7 +152,7 @@ declare interface ICrmOData {
     createEntity(
         entity: IEntity,
         entitySetName: string,
-        attributes?: string[]): JQueryPromise<IEntity>
+        attributes?: string[]): JQueryPromise<IEntity>;
     deleteEntity(
         entityName: string,
         entitySetName: string,

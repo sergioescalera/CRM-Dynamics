@@ -367,6 +367,13 @@ interface Control {
     removeOnLoad(func: Function): void; // Remove event handlers to a Sub-Grid
     getGrid(): Grid;
     getEntityName(): string;
+
+    addOnKeyPress(func: Function): void;
+
+    getValue(): any; // Gets the latest value in a control as the user types characters in a specific text or number field. This method helps you to build interactive experiences by validating data and alerting users as they type characters in a control.
+
+    showAutoComplete(options: AutoCompleteOptions): void;
+    hideAutoComplete(): void;
 }
 
 interface Grid {
@@ -535,4 +542,21 @@ interface ProcessUI {
 
     getVisible(): boolean;
     setVisible(visible: boolean): void;
+}
+
+interface AutoCompleteOptions {
+    results?: AutoCompleteResult[];
+    commands?: AutoCompleteCommand;
+}
+
+interface AutoCompleteResult {
+    id: string;
+    icon: string;
+    fields: string[];
+}
+
+interface AutoCompleteCommand {
+    id: string;
+    label: string;
+    action: () => void;
 }
