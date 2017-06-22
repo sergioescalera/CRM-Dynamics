@@ -33,4 +33,9 @@
     {
         Active = 1, Inactive = 2
     }
+
+    public enum TeamType
+    {
+        Owner = 0, Access = 1
+    }
 }

@@ -57,6 +57,15 @@ namespace Dynamics.Crm.Data
             public static readonly Func<String, String> PhoneFieldFormat = (s) => $"{s}telephone";
         }
 
+        public static class BusinessUnitEntity
+        {
+            public const String TypeName = "businessunit";
+
+            public const String IdFieldName = "businessunitid";
+
+            public const String ParentFieldName = "parentbusinessunitid";
+        }
+
         public static class ContactEntity
         {
             public const String TypeName = "contact";
@@ -162,6 +171,13 @@ namespace Dynamics.Crm.Data
             public const String DefaultUnitFieldName = "defaultuomid";
         }
 
+        public static class RoleEntity
+        {
+            public const String TypeName = "role";
+
+            public const String IdFieldName = "roleid";
+        }
+
         public static class SiteEntity
         {
             public const String TypeName = "site";
@@ -204,6 +220,21 @@ namespace Dynamics.Crm.Data
             public const String TypeName = "systemuser";
 
             public const String IdFieldName = "systemuserid";
+        }
+
+        public static class TeamEntity
+        {
+            public const String TypeName = "team";
+
+            public const String IdFieldName = "teamid";
+
+            public const String AdministratorFieldName = "administratorid";
+
+            public const String BusinessUnitFieldName = "businessunitid";
+
+            public const String IsDefaultFieldName = "isdefault";
+
+            public const String TypeFieldName = "teamtype";            
         }
 
         public static class UnitEntity

@@ -203,5 +203,25 @@ namespace Dynamics.Crm.Interfaces
         }
 
         #endregion
+
+        #region Parameters
+
+        public static T GetInputParameter<T>(
+            this IPluginContext pluginContext,
+            String parameterName,
+            T defaultValue = default(T))
+        {
+            ValidationHelper.EnsureNotNull(pluginContext, nameof(pluginContext));
+            ValidationHelper.EnsureNotNull(parameterName, nameof(parameterName));
+
+            if (!pluginContext.ExecutionContext.InputParameters.ContainsKey(parameterName))
+                return defaultValue;
+
+            var value = pluginContext.ExecutionContext.InputParameters[parameterName];
+
+            return (T)value;
+        }
+
+        #endregion
     }
 }

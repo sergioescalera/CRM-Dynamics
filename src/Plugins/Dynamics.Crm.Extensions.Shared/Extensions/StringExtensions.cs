@@ -23,5 +23,15 @@
 
             return str.Substring(str.Length - length, length);
         }
+
+        public static Boolean IsNullOrEmpty(this String str)
+        {
+            return String.IsNullOrEmpty(str);
+        }
+
+        public static Boolean IsNullOrWhiteSpace(this String str)
+        {
+            return String.IsNullOrWhiteSpace(str);
+        }
     }
 }
