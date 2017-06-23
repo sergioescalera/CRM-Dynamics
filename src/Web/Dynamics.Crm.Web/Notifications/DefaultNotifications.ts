@@ -5,10 +5,19 @@
     export class DefaultNotifications implements INotificationService {
 
         init(): void {
+
+            if (!this.test()) {
+                throw new Error("Not supported.");
+            }
         }
 
-        show(title: string, content: string, icon?: string): void {
-            console.log(`${title}:${content}`);
+        show(options: Options): void {
+            alert(options.message);
+        }
+
+        test(): boolean {
+
+            return _.isFunction(alert);
         }
     }
 }

@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Dynamics.Crm.Web</id>
-    <version>1.3.8.10-alpha</version>
+    <version>1.3.8.14-alpha</version>
     <authors>Sergio Escalera</authors>
     <owners>Sergio Escalera</owners>    
     <projectUrl>https://github.com/sergioescalera/CRM-Dynamics/</projectUrl>    
@@ -16,10 +16,13 @@
     <file src="..\Web\Dynamics.Crm.Web\Scripts\Dynamics.Crm.Dialogs.min.js" target="content\Scripts" />
     <file src="..\Web\Dynamics.Crm.Web\Scripts\Dynamics.Crm.Forms.js" target="content\Scripts" />
     <file src="..\Web\Dynamics.Crm.Web\Scripts\Dynamics.Crm.Forms.min.js" target="content\Scripts" />
+    <file src="..\Web\Dynamics.Crm.Web\Scripts\Dynamics.Crm.Notifications.js" target="content\Scripts" />
+    <file src="..\Web\Dynamics.Crm.Web\Scripts\Dynamics.Crm.Notifications.min.js" target="content\Scripts" />
     <file src="..\Web\Dynamics.Crm.Web\_typings\Dynamics.Crm.Forms.d.ts" target="content\_typings" />    
     <file src="..\Web\Dynamics.Crm.Web\_typings\Xrm.d.ts" target="content\_typings" />
     <file src="..\Web\Dynamics.Crm.Web\_typings\jquery.d.ts" target="content\_typings" />
     <file src="..\Web\Dynamics.Crm.Web\_typings\moment.d.ts" target="content\_typings" />
+    <file src="..\Web\Dynamics.Crm.Web\_typings\lodash.d.ts" target="content\_typings" />
     <file src="..\Web\Dynamics.Crm.Web\Libs\bootstrap\css\*.css" target="content\Libs\bootstrap\css" />
     <file src="..\Web\Dynamics.Crm.Web\Libs\bootstrap\js\*.js" target="content\Libs\bootstrap\js" />
     <file src="..\Web\Dynamics.Crm.Web\Widgets\MetadataBrowser\Html\*.html" target="content\Widgets\MetadataBrowser\Html" />

@@ -4,6 +4,15 @@
 
     export interface INotificationService {
         init(): void;
-        show(title: string, content: string, icon?: string): void;
+        show(options: Options): void;
+        test(): boolean;
+    }
+
+    export interface Options {
+        id?: string;
+        type?: any;
+        title?: string;
+        message: string;
+        icon?: string;
     }
 }

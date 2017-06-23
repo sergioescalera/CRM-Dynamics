@@ -1,4 +1,4 @@
-﻿interface IJQueryWindow extends Window {
+﻿interface JQueryWindow extends Window {
     jQuery: JQueryStatic;
     $: JQueryStatic;
 }
@@ -12,7 +12,7 @@ module Dynamics.Crm.ScriptManager {
 
     export function loadScripts(
         scripts: string[],
-        win: IJQueryWindow): JQueryPromise<JQueryPromise<void>[]> {
+        win: JQueryWindow): JQueryPromise<JQueryPromise<void>[]> {
 
         var deferreds = scripts.map((s: string) => loadScript(s, win));
 
@@ -21,7 +21,7 @@ module Dynamics.Crm.ScriptManager {
 
     export function loadScript(
         script: string,
-        win: IJQueryWindow): JQueryPromise<void> {
+        win: JQueryWindow): JQueryPromise<void> {
 
         console.log("Dynamics.Crm.ScriptManager.loadScript: " + script);
 
@@ -50,14 +50,14 @@ module Dynamics.Crm.ScriptManager {
 
     export function loadStylesheets(
         stylesheets: string[],
-        win: IJQueryWindow): void {
+        win: JQueryWindow): void {
 
         stylesheets.forEach((s: string) => loadStylesheet(s, win));
     }
 
     export function loadStylesheet(
         stylesheet: string,
-        win: IJQueryWindow): void {
+        win: JQueryWindow): void {
 
         console.log("Dynamics.Crm.ScriptManager.loadStylesheet: " + stylesheet);
 

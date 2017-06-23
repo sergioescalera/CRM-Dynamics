@@ -1,26 +1,31 @@
 var Notifications;
 (function (Notifications) {
     "use strict";
+    Notifications.services = [
+        new Notifications.CrmFormNotificationService(),
+        new Notifications.WebNotificationService(),
+        new Notifications.ToastrNotificationService(),
+        new Notifications.DefaultNotifications()
+    ];
     var notifications;
-    function show(title, content, icon) {
+    function show(options) {
         console.log("Notifications.show()");
         if (!notifications) {
             notifications = resolveNotificationService();
+            notifications.init();
         }
-        notifications.show(title, content, icon);
+        notifications.show(options || {
+            message: ""
+        });
     }
     Notifications.show = show;
     function resolveNotificationService() {
-        if (typeof Notification === "undefined") {
-            console.warn("This browser does not support system notifications");
-            return new Notifications.DefaultNotifications();
+        for (var i = 0; i < Notifications.services.length; i++) {
+            var service = Notifications.services[i];
+            if (service && service.test()) {
+                return service;
+            }
         }
-        else if (Notification.permission === "denied") {
-            console.warn("User has denied browser notifications");
-            return new Notifications.DefaultNotifications();
-        }
-        else {
-            return new Notifications.WebNotificationService();
-        }
+        throw new Error("Unable to resolve notification service");
     }
 })(Notifications || (Notifications = {}));

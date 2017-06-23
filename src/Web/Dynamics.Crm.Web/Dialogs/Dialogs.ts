@@ -32,7 +32,7 @@
     function getProvider(): IDialogProvider {
 
         if (!provider) {
-            var win = <IJQueryWindow>window.top;
+            var win = <JQueryWindow>window.top;
             provider = bootstrapEnabled ?
                 new BootstrapDialogProvider(win) :
                 new CrmDialogProvider(win);
@@ -43,7 +43,7 @@
 
     export function alert(message: string, title: string): JQueryPromise<void> {
 
-        var win = <IJQueryWindow>window.top;
+        var win = <JQueryWindow>window.top;
         var deferred: JQueryDeferred<void> = win.$.Deferred<void>();
 
         getProvider()
@@ -60,7 +60,7 @@
 
     export function confirm(message: string, title: string): JQueryPromise<boolean> {
 
-        var win = <IJQueryWindow>window.top;
+        var win = <JQueryWindow>window.top;
         var deferred: JQueryDeferred<boolean> = win.$.Deferred<boolean>();
 
         getProvider()
@@ -77,7 +77,7 @@
 
     export function create<TResult>(config: IDialogConfig<TResult>): JQueryPromise<TResult> {
 
-        var win = <IJQueryWindow>window.top;
+        var win = <JQueryWindow>window.top;
         var deferred: JQueryDeferred<TResult> = win.$.Deferred<TResult>();
 
         getProvider()

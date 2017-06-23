@@ -10,15 +10,13 @@
       "Widgets/MetadataBrowser/Scripts/Services/*.js",
       "Widgets/MetadataBrowser/Scripts/Directives/*.js",
       "Widgets/MetadataBrowser/Scripts/Controllers/*.js"
-    ],
-    "sourceMap": false
+    ]
   },
   {
     "outputFileName": "Scripts/Libs/SDK.MetaData.min.js",
     "inputFiles": [
       "Scripts/Libs/SDK.MetaData.js"
-    ],
-    "sourceMap": false
+    ]
   },
   {
     "outputFileName": "Scripts/Dynamics.Crm.Forms.js",
@@ -30,8 +28,7 @@
       "Cache/*.js",
       "Data/*.js",
       "Resources/Strings.js"
-    ],
-    "sourceMap": false
+    ]
   },
   {
     "outputFileName": "Scripts/Dynamics.Crm.Dialogs.js",
@@ -39,8 +36,7 @@
       "Dialogs/Dialogs.js",
       "Dialogs/BootstrapDialogs.js",
       "Dialogs/CrmDialogs.js"
-    ],
-    "sourceMap": false
+    ]
   },
   {
     "outputFileName": "UnitTests/Dynamics.Crm.UnitTests.js",
@@ -54,35 +50,43 @@
       "UnitTests/TabsUnitTests.js",
       "UnitTests/TasksUnitTests.js",
       "UnitTests/ValidationUnitTests.js"
-    ],
-    "sourceMap": false
+    ]
   },
   {
     "outputFileName": "Libs/bootstrap/css/bootstrap.min.css",
     "inputFiles": [
       "Libs/bootstrap/css/bootstrap.css"
-    ],
-    "sourceMap": false
+    ]
   },
   {
     "outputFileName": "Libs/bootstrap/js/bootstrap.min.js",
     "inputFiles": [
       "Libs/bootstrap/js/bootstrap.js"
-    ],
-    "sourceMap": false
+    ]
   },
   {
     "outputFileName": "Libs/lodash/lodash.min.js",
     "inputFiles": [
       "Libs/lodash/lodash.js"
-    ],
-    "sourceMap": false
+    ]
   },
   {
     "outputFileName": "Libs/moment/moment.min.js",
     "inputFiles": [
       "Libs/moment/moment.js"
-    ],
-    "sourceMap": false
+    ]
+  },
+  {
+    "outputFileName": "Scripts/Dynamics.Crm.Notifications.js",
+    "inputFiles": [
+      "libs/lodash/lodash.min.js",
+      "libs/toastr/toastr.min.js",
+      "Core/ScriptManager.js",
+      "Notifications/CrmFormNotifications.js",
+      "Notifications/ToastrNotifications.js",
+      "Notifications/DefaultNotifications.js",
+      "Notifications/WebNotifications.js",
+      "Notifications/Notifications.js"
+    ]
   }
 ]

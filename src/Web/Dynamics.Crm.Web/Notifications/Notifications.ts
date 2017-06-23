@@ -2,29 +2,36 @@
 
     "use strict";
 
+    export var services: INotificationService[] = [
+        new CrmFormNotificationService(),
+        new WebNotificationService(),
+        new ToastrNotificationService(),
+        new DefaultNotifications()
+    ];
     var notifications: INotificationService;
 
-    export function show(title: string, content: string, icon?: string): void {
+    export function show(options: Options): void {
 
         console.log("Notifications.show()");
 
         if (!notifications) {
             notifications = resolveNotificationService();
+            notifications.init();
         }
 
-        notifications.show(title, content, icon);
+        notifications.show(options || {
+            message: ""
+        });
     }
 
     function resolveNotificationService(): INotificationService {
 
-        if (typeof Notification === "undefined") {
-            console.warn("This browser does not support system notifications");
-            return new DefaultNotifications();
-        } else if (Notification.permission === "denied") {
-            console.warn("User has denied browser notifications");
-            return new DefaultNotifications();
-        } else {
-            return new WebNotificationService();
+        for (var i: number = 0; i < services.length; i++) {
+            var service: INotificationService = services[i];
+            if (service && service.test()) {
+                return service;
+            }
         }
+        throw new Error("Unable to resolve notification service");
     }
 }

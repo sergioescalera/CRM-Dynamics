@@ -30,10 +30,10 @@
 
     export class CrmConfirmDialog implements IDialog<boolean> {
 
-        private _window: IJQueryWindow;
+        private _window: JQueryWindow;
         private _message: string;
 
-        constructor(window: IJQueryWindow, message: string) {
+        constructor(window: JQueryWindow, message: string) {
 
             this._window = window;
             this._message = message;
@@ -58,9 +58,9 @@
 
     export class CrmDialogProvider implements IDialogProvider {
 
-        private _window: IJQueryWindow;
+        private _window: JQueryWindow;
         
-        constructor(window: IJQueryWindow) {
+        constructor(window: JQueryWindow) {
 
             this._window = window;
         }

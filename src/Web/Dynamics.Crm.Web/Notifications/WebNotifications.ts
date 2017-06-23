@@ -9,8 +9,8 @@
 
         init(): void {
 
-            if (typeof Notification === "undefined") {
-                throw new Error("Browser does not support web notifications.");
+            if (!this.test()) {
+                throw new Error("Web browser does not support notifications.");
             }
 
             if (!this._permissionRequest) {
@@ -21,11 +21,11 @@
             }
         }
 
-        show(title: string, content: string, icon?: string): void {
+        show(options: Options): void {
 
             if (this._granted) {
 
-                this.createNotification(title, content, icon);
+                this.createNotification(options.title, options.message, options.icon);
 
             } else if (this._permissionRequest) {
 
@@ -34,23 +34,33 @@
                         if (permission !== "granted") {
                             return;
                         }
-                        this.createNotification(title, content, icon);
+                        this.createNotification(options.title, options.message, options.icon);
                     });
             } else {
                 throw new Error("WebNotificationService hasn't been initialized.");
             }
         }
 
-        private createNotification(title: string, content: string, icon: string): void {
+        test(): boolean {
+
+            return _.isFunction(Notification)
+                && _.isString(Notification.permission)
+                && _.isFunction(Notification.requestPermission)
+                && Notification.permission !== "denied";
+        }
+
+        private createNotification(title: string, content: string, icon: string): Notification {
 
             if (!this._granted) {
                 return;
             }
 
-            var notification = new Notification(title, {
+            var notification: Notification = new Notification(title, {
                 body: content,
                 icon: icon
             });
+
+            return notification;
         }
 
         private requestPermissionFulfilled(permission: NotificationPermission): void {

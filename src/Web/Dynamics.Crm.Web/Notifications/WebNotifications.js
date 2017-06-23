@@ -5,8 +5,8 @@ var Notifications;
         function WebNotificationService() {
         }
         WebNotificationService.prototype.init = function () {
-            if (typeof Notification === "undefined") {
-                throw new Error("Browser does not support web notifications.");
+            if (!this.test()) {
+                throw new Error("Web browser does not support notifications.");
             }
             if (!this._permissionRequest) {
                 this._permissionRequest = Notification
@@ -14,10 +14,10 @@ var Notifications;
                     .then(this.requestPermissionFulfilled.bind(this), this.requestPermissionRejected.bind(this));
             }
         };
-        WebNotificationService.prototype.show = function (title, content, icon) {
+        WebNotificationService.prototype.show = function (options) {
             var _this = this;
             if (this._granted) {
-                this.createNotification(title, content, icon);
+                this.createNotification(options.title, options.message, options.icon);
             }
             else if (this._permissionRequest) {
                 this._permissionRequest
@@ -25,12 +25,18 @@ var Notifications;
                     if (permission !== "granted") {
                         return;
                     }
-                    _this.createNotification(title, content, icon);
+                    _this.createNotification(options.title, options.message, options.icon);
                 });
             }
             else {
                 throw new Error("WebNotificationService hasn't been initialized.");
             }
+        };
+        WebNotificationService.prototype.test = function () {
+            return _.isFunction(Notification)
+                && _.isString(Notification.permission)
+                && _.isFunction(Notification.requestPermission)
+                && Notification.permission !== "denied";
         };
         WebNotificationService.prototype.createNotification = function (title, content, icon) {
             if (!this._granted) {
@@ -40,6 +46,7 @@ var Notifications;
                 body: content,
                 icon: icon
             });
+            return notification;
         };
         WebNotificationService.prototype.requestPermissionFulfilled = function (permission) {
             console.log("NotificationService.requestPermissionFulfilled(permission=" + permission + ")");

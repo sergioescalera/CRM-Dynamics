@@ -108,6 +108,7 @@
     <Content Include="Libs\moment\moment.min.js">
       <DependentUpon>moment.js</DependentUpon>
     </Content>
+    <Content Include="Libs\toastr\toastr.min.js" />
     <Content Include="Scripts\Dynamics.Crm.Dialogs.js" />
     <Content Include="Scripts\Dynamics.Crm.Dialogs.min.js">
       <DependentUpon>Dynamics.Crm.Dialogs.js</DependentUpon>
@@ -119,6 +120,10 @@
     <Content Include="Libs\lodash\lodash.core.js" />
     <Content Include="Libs\lodash\lodash.js" />
     <Content Include="Libs\moment\moment.js" />
+    <Content Include="Scripts\Dynamics.Crm.Notifications.js" />
+    <Content Include="Scripts\Dynamics.Crm.Notifications.min.js">
+      <DependentUpon>Dynamics.Crm.Notifications.js</DependentUpon>
+    </Content>
     <Content Include="Scripts\jasmine\boot.js" />
     <Content Include="Scripts\jasmine\console.js" />
     <Content Include="Scripts\jasmine\jasmine-html.js" />
@@ -193,9 +198,11 @@
     <TypeScriptCompile Include="Dialogs\BootstrapDialogs.ts" />
     <TypeScriptCompile Include="Dialogs\CrmDialogs.ts" />
     <TypeScriptCompile Include="Dialogs\Dialogs.ts" />
+    <TypeScriptCompile Include="Notifications\CrmFormNotifications.ts" />
     <TypeScriptCompile Include="Notifications\DefaultNotifications.ts" />
     <TypeScriptCompile Include="Notifications\INotificationService.ts" />
     <TypeScriptCompile Include="Notifications\Notifications.ts" />
+    <TypeScriptCompile Include="Notifications\ToastrNotifications.ts" />
     <TypeScriptCompile Include="Notifications\WebNotifications.ts" />
     <TypeScriptCompile Include="Resources\Strings.ts" />
     <TypeScriptCompile Include="UnitTests\AttributesUnitTests.ts" />
@@ -231,6 +238,7 @@
     <TypeScriptCompile Include="_typings\moment.d.ts" />
     <TypeScriptCompile Include="_typings\Notification.d.ts" />
     <TypeScriptCompile Include="_typings\SDK.MetaData.d.ts" />
+    <TypeScriptCompile Include="_typings\toastr.d.ts" />
     <TypeScriptCompile Include="_typings\Xrm.d.ts" />
   </ItemGroup>
   <ItemGroup>
