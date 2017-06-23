@@ -186,5 +186,35 @@ namespace Dynamics.Crm.Extensions
 
             return response;
         }
+
+        public static GrantAccessResponse GrantAccess(
+            this IOrganizationService service,
+            EntityReference principal,
+            EntityReference target,
+            AccessRights accessMask)
+        {
+            var request = new GrantAccessRequest
+            {
+                PrincipalAccess = new PrincipalAccess
+                {
+                    AccessMask = accessMask,
+                    Principal = principal
+                },
+                Target = target
+            };
+
+            var response = service.Execute<GrantAccessResponse>(request);
+
+            return response;
+        }
+
+        public static Entity Retrieve(
+            this IOrganizationService service,
+            String entityName,
+            Guid id,
+            params String[] columns)
+        {
+            return service.Retrieve(entityName, id, new ColumnSet(columns));
+        }
     }
 }

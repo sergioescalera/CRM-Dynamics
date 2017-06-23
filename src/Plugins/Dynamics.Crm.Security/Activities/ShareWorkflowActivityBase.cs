@@ -66,17 +66,7 @@ namespace Dynamics.Crm.Security.Activities
             if (mask == AccessRights.None)
                 return;
 
-            var request = new GrantAccessRequest
-            {
-                PrincipalAccess = new PrincipalAccess
-                {
-                    AccessMask = mask,
-                    Principal = principal
-                },
-                Target = entity
-            };
-
-            var response = context.OrganizationService.Execute<GrantAccessResponse>(request);
+            context.OrganizationService.GrantAccess(principal, entity, mask);
         }
 
         protected virtual AccessRights GetMask(IWorkflowActivityContext context)
