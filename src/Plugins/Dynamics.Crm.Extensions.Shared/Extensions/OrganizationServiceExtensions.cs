@@ -3,6 +3,7 @@ using Dynamics.Crm.Models;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
+using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
@@ -215,6 +216,33 @@ namespace Dynamics.Crm.Extensions
             params String[] columns)
         {
             return service.Retrieve(entityName, id, new ColumnSet(columns));
+        }
+
+        public static String GetOptionSetValueLabel(
+            this IOrganizationService service,
+            String entityLogicalName,
+            String attributeName,
+            Int32 optionSetValue)
+        {
+            ValidationHelper.EnsureNotNull(service);
+            ValidationHelper.EnsureNotNull(entityLogicalName);
+            ValidationHelper.EnsureNotNull(attributeName);
+
+            var request = new RetrieveAttributeRequest
+            {
+                EntityLogicalName = entityLogicalName,
+                LogicalName = attributeName,
+                RetrieveAsIfPublished = true
+            };
+
+            var response = service.Execute<RetrieveAttributeResponse>(request);
+            var metadata = (EnumAttributeMetadata)response.AttributeMetadata;
+
+            return metadata
+                .OptionSet.Options
+                .Where(x => x.Value == optionSetValue)
+                .FirstOrDefault()?
+                .Label.UserLocalizedLabel.Label;
         }
     }
 }

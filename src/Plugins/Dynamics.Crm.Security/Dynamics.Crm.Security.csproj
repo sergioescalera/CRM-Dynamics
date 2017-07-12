@@ -82,6 +82,7 @@
   <ItemGroup>
     <Compile Include="Activities\ShareEntity.cs" />
     <Compile Include="Activities\ShareWorkflowActivityBase.cs" />
+    <Compile Include="Activities\UpdateUserRole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
