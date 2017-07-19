@@ -5,7 +5,10 @@ namespace System
 {
     public static class DateTimeExtensions
     {
-        public static Int32 BusinessDaysUntil(this DateTime firstDate, DateTime lastDate, params DateTime[] holidays)
+        public static Int32 BusinessDaysUntil(
+            this DateTime firstDate,
+            DateTime lastDate,
+            params DateTime[] holidays)
         {
             var firstDay = firstDate.Date;
             var lastDay = lastDate.Date;
@@ -53,7 +56,9 @@ namespace System
             return date.IsBusinessDay(date.GetHolidays().ToArray());
         }
 
-        public static Boolean IsBusinessDay(this DateTime date, params DateTime[] holidays)
+        public static Boolean IsBusinessDay(
+            this DateTime date,
+            params DateTime[] holidays)
         {
             if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday)
                 return false;

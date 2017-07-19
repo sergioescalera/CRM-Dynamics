@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
-namespace Dynamics.Crm.Extensions
+namespace System.Linq
 {
     public static class EnumerableExtensions
     {
-        public static IEnumerable<IEnumerable<T>> Paged<T>(this IEnumerable<T> items, Int32 pageSize)
+        public static IEnumerable<IEnumerable<T>> Paged<T>(
+            this IEnumerable<T> items,
+            Int32 pageSize)
         {
             ValidationHelper.EnsureNotNull(items, nameof(items));
             ValidationHelper.EnsureInRange(pageSize, min: 1, paramName: nameof(pageSize));
@@ -21,7 +21,10 @@ namespace Dynamics.Crm.Extensions
             }
         }
 
-        private static IEnumerable<T> GetPage<T>(T[] array, Int32 index, Int32 pageSize)
+        private static IEnumerable<T> GetPage<T>(
+            T[] array,
+            Int32 index,
+            Int32 pageSize)
         {
             var length = Math.Min(index + pageSize, array.Length);
 

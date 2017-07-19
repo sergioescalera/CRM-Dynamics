@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Dynamics.Crm.Extensions
+﻿namespace System
 {
     public static class ActionExtensions
     {

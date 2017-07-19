@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>5d8eae7f-b989-4d5e-96d8-bb36a4a57206</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>System.Extensions.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ActionExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\DateTimeExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\DayOfWeekExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\EnumerableExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ObjectExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Linq\EnumerableExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Validation\ValidationHelper.cs" />
+  </ItemGroup>
+</Project>

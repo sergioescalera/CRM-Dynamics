@@ -25,6 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{81A679CE
 		Nuget\Dynamics.Crm.Web.nuspec = Nuget\Dynamics.Crm.Web.nuspec
 		Nuget\Microsoft.VisualStudio.TestTools.UnitTesting.Extensions.nuspec = Nuget\Microsoft.VisualStudio.TestTools.UnitTesting.Extensions.nuspec
 		Nuget\nuget.exe = Nuget\nuget.exe
+		Nuget\System.Extensions.nuspec = Nuget\System.Extensions.nuspec
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dynamics.Crm.Diagnostics", "Plugins\Dynamics.Crm.Diagnostics\Dynamics.Crm.Diagnostics.csproj", "{89EBDA3C-B9EB-455A-85B9-5BD830E10794}"
@@ -40,13 +41,26 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{D7FB8C78-5DE3-49EA-8A2C-D3095C5C2D73}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "System.Extensions.Shared", "Common\System.Extensions.Shared\System.Extensions.Shared.shproj", "{5D8EAE7F-B989-4D5E-96D8-BB36A4A57206}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Extensions", "Common\System.Extensions\System.Extensions.csproj", "{41880AC2-1B01-42AF-84D4-CDCB0C28AAE4}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Common\System.Extensions.Shared\System.Extensions.Shared.projitems*{41880ac2-1b01-42af-84d4-cdcb0c28aae4}*SharedItemsImports = 4
+		Common\System.Extensions.Shared\System.Extensions.Shared.projitems*{59514ec6-4b9b-45f6-b64b-b5685bf69a32}*SharedItemsImports = 4
 		Plugins\Dynamics.Crm.Extensions.Shared\Dynamics.Crm.Extensions.projitems*{59514ec6-4b9b-45f6-b64b-b5685bf69a32}*SharedItemsImports = 4
+		Common\System.Extensions.Shared\System.Extensions.Shared.projitems*{5d8eae7f-b989-4d5e-96d8-bb36a4a57206}*SharedItemsImports = 13
 		Plugins\Dynamics.Crm.Extensions.Shared\Dynamics.Crm.Extensions.projitems*{614d943a-4ce3-483d-8718-30186c3d18c4}*SharedItemsImports = 13
+		Common\System.Extensions.Shared\System.Extensions.Shared.projitems*{89ebda3c-b9eb-455a-85b9-5bd830e10794}*SharedItemsImports = 4
 		Plugins\Dynamics.Crm.Extensions.Shared\Dynamics.Crm.Extensions.projitems*{89ebda3c-b9eb-455a-85b9-5bd830e10794}*SharedItemsImports = 4
+		Common\System.Extensions.Shared\System.Extensions.Shared.projitems*{b1a0b05a-88a8-4bc3-8849-49aea8f571c9}*SharedItemsImports = 4
 		Plugins\Dynamics.Crm.Extensions.Shared\Dynamics.Crm.Extensions.projitems*{b1a0b05a-88a8-4bc3-8849-49aea8f571c9}*SharedItemsImports = 4
+		Common\System.Extensions.Shared\System.Extensions.Shared.projitems*{b8f74789-d7e3-4ddb-be1a-13a8c44db72f}*SharedItemsImports = 4
 		Plugins\Dynamics.Crm.Extensions.Shared\Dynamics.Crm.Extensions.projitems*{b8f74789-d7e3-4ddb-be1a-13a8c44db72f}*SharedItemsImports = 4
+		Common\System.Extensions.Shared\System.Extensions.Shared.projitems*{c66d7d35-4327-4a22-b125-d99615315cbf}*SharedItemsImports = 4
 		Plugins\Dynamics.Crm.Extensions.Shared\Dynamics.Crm.Extensions.projitems*{c66d7d35-4327-4a22-b125-d99615315cbf}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -86,6 +100,10 @@ Global
 		{E68FD44D-8CF1-4A56-B5BD-95B62D8CF081}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E68FD44D-8CF1-4A56-B5BD-95B62D8CF081}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E68FD44D-8CF1-4A56-B5BD-95B62D8CF081}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41880AC2-1B01-42AF-84D4-CDCB0C28AAE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41880AC2-1B01-42AF-84D4-CDCB0C28AAE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41880AC2-1B01-42AF-84D4-CDCB0C28AAE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41880AC2-1B01-42AF-84D4-CDCB0C28AAE4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -100,5 +118,7 @@ Global
 		{614D943A-4CE3-483D-8718-30186C3D18C4} = {68AFE417-E02E-472E-850B-8DC8C3FC3C37}
 		{B8F74789-D7E3-4DDB-BE1A-13A8C44DB72F} = {68AFE417-E02E-472E-850B-8DC8C3FC3C37}
 		{E68FD44D-8CF1-4A56-B5BD-95B62D8CF081} = {6EF24300-1F5B-4620-9629-D3AC36D89139}
+		{5D8EAE7F-B989-4D5E-96D8-BB36A4A57206} = {D7FB8C78-5DE3-49EA-8A2C-D3095C5C2D73}
+		{41880AC2-1B01-42AF-84D4-CDCB0C28AAE4} = {D7FB8C78-5DE3-49EA-8A2C-D3095C5C2D73}
 	EndGlobalSection
 EndGlobal

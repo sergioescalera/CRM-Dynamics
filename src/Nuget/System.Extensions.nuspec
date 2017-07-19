@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>System.Extensions</id>
+    <version>0.0.1.0-alpha</version>
+    <authors>Sergio Escalera</authors>
+    <owners>Sergio Escalera</owners>    
+    <projectUrl>https://github.com/sergioescalera/CRM-Dynamics/</projectUrl>    
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <title>.NET Extensions</title>
+    <description>.NET Extensions</description>
+    <tags>.NET C#</tags>    
+  </metadata>
+  <files>
+    <file src="..\Common\System.Extensions\bin\Release\System.Extensions.dll"
+          target="lib\System.Extensions\net452" />
+  </files>
+</package>

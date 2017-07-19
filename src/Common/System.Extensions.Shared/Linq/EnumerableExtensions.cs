@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Dynamics.Crm.Linq
+﻿namespace System.Collections.Generic
 {
     public static class EnumerableExtensions
     {
