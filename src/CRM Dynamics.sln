@@ -47,6 +47,8 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "System.Extensions.Shared", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Extensions", "Common\System.Extensions\System.Extensions.csproj", "{41880AC2-1B01-42AF-84D4-CDCB0C28AAE4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Extensions.UnitTests", "Tests\System.Extensions.UnitTests\System.Extensions.UnitTests.csproj", "{C134EB5E-A080-430F-99D3-2F6974142517}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Common\System.Extensions.Shared\System.Extensions.Shared.projitems*{41880ac2-1b01-42af-84d4-cdcb0c28aae4}*SharedItemsImports = 4
@@ -104,6 +106,10 @@ Global
 		{41880AC2-1B01-42AF-84D4-CDCB0C28AAE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41880AC2-1B01-42AF-84D4-CDCB0C28AAE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41880AC2-1B01-42AF-84D4-CDCB0C28AAE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C134EB5E-A080-430F-99D3-2F6974142517}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C134EB5E-A080-430F-99D3-2F6974142517}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C134EB5E-A080-430F-99D3-2F6974142517}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C134EB5E-A080-430F-99D3-2F6974142517}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -120,5 +126,6 @@ Global
 		{E68FD44D-8CF1-4A56-B5BD-95B62D8CF081} = {6EF24300-1F5B-4620-9629-D3AC36D89139}
 		{5D8EAE7F-B989-4D5E-96D8-BB36A4A57206} = {D7FB8C78-5DE3-49EA-8A2C-D3095C5C2D73}
 		{41880AC2-1B01-42AF-84D4-CDCB0C28AAE4} = {D7FB8C78-5DE3-49EA-8A2C-D3095C5C2D73}
+		{C134EB5E-A080-430F-99D3-2F6974142517} = {6EF24300-1F5B-4620-9629-D3AC36D89139}
 	EndGlobalSection
 EndGlobal

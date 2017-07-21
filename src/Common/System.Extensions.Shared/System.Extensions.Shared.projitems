@@ -16,6 +16,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ObjectExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Linq\EnumerableExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Reflection\AssemblyExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Validation\ValidationHelper.cs" />
   </ItemGroup>
 </Project>
