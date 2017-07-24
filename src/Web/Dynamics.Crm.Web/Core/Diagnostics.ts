@@ -100,10 +100,12 @@
         var entityName = getEntityName();
         var entityId = getEntityId();
         var formType = getFormType();
+        var clientType = getClientType();
+        var formFactor = getFormFactor();
         var stack = error.stack || error.stacktrace || "<none>";
         var desc = error.description || "<none>";
 
-        var source = `JavaScript::${formType}:${entityName}(${entityId})`;
+        var source = `JavaScript::${clientType},${formFactor},${formType}:${entityName}(${entityId})`;
         var description = `Stack: ${stack}\nDescription: ${desc}`;
 
         var entry: Core.ILogEntry = {
@@ -161,6 +163,34 @@
             trace && log && log.Warning(e);
 
             return "";
+        }
+    }
+
+    function getFormFactor(): number {
+
+        try {
+
+            return Forms.getFormFactor();
+
+        } catch (e) {
+
+            trace && log && log.Warning(e);
+
+            return -1;
+        }
+    }
+
+    function getClientType(): string {
+
+        try {
+
+            return Forms.getClientType();
+
+        } catch (e) {
+
+            trace && log && log.Warning(e);
+
+            return "unknown";
         }
     }
 

@@ -72,9 +72,11 @@ var Dynamics;
                 var entityName = getEntityName();
                 var entityId = getEntityId();
                 var formType = getFormType();
+                var clientType = getClientType();
+                var formFactor = getFormFactor();
                 var stack = error.stack || error.stacktrace || "<none>";
                 var desc = error.description || "<none>";
-                var source = "JavaScript::" + formType + ":" + entityName + "(" + entityId + ")";
+                var source = "JavaScript::" + clientType + "," + formFactor + "," + formType + ":" + entityName + "(" + entityId + ")";
                 var description = "Stack: " + stack + "\nDescription: " + desc;
                 var entry = {
                     type: Crm.Data.Schema.LogEntryEntity.type
@@ -113,6 +115,24 @@ var Dynamics;
                 catch (e) {
                     Diagnostics.trace && Diagnostics.log && Diagnostics.log.Warning(e);
                     return "";
+                }
+            }
+            function getFormFactor() {
+                try {
+                    return Crm.Forms.getFormFactor();
+                }
+                catch (e) {
+                    Diagnostics.trace && Diagnostics.log && Diagnostics.log.Warning(e);
+                    return -1;
+                }
+            }
+            function getClientType() {
+                try {
+                    return Crm.Forms.getClientType();
+                }
+                catch (e) {
+                    Diagnostics.trace && Diagnostics.log && Diagnostics.log.Warning(e);
+                    return "unknown";
                 }
             }
             // variables
