@@ -1,5 +1,4 @@
 ﻿using Dynamics.Crm.Core;
-using Dynamics.Crm.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

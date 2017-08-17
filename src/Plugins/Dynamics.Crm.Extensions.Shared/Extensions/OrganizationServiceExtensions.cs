@@ -40,7 +40,7 @@ namespace Dynamics.Crm.Extensions
 
             return response.EntityCollection;
         }
-        
+
         public static IEnumerable<Entity> FetchAll(this IOrganizationService service, String fetch)
         {
             ValidationHelper.EnsureNotNull(service, nameof(service));
@@ -51,15 +51,24 @@ namespace Dynamics.Crm.Extensions
 
             xml.LoadXml(fetch);
 
-            var node = xml.SelectSingleNode("/fetch");
+            var fetchNode = xml.SelectSingleNode("/fetch");
 
-            var pageAttribute = node.Attributes["page"];
+            var pageAttribute = fetchNode.Attributes["page"];
 
             if (pageAttribute == null)
             {
                 pageAttribute = xml.CreateAttribute("page");
 
-                node.Attributes.Append(pageAttribute);
+                fetchNode.Attributes.Append(pageAttribute);
+            }
+
+            var cookieAttribute = fetchNode.Attributes["paging-cookie"];
+
+            if (cookieAttribute == null)
+            {
+                cookieAttribute = xml.CreateAttribute("paging-cookie");
+
+                fetchNode.Attributes.Append(cookieAttribute);
             }
 
             var page = 0;
@@ -76,6 +85,8 @@ namespace Dynamics.Crm.Extensions
                 if (colletion.Entities.Any())
                     list.AddRange(colletion.Entities);
 
+                cookieAttribute.Value = colletion.PagingCookie;
+
             } while (colletion.MoreRecords);
 
             return list;
@@ -90,14 +101,15 @@ namespace Dynamics.Crm.Extensions
 
             while (true)
             {
-                var pageResponse = service.RetrieveMultiple(query);
+                var response = service.RetrieveMultiple(query);
 
-                if (pageResponse.Entities.Count > 0)
-                    list.AddRange(pageResponse.Entities);
+                if (response.Entities.Count > 0)
+                    list.AddRange(response.Entities);
 
-                if (!pageResponse.MoreRecords) break;
+                if (!response.MoreRecords) break;
 
                 query.PageInfo.PageNumber++;
+                query.PageInfo.PagingCookie = response.PagingCookie;
             }
 
             return list;

@@ -4,6 +4,14 @@ namespace System.Linq
 {
     public static class EnumerableExtensions
     {
+        public static Boolean Empty<T>(
+            this IEnumerable<T> items)
+        {
+            ValidationHelper.EnsureNotNull(items, nameof(items));
+
+            return !items.Any();
+        }
+
         public static IEnumerable<IEnumerable<T>> Paged<T>(
             this IEnumerable<T> items,
             Int32 pageSize)
