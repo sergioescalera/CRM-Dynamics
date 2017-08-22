@@ -35,5 +35,15 @@ namespace Dynamics.Crm.Models
         {
             get; set;
         }
+
+        public StateCode State
+        {
+            get; set;
+        }
+
+        public StatusCode Status
+        {
+            get; set;
+        }
     }
 }

@@ -34,6 +34,16 @@ namespace Dynamics.Crm.Data
             public const String ParentAccountFieldName = "parentaccountid";
 
             public const String PrimaryContactFieldName = "primarycontactid";
+
+            public const String MainPhoneFieldName = "telephone1";
+
+            public const String OtherPhoneFieldName = "telephone2";
+
+            public const String FaxFieldName = "fax";
+
+            public const String EmailFieldName = "emailaddress1";
+
+            public const String WebsiteFieldName = "websiteurl";
         }
 
         public static class AddressStruct
@@ -83,6 +93,14 @@ namespace Dynamics.Crm.Data
             public const String FirstNameField = "firstname";
 
             public const String LastNameField = "lastname";
+
+            public const String EmailFieldName = "emailaddress1";
+
+            public const String PhoneFieldName = "telephone1";
+
+            public const String MobilePhoneFieldName = "mobilephone";
+
+            public const String FaxFieldName = "fax";
         }
 
         public static class Currency
