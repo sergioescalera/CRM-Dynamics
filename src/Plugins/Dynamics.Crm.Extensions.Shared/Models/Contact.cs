@@ -44,6 +44,11 @@ namespace Dynamics.Crm.Models
             get; set;
         }
 
+        public String Fax
+        {
+            get; set;
+        }
+
         public StateCode State
         {
             get; set;

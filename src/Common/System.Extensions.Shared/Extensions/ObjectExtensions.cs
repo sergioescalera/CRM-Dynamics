@@ -2,9 +2,14 @@
 {
     public static class ObjectExtensions
     {
-        public static Boolean HasValue(this Object value)
+        public static Boolean IsNotNull(this Object value)
         {
             return value != null;
+        }
+
+        public static Boolean IsNull(this Object value)
+        {
+            return value == null;
         }
 
         public static Boolean IsNumeric(this Object value)

@@ -74,6 +74,7 @@ namespace Dynamics.Crm.Data
                             Email = o.GetAttributeValue<String>(ContactEntity.EmailFieldName),
                             MobilePhone = o.GetAttributeValue<String>(ContactEntity.MobilePhoneFieldName),
                             Phone = o.GetAttributeValue<String>(ContactEntity.PhoneFieldName),
+                            Fax = o.GetAttributeValue<String>(ContactEntity.FaxFieldName),
                             State = o.GetAttributeValue<OptionSetValue>(Common.StateFieldName),
                             Status = o.GetAttributeValue<OptionSetValue>(Common.StatusFieldName)
                         };
@@ -89,6 +90,7 @@ namespace Dynamics.Crm.Data
                     Email = o.Email,
                     MobilePhone = o.MobilePhone,
                     Phone = o.Phone,
+                    Fax = o.Fax,
                     State = o.State.ToEnum<StateCode>().Value,
                     Status = o.Status.ToEnum<StatusCode>().Value
                 })
