@@ -50,5 +50,5 @@
     export function supportsIFrames(): boolean {
 
         return getIsDesktop();
-    }    
+    }
 }

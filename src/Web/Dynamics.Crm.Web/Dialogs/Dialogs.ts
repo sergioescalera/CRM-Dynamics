@@ -52,7 +52,7 @@
                 .Show()
                 .done(() => deferred.resolve())
                 .fail(() => deferred.reject())
-                .always(() => d.Destroy()))      
+                .always(() => d.Destroy()))
             .fail(() => deferred.reject());
 
         return deferred;

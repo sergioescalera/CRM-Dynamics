@@ -4,12 +4,12 @@
 
     export interface IEntity {
         id?: string;
-        type: string;        
+        type: string;
     }
 
     export interface ILogEntry extends IEntity {
     }
-    
+
     export function parseIdentifier(idStr: string): string {
 
         if (idStr === undefined || idStr == null) {

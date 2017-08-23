@@ -8,7 +8,7 @@
         message: string,
         id: string,
         level: string = Dynamics.Crm.Forms.FormNotificationType.Information): void {
-        
+
         Xrm.Page.ui.setFormNotification(message, level, id);
     }
 

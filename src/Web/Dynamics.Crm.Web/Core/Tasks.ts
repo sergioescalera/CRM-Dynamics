@@ -14,7 +14,7 @@ Clearing your browser's cache <u>(using Ctrl + F5)</u> may help solve the proble
     var executeTaskErrorNotificationId: string = "ExecuteTaskErrorNotification";
 
     export function execute(
-        tasks: (() => boolean)[],
+        tasks: ((() => boolean) | (() => void))[],
         config: ITasksConfig = {
             displayGenericMessageOnError: true
         }): any[] {
@@ -43,7 +43,7 @@ Clearing your browser's cache <u>(using Ctrl + F5)</u> may help solve the proble
                 try {
 
                     var result: boolean = task();
-                    
+
                     results.push(result);
 
                     if (!config.executeAll && !!result) {
@@ -60,7 +60,7 @@ Clearing your browser's cache <u>(using Ctrl + F5)</u> may help solve the proble
 
                     if (!config.continueOnError) {
                         break;
-                    }                   
+                    }
                 }
             }
         }

@@ -4,11 +4,13 @@ var Dynamics;
     (function (Crm) {
         var Data;
         (function (Data) {
+            "use strict";
             var LogEntryRepository = (function () {
-                function LogEntryRepository() {
+                function LogEntryRepository(prefix) {
+                    this._prefix = prefix;
                 }
                 LogEntryRepository.prototype.Create = function (entry) {
-                    Crm.OData.createEntity(entry, Data.Schema.LogEntryEntity.setName);
+                    Crm.OData.createEntity(entry, Data.Schema.LogEntryEntity.setName(this._prefix));
                 };
                 return LogEntryRepository;
             }());
@@ -16,8 +18,8 @@ var Dynamics;
             var UnitOfWork = (function () {
                 function UnitOfWork() {
                 }
-                UnitOfWork.prototype.GetLogEntryRepository = function () {
-                    return new LogEntryRepository();
+                UnitOfWork.prototype.GetLogEntryRepository = function (prefix) {
+                    return new LogEntryRepository(prefix);
                 };
                 return UnitOfWork;
             }());
@@ -34,17 +36,18 @@ var Dynamics;
         (function (Data) {
             var Schema;
             (function (Schema) {
+                "use strict";
                 var LogEntryEntity = (function () {
                     function LogEntryEntity() {
                     }
-                    LogEntryEntity.type = Crm.componentName("logentry");
-                    LogEntryEntity.setName = Crm.componentName("logentries");
-                    LogEntryEntity.idField = Crm.componentName("logentryid");
-                    LogEntryEntity.nameField = Crm.componentName("name");
-                    LogEntryEntity.messageField = Crm.componentName("message");
-                    LogEntryEntity.descriptionField = Crm.componentName("description");
-                    LogEntryEntity.sourceField = Crm.componentName("source");
-                    LogEntryEntity.typeField = Crm.componentName("type");
+                    LogEntryEntity.type = function (prefix) { return Crm.componentName(prefix, "logentry"); };
+                    LogEntryEntity.setName = function (prefix) { return Crm.componentName(prefix, "logentries"); };
+                    LogEntryEntity.idField = function (prefix) { return Crm.componentName(prefix, "logentryid"); };
+                    LogEntryEntity.nameField = function (prefix) { return Crm.componentName(prefix, "name"); };
+                    LogEntryEntity.messageField = function (prefix) { return Crm.componentName(prefix, "message"); };
+                    LogEntryEntity.descriptionField = function (prefix) { return Crm.componentName(prefix, "description"); };
+                    LogEntryEntity.sourceField = function (prefix) { return Crm.componentName(prefix, "source"); };
+                    LogEntryEntity.typeField = function (prefix) { return Crm.componentName(prefix, "type"); };
                     return LogEntryEntity;
                 }());
                 Schema.LogEntryEntity = LogEntryEntity;

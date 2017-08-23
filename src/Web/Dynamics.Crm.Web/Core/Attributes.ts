@@ -71,7 +71,7 @@
 
     // options
 
-    export function hideOptions(attribute: Attribute, hide?: (o: number) => boolean) {
+    export function hideOptions(attribute: Attribute, hide?: (o: number) => boolean): void {
 
         var options = attribute.getOptions();
 
@@ -139,7 +139,7 @@
 
         attribute
             .controls
-            .forEach(function (c: Control) {
+            .forEach((c: Control) => {
 
                 c.setNotification(message, messageId);
             });
@@ -151,7 +151,7 @@
 
         attribute
             .controls
-            .forEach(function (c: Control) {
+            .forEach((c: Control) => {
 
                 c.clearNotification(messageId);
             });

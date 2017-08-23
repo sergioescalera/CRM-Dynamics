@@ -4,11 +4,13 @@ namespace Dynamics.Crm.Data
 {
     public static class Schema
     {
-        public const String publisherPrefix = "sib_";
+        public const String DefaultPrefix = "cc";
 
         public static class Common
         {
-            public const String ConcurrencyTokenFieldName = Schema.publisherPrefix + "concurrencytoken";
+            public static readonly Func<String, String> ConcurrencyTokenFieldName = prefix => $"{prefix}_concurrencytoken";
+
+            public static readonly Func<String, String> CustomNameFieldName = prefix => $"{prefix}_name";
 
             public const String NameFieldName = "name";
 
@@ -127,23 +129,38 @@ namespace Dynamics.Crm.Data
             public const String DirectionCodeFieldName = "directioncode";
         }
 
+        public static class GlobalSettingEntity
+        {
+            public static readonly Func<String, String> TypeName = prefix => $"{prefix}_globalsetting";
+
+            public static readonly Func<String, String> IdFieldName = prefix => $"{prefix}_globalsettingid";
+
+            public static readonly Func<String, String> KeyFieldName = prefix => $"{prefix}_key";
+
+            public static readonly Func<String, String> ValueFieldName = prefix => $"{prefix}_value";
+
+            public static readonly Func<String, String> TypeFieldName = prefix => $"{prefix}_type";
+
+            public static readonly Func<String, String> DescriptionFieldName = prefix => $"{prefix}_description";
+
+            public static readonly Func<String, String> LogicalNameFieldName = prefix => $"{prefix}_logicalname";
+        }
+
         public static class LogEntryEntity
         {
-            public const String TypeName = publisherPrefix + "logentry";
+            public static readonly Func<String, String> TypeName = prefix => $"{prefix}_logentry";
 
-            public static readonly String IdFieldName = $"{publisherPrefix}logentryid";
+            public static readonly Func<String, String> IdFieldName = prefix => $"{prefix}_logentryid";
+            
+            public static readonly Func<String, String> MessageFieldName = prefix => $"{prefix}_message";
 
-            public static readonly String NameFieldName = $"{publisherPrefix}name";
+            public static readonly Func<String, String> DescriptionFieldName = prefix => $"{prefix}_description";
 
-            public static readonly String MessageFieldName = $"{publisherPrefix}message";
+            public static readonly Func<String, String> SourceFieldName = prefix => $"{prefix}_source";
 
-            public static readonly String DescriptionFieldName = $"{publisherPrefix}description";
+            public static readonly Func<String, String> TypeFieldName = prefix => $"{prefix}_type";
 
-            public static readonly String SourceFieldName = $"{publisherPrefix}source";
-
-            public static readonly String TypeFieldName = $"{publisherPrefix}type";
-
-            public static readonly String UserFieldName = $"{publisherPrefix}user";
+            public static readonly Func<String, String> UserFieldName = prefix => $"{prefix}_user";
 
             public static readonly Int32 NameFieldLength = 300;
 

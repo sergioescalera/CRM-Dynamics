@@ -1,11 +1,13 @@
 ﻿module Dynamics.Crm.Data {
 
+    "use strict";
+
     export interface ILogEntryRepository {
         Create(entry: Core.ILogEntry): void;
     }
 
     export interface IUnitOfWork {
 
-        GetLogEntryRepository(): ILogEntryRepository;
+        GetLogEntryRepository(prefix: string): ILogEntryRepository;
     }
 }

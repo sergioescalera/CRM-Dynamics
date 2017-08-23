@@ -32,6 +32,22 @@ var Dynamics;
     (function (Crm) {
         var Core;
         (function (Core) {
+            "use strict";
+            (function (AutoNumberingRuleType) {
+                AutoNumberingRuleType[AutoNumberingRuleType["Global"] = 0] = "Global";
+                AutoNumberingRuleType[AutoNumberingRuleType["GlobalPerDay"] = 3] = "GlobalPerDay";
+                AutoNumberingRuleType[AutoNumberingRuleType["GlobalPerYear"] = 1] = "GlobalPerYear";
+                AutoNumberingRuleType[AutoNumberingRuleType["Parented"] = 2] = "Parented";
+            })(Core.AutoNumberingRuleType || (Core.AutoNumberingRuleType = {}));
+            var AutoNumberingRuleType = Core.AutoNumberingRuleType;
+            (function (GlobalSettingType) {
+                GlobalSettingType[GlobalSettingType["String"] = 0] = "String";
+                GlobalSettingType[GlobalSettingType["Int"] = 1] = "Int";
+                GlobalSettingType[GlobalSettingType["Decimal"] = 2] = "Decimal";
+                GlobalSettingType[GlobalSettingType["Boolean"] = 3] = "Boolean";
+                GlobalSettingType[GlobalSettingType["Reference"] = 4] = "Reference";
+            })(Core.GlobalSettingType || (Core.GlobalSettingType = {}));
+            var GlobalSettingType = Core.GlobalSettingType;
             (function (LogEntryType) {
                 LogEntryType[LogEntryType["Trace"] = 0] = "Trace";
                 LogEntryType[LogEntryType["Warning"] = 1] = "Warning";

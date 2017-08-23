@@ -28,7 +28,7 @@
                 debugger;
             }
 
-            var entry = createLogEntry(message, error);
+            var entry = createLogEntry(Publishers.logEntry, message, error);
 
             console.error(entry);
         }
@@ -52,12 +52,12 @@
                 debugger;
             }
 
-            var entry = createLogEntry(message, error);
+            var entry = createLogEntry(Publishers.logEntry, message, error);
 
             console.error(entry);
 
             Dynamics.Crm.Data.unitOfWork
-                .GetLogEntryRepository()
+                .GetLogEntryRepository(Publishers.logEntry)
                 .Create(entry);
         }
 
@@ -95,7 +95,7 @@
 
     // private function
 
-    function createLogEntry(message: string, error: IError): Core.ILogEntry {
+    function createLogEntry(prefix: string, message: string, error: IError): Core.ILogEntry {
 
         var entityName = getEntityName();
         var entityId = getEntityId();
@@ -109,17 +109,22 @@
         var description = `Stack: ${stack}\nDescription: ${desc}`;
 
         var entry: Core.ILogEntry = {
-            type: Data.Schema.LogEntryEntity.type
+            type: Data.Schema.LogEntryEntity.type(prefix)
         };
 
         var name = error.type ? `${error.type}:${message}` : message;
         var msg = message === error.message ? message : (`${message}. ${error.message}`.trim());
 
-        entry[Data.Schema.LogEntryEntity.nameField] = Validation.Strings.left(name, 300);
-        entry[Data.Schema.LogEntryEntity.messageField] = Validation.Strings.left(msg, 5000);
-        entry[Data.Schema.LogEntryEntity.descriptionField] = Validation.Strings.right(description, 1048576);
-        entry[Data.Schema.LogEntryEntity.sourceField] = Validation.Strings.left(source, 500);
-        entry[Data.Schema.LogEntryEntity.typeField] = Dynamics.Crm.Core.LogEntryType.Error;
+        entry[Data.Schema.LogEntryEntity.nameField(prefix)]
+            = Validation.Strings.left(name, 300);
+        entry[Data.Schema.LogEntryEntity.messageField(prefix)]
+            = Validation.Strings.left(msg, 5000);
+        entry[Data.Schema.LogEntryEntity.descriptionField(prefix)]
+            = Validation.Strings.right(description, 1048576);
+        entry[Data.Schema.LogEntryEntity.sourceField(prefix)]
+            = Validation.Strings.left(source, 500);
+        entry[Data.Schema.LogEntryEntity.typeField(prefix)]
+            = Dynamics.Crm.Core.LogEntryType.Error;
 
         return entry;
     }
@@ -132,7 +137,9 @@
 
         } catch (e) {
 
-            trace && log && log.Warning(e);
+            if (trace && log) {
+                log.Warning(e);
+            }
 
             return "UnknownEntity";
         }
@@ -146,7 +153,9 @@
 
         } catch (e) {
 
-            trace && log && log.Warning(e);
+            if (trace && log) {
+                log.Warning(e);
+            }
 
             return "";
         }
@@ -160,7 +169,9 @@
 
         } catch (e) {
 
-            trace && log && log.Warning(e);
+            if (trace && log) {
+                log.Warning(e);
+            }
 
             return "";
         }
@@ -174,7 +185,9 @@
 
         } catch (e) {
 
-            trace && log && log.Warning(e);
+            if (trace && log) {
+                log.Warning(e);
+            }
 
             return -1;
         }
@@ -188,7 +201,9 @@
 
         } catch (e) {
 
-            trace && log && log.Warning(e);
+            if (trace && log) {
+                log.Warning(e);
+            }
 
             return "unknown";
         }

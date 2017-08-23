@@ -6,26 +6,32 @@ using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Messages;
 using System;
 using System.Linq;
+using static Dynamics.Crm.Data.Schema;
 
 namespace Dynamics.Crm.Data
 {
     public class LogEntryRepository : Repository, ILogEntryRepository
     {
-        public LogEntryRepository(IPluginContext pluginContext)
-            : this(pluginContext, pluginContext?.GetOrganizationServiceContext())
+        private readonly string _prefix;
+
+        public LogEntryRepository(String prefix, IPluginContext pluginContext)
+            : this(prefix, pluginContext, pluginContext?.GetOrganizationServiceContext())
         {
         }
 
-        public LogEntryRepository(IPluginContext pluginContext, OrganizationServiceContext context)
+        public LogEntryRepository(String prefix, IPluginContext pluginContext, OrganizationServiceContext context)
             : base(pluginContext, context)
         {
+            this.EnsureNotNull(prefix, nameof(prefix));
+
+            _prefix = prefix;
         }
 
         protected override String EntityName
         {
             get
             {
-                return Schema.LogEntryEntity.TypeName;
+                return LogEntryEntity.TypeName(_prefix);
             }
         }
 
@@ -36,12 +42,12 @@ namespace Dynamics.Crm.Data
 
             var entity = new Entity(logEntry.TypeName);
 
-            entity.AddOrUpdateAttribute(Schema.LogEntryEntity.DescriptionFieldName, logEntry.Description);
-            entity.AddOrUpdateAttribute(Schema.LogEntryEntity.MessageFieldName, logEntry.Message);
-            entity.AddOrUpdateAttribute(Schema.LogEntryEntity.NameFieldName, logEntry.Name);
-            entity.AddOrUpdateAttribute(Schema.LogEntryEntity.SourceFieldName, logEntry.Source);
-            entity.AddOrUpdateAttribute(Schema.LogEntryEntity.TypeFieldName, logEntry.Type.ToOptionSetValue());
-            entity.AddOrUpdateAttribute(Schema.LogEntryEntity.UserFieldName, logEntry.User);
+            entity.AddOrUpdateAttribute(LogEntryEntity.DescriptionFieldName(_prefix), logEntry.Description);
+            entity.AddOrUpdateAttribute(LogEntryEntity.MessageFieldName(_prefix), logEntry.Message);
+            entity.AddOrUpdateAttribute(Common.CustomNameFieldName(_prefix), logEntry.Name);
+            entity.AddOrUpdateAttribute(LogEntryEntity.SourceFieldName(_prefix), logEntry.Source);
+            entity.AddOrUpdateAttribute(LogEntryEntity.TypeFieldName(_prefix), logEntry.Type.ToOptionSetValue());
+            entity.AddOrUpdateAttribute(LogEntryEntity.UserFieldName(_prefix), logEntry.User);
 
             if (useCurrentTransaction)
             {

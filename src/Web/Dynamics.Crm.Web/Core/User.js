@@ -4,6 +4,7 @@ var Dynamics;
     (function (Crm) {
         var User;
         (function (User) {
+            "use strict";
             function getId() {
                 var userId = Xrm.Page.context.getUserId();
                 return Crm.Core.parseIdentifier(userId);

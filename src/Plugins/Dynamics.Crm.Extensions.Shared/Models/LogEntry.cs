@@ -2,18 +2,26 @@
 using Dynamics.Crm.Interfaces;
 using Microsoft.Xrm.Sdk;
 using System;
+using static Dynamics.Crm.Data.Schema;
 
 namespace Dynamics.Crm.Models
 {
     public class LogEntry : IEntity
     {
+        private readonly string _prefix;
+
         public LogEntry(
             String name,
             String message,
             String description,
             String source,
-            LogEntryType type = LogEntryType.Error)
+            LogEntryType type = LogEntryType.Error,
+            String prefix = Schema.DefaultPrefix)
         {
+            this.EnsureNotNull(prefix, nameof(prefix));
+
+            _prefix = prefix;
+
             Name = name?.Left(Schema.LogEntryEntity.NameFieldLength);
             Message = message?.Left(Schema.LogEntryEntity.MessageFieldLength);
             Description = description?.Right(Schema.LogEntryEntity.DescriptionFieldLength);
@@ -60,7 +68,7 @@ namespace Dynamics.Crm.Models
         {
             get
             {
-                return Schema.LogEntryEntity.TypeName;
+                return LogEntryEntity.TypeName(_prefix);
             }
         }
 
@@ -69,7 +77,8 @@ namespace Dynamics.Crm.Models
             String name,
             String trace,
             String source = "Plugin",
-            LogEntryType type = LogEntryType.Error)
+            LogEntryType type = LogEntryType.Error,
+            String prefix = Schema.DefaultPrefix)
         {
             ValidationHelper.EnsureNotNull(exception);
             ValidationHelper.EnsureNotNull(name);
@@ -77,7 +86,7 @@ namespace Dynamics.Crm.Models
             var message = exception.Message;
             var description = $"EXCEPTION:{exception.ToString()}\nTRACE:{trace}";
 
-            var entry = new LogEntry(name, message, description, source, type);
+            var entry = new LogEntry(name, message, description, source, type, prefix);
             
             return entry;
         }

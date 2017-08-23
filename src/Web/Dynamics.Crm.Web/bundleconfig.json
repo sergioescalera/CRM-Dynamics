@@ -39,6 +39,20 @@
     ]
   },
   {
+    "outputFileName": "Scripts/Dynamics.Crm.AutoNumberingRuleForm.js",
+    "inputFiles": [
+      "Forms/AutoNumberingRuleForm.js"
+    ],
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "Scripts/Dynamics.Crm.GlobalSettingForm.js",
+    "inputFiles": [
+      "Forms/GlobalSettingForm.js"
+    ],
+    "sourceMap": false
+  },
+  {
     "outputFileName": "UnitTests/Dynamics.Crm.UnitTests.js",
     "inputFiles": [
       "UnitTests/Setup.js",

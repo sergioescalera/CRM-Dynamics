@@ -119,7 +119,7 @@
         Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
         Validation.ensureNotNullOrEmpty(entityId, "entityId");
 
-        var baseUrl = getContext().getClientUrl();
+        var baseUrl: string = getContext().getClientUrl();
 
         var url = `${baseUrl}/api/data/${getVersion()}/${entitySetName}(${Core.parseIdentifier(entityId)})?$select=${attributes.join(",") }`;
 
@@ -161,7 +161,7 @@
         Validation.ensureNotNullOrEmpty(entityName, "entityName");
         Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
 
-        var baseUrl = getContext().getClientUrl();
+        var baseUrl: string = getContext().getClientUrl();
 
         var filterJoin = !filterType || filterType === FilterType.And ? " and " : " or ";
 
@@ -209,7 +209,7 @@
         Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
         Validation.ensureNotNullOrEmpty(entityId, "entityId");
 
-        var baseUrl = getContext().getClientUrl();
+        var baseUrl: string = getContext().getClientUrl();
 
         var url = `${baseUrl}/api/data/${getVersion()}/${entitySetName}(${Core.parseIdentifier(entityId)})`;
 
@@ -239,7 +239,7 @@
         Validation.ensureNotNullOrUndefined(entity, "entity");
         Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
 
-        var baseUrl = getContext().getClientUrl();
+        var baseUrl: string = getContext().getClientUrl();
         var idFieldName = entityIdFieldName(entity.type);
 
         attributes = attributes || [];
@@ -248,7 +248,7 @@
         }
 
         var url = `${baseUrl}/api/data/${getVersion()}/${entitySetName}?$select=${attributes.join(",")}`;
-        
+
         var data = stringifyEntity(entity);
 
         return $
@@ -283,7 +283,7 @@
         Validation.ensureNotNullOrUndefined(entity, "entity");
         Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
 
-        var baseUrl = getContext().getClientUrl();
+        var baseUrl: string = getContext().getClientUrl();
 
         var url = `${baseUrl}/api/data/${getVersion()}/${entitySetName}(${Core.parseIdentifier(entity.id)})`;
 
@@ -313,7 +313,7 @@
 
     export function fetch(entitySetName: string, fetchXml: string): JQueryPromise<any> {
 
-        var baseUrl = getContext().getClientUrl();
+        var baseUrl: string = getContext().getClientUrl();
 
         var url = `${baseUrl}/api/data/${getVersion()}/${entitySetName}?fetchXml=${encodeURIComponent(fetchXml)}`;
 
@@ -346,7 +346,7 @@
     export function entityDefinitions(
         attributes: string[] = entityDefinitionAttributes): JQueryPromise<IEntityDefinition[]> {
 
-        var baseUrl = getContext().getClientUrl();
+        var baseUrl: string = getContext().getClientUrl();
 
         var url = `${baseUrl}/api/data/${getVersion()}/EntityDefinitions?$select=${attributes.join(",")}`;
 
@@ -375,7 +375,7 @@
 
         Validation.ensureNotNullOrEmpty(metadataId, "metadataId");
 
-        var baseUrl = getContext().getClientUrl();
+        var baseUrl: string = getContext().getClientUrl();
 
         var url = `${baseUrl}/api/data/${getVersion()}/EntityDefinitions(${metadataId})/Attributes?$select=${attributes.join(",")}`;
 
@@ -397,7 +397,7 @@
         Validation.ensureNotNullOrEmpty(metadataId, "metadataId");
         Validation.ensureNotNullOrEmpty(attributeMetadataId, "attributeMetadataId");
 
-        var baseUrl = getContext().getClientUrl();
+        var baseUrl: string = getContext().getClientUrl();
 
         var url = `${baseUrl}/api/data/v8.0/EntityDefinitions(${metadataId})/Attributes(${attributeMetadataId})/Microsoft.Dynamics.CRM.PicklistAttributeMetadata/OptionSet?$select=Options`;
 

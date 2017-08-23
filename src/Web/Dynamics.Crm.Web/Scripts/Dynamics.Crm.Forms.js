@@ -150,8 +150,20 @@ var Dynamics;
 (function (Dynamics) {
     var Crm;
     (function (Crm) {
-        Crm.publisherPrefix = "sib_";
-        Crm.componentName = function (name) { return Crm.publisherPrefix + name; };
+        "use strict";
+        Crm.componentName = function (prefix, name) { return (prefix + "_" + name); };
+    })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
+})(Dynamics || (Dynamics = {}));
+var Dynamics;
+(function (Dynamics) {
+    var Crm;
+    (function (Crm) {
+        var Publishers;
+        (function (Publishers) {
+            "use strict";
+            Publishers.bootstrap = "cc";
+            Publishers.logEntry = "cc";
+        })(Publishers = Crm.Publishers || (Crm.Publishers = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
 var Dynamics;
@@ -347,7 +359,7 @@ var Dynamics;
                     if (Diagnostics.debug) {
                         debugger;
                     }
-                    var entry = createLogEntry(message, error);
+                    var entry = createLogEntry(Crm.Publishers.logEntry, message, error);
                     console.error(entry);
                 };
                 ConsoleLogger.prototype.Message = function (message) {
@@ -365,10 +377,10 @@ var Dynamics;
                     if (Diagnostics.debug) {
                         debugger;
                     }
-                    var entry = createLogEntry(message, error);
+                    var entry = createLogEntry(Crm.Publishers.logEntry, message, error);
                     console.error(entry);
                     Dynamics.Crm.Data.unitOfWork
-                        .GetLogEntryRepository()
+                        .GetLogEntryRepository(Crm.Publishers.logEntry)
                         .Create(entry);
                 };
                 LogEntryLogger.prototype.Message = function (message) {
@@ -401,7 +413,7 @@ var Dynamics;
             }
             Diagnostics.printArguments = printArguments;
             // private function
-            function createLogEntry(message, error) {
+            function createLogEntry(prefix, message, error) {
                 var entityName = getEntityName();
                 var entityId = getEntityId();
                 var formType = getFormType();
@@ -412,15 +424,20 @@ var Dynamics;
                 var source = "JavaScript::" + clientType + "," + formFactor + "," + formType + ":" + entityName + "(" + entityId + ")";
                 var description = "Stack: " + stack + "\nDescription: " + desc;
                 var entry = {
-                    type: Crm.Data.Schema.LogEntryEntity.type
+                    type: Crm.Data.Schema.LogEntryEntity.type(prefix)
                 };
                 var name = error.type ? error.type + ":" + message : message;
                 var msg = message === error.message ? message : ((message + ". " + error.message).trim());
-                entry[Crm.Data.Schema.LogEntryEntity.nameField] = Validation.Strings.left(name, 300);
-                entry[Crm.Data.Schema.LogEntryEntity.messageField] = Validation.Strings.left(msg, 5000);
-                entry[Crm.Data.Schema.LogEntryEntity.descriptionField] = Validation.Strings.right(description, 1048576);
-                entry[Crm.Data.Schema.LogEntryEntity.sourceField] = Validation.Strings.left(source, 500);
-                entry[Crm.Data.Schema.LogEntryEntity.typeField] = Dynamics.Crm.Core.LogEntryType.Error;
+                entry[Crm.Data.Schema.LogEntryEntity.nameField(prefix)]
+                    = Validation.Strings.left(name, 300);
+                entry[Crm.Data.Schema.LogEntryEntity.messageField(prefix)]
+                    = Validation.Strings.left(msg, 5000);
+                entry[Crm.Data.Schema.LogEntryEntity.descriptionField(prefix)]
+                    = Validation.Strings.right(description, 1048576);
+                entry[Crm.Data.Schema.LogEntryEntity.sourceField(prefix)]
+                    = Validation.Strings.left(source, 500);
+                entry[Crm.Data.Schema.LogEntryEntity.typeField(prefix)]
+                    = Dynamics.Crm.Core.LogEntryType.Error;
                 return entry;
             }
             function getEntityName() {
@@ -428,7 +445,9 @@ var Dynamics;
                     return Xrm.Page.data.entity.getEntityName();
                 }
                 catch (e) {
-                    Diagnostics.trace && Diagnostics.log && Diagnostics.log.Warning(e);
+                    if (Diagnostics.trace && Diagnostics.log) {
+                        Diagnostics.log.Warning(e);
+                    }
                     return "UnknownEntity";
                 }
             }
@@ -437,7 +456,9 @@ var Dynamics;
                     return Xrm.Page.data.entity.getId();
                 }
                 catch (e) {
-                    Diagnostics.trace && Diagnostics.log && Diagnostics.log.Warning(e);
+                    if (Diagnostics.trace && Diagnostics.log) {
+                        Diagnostics.log.Warning(e);
+                    }
                     return "";
                 }
             }
@@ -446,7 +467,9 @@ var Dynamics;
                     return Xrm.Page.ui.getFormType().toString();
                 }
                 catch (e) {
-                    Diagnostics.trace && Diagnostics.log && Diagnostics.log.Warning(e);
+                    if (Diagnostics.trace && Diagnostics.log) {
+                        Diagnostics.log.Warning(e);
+                    }
                     return "";
                 }
             }
@@ -455,7 +478,9 @@ var Dynamics;
                     return Crm.Forms.getFormFactor();
                 }
                 catch (e) {
-                    Diagnostics.trace && Diagnostics.log && Diagnostics.log.Warning(e);
+                    if (Diagnostics.trace && Diagnostics.log) {
+                        Diagnostics.log.Warning(e);
+                    }
                     return -1;
                 }
             }
@@ -464,7 +489,9 @@ var Dynamics;
                     return Crm.Forms.getClientType();
                 }
                 catch (e) {
-                    Diagnostics.trace && Diagnostics.log && Diagnostics.log.Warning(e);
+                    if (Diagnostics.trace && Diagnostics.log) {
+                        Diagnostics.log.Warning(e);
+                    }
                     return "unknown";
                 }
             }
@@ -566,6 +593,22 @@ var Dynamics;
     (function (Crm) {
         var Core;
         (function (Core) {
+            "use strict";
+            (function (AutoNumberingRuleType) {
+                AutoNumberingRuleType[AutoNumberingRuleType["Global"] = 0] = "Global";
+                AutoNumberingRuleType[AutoNumberingRuleType["GlobalPerDay"] = 3] = "GlobalPerDay";
+                AutoNumberingRuleType[AutoNumberingRuleType["GlobalPerYear"] = 1] = "GlobalPerYear";
+                AutoNumberingRuleType[AutoNumberingRuleType["Parented"] = 2] = "Parented";
+            })(Core.AutoNumberingRuleType || (Core.AutoNumberingRuleType = {}));
+            var AutoNumberingRuleType = Core.AutoNumberingRuleType;
+            (function (GlobalSettingType) {
+                GlobalSettingType[GlobalSettingType["String"] = 0] = "String";
+                GlobalSettingType[GlobalSettingType["Int"] = 1] = "Int";
+                GlobalSettingType[GlobalSettingType["Decimal"] = 2] = "Decimal";
+                GlobalSettingType[GlobalSettingType["Boolean"] = 3] = "Boolean";
+                GlobalSettingType[GlobalSettingType["Reference"] = 4] = "Reference";
+            })(Core.GlobalSettingType || (Core.GlobalSettingType = {}));
+            var GlobalSettingType = Core.GlobalSettingType;
             (function (LogEntryType) {
                 LogEntryType[LogEntryType["Trace"] = 0] = "Trace";
                 LogEntryType[LogEntryType["Warning"] = 1] = "Warning";
@@ -1061,6 +1104,7 @@ var Dynamics;
     (function (Crm) {
         var User;
         (function (User) {
+            "use strict";
             function getId() {
                 var userId = Xrm.Page.context.getUserId();
                 return Crm.Core.parseIdentifier(userId);
@@ -1119,19 +1163,23 @@ var Validation;
         "use strict";
         function left(str, length) {
             Validation.ensureNumberInRange(length, 0);
-            if (str === null || str === undefined)
+            if (str === null || str === undefined) {
                 return str;
-            if (str.length <= length)
+            }
+            if (str.length <= length) {
                 return str;
+            }
             return str.substr(0, length);
         }
         Strings.left = left;
         function right(str, length) {
             Validation.ensureNumberInRange(length, 0);
-            if (str === null || str === undefined)
+            if (str === null || str === undefined) {
                 return str;
-            if (str.length <= length)
+            }
+            if (str.length <= length) {
                 return str;
+            }
             return str.substr(str.length - length, length);
         }
         Strings.right = right;
@@ -1211,6 +1259,16 @@ var Caching;
     "use strict";
 })(Caching || (Caching = {}));
 
+var Dynamics;
+(function (Dynamics) {
+    var Crm;
+    (function (Crm) {
+        var Data;
+        (function (Data) {
+            "use strict";
+        })(Data = Crm.Data || (Crm.Data = {}));
+    })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
+})(Dynamics || (Dynamics = {}));
 
 var Dynamics;
 (function (Dynamics) {
@@ -1510,11 +1568,13 @@ var Dynamics;
     (function (Crm) {
         var Data;
         (function (Data) {
+            "use strict";
             var LogEntryRepository = (function () {
-                function LogEntryRepository() {
+                function LogEntryRepository(prefix) {
+                    this._prefix = prefix;
                 }
                 LogEntryRepository.prototype.Create = function (entry) {
-                    Crm.OData.createEntity(entry, Data.Schema.LogEntryEntity.setName);
+                    Crm.OData.createEntity(entry, Data.Schema.LogEntryEntity.setName(this._prefix));
                 };
                 return LogEntryRepository;
             }());
@@ -1522,8 +1582,8 @@ var Dynamics;
             var UnitOfWork = (function () {
                 function UnitOfWork() {
                 }
-                UnitOfWork.prototype.GetLogEntryRepository = function () {
-                    return new LogEntryRepository();
+                UnitOfWork.prototype.GetLogEntryRepository = function (prefix) {
+                    return new LogEntryRepository(prefix);
                 };
                 return UnitOfWork;
             }());
@@ -1540,17 +1600,18 @@ var Dynamics;
         (function (Data) {
             var Schema;
             (function (Schema) {
+                "use strict";
                 var LogEntryEntity = (function () {
                     function LogEntryEntity() {
                     }
-                    LogEntryEntity.type = Crm.componentName("logentry");
-                    LogEntryEntity.setName = Crm.componentName("logentries");
-                    LogEntryEntity.idField = Crm.componentName("logentryid");
-                    LogEntryEntity.nameField = Crm.componentName("name");
-                    LogEntryEntity.messageField = Crm.componentName("message");
-                    LogEntryEntity.descriptionField = Crm.componentName("description");
-                    LogEntryEntity.sourceField = Crm.componentName("source");
-                    LogEntryEntity.typeField = Crm.componentName("type");
+                    LogEntryEntity.type = function (prefix) { return Crm.componentName(prefix, "logentry"); };
+                    LogEntryEntity.setName = function (prefix) { return Crm.componentName(prefix, "logentries"); };
+                    LogEntryEntity.idField = function (prefix) { return Crm.componentName(prefix, "logentryid"); };
+                    LogEntryEntity.nameField = function (prefix) { return Crm.componentName(prefix, "name"); };
+                    LogEntryEntity.messageField = function (prefix) { return Crm.componentName(prefix, "message"); };
+                    LogEntryEntity.descriptionField = function (prefix) { return Crm.componentName(prefix, "description"); };
+                    LogEntryEntity.sourceField = function (prefix) { return Crm.componentName(prefix, "source"); };
+                    LogEntryEntity.typeField = function (prefix) { return Crm.componentName(prefix, "type"); };
                     return LogEntryEntity;
                 }());
                 Schema.LogEntryEntity = LogEntryEntity;

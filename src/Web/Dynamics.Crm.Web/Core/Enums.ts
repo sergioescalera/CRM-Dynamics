@@ -23,6 +23,23 @@
 
 module Dynamics.Crm.Core {
 
+    "use strict";
+
+    export enum AutoNumberingRuleType {
+        Global = 0,
+        GlobalPerDay = 3,
+        GlobalPerYear = 1,
+        Parented = 2
+    }
+
+    export enum GlobalSettingType {
+        String = 0,
+        Int = 1,
+        Decimal = 2,
+        Boolean = 3,
+        Reference = 4
+    }
+
     export enum LogEntryType {
         Trace = 0,
         Warning = 1,

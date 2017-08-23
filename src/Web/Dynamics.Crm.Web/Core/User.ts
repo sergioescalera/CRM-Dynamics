@@ -1,5 +1,7 @@
 ﻿module Dynamics.Crm.User {
 
+    "use strict";
+
     export function getId(): string {
 
         var userId = Xrm.Page.context.getUserId();

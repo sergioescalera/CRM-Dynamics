@@ -1,6 +1,5 @@
 ﻿using Dynamics.Crm.Attributes;
 using Dynamics.Crm.Data;
-using Dynamics.Crm.Extensions;
 using Dynamics.Crm.Interfaces;
 using Dynamics.Crm.Models;
 using Microsoft.Xrm.Sdk;
@@ -12,6 +11,15 @@ namespace Dynamics.Crm.Plugins
 {
     public abstract class PluginBase : IPlugin
     {
+        private readonly string _prefix;
+
+        protected PluginBase(String prefix = Schema.DefaultPrefix)
+        {
+            this.EnsureNotNull(prefix);
+
+            _prefix = prefix;
+        }
+
         public virtual void Execute(IServiceProvider serviceProvider)
         {
             var stopwatch = new Stopwatch();
@@ -102,9 +110,9 @@ UserId: {executionContext?.UserId}";
                 var name = GetType().FullName;
                 var trace = context.TracingService.ToString();
 
-                var entry = LogEntry.CreateFromException(exception, name, trace, type: type);
+                var entry = LogEntry.CreateFromException(exception, name, trace, type: type, prefix: _prefix);
 
-                var repository = new LogEntryRepository(context);
+                var repository = new LogEntryRepository(_prefix, context);
 
                 repository.Create(entry);
             });

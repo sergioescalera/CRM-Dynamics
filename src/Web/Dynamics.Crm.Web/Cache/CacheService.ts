@@ -28,7 +28,7 @@
             var str = this._storage.getItem(key);
 
             var entry: ICacheEntry<T>;
-            
+
             if (str) {
                 entry = this.parse<T>(str);
             }
@@ -46,7 +46,7 @@
             var value = factory();
 
             this.set(key, value, expiration);
-            
+
             return value;
         }
 

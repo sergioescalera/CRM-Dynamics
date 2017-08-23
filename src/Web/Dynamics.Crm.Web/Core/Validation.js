@@ -42,19 +42,23 @@ var Validation;
         "use strict";
         function left(str, length) {
             Validation.ensureNumberInRange(length, 0);
-            if (str === null || str === undefined)
+            if (str === null || str === undefined) {
                 return str;
-            if (str.length <= length)
+            }
+            if (str.length <= length) {
                 return str;
+            }
             return str.substr(0, length);
         }
         Strings.left = left;
         function right(str, length) {
             Validation.ensureNumberInRange(length, 0);
-            if (str === null || str === undefined)
+            if (str === null || str === undefined) {
                 return str;
-            if (str.length <= length)
+            }
+            if (str.length <= length) {
                 return str;
+            }
             return str.substr(str.length - length, length);
         }
         Strings.right = right;

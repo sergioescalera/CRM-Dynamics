@@ -43,12 +43,12 @@
     export class BootstrapDialog<TResult> implements IDialog<TResult> {
 
         private _content: string;
-        private _window: IJQueryWindow;
+        private _window: JQueryWindow;
         private _dialog: Bootstrap;
         private _deferred: JQueryDeferred<TResult>;
         private _init: (dialog: JQuery) => void;
 
-        constructor(window: IJQueryWindow, content: string, init?: (dialog: JQuery) => void) {
+        constructor(window: JQueryWindow, content: string, init?: (dialog: JQuery) => void) {
 
             this._content = content;
             this._window = window;
@@ -115,10 +115,10 @@
 
     export class BootstrapDialogProvider implements IDialogProvider {
 
-        private _window: IJQueryWindow;
+        private _window: JQueryWindow;
         private _loading: JQueryPromise<any>;
 
-        constructor(window: IJQueryWindow) {
+        constructor(window: JQueryWindow) {
 
             this._window = window;
 
@@ -127,7 +127,7 @@
 
         private Init(): void {
 
-            var baseUrl: string = `../WebResources/${Dynamics.Crm.publisherPrefix}/Libs/bootstrap/`;
+            var baseUrl: string = `../WebResources/${Dynamics.Crm.Publishers.bootstrap}_/Libs/bootstrap/`;
 
             this._loading = ScriptManager.loadScript(baseUrl + "js/bootstrap.min.js", this._window);
 

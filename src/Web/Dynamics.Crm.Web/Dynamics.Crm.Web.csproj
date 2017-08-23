@@ -92,6 +92,12 @@
   <ItemGroup>
     <Content Include="Content\jasmine\jasmine.css" />
     <Content Include="Content\jasmine\jasmine_favicon.png" />
+    <Content Include="Images\LogEntry_16.png" />
+    <Content Include="Images\LogEntry_32.png" />
+    <Content Include="Images\Numbering_16.png" />
+    <Content Include="Images\Numbering_32.png" />
+    <Content Include="Images\Settings_16.png" />
+    <Content Include="Images\Settings_32.png" />
     <Content Include="Libs\bootstrap\css\bootstrap-theme.css" />
     <Content Include="Libs\bootstrap\css\bootstrap.css" />
     <Content Include="Libs\bootstrap\css\bootstrap.min.css">
@@ -109,6 +115,10 @@
       <DependentUpon>moment.js</DependentUpon>
     </Content>
     <Content Include="Libs\toastr\toastr.min.js" />
+    <Content Include="Scripts\Dynamics.Crm.AutoNumberingRuleForm.js" />
+    <Content Include="Scripts\Dynamics.Crm.AutoNumberingRuleForm.min.js">
+      <DependentUpon>Dynamics.Crm.AutoNumberingRuleForm.js</DependentUpon>
+    </Content>
     <Content Include="Scripts\Dynamics.Crm.Dialogs.js" />
     <Content Include="Scripts\Dynamics.Crm.Dialogs.min.js">
       <DependentUpon>Dynamics.Crm.Dialogs.js</DependentUpon>
@@ -120,6 +130,10 @@
     <Content Include="Libs\lodash\lodash.core.js" />
     <Content Include="Libs\lodash\lodash.js" />
     <Content Include="Libs\moment\moment.js" />
+    <Content Include="Scripts\Dynamics.Crm.GlobalSettingForm.js" />
+    <Content Include="Scripts\Dynamics.Crm.GlobalSettingForm.min.js">
+      <DependentUpon>Dynamics.Crm.GlobalSettingForm.js</DependentUpon>
+    </Content>
     <Content Include="Scripts\Dynamics.Crm.Notifications.js" />
     <Content Include="Scripts\Dynamics.Crm.Notifications.min.js">
       <DependentUpon>Dynamics.Crm.Notifications.js</DependentUpon>
@@ -198,6 +212,8 @@
     <TypeScriptCompile Include="Dialogs\BootstrapDialogs.ts" />
     <TypeScriptCompile Include="Dialogs\CrmDialogs.ts" />
     <TypeScriptCompile Include="Dialogs\Dialogs.ts" />
+    <TypeScriptCompile Include="Forms\AutoNumberingRuleForm.ts" />
+    <TypeScriptCompile Include="Forms\GlobalSettingForm.ts" />
     <TypeScriptCompile Include="Notifications\CrmFormNotifications.ts" />
     <TypeScriptCompile Include="Notifications\DefaultNotifications.ts" />
     <TypeScriptCompile Include="Notifications\INotificationService.ts" />

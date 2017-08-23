@@ -1,8 +1,16 @@
 ﻿module Dynamics.Crm {
 
-    export var publisherPrefix = "sib_"
+    "use strict";
 
-    export var componentName = (name: string) => publisherPrefix + name;
+    export var componentName = (prefix: string, name: string) => `${prefix}_${name}`;
+}
+
+module Dynamics.Crm.Publishers {
+
+    "use strict";
+
+    export var bootstrap: string = "cc";
+    export var logEntry: string = "cc";
 }
 
 module Dynamics.Crm.Forms {

@@ -14,7 +14,7 @@ var Dynamics;
                     if (Diagnostics.debug) {
                         debugger;
                     }
-                    var entry = createLogEntry(message, error);
+                    var entry = createLogEntry(Crm.Publishers.logEntry, message, error);
                     console.error(entry);
                 };
                 ConsoleLogger.prototype.Message = function (message) {
@@ -32,10 +32,10 @@ var Dynamics;
                     if (Diagnostics.debug) {
                         debugger;
                     }
-                    var entry = createLogEntry(message, error);
+                    var entry = createLogEntry(Crm.Publishers.logEntry, message, error);
                     console.error(entry);
                     Dynamics.Crm.Data.unitOfWork
-                        .GetLogEntryRepository()
+                        .GetLogEntryRepository(Crm.Publishers.logEntry)
                         .Create(entry);
                 };
                 LogEntryLogger.prototype.Message = function (message) {
@@ -68,7 +68,7 @@ var Dynamics;
             }
             Diagnostics.printArguments = printArguments;
             // private function
-            function createLogEntry(message, error) {
+            function createLogEntry(prefix, message, error) {
                 var entityName = getEntityName();
                 var entityId = getEntityId();
                 var formType = getFormType();
@@ -79,15 +79,20 @@ var Dynamics;
                 var source = "JavaScript::" + clientType + "," + formFactor + "," + formType + ":" + entityName + "(" + entityId + ")";
                 var description = "Stack: " + stack + "\nDescription: " + desc;
                 var entry = {
-                    type: Crm.Data.Schema.LogEntryEntity.type
+                    type: Crm.Data.Schema.LogEntryEntity.type(prefix)
                 };
                 var name = error.type ? error.type + ":" + message : message;
                 var msg = message === error.message ? message : ((message + ". " + error.message).trim());
-                entry[Crm.Data.Schema.LogEntryEntity.nameField] = Validation.Strings.left(name, 300);
-                entry[Crm.Data.Schema.LogEntryEntity.messageField] = Validation.Strings.left(msg, 5000);
-                entry[Crm.Data.Schema.LogEntryEntity.descriptionField] = Validation.Strings.right(description, 1048576);
-                entry[Crm.Data.Schema.LogEntryEntity.sourceField] = Validation.Strings.left(source, 500);
-                entry[Crm.Data.Schema.LogEntryEntity.typeField] = Dynamics.Crm.Core.LogEntryType.Error;
+                entry[Crm.Data.Schema.LogEntryEntity.nameField(prefix)]
+                    = Validation.Strings.left(name, 300);
+                entry[Crm.Data.Schema.LogEntryEntity.messageField(prefix)]
+                    = Validation.Strings.left(msg, 5000);
+                entry[Crm.Data.Schema.LogEntryEntity.descriptionField(prefix)]
+                    = Validation.Strings.right(description, 1048576);
+                entry[Crm.Data.Schema.LogEntryEntity.sourceField(prefix)]
+                    = Validation.Strings.left(source, 500);
+                entry[Crm.Data.Schema.LogEntryEntity.typeField(prefix)]
+                    = Dynamics.Crm.Core.LogEntryType.Error;
                 return entry;
             }
             function getEntityName() {
@@ -95,7 +100,9 @@ var Dynamics;
                     return Xrm.Page.data.entity.getEntityName();
                 }
                 catch (e) {
-                    Diagnostics.trace && Diagnostics.log && Diagnostics.log.Warning(e);
+                    if (Diagnostics.trace && Diagnostics.log) {
+                        Diagnostics.log.Warning(e);
+                    }
                     return "UnknownEntity";
                 }
             }
@@ -104,7 +111,9 @@ var Dynamics;
                     return Xrm.Page.data.entity.getId();
                 }
                 catch (e) {
-                    Diagnostics.trace && Diagnostics.log && Diagnostics.log.Warning(e);
+                    if (Diagnostics.trace && Diagnostics.log) {
+                        Diagnostics.log.Warning(e);
+                    }
                     return "";
                 }
             }
@@ -113,7 +122,9 @@ var Dynamics;
                     return Xrm.Page.ui.getFormType().toString();
                 }
                 catch (e) {
-                    Diagnostics.trace && Diagnostics.log && Diagnostics.log.Warning(e);
+                    if (Diagnostics.trace && Diagnostics.log) {
+                        Diagnostics.log.Warning(e);
+                    }
                     return "";
                 }
             }
@@ -122,7 +133,9 @@ var Dynamics;
                     return Crm.Forms.getFormFactor();
                 }
                 catch (e) {
-                    Diagnostics.trace && Diagnostics.log && Diagnostics.log.Warning(e);
+                    if (Diagnostics.trace && Diagnostics.log) {
+                        Diagnostics.log.Warning(e);
+                    }
                     return -1;
                 }
             }
@@ -131,7 +144,9 @@ var Dynamics;
                     return Crm.Forms.getClientType();
                 }
                 catch (e) {
-                    Diagnostics.trace && Diagnostics.log && Diagnostics.log.Warning(e);
+                    if (Diagnostics.trace && Diagnostics.log) {
+                        Diagnostics.log.Warning(e);
+                    }
                     return "unknown";
                 }
             }

@@ -1,7 +1,7 @@
 ﻿module Notifications {
 
     "use strict";
-    
+
     export class CrmFormNotificationService implements INotificationService {
 
         hide(id: string): void {
@@ -17,7 +17,7 @@
         }
 
         show(options: Options): void {
-            
+
             if (_.isFunction(Xrm.Page.ui.setFormHtmlNotification)) {
                 Xrm.Page.ui.setFormHtmlNotification(options.message, options.type, options.id);
             } else {

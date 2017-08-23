@@ -6,7 +6,7 @@
 
         if (value === undefined || value === null) {
             throw new Error(Resources.Strings.NullArgumentMessageFormat(label));
-        }        
+        }
     }
 
     export function ensureNotNullOrEmpty(str: string, label: string): void {
@@ -14,7 +14,7 @@
         if (str === undefined || str === null) {
             throw new Error(Resources.Strings.NullArgumentMessageFormat(label));
         }
-        
+
         if (!_.isString(str)) {
             throw new Error(Resources.Strings.InvalidTypeMessageFormat("string", typeof str));
         }
@@ -28,8 +28,7 @@
         value: number,
         min: number = null,
         max: number = null,
-        paramName: string = null): void
-    {
+        paramName: string = null): void {
         if (!_.isNumber(value)) {
             throw new Error(Resources.Strings.InvalidTypeMessageFormat("number", typeof value));
         }
@@ -52,11 +51,13 @@ module Validation.Strings {
 
         Validation.ensureNumberInRange(length, 0);
 
-        if (str === null || str === undefined)
+        if (str === null || str === undefined) {
             return str;
+        }
 
-        if (str.length <= length)
+        if (str.length <= length) {
             return str;
+        }
 
         return str.substr(0, length);
     }
@@ -65,11 +66,13 @@ module Validation.Strings {
 
         Validation.ensureNumberInRange(length, 0);
 
-        if (str === null || str === undefined)
+        if (str === null || str === undefined) {
             return str;
+        }
 
-        if (str.length <= length)
+        if (str.length <= length) {
             return str;
+        }
 
         return str.substr(str.length - length, length);
     }

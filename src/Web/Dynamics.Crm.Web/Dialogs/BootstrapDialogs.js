@@ -73,7 +73,7 @@ var Dynamics;
                     this.Init();
                 }
                 BootstrapDialogProvider.prototype.Init = function () {
-                    var baseUrl = "../WebResources/" + Dynamics.Crm.publisherPrefix + "/Libs/bootstrap/";
+                    var baseUrl = "../WebResources/" + Dynamics.Crm.Publishers.bootstrap + "_/Libs/bootstrap/";
                     this._loading = Crm.ScriptManager.loadScript(baseUrl + "js/bootstrap.min.js", this._window);
                     Crm.ScriptManager.loadStylesheet(baseUrl + "css/bootstrap.min.css", this._window);
                 };
