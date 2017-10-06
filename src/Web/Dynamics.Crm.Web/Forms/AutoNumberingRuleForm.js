@@ -41,7 +41,8 @@ var Dynamics;
                     var type = _type.getValue();
                     var section = Forms.Sections.get("tabGeneral", "sectionGlobal");
                     var isGlobal = type === Crm.Core.AutoNumberingRuleType.Global
-                        || type === Crm.Core.AutoNumberingRuleType.GlobalPerYear;
+                        || type === Crm.Core.AutoNumberingRuleType.GlobalPerYear
+                        || type === Crm.Core.AutoNumberingRuleType.GlobalPerDay;
                     section.controls.forEach(function (c) { return c.setDisabled(!isGlobal); });
                     if (!isGlobal) {
                         section.controls.forEach(function (c) { return c.getAttribute().setValue(null); });

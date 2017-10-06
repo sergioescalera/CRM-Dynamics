@@ -50,7 +50,8 @@
         var section = Sections.get("tabGeneral", "sectionGlobal");
 
         var isGlobal = type === Core.AutoNumberingRuleType.Global
-            || type === Core.AutoNumberingRuleType.GlobalPerYear;
+            || type === Core.AutoNumberingRuleType.GlobalPerYear
+            || type === Core.AutoNumberingRuleType.GlobalPerDay;
 
         section.controls.forEach((c: Control) => c.setDisabled(!isGlobal));
 
