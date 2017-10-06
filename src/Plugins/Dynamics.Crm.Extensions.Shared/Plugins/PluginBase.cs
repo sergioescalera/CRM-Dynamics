@@ -110,7 +110,12 @@ UserId: {executionContext?.UserId}";
                 var name = GetType().FullName;
                 var trace = context.TracingService.ToString();
 
-                var entry = LogEntry.CreateFromException(exception, name, trace, type: type, prefix: _prefix);
+                var entry = LogEntry.CreateFromException(
+                    exception,
+                    name, 
+                    trace,
+                    type: type,
+                    prefix: _prefix);
 
                 var repository = new LogEntryRepository(_prefix, context);
 

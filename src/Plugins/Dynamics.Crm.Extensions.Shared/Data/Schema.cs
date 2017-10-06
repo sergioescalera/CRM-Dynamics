@@ -12,6 +12,14 @@ namespace Dynamics.Crm.Data
 
             public static readonly Func<String, String> CustomNameFieldName = prefix => $"{prefix}_name";
 
+            public const String CreatedByFieldName = "createdby";
+
+            public const String CreatedOnFieldName = "createdon";
+
+            public const String ModifiedByFieldName = "modifiedon";
+
+            public const String ModifiedOnFieldName = "modifiedby";
+
             public const String NameFieldName = "name";
 
             public const String OwnerFieldName = "ownerid";

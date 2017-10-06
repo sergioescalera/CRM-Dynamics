@@ -66,7 +66,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Contact.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Enums.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\GlobalSetting.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\GlobalSettingType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\LogEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Product.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Team.cs" />
