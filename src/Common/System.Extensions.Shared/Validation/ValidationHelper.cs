@@ -46,17 +46,37 @@
                 throw new ArgumentException();
         }
 
-        public static void EnsureInRange(this Object obj, Int32 value, Int32? min = null, Int32? max = null, String paramName = null)
+        public static void EnsureInRange(
+            this Object obj,
+            Int32 value,
+            Int32? min = null,
+            Int32? max = null,
+            String paramName = null)
         {
             EnsureInRange(value, min, max, paramName);
         }
 
-        public static void EnsureInRange(Int32 value, Int32? min = null, Int32? max = null, String paramName = null)
+        public static void EnsureInRange(
+            Int32 value,
+            Int32? min = null,
+            Int32? max = null,
+            String paramName = null)
         {
             if (min != null && value < min)
                 throw new ArgumentOutOfRangeException(paramName ?? nameof(value));
 
             if (max != null && value > max)
+                throw new ArgumentOutOfRangeException(paramName ?? nameof(value));
+        }
+
+        public static void EnsureIsDefined<TEnum>(this Object obj, TEnum value, String paramName = null)
+        {
+            EnsureIsDefined(value, paramName);
+        }
+
+        public static void EnsureIsDefined<TEnum>(TEnum value, String paramName = null)
+        {
+            if (!Enum.IsDefined(value.GetType(), value))
                 throw new ArgumentOutOfRangeException(paramName ?? nameof(value));
         }
     }
