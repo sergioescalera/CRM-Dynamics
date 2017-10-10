@@ -12,7 +12,7 @@ using static Dynamics.Crm.Data.Schema;
 
 namespace Dynamics.Crm.Plugins
 {
-    [PipelineStage(PipelineStage.PreOperation)]
+    [PipelineStage(PipelineStage.PreOperation, PipelineStage.PreValidation)]
     [PipelineExecutionMode(ExecutionMode.Synchronous)]
     [PipelineMessage(Messages.Create)]
     public class GenerateNumberOnCreatePlugin : PluginBase
@@ -44,9 +44,8 @@ namespace Dynamics.Crm.Plugins
             if (HasNumber(context, target, rule))
                 return;
 
-            if (!rule.Lock(context, Common.ConcurrencyTokenFieldName(_prefix)))
-                throw new InvalidOperationException();
-
+            rule.Lock(context, Common.ConcurrencyTokenFieldName(_prefix));
+            
             if (rule.IsGlobal())
             {
                 GenerateNumber(context, target, rule);
