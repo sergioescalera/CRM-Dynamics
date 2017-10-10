@@ -7,6 +7,8 @@ using Microsoft.Xrm.Sdk.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
+using System.Xml.Linq;
 using static Dynamics.Crm.Data.Schema;
 
 namespace Dynamics.Crm.Data
@@ -100,6 +102,10 @@ namespace Dynamics.Crm.Data
             LogEntryType type = LogEntryType.Error,
             Int32 top = 1)
         {
+            name = HtmlEncode(name ?? String.Empty);
+            message = HtmlEncode(message ?? String.Empty);
+            source = HtmlEncode(source ?? String.Empty);
+            
             var fetch = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false' count='{top}'>
   <entity name='{LogEntryEntity.TypeName(_prefix)}'>
     <attribute name='{LogEntryEntity.IdFieldName(_prefix)}' />
@@ -112,13 +118,14 @@ namespace Dynamics.Crm.Data
     <order attribute='{Common.CreatedOnFieldName}' descending='true' />
     <filter type='and'>
       <condition attribute='{Common.CustomNameFieldName(_prefix)}' operator='eq' value='{name}' />
-      <condition attribute='{LogEntryEntity.MessageFieldName(_prefix)}' operator='like' value='{message}' />
+      <condition attribute='{LogEntryEntity.MessageFieldName(_prefix)}' operator='eq' value='{message}' />
       <condition attribute='{LogEntryEntity.SourceFieldName(_prefix)}' operator='eq' value='{source}' />
       <condition attribute='{LogEntryEntity.TypeFieldName(_prefix)}' operator='eq' value='{(Int32)type}' />
+      <condition attribute='{Common.CreatedOnFieldName}' operator='gt' value='{since.ToString("yyyy-MM-dd HH:mm")}Z' />
     </filter>
   </entity>
 </fetch>";
-
+            
             var collection = Service.FetchAll(fetch);
 
             return collection
@@ -136,6 +143,19 @@ namespace Dynamics.Crm.Data
                     User = o.GetAttributeValue<EntityReference>(LogEntryEntity.UserFieldName(_prefix))
                 })
                 .ToArray();
+        }
+
+        private String HtmlEncode(String str)
+        {
+            if (str == null)
+                return null;
+
+            return str
+                .Replace("&", "&amp;")
+                .Replace("\"", "&quot;")
+                .Replace("'", "&apos;")
+                .Replace("<", "&lt;")
+                .Replace(">", "&gt;");
         }
     }
 }
