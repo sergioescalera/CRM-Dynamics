@@ -32,10 +32,7 @@
     function getProvider(): IDialogProvider {
 
         if (!provider) {
-            var win = <JQueryWindow>window.top;
-            provider = bootstrapEnabled ?
-                new BootstrapDialogProvider(win) :
-                new CrmDialogProvider(win);
+            throw new Error("Dialog provider hasn't been initialized");
         }
 
         return provider;
@@ -98,8 +95,14 @@
 
     export var bootstrapEnabled: boolean = true;
 
-    export function init(): void {
+    export function init(prefix: string): void {
 
-        getProvider();
+        var win = <JQueryWindow>window.top;
+
+        prefix = prefix || Publishers.bootstrap;
+
+        provider = bootstrapEnabled ?
+            new BootstrapDialogProvider(win, prefix) :
+            new CrmDialogProvider(win);
     }
 }

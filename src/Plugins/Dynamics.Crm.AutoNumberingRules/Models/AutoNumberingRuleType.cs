@@ -4,7 +4,9 @@
     {
         Global = 0,
         GlobalPerYear = 1,
-        Parented = 2,
         GlobalPerDay = 3,
+        Parented = 2,
+        ParentedPerYear = 4,
+        ParentedPerDay = 5
     }
 }

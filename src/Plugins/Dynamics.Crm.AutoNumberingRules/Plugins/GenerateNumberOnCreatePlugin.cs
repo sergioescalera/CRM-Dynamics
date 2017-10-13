@@ -41,83 +41,52 @@ namespace Dynamics.Crm.Plugins
 
             var rule = rules.First();
 
-            if (HasNumber(context, target, rule))
+            var number = target.GetAttributeValue<String>(rule.AttributeName);
+
+            context.TracingService.Trace($"Found {rule.AttributeName}={number}");
+            
+            if (!number.IsNullOrEmpty())
                 return;
 
-            rule.Lock(context, Common.ConcurrencyTokenFieldName(_prefix));
-            
-            if (rule.IsGlobal())
+            var stage = (PipelineStage)context.ExecutionContext.Stage;
+
+            if (stage != PipelineStage.PreValidation && !rule.Lock(context, Common.ConcurrencyTokenFieldName(_prefix)))
+                throw new InvalidPluginExecutionException(
+                    "Unable to lock rule entity. Plug-in should run within the context of a transaction.");
+
+            var today = DateTime.Today;
+
+            var parent = GetParentEntity(context, target, rule);
+
+            var lastNumber = GetLastNumber(context, rule, parent, today);
+
+            var nextNumber = lastNumber + 1;
+
+            ValidateNumber(rule, nextNumber);
+
+            var formatted = Formatted(rule, today, target, parent, nextNumber);
+
+            target.AddOrUpdateAttribute(rule.AttributeName, formatted);
+
+            if (rule.IsParented())
             {
-                GenerateNumber(context, target, rule);
+                UpdateParent(context, rule, parent.ToEntityReference(), nextNumber, today);
             }
             else
             {
-                GenerateNumberWithParent(context, target, rule);
+                UpdateRule(context, rule, nextNumber, today);
             }
         }
 
-        private void GenerateNumber(IPluginContext context, Entity entity, AutoNumberingRule rule)
+        private Entity GetParentEntity(IPluginContext context, Entity entity, AutoNumberingRule rule)
         {
-            var now = DateTime.Now;
+            if (!rule.IsParented())
+                return null;
 
-            var dateFormat = DateFormat(rule, now);
-
-            var number = GetCurrentNumber(context, rule, dateFormat);
-
-            number++;
-
-            ValidateNumber(rule, number);
-
-            var format = $"{dateFormat}{rule.Format ?? String.Empty}";
-
-            var value = Formatted(entity, format, rule.Length, number);
-            
-            context.TracingService.Trace($"Set {rule.EntityName}.{rule.AttributeName}='{value}'");
-
-            entity.AddOrUpdateAttribute(rule.AttributeName, value);
-
-            UpdateRule(context, rule, number, now);
-        }
-
-        private Int32 GetCurrentNumber(IPluginContext context, AutoNumberingRule rule, String dateFormat)
-        {
-            if (rule.Type == AutoNumberingRuleType.Parented)
-                throw new NotSupportedException();
-
-            if ((rule.Type == AutoNumberingRuleType.GlobalPerYear || rule.Type == AutoNumberingRuleType.GlobalPerDay)
-                && !AnyWithPrefix(context, rule, dateFormat))
-            {
-                return 0;
-            }
-
-            var entity = context.OrganizationService.Retrieve(
-                rule.TypeName,
-                rule.Id,
-                AutoNumberingRuleEntity.LastNumberFieldName(_prefix),
-                AutoNumberingRuleEntity.LastYearFieldName(_prefix));
-
-            var number = entity.GetAttributeValue<Int32?>(AutoNumberingRuleEntity.LastNumberFieldName(_prefix)) ?? 0;
-
-            return number;
-        }
-
-        private Boolean AnyWithPrefix(IPluginContext context, AutoNumberingRule rule, String prefix)
-        {
-            var query = from o in context.GetOrganizationServiceContext().CreateQuery(rule.EntityName)
-                        where o.GetAttributeValue<String>(rule.AttributeName).StartsWith(prefix)
-                        select o.GetAttributeValue<String>(rule.AttributeName);
-
-            var first = query.FirstOrDefault();
-
-            return first != null;
-        }
-
-        private void GenerateNumberWithParent(IPluginContext context, Entity entity, AutoNumberingRule rule)
-        {
-            if (String.IsNullOrEmpty(rule.ParentAttributeName))
+            if (rule.ParentAttributeName.IsNullOrEmpty())
                 throw new InvalidPluginExecutionException("Invalid auto-numbering configuration. Missing parent attribute name.");
 
-            if (String.IsNullOrEmpty(rule.LastNumberAttributeName))
+            if (rule.LastNumberAttributeName.IsNullOrEmpty())
                 throw new InvalidPluginExecutionException("Invalid auto-numbering configuration. Missing last number attribute name.");
 
             var parentReference = entity.GetAttributeValue<EntityReference>(rule.ParentAttributeName);
@@ -125,67 +94,145 @@ namespace Dynamics.Crm.Plugins
             if (parentReference == null)
                 throw new InvalidPluginExecutionException($"You must provide a value for '{rule.ParentAttributeName}'.");
 
-            var parent = context.OrganizationService
-                .Retrieve(parentReference.LogicalName, parentReference.Id, rule.ParentAttributes
-                .Union(new[] { rule.LastNumberAttributeName })
-                .ToArray());
+            var parentAttributes = rule.ParentAttributes
+                .Union(new[] { rule.LastNumberAttributeName, rule.LastYearAttributeName, rule.LastDayAttributeName })
+                .Where(o => !o.IsNullOrEmpty())
+                .Distinct()
+                .ToArray();
 
-            var format = rule.Format ?? String.Empty;
+            var parent = context.OrganizationService.Retrieve(
+                parentReference.LogicalName,
+                parentReference.Id,
+                parentAttributes);
 
-            var number = parent.GetAttributeValue<Int32?>(rule.LastNumberAttributeName) ?? 0;
+            return parent;
+        }
 
-            number++;
+        private Int32 GetLastNumber(IPluginContext context, AutoNumberingRule rule, Entity parent, DateTime today)
+        {
+            var entityReference = default(EntityReference);
+            var lastNumberAttribute = default(String);
+            var lastYearAttribute = default(String);
+            var lastDayAttribute = default(String);
 
-            ValidateNumber(rule, number);
+            if (rule.IsParented())
+            {
+                entityReference = parent.ToEntityReference();
 
-            var formatted = ParentFormatted(format, rule.ParentAttributes, parent);
+                lastNumberAttribute = rule.LastNumberAttributeName;
+                lastYearAttribute = rule.LastYearAttributeName;
+                lastDayAttribute = rule.LastDayAttributeName;
+            }
+            else
+            {
+                entityReference = rule.ToEntityReference();
 
-            var value = Formatted(entity, formatted, rule.Length, number);
+                lastNumberAttribute = AutoNumberingRuleEntity.LastNumberFieldName(_prefix);
+                lastYearAttribute = AutoNumberingRuleEntity.LastYearFieldName(_prefix);
+                lastDayAttribute = AutoNumberingRuleEntity.LastDayFieldName(_prefix);
+            }
 
-            context.TracingService.Trace($"Set {rule.EntityName}.{rule.AttributeName}='{value}'");
+            if (lastNumberAttribute.IsNullOrEmpty())
+                throw new InvalidPluginExecutionException("Invalid auto-numbering configuration. Missing last number attribute name.");
 
-            entity.AddOrUpdateAttribute(rule.AttributeName, value);
+            if (rule.IsYearly() && lastYearAttribute.IsNullOrEmpty())
+                throw new InvalidPluginExecutionException("Invalid auto-numbering configuration. Missing last year attribute name.");
 
-            UpdateParentLastNumber(context, rule, parent.ToEntityReference(), number);
+            if (rule.IsDaily() && lastDayAttribute.IsNullOrEmpty())
+                throw new InvalidPluginExecutionException("Invalid auto-numbering configuration. Missing last day attribute name.");
+
+            var attributes = new[]
+            {
+                lastNumberAttribute,
+                lastYearAttribute,
+                lastDayAttribute
+            };
+
+            var entity = context.OrganizationService.Retrieve(
+                    entityReference.LogicalName,
+                    entityReference.Id,
+                    attributes.Where(o => !o.IsNullOrEmpty()).ToArray());
+
+            var number = entity.GetAttributeValue<Int32?>(lastNumberAttribute);
+            
+            if (rule.IsYearly() && today.Year != entity.GetAttributeValue<Int32?>(lastYearAttribute))
+            {
+                return 0;
+            }
+            else if (rule.IsDaily() && today != entity.GetAttributeValue<DateTime?>(lastDayAttribute))
+            {
+                return 0;
+            }
+
+            return number ?? 0;
+        }
+
+        private void ValidateNumber(AutoNumberingRule rule, Int32 number)
+        {
+            if (rule.Length == null)
+                return;
+
+            var max = Convert.ToInt32(String.Empty.PadLeft(rule.Length.Value, '9'));
+
+            if (number > max)
+                throw new InvalidPluginExecutionException(
+                    $"Current number '{number}' is greater than the maximum number '{max}' allowed by the system.");
+        }
+
+        private String Formatted(
+            AutoNumberingRule rule,
+            DateTime today,
+            Entity entity,
+            Entity parent,
+            Int32 number)
+        {
+            var formatted = DateFormat(rule, today);
+
+            var numberStr = number.ToString();
+
+            if (rule.Length != null)
+                numberStr = numberStr.PadLeft(rule.Length.Value, '0');
+
+            formatted = $"{formatted}{ParentFormatted(rule.Format, parent, rule.ParentAttributes)}";
+
+            foreach (var attributeName in entity.Attributes.Keys)
+            {
+                formatted = formatted.Replace($"[{attributeName}]", DisplayValue(entity.GetAttributeValue<Object>(attributeName)));
+            }
+
+            if (formatted.Contains("[number]"))
+            {
+                return formatted.Replace("[number]", numberStr);
+            }
+            else
+            {
+                return $"{formatted}{numberStr}";
+            }
         }
 
         private String DateFormat(AutoNumberingRule rule, DateTime date)
         {
-            if (rule.Type != AutoNumberingRuleType.GlobalPerYear && rule.Type != AutoNumberingRuleType.GlobalPerDay)
-                return String.Empty;
+            if (rule.IsDaily())
+                return date.ToString(rule.UsesFourDigitsYear ? "yyyyMMdd" : "yyMMdd");
 
-            if (rule.Type == AutoNumberingRuleType.GlobalPerDay && rule.UsesFourDigitsYear)
-                return date.ToString("yyyyMMdd");
+            if (rule.IsYearly())
+                return date.ToString(rule.UsesFourDigitsYear ? "yyyy" : "yy");
 
-            if (rule.Type == AutoNumberingRuleType.GlobalPerDay)
-                return date.ToString("yyMMdd");
-
-            if (rule.UsesFourDigitsYear)
-                return date.ToString("yyyy");
-
-            return date.ToString("yy");
+            return String.Empty;
         }
 
-        private String Formatted(Entity entity, String format, Int32? length, Int32 number)
+        private String ParentFormatted(String format, Entity parent, String[] attributes)
         {
-            var numberStr = number.ToString();
-
-            if (length != null)
-                numberStr = numberStr.PadLeft(length.Value, '0');
-
-            foreach (var attributeName in entity.Attributes.Keys)
+            foreach (var attribute in attributes)
             {
-                format = format.Replace($"[{attributeName}]", DisplayValue(entity.GetAttributeValue<Object>(attributeName)));
+                var token = $"[{attribute}]";
+                var value = DisplayValue(parent.GetAttributeValue<Object>(attribute));
+
+                if (format.Contains(token))
+                    format = format.Replace(token, value);
             }
 
-            if (format.Contains("[number]"))
-            {
-                return format.Replace("[number]", numberStr);
-            }
-            else
-            {
-                return $"{format}{numberStr}";
-            }
+            return format;
         }
 
         private String DisplayValue(object value)
@@ -199,68 +246,59 @@ namespace Dynamics.Crm.Plugins
             return value?.ToString() ?? String.Empty;
         }
 
-        private String ParentFormatted(String format, String[] attributes, Entity parent)
-        {
-            foreach (var attribute in attributes)
-            {
-                var token = $"[{attribute}]";
-                var value = parent.GetAttributeValue<Object>(attribute)?.ToString() ?? String.Empty;
-
-                if (format.Contains(token))
-                    format = format.Replace(token, value);
-            }
-
-            return format;
-        }
-
-        private Boolean HasNumber(IPluginContext context, Entity entity, AutoNumberingRule rule)
-        {
-            var number = entity.GetAttributeValue<String>(rule.AttributeName);
-
-            context.TracingService.Trace($"Found {rule.AttributeName}={number}");
-
-            return !String.IsNullOrEmpty(number);
-        }
-
-        private void ValidateNumber(AutoNumberingRule rule, Int32 number)
-        {
-            if (rule.Length == null)
-                return;
-
-            var max = Convert.ToInt32(String.Empty.PadLeft(rule.Length.Value, '9'));
-
-            if (number > max)
-                throw new InvalidPluginExecutionException($"Current number '{number}' is greater than the maximum number '{max}' allowed by the system.");
-        }
-
-        private void UpdateRule(IPluginContext context, AutoNumberingRule rule, Int32 number, DateTime date)
+        private void UpdateRule(
+            IPluginContext context,
+            AutoNumberingRule rule,
+            Int32 number,
+            DateTime date)
         {
             var update = new Entity(rule.TypeName, rule.Id);
 
             context.TracingService.Trace($"Set {rule.TypeName}.{AutoNumberingRuleEntity.LastNumberFieldName}='{number}'");
+
             update.AddOrUpdateAttribute(AutoNumberingRuleEntity.LastNumberFieldName(_prefix), number);
 
-            if (rule.Type == AutoNumberingRuleType.GlobalPerYear)
+            if (rule.IsYearly())
             {
                 context.TracingService.Trace($"Set {rule.TypeName}.{AutoNumberingRuleEntity.LastYearFieldName}='{date.Year}'");
+
                 update.AddOrUpdateAttribute(AutoNumberingRuleEntity.LastYearFieldName(_prefix), date.Year);
             }
-
-            if (rule.Type == AutoNumberingRuleType.GlobalPerDay)
+            else if (rule.IsDaily())
             {
-                context.TracingService.Trace($"Set {rule.TypeName}.{AutoNumberingRuleEntity.LastDayFieldName}='{date.Year}'");
+                context.TracingService.Trace($"Set {rule.TypeName}.{AutoNumberingRuleEntity.LastDayFieldName}='{date}'");
+
                 update.AddOrUpdateAttribute(AutoNumberingRuleEntity.LastDayFieldName(_prefix), date);
             }
 
             context.OrganizationService.Update(update);
         }
 
-        private void UpdateParentLastNumber(IPluginContext context, AutoNumberingRule rule, EntityReference parent, Int32 number)
+        private void UpdateParent(
+            IPluginContext context,
+            AutoNumberingRule rule,
+            EntityReference parent,
+            Int32 number,
+            DateTime date)
         {
             var update = new Entity(parent.LogicalName, parent.Id);
 
             context.TracingService.Trace($"Set {parent.LogicalName}.{rule.LastNumberAttributeName}='{number}'");
+
             update.AddOrUpdateAttribute(rule.LastNumberAttributeName, number);
+
+            if (rule.IsYearly())
+            {
+                context.TracingService.Trace($"Set {parent.LogicalName}.{rule.LastYearAttributeName}='{date.Year}'");
+
+                update.AddOrUpdateAttribute(rule.LastYearAttributeName, date.Year);
+            }
+            else if (rule.IsDaily())
+            {
+                context.TracingService.Trace($"Set {parent.LogicalName}.{rule.LastDayAttributeName}='{date}'");
+
+                update.AddOrUpdateAttribute(rule.LastDayAttributeName, date);
+            }
 
             context.OrganizationService.Update(update);
         }

@@ -68,12 +68,12 @@ var Dynamics;
             }());
             Dialogs.BootstrapDialog = BootstrapDialog;
             var BootstrapDialogProvider = (function () {
-                function BootstrapDialogProvider(window) {
+                function BootstrapDialogProvider(window, prefix) {
                     this._window = window;
-                    this.Init();
+                    this.Init(prefix);
                 }
-                BootstrapDialogProvider.prototype.Init = function () {
-                    var baseUrl = "../WebResources/" + Dynamics.Crm.Publishers.bootstrap + "_/Libs/bootstrap/";
+                BootstrapDialogProvider.prototype.Init = function (prefix) {
+                    var baseUrl = "../WebResources/" + prefix + "_/Libs/bootstrap/";
                     this._loading = Crm.ScriptManager.loadScript(baseUrl + "js/bootstrap.min.js", this._window);
                     Crm.ScriptManager.loadStylesheet(baseUrl + "css/bootstrap.min.css", this._window);
                 };

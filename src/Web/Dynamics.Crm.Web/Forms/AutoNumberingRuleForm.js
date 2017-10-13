@@ -40,41 +40,51 @@ var Dynamics;
                 function ConfigureGlobalSection() {
                     var type = _type.getValue();
                     var section = Forms.Sections.get("tabGeneral", "sectionGlobal");
-                    var isGlobal = type === Crm.Core.AutoNumberingRuleType.Global
-                        || type === Crm.Core.AutoNumberingRuleType.GlobalPerYear
-                        || type === Crm.Core.AutoNumberingRuleType.GlobalPerDay;
-                    section.controls.forEach(function (c) { return c.setDisabled(!isGlobal); });
-                    if (!isGlobal) {
+                    var disabled = !isGlobal(type);
+                    section.controls.forEach(function (c) { return c.setDisabled(disabled); });
+                    if (disabled) {
                         section.controls.forEach(function (c) { return c.getAttribute().setValue(null); });
                     }
                 }
                 function ConfigureDailyConfigSection() {
                     var type = _type.getValue();
                     var section = Forms.Sections.get("tabGeneral", "sectionDailyConfig");
-                    var isPerDay = type === Crm.Core.AutoNumberingRuleType.GlobalPerDay;
-                    section.controls.forEach(function (c) { return c.setDisabled(!isPerDay); });
-                    if (!isPerDay) {
+                    var disabled = !isDaily(type);
+                    section.controls.forEach(function (c) { return c.setDisabled(disabled); });
+                    if (disabled) {
                         section.controls.forEach(function (c) { return c.getAttribute().setValue(null); });
                     }
                 }
                 function ConfigureYearConfigSection() {
                     var type = _type.getValue();
                     var section = Forms.Sections.get("tabGeneral", "sectionYearConfig");
-                    var isPerYear = type === Crm.Core.AutoNumberingRuleType.GlobalPerYear;
-                    var isPerDay = type === Crm.Core.AutoNumberingRuleType.GlobalPerDay;
-                    section.controls.forEach(function (c) { return c.setDisabled(!isPerYear && !isPerDay); });
-                    if (!isPerYear && !isPerDay) {
+                    var disabled = !isYearly(type) && !isDaily(type);
+                    section.controls.forEach(function (c) { return c.setDisabled(disabled); });
+                    if (disabled) {
                         section.controls.forEach(function (c) { return c.getAttribute().setValue(null); });
                     }
                 }
                 function ConfigureParentedSection() {
                     var type = _type.getValue();
                     var section = Forms.Sections.get("tabGeneral", "sectionParented");
-                    var isParented = type === Crm.Core.AutoNumberingRuleType.Parented;
-                    section.controls.forEach(function (c) { return c.setDisabled(!isParented); });
-                    if (!isParented) {
+                    var disabled = isGlobal(type);
+                    section.controls.forEach(function (c) { return c.setDisabled(disabled); });
+                    if (disabled) {
                         section.controls.forEach(function (c) { return c.getAttribute().setValue(null); });
                     }
+                }
+                function isGlobal(type) {
+                    return type === Crm.Core.AutoNumberingRuleType.Global
+                        || type === Crm.Core.AutoNumberingRuleType.GlobalPerYear
+                        || type === Crm.Core.AutoNumberingRuleType.GlobalPerDay;
+                }
+                function isDaily(type) {
+                    return type === Crm.Core.AutoNumberingRuleType.GlobalPerDay
+                        || type === Crm.Core.AutoNumberingRuleType.ParentedPerDay;
+                }
+                function isYearly(type) {
+                    return type === Crm.Core.AutoNumberingRuleType.GlobalPerYear
+                        || type === Crm.Core.AutoNumberingRuleType.ParentedPerYear;
                 }
             })(AutoNumberingRuleForm = Forms.AutoNumberingRuleForm || (Forms.AutoNumberingRuleForm = {}));
         })(Forms = Crm.Forms || (Crm.Forms = {}));

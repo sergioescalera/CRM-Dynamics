@@ -118,16 +118,16 @@
         private _window: JQueryWindow;
         private _loading: JQueryPromise<any>;
 
-        constructor(window: JQueryWindow) {
+        constructor(window: JQueryWindow, prefix: string) {
 
             this._window = window;
 
-            this.Init();
+            this.Init(prefix);
         }
 
-        private Init(): void {
+        private Init(prefix: string): void {
 
-            var baseUrl: string = `../WebResources/${Dynamics.Crm.Publishers.bootstrap}_/Libs/bootstrap/`;
+            var baseUrl: string = `../WebResources/${prefix}_/Libs/bootstrap/`;
 
             this._loading = ScriptManager.loadScript(baseUrl + "js/bootstrap.min.js", this._window);
 

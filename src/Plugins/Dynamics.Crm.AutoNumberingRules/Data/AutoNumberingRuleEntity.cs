@@ -21,6 +21,11 @@ namespace Dynamics.Crm.Data
         public static readonly Func<String, String> LastNumberFieldName = (prefix) => $"{prefix}_lastnumber";
 
         public static readonly Func<String, String> LastNumberAttributeNameFieldName = (prefix) => $"{prefix}_lastnumberattributename";
+
+        public static readonly Func<String, String> LastYearAttributeNameFieldName = (prefix) => $"{prefix}_lastyearattributename";
+
+        public static readonly Func<String, String> LastDayAttributeNameFieldName = (prefix) => $"{prefix}_lastdayattributename";
+
         public static readonly Func<String, String> LengthFieldName = (prefix) => $"{prefix}_length";
 
         public static readonly Func<String, String> ParentAttributeNameFieldName = (prefix) => $"{prefix}_parentattributename";

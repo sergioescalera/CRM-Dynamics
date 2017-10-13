@@ -38,6 +38,8 @@ var Dynamics;
                 AutoNumberingRuleType[AutoNumberingRuleType["GlobalPerDay"] = 3] = "GlobalPerDay";
                 AutoNumberingRuleType[AutoNumberingRuleType["GlobalPerYear"] = 1] = "GlobalPerYear";
                 AutoNumberingRuleType[AutoNumberingRuleType["Parented"] = 2] = "Parented";
+                AutoNumberingRuleType[AutoNumberingRuleType["ParentedPerDay"] = 5] = "ParentedPerDay";
+                AutoNumberingRuleType[AutoNumberingRuleType["ParentedPerYear"] = 4] = "ParentedPerYear";
             })(Core.AutoNumberingRuleType || (Core.AutoNumberingRuleType = {}));
             var AutoNumberingRuleType = Core.AutoNumberingRuleType;
             (function (GlobalSettingType) {

@@ -136,7 +136,7 @@ declare interface ICrmDialogs {
     alert(message: string, title: string): JQueryPromise<void>;
     confirm(message: string, title: string): JQueryPromise<boolean>;
     create<TResult>(config: ICrmDialogConfig<TResult>): JQueryPromise<TResult>;
-    init(): void;
+    init(prefix?: string): void;
     bootstrapEnabled: boolean;
 }
 
@@ -197,6 +197,8 @@ declare interface ICrmDiagnostics {
     log: ILogger;
     debug: boolean;
     trace: boolean;
+    useConsoleLogger(prefix: string): void;
+    useLogEntryLogger(prefix: string): void;
 }
 
 declare interface ICrmReports {

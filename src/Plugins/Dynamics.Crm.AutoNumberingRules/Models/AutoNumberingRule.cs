@@ -59,6 +59,16 @@ namespace Dynamics.Crm.Models
             get; set;
         }
 
+        public String LastYearAttributeName
+        {
+            get; set;
+        }
+
+        public String LastDayAttributeName
+        {
+            get; set;
+        }
+
         public Int32? Length
         {
             get; set;
@@ -86,7 +96,28 @@ namespace Dynamics.Crm.Models
 
         public Boolean IsGlobal()
         {
-            return Type != AutoNumberingRuleType.Parented;
+            return Type == AutoNumberingRuleType.Global
+                || Type == AutoNumberingRuleType.GlobalPerDay
+                || Type == AutoNumberingRuleType.GlobalPerYear;
+        }
+
+        public Boolean IsParented()
+        {
+            return Type == AutoNumberingRuleType.Parented
+                || Type == AutoNumberingRuleType.ParentedPerDay
+                || Type == AutoNumberingRuleType.ParentedPerYear;
+        }
+        
+        public Boolean IsDaily()
+        {
+            return Type == AutoNumberingRuleType.GlobalPerDay
+                || Type == AutoNumberingRuleType.ParentedPerDay;
+        }
+
+        public Boolean IsYearly()
+        {
+            return Type == AutoNumberingRuleType.GlobalPerYear
+                || Type == AutoNumberingRuleType.ParentedPerYear;
         }
     }
 }

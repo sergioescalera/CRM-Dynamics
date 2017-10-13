@@ -56,11 +56,19 @@ namespace Dynamics.Crm.Data
                             EntityName = o.GetAttributeValue<String>(AutoNumberingRuleEntity.EntityNameFieldName(_prefix)),
                             Format = o.GetAttributeValue<String>(AutoNumberingRuleEntity.FormatFieldName(_prefix)),
                             Type = o.GetAttributeValue<OptionSetValue>(AutoNumberingRuleEntity.TypeFieldName(_prefix)),
-                            LastNumberAttributeName = o.GetAttributeValue<String>(AutoNumberingRuleEntity.LastNumberAttributeNameFieldName(_prefix)),
+                            LastNumberAttributeName = o.GetAttributeValue<String>(
+                                AutoNumberingRuleEntity.LastNumberAttributeNameFieldName(_prefix)),
+                            LastYearAttributeName = o.GetAttributeValue<String>(
+                                AutoNumberingRuleEntity.LastYearAttributeNameFieldName(_prefix)),
+                            LastDayAttributeName = o.GetAttributeValue<String>(
+                                AutoNumberingRuleEntity.LastDayAttributeNameFieldName(_prefix)),
                             Length = o.GetAttributeValue<Int32?>(AutoNumberingRuleEntity.LengthFieldName(_prefix)),
-                            ParentAttributeName = o.GetAttributeValue<String>(AutoNumberingRuleEntity.ParentAttributeNameFieldName(_prefix)),
-                            ParentAttributeList = o.GetAttributeValue<String>(AutoNumberingRuleEntity.ParentAttributeListFieldName(_prefix)),
-                            UsesFourDigitsYear = o.GetAttributeValue<Boolean?>(AutoNumberingRuleEntity.UsesFourDigitsYearFieldName(_prefix))
+                            ParentAttributeName = o.GetAttributeValue<String>(
+                                AutoNumberingRuleEntity.ParentAttributeNameFieldName(_prefix)),
+                            ParentAttributeList = o.GetAttributeValue<String>(
+                                AutoNumberingRuleEntity.ParentAttributeListFieldName(_prefix)),
+                            UsesFourDigitsYear = o.GetAttributeValue<Boolean?>(
+                                AutoNumberingRuleEntity.UsesFourDigitsYearFieldName(_prefix))
                         };
 
             var array = query.ToArray();
@@ -76,6 +84,8 @@ namespace Dynamics.Crm.Data
                     Format = o.Format,
                     Type = o.Type.ToEnum<AutoNumberingRuleType>() ?? AutoNumberingRuleType.Global,
                     LastNumberAttributeName = o.LastNumberAttributeName,
+                    LastYearAttributeName = o.LastYearAttributeName,
+                    LastDayAttributeName = o.LastDayAttributeName,
                     Length = o.Length,
                     ParentAttributeName = o.ParentAttributeName,
                     ParentAttributes = (o.ParentAttributeList?

@@ -49,13 +49,11 @@
 
         var section = Sections.get("tabGeneral", "sectionGlobal");
 
-        var isGlobal = type === Core.AutoNumberingRuleType.Global
-            || type === Core.AutoNumberingRuleType.GlobalPerYear
-            || type === Core.AutoNumberingRuleType.GlobalPerDay;
+        var disabled = !isGlobal(type);
 
-        section.controls.forEach((c: Control) => c.setDisabled(!isGlobal));
+        section.controls.forEach((c: Control) => c.setDisabled(disabled));
 
-        if (!isGlobal) {
+        if (disabled) {
 
             section.controls.forEach((c: Control) => c.getAttribute().setValue(null));
         }
@@ -66,12 +64,12 @@
         var type = _type.getValue();
 
         var section = Sections.get("tabGeneral", "sectionDailyConfig");
-        
-        var isPerDay = type === Core.AutoNumberingRuleType.GlobalPerDay;
 
-        section.controls.forEach((c: Control) => c.setDisabled(!isPerDay));
+        var disabled = !isDaily(type);
 
-        if (!isPerDay) {
+        section.controls.forEach((c: Control) => c.setDisabled(disabled));
+
+        if (disabled) {
 
             section.controls.forEach((c: Control) => c.getAttribute().setValue(null));
         }
@@ -83,12 +81,11 @@
 
         var section = Sections.get("tabGeneral", "sectionYearConfig");
 
-        var isPerYear = type === Core.AutoNumberingRuleType.GlobalPerYear;
-        var isPerDay = type === Core.AutoNumberingRuleType.GlobalPerDay;
+        var disabled = !isYearly(type) && !isDaily(type)
+        
+        section.controls.forEach((c: Control) => c.setDisabled(disabled));
 
-        section.controls.forEach((c: Control) => c.setDisabled(!isPerYear && !isPerDay));
-
-        if (!isPerYear && !isPerDay) {
+        if (disabled) {
 
             section.controls.forEach((c: Control) => c.getAttribute().setValue(null));
         }
@@ -100,13 +97,32 @@
 
         var section = Sections.get("tabGeneral", "sectionParented");
 
-        var isParented = type === Core.AutoNumberingRuleType.Parented;
+        var disabled = isGlobal(type);
 
-        section.controls.forEach((c: Control) => c.setDisabled(!isParented));
+        section.controls.forEach((c: Control) => c.setDisabled(disabled));
 
-        if (!isParented) {
+        if (disabled) {
 
             section.controls.forEach((c: Control) => c.getAttribute().setValue(null));
         }
+    }
+
+    function isGlobal(type: Core.AutoNumberingRuleType): boolean {
+
+        return type === Core.AutoNumberingRuleType.Global
+            || type === Core.AutoNumberingRuleType.GlobalPerYear
+            || type === Core.AutoNumberingRuleType.GlobalPerDay;
+    }
+    
+    function isDaily(type: Core.AutoNumberingRuleType): boolean {
+
+        return type === Core.AutoNumberingRuleType.GlobalPerDay
+            || type === Core.AutoNumberingRuleType.ParentedPerDay;
+    }
+
+    function isYearly(type: Core.AutoNumberingRuleType): boolean {
+
+        return type === Core.AutoNumberingRuleType.GlobalPerYear
+            || type === Core.AutoNumberingRuleType.ParentedPerYear;
     }
 }

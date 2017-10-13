@@ -22,13 +22,20 @@
 
     class ConsoleLogger implements ILogger {
 
+        private _prefix: string;
+
+        constructor(prefix: string) {
+
+            this._prefix = prefix;
+        }
+
         Error(message: string, error: IError): void {
 
             if (debug) {
                 debugger;
             }
 
-            var entry = createLogEntry(Publishers.logEntry, message, error);
+            var entry = createLogEntry(this._prefix, message, error);
 
             console.error(entry);
         }
@@ -46,18 +53,25 @@
 
     class LogEntryLogger implements ILogger {
 
+        private _prefix: string;
+
+        constructor(prefix: string) {
+
+            this._prefix = prefix;
+        }
+
         Error(message: string, error: IError): void {
 
             if (debug) {
                 debugger;
             }
 
-            var entry = createLogEntry(Publishers.logEntry, message, error);
+            var entry = createLogEntry(this._prefix, message, error);
 
             console.error(entry);
 
             Dynamics.Crm.Data.unitOfWork
-                .GetLogEntryRepository(Publishers.logEntry)
+                .GetLogEntryRepository(this._prefix)
                 .Create(entry);
         }
 
@@ -74,14 +88,14 @@
 
     // public functions
 
-    export function useLogEntryLogger(): void {
+    export function useLogEntryLogger(prefix?: string): void {
 
-        log = new LogEntryLogger();
+        log = new LogEntryLogger(prefix || Publishers.logEntry);
     }
 
-    export function useConsoleLogger(): void {
+    export function useConsoleLogger(prefix?: string): void {
 
-        log = new ConsoleLogger();
+        log = new ConsoleLogger(prefix || Publishers.logEntry);
     }
 
     export function printArguments(...args: any[]): void {

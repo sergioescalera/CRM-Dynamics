@@ -353,13 +353,14 @@ var Dynamics;
             Diagnostics.debug = true;
             Diagnostics.trace = true;
             var ConsoleLogger = (function () {
-                function ConsoleLogger() {
+                function ConsoleLogger(prefix) {
+                    this._prefix = prefix;
                 }
                 ConsoleLogger.prototype.Error = function (message, error) {
                     if (Diagnostics.debug) {
                         debugger;
                     }
-                    var entry = createLogEntry(Crm.Publishers.logEntry, message, error);
+                    var entry = createLogEntry(this._prefix, message, error);
                     console.error(entry);
                 };
                 ConsoleLogger.prototype.Message = function (message) {
@@ -371,16 +372,17 @@ var Dynamics;
                 return ConsoleLogger;
             }());
             var LogEntryLogger = (function () {
-                function LogEntryLogger() {
+                function LogEntryLogger(prefix) {
+                    this._prefix = prefix;
                 }
                 LogEntryLogger.prototype.Error = function (message, error) {
                     if (Diagnostics.debug) {
                         debugger;
                     }
-                    var entry = createLogEntry(Crm.Publishers.logEntry, message, error);
+                    var entry = createLogEntry(this._prefix, message, error);
                     console.error(entry);
                     Dynamics.Crm.Data.unitOfWork
-                        .GetLogEntryRepository(Crm.Publishers.logEntry)
+                        .GetLogEntryRepository(this._prefix)
                         .Create(entry);
                 };
                 LogEntryLogger.prototype.Message = function (message) {
@@ -392,12 +394,12 @@ var Dynamics;
                 return LogEntryLogger;
             }());
             // public functions
-            function useLogEntryLogger() {
-                Diagnostics.log = new LogEntryLogger();
+            function useLogEntryLogger(prefix) {
+                Diagnostics.log = new LogEntryLogger(prefix || Crm.Publishers.logEntry);
             }
             Diagnostics.useLogEntryLogger = useLogEntryLogger;
-            function useConsoleLogger() {
-                Diagnostics.log = new ConsoleLogger();
+            function useConsoleLogger(prefix) {
+                Diagnostics.log = new ConsoleLogger(prefix || Crm.Publishers.logEntry);
             }
             Diagnostics.useConsoleLogger = useConsoleLogger;
             function printArguments() {
@@ -599,6 +601,8 @@ var Dynamics;
                 AutoNumberingRuleType[AutoNumberingRuleType["GlobalPerDay"] = 3] = "GlobalPerDay";
                 AutoNumberingRuleType[AutoNumberingRuleType["GlobalPerYear"] = 1] = "GlobalPerYear";
                 AutoNumberingRuleType[AutoNumberingRuleType["Parented"] = 2] = "Parented";
+                AutoNumberingRuleType[AutoNumberingRuleType["ParentedPerDay"] = 5] = "ParentedPerDay";
+                AutoNumberingRuleType[AutoNumberingRuleType["ParentedPerYear"] = 4] = "ParentedPerYear";
             })(Core.AutoNumberingRuleType || (Core.AutoNumberingRuleType = {}));
             var AutoNumberingRuleType = Core.AutoNumberingRuleType;
             (function (GlobalSettingType) {

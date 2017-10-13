@@ -29,7 +29,9 @@ module Dynamics.Crm.Core {
         Global = 0,
         GlobalPerDay = 3,
         GlobalPerYear = 1,
-        Parented = 2
+        Parented = 2,
+        ParentedPerDay = 5,
+        ParentedPerYear = 4
     }
 
     export enum GlobalSettingType {
