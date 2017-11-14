@@ -67,7 +67,7 @@ namespace Dynamics.Crm.Data
                TeamEntity.TypeName,
                teamId,
                new Relationship("teamroles_association"),
-               new EntityReferenceCollection()
+               new EntityReferenceCollection
                {
                    new EntityReference(RoleEntity.TypeName, roleId)
                });

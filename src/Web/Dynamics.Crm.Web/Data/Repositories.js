@@ -10,7 +10,7 @@ var Dynamics;
                     this._prefix = prefix;
                 }
                 LogEntryRepository.prototype.Create = function (entry) {
-                    Crm.OData.createEntity(entry, Data.Schema.LogEntryEntity.setName(this._prefix));
+                    Crm.OData.createEntity(entry, Data.Schema.LogEntryEntity.setName(this._prefix), [], false);
                 };
                 return LogEntryRepository;
             }());

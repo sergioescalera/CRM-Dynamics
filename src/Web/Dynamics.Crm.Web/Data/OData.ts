@@ -234,7 +234,8 @@
     export function createEntity(
         entity: Core.IEntity,
         entitySetName: string,
-        attributes: string[] = null): JQueryPromise<Core.IEntity> {
+        attributes: string[] = null,
+        logError = true): JQueryPromise<Core.IEntity> {
 
         Validation.ensureNotNullOrUndefined(entity, "entity");
         Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
@@ -272,9 +273,11 @@
                     return;
                 }
 
-                Diagnostics.log.Error(
-                    `${response.responseJSON.error.message} create ${url}`,
-                    response.responseJSON.error.innererror || response.responseJSON.error);
+                if (logError) {
+                    Diagnostics.log.Error(
+                        `${response.responseJSON.error.message} create ${url}`,
+                        response.responseJSON.error.innererror || response.responseJSON.error);
+                }
             });
     }
 

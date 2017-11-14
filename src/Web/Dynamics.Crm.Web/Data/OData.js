@@ -155,8 +155,9 @@ var Dynamics;
                 });
             }
             OData.deleteEntity = deleteEntity;
-            function createEntity(entity, entitySetName, attributes) {
+            function createEntity(entity, entitySetName, attributes, logError) {
                 if (attributes === void 0) { attributes = null; }
+                if (logError === void 0) { logError = true; }
                 Validation.ensureNotNullOrUndefined(entity, "entity");
                 Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
                 var baseUrl = getContext().getClientUrl();
@@ -185,7 +186,9 @@ var Dynamics;
                     if (!response || !response.responseJSON || !response.responseJSON.error) {
                         return;
                     }
-                    Crm.Diagnostics.log.Error(response.responseJSON.error.message + " create " + url, response.responseJSON.error.innererror || response.responseJSON.error);
+                    if (logError) {
+                        Crm.Diagnostics.log.Error(response.responseJSON.error.message + " create " + url, response.responseJSON.error.innererror || response.responseJSON.error);
+                    }
                 });
             }
             OData.createEntity = createEntity;

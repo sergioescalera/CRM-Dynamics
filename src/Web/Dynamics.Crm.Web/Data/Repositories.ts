@@ -13,7 +13,7 @@
 
         Create(entry: Core.ILogEntry): void {
 
-            OData.createEntity(entry, Schema.LogEntryEntity.setName(this._prefix));
+            OData.createEntity(entry, Schema.LogEntryEntity.setName(this._prefix), [], false);
         }
     }
 
