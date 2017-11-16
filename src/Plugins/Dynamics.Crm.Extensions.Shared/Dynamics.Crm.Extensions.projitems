@@ -38,6 +38,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\TeamRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\UnitGroupRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\UnitRepository.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\UserRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Diagnostics\Debug.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Diagnostics\PrettyPrintEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Diagnostics\PluginContextExtensions.cs" />
