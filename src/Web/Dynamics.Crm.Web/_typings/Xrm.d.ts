@@ -550,13 +550,13 @@ interface AutoCompleteOptions {
 }
 
 interface AutoCompleteResult {
-    id: string;
-    icon: string;
-    fields: string[];
+    id?: any;
+    icon?: string;
+    fields?: string[];
 }
 
 interface AutoCompleteCommand {
-    id: string;
+    id: any;
     label: string;
     action: () => void;
 }
