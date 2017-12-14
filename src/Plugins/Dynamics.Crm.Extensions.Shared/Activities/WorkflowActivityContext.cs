@@ -16,6 +16,8 @@ namespace Dynamics.Crm.Activities
             WorkflowContext = activityContext.GetExtension<IWorkflowContext>();
             ServiceFactory = activityContext.GetExtension<IOrganizationServiceFactory>();
             OrganizationService = ServiceFactory.CreateOrganizationService(WorkflowContext.UserId);
+            TracingService = activityContext.GetExtension<ITracingService>();
+
 
             if (WorkflowContext == null)
             {
@@ -39,6 +41,10 @@ namespace Dynamics.Crm.Activities
         {
             get;
             private set;
+        }
+        public ITracingService TracingService
+        {
+            get; private set;
         }
 
         public IWorkflowContext WorkflowContext

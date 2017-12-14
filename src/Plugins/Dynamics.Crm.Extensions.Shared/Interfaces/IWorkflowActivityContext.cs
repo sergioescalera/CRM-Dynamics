@@ -1,7 +1,6 @@
 ﻿#if WORKFLOWS
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Workflow;
-using System.Activities;
 
 namespace Dynamics.Crm.Interfaces
 {
@@ -10,6 +9,8 @@ namespace Dynamics.Crm.Interfaces
         ICodeActivityContext ExecutionContext { get; }
         
         IOrganizationService OrganizationService { get; }
+
+        ITracingService TracingService { get; }
 
         IWorkflowContext WorkflowContext { get; }
     }
