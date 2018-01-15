@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Dynamics.Crm.Web</id>
-    <version>1.4.0.2-alpha3</version>
+    <version>1.4.0.3-alpha</version>
     <authors>Sergio Escalera</authors>
     <owners>Sergio Escalera</owners>    
     <projectUrl>https://github.com/sergioescalera/CRM-Dynamics/</projectUrl>    
@@ -13,7 +13,8 @@
   </metadata>
   <files>
     <file src="..\Web\Dynamics.Crm.Web\Scripts\Dynamics.Crm.*.js" target="content\Scripts" />
-    <file src="..\Web\Dynamics.Crm.Web\_typings\Dynamics.Crm.Forms.d.ts" target="content\_typings" />    
+    <file src="..\Web\Dynamics.Crm.Web\_typings\Dynamics.Crm.Forms.d.ts" target="content\_typings" />
+    <file src="..\Web\Dynamics.Crm.Web\_typings\Dynamics.Crm.Notifications.d.ts" target="content\_typings" />
     <file src="..\Web\Dynamics.Crm.Web\_typings\Xrm.d.ts" target="content\_typings" />
     <file src="..\Web\Dynamics.Crm.Web\_typings\jquery.d.ts" target="content\_typings" />
     <file src="..\Web\Dynamics.Crm.Web\_typings\moment.d.ts" target="content\_typings" />

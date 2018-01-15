@@ -9,6 +9,8 @@ var Notifications;
                 throw new Error("Not supported.");
             }
         };
+        DefaultNotifications.prototype.hide = function (id) {
+        };
         DefaultNotifications.prototype.show = function (options) {
             alert(options.message);
         };

@@ -14,6 +14,8 @@ var Notifications;
                     .then(this.requestPermissionFulfilled.bind(this), this.requestPermissionRejected.bind(this));
             }
         };
+        WebNotificationService.prototype.hide = function (id) {
+        };
         WebNotificationService.prototype.show = function (options) {
             var _this = this;
             if (this._granted) {

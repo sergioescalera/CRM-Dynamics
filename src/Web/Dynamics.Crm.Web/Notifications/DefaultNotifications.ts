@@ -2,7 +2,7 @@
 
     "use strict";
 
-    export class DefaultNotifications implements INotificationService {
+    export class DefaultNotifications implements NotificationService {
 
         init(): void {
 
@@ -11,7 +11,10 @@
             }
         }
 
-        show(options: Options): void {
+        hide(id?: string): void {
+        }
+
+        show(options: NotificationServiceOptions): void {
             alert(options.message);
         }
 

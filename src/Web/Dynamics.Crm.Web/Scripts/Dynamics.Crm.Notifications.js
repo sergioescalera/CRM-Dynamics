@@ -134,6 +134,8 @@ var Notifications;
                 throw new Error("Not supported.");
             }
         };
+        DefaultNotifications.prototype.hide = function (id) {
+        };
         DefaultNotifications.prototype.show = function (options) {
             alert(options.message);
         };
@@ -160,6 +162,8 @@ var Notifications;
                     .requestPermission()
                     .then(this.requestPermissionFulfilled.bind(this), this.requestPermissionRejected.bind(this));
             }
+        };
+        WebNotificationService.prototype.hide = function (id) {
         };
         WebNotificationService.prototype.show = function (options) {
             var _this = this;
@@ -210,31 +214,105 @@ var Notifications;
 var Notifications;
 (function (Notifications) {
     "use strict";
-    Notifications.services = [
-        new Notifications.CrmFormNotificationService(),
-        new Notifications.WebNotificationService(),
-        new Notifications.ToastrNotificationService(),
-        new Notifications.DefaultNotifications()
-    ];
-    var notifications;
-    function show(options) {
-        console.log("Notifications.show()");
-        if (!notifications) {
-            notifications = resolveNotificationService();
-            notifications.init();
+    var $notificationWrapper;
+    var BoostrapAlert = (function () {
+        function BoostrapAlert() {
         }
-        notifications.show(options || {
+        BoostrapAlert.prototype.init = function () {
+            $notificationWrapper = $notificationWrapper || $("#notification-wrapper");
+            if (!$notificationWrapper.get(0)) {
+                $notificationWrapper = $("<div id=\"notification-wrapper\" class=\"hidden\"></div>");
+                $notificationWrapper.prependTo(document.body);
+            }
+        };
+        BoostrapAlert.prototype.show = function (options) {
+            var dismissible = !!options.dismissible;
+            var message = options.message;
+            var type = options.type;
+            $notificationWrapper
+                .removeClass("hidden")
+                .html("\n<div class=\"alert alert-" + type + " " + (dismissible ? "alert-dismissible" : "") + "\" id=\"notification\" role=\"alert\">\n    " + (dismissible ? "<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n        <span aria-hidden=\"true\">&times;</span>\n    </button>" : "") + "\n    <p>" + message + "</p>\n</div>");
+        };
+        BoostrapAlert.prototype.hide = function () {
+            $notificationWrapper.addClass("hidden");
+        };
+        BoostrapAlert.prototype.test = function () {
+            return true;
+        };
+        return BoostrapAlert;
+    }());
+    Notifications.BoostrapAlert = BoostrapAlert;
+})(Notifications || (Notifications = {}));
+
+var Notifications;
+(function (Notifications) {
+    "use strict";
+    Notifications.toastProviders = [
+        Notifications.web = new Notifications.WebNotificationService(),
+        Notifications.toast = new Notifications.ToastrNotificationService(),
+        Notifications.basic = new Notifications.DefaultNotifications()
+    ];
+    Notifications.providers = [
+        Notifications.forms = new Notifications.CrmFormNotificationService(),
+        Notifications.boostrap = new Notifications.BoostrapAlert(),
+        Notifications.basic = new Notifications.DefaultNotifications()
+    ];
+    var provider;
+    var toastProvider;
+    function show(options) {
+        console.log("Notifications.show()", options);
+        if (!provider) {
+            provider = resolve();
+            provider.init();
+        }
+        provider.show(options || {
             message: ""
         });
     }
     Notifications.show = show;
-    function resolveNotificationService() {
-        for (var i = 0; i < Notifications.services.length; i++) {
-            var service = Notifications.services[i];
+    function hide(id) {
+        if (!provider) {
+            provider = resolve();
+            provider.init();
+        }
+        provider.hide();
+    }
+    Notifications.hide = hide;
+    function showToast(options) {
+        console.log("Notifications.show()", options);
+        if (!toastProvider) {
+            toastProvider = resolveToast();
+            toastProvider.init();
+        }
+        toastProvider.show(options || {
+            message: ""
+        });
+    }
+    Notifications.showToast = showToast;
+    function hideToast(id) {
+        if (!toastProvider) {
+            toastProvider = resolve();
+            toastProvider.init();
+        }
+        toastProvider.hide();
+    }
+    Notifications.hideToast = hideToast;
+    function resolve() {
+        for (var i = 0; i < Notifications.providers.length; i++) {
+            var service = Notifications.providers[i];
             if (service && service.test()) {
                 return service;
             }
         }
-        throw new Error("Unable to resolve notification service");
+        throw new Error("Unable to resolve notification provider");
+    }
+    function resolveToast() {
+        for (var i = 0; i < Notifications.toastProviders.length; i++) {
+            var service = Notifications.toastProviders[i];
+            if (service && service.test()) {
+                return service;
+            }
+        }
+        throw new Error("Unable to resolve notification provider");
     }
 })(Notifications || (Notifications = {}));

@@ -100,6 +100,7 @@
       "Notifications/ToastrNotifications.js",
       "Notifications/DefaultNotifications.js",
       "Notifications/WebNotifications.js",
+      "Notifications/BootstrapAlert.js",
       "Notifications/Notifications.js"
     ]
   }

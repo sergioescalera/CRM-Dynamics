@@ -211,6 +211,8 @@ interface Client {
 
 interface data {
     addOnLoad(callback): void;
+    removeOnLoad(callback): void;
+
     /**
       * Asynchronously refreshes and optionally saves all the data of the form without reloading the page
       * @param save A Boolean value to indicate if data should be saved after it is refreshed

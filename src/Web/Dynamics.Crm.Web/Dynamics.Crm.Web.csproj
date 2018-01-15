@@ -214,9 +214,9 @@
     <TypeScriptCompile Include="Dialogs\Dialogs.ts" />
     <TypeScriptCompile Include="Forms\AutoNumberingRuleForm.ts" />
     <TypeScriptCompile Include="Forms\GlobalSettingForm.ts" />
+    <TypeScriptCompile Include="Notifications\BootstrapAlert.ts" />
     <TypeScriptCompile Include="Notifications\CrmFormNotifications.ts" />
     <TypeScriptCompile Include="Notifications\DefaultNotifications.ts" />
-    <TypeScriptCompile Include="Notifications\INotificationService.ts" />
     <TypeScriptCompile Include="Notifications\Notifications.ts" />
     <TypeScriptCompile Include="Notifications\ToastrNotifications.ts" />
     <TypeScriptCompile Include="Notifications\WebNotifications.ts" />
@@ -248,6 +248,7 @@
     <TypeScriptCompile Include="_typings\angular.d.ts" />
     <TypeScriptCompile Include="_typings\bootstrap.d.ts" />
     <TypeScriptCompile Include="_typings\Dynamics.Crm.Forms.d.ts" />
+    <TypeScriptCompile Include="_typings\Dynamics.Crm.Notifications.d.ts" />
     <TypeScriptCompile Include="_typings\jasmine.d.ts" />
     <TypeScriptCompile Include="_typings\jquery.d.ts" />
     <TypeScriptCompile Include="_typings\lodash.d.ts" />

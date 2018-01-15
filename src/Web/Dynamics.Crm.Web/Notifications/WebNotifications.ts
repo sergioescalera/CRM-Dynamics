@@ -2,7 +2,7 @@
 
     "use strict";
 
-    export class WebNotificationService implements INotificationService {
+    export class WebNotificationService implements NotificationService {
 
         private _permissionRequest: PromiseLike<NotificationPermission>;
         private _granted: boolean;
@@ -21,7 +21,10 @@
             }
         }
 
-        show(options: Options): void {
+        hide(id?: string): void {
+        }
+
+        show(options: NotificationServiceOptions): void {
 
             if (this._granted) {
 
