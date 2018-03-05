@@ -196,7 +196,7 @@ interface Context {
       * Returns the name of the current user
       */
     getUserName(): string;
-    getUserRoles(): any[]; // Returns an array of strings representing the GUID values of each of the security roles that the user is associated with.
+    getUserRoles(): string[]; // Returns an array of strings representing the GUID values of each of the security roles that the user is associated with.
     getVersion(): string;
     isOutlookClient(): boolean; // Returns a Boolean value indicating if the user is using Microsoft Dynamics CRM for Microsoft Office Outlook.
     isOutlookOnline(): boolean; /// Returns a Boolean value indicating whether the user is connected to the Microsoft Dynamics CRM server while using Microsoft Dynamics CRM for Microsoft Office Outlook with Offline Access. When this function returns false, the user is not connected to the server. The user is interacting with an instance of Microsoft Dynamics CRM running on the local computer.
@@ -252,6 +252,7 @@ interface Entity {
     addOnSave(ev: any): void;  // Sets a function to be called when the record is saved.    
     getDataXml(): string;  //  Returns a string representing the xml that will be sent to the server when the record is saved.
     getEntityName(): string;  // Returns a string representing the logical name of the entity for the record.
+    getEntitySetName(): string;
     getId(): string;  // Returns a string representing the GUID id value for the record.
     getIsDirty(): boolean;  // Returns a Boolean value that indicates if any fields in the form have been modified.
 

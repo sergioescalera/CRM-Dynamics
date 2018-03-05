@@ -179,6 +179,25 @@ namespace Dynamics.Crm.Data
             public static readonly Int32 SourceFieldLength = 500;
         }
 
+        public static class NoteEntity
+        {
+            public const String TypeName = "annotation";
+
+            public const String IdFieldName = "annotationid";
+
+            public const String SubjectFieldName = "subject";
+
+            public const String FileNameFieldName = "filename";
+
+            public const String MimeTypeFieldName = "mimetype";
+
+            public const String DocumentBodyFieldName = "documentbody";
+
+            public const String RegardingObjectFieldName = "objectid";
+
+            public const String TextFieldName = "notetext";
+        }
+
         public static class OpportunityEntity
         {
             public const String TypeName = "opportunity";
@@ -263,6 +282,27 @@ namespace Dynamics.Crm.Data
             public const String TypeName = "systemuser";
 
             public const String IdFieldName = "systemuserid";
+        }
+
+        public static class TaskEntity
+        {
+            public const String TypeName = "task";
+
+            public const String IdFieldName = "activityid";
+
+            public const String RegardingObjectFieldName = "regardingobjectid";
+
+            public const String SubjectFieldName = "subject";
+
+            public const String DescriptionFieldName = "description";
+
+            public const String ActualStartFieldName = "actualstart";
+
+            public const String ScheduledStartFieldName = "scheduledstart";
+
+            public const String ActualEndFieldName = "actualend";
+
+            public const String ScheduledEndFieldName = "scheduledend";
         }
 
         public static class TeamEntity
