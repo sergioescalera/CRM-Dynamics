@@ -49,9 +49,13 @@ namespace Dynamics.Crm.Data
 
             public const String OtherPhoneFieldName = "telephone2";
 
+            public const String DoNotPhoneFieldName = "donotphone";
+
             public const String FaxFieldName = "fax";
 
             public const String EmailFieldName = "emailaddress1";
+
+            public const String DoNotEmailFieldName = "donotemail";
 
             public const String WebsiteFieldName = "websiteurl";
         }
@@ -106,11 +110,17 @@ namespace Dynamics.Crm.Data
 
             public const String EmailFieldName = "emailaddress1";
 
+            public const String DoNotEmailFieldName = "donotemail";
+
             public const String PhoneFieldName = "telephone1";
+
+            public const String OtherPhoneFieldName = "telephone2";
 
             public const String MobilePhoneFieldName = "mobilephone";
 
             public const String FaxFieldName = "fax";
+
+            public const String DoNotPhoneFieldName = "donotphone";
         }
 
         public static class Currency
@@ -152,6 +162,25 @@ namespace Dynamics.Crm.Data
             public static readonly Func<String, String> DescriptionFieldName = prefix => $"{prefix}_description";
 
             public static readonly Func<String, String> LogicalNameFieldName = prefix => $"{prefix}_logicalname";
+        }
+
+        public static class LeadEntity
+        {
+            public const String TypeName = "lead";
+
+            public const String IdFieldName = "leadid";
+
+            public const String MobilePhoneFieldName = "mobilephone";
+
+            public const String PhoneFieldName = "telephone1";
+
+            public const String OtherPhoneFieldName = "telephone2";
+
+            public const String DoNotPhoneFieldName = "donotphone";
+
+            public const String EmailFieldName = "emailaddress1";
+
+            public const String DoNotEmailFieldName = "donotemail";
         }
 
         public static class LogEntryEntity
@@ -282,6 +311,12 @@ namespace Dynamics.Crm.Data
             public const String TypeName = "systemuser";
 
             public const String IdFieldName = "systemuserid";
+
+            public const String MobilePhoneFieldName = "mobilephone";
+
+            public const String HomePhoneFieldName = "homephone";
+
+            public const String EmailFieldName = "internalemailaddress";
         }
 
         public static class TaskEntity
