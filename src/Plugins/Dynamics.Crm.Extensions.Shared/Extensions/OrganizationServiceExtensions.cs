@@ -256,5 +256,21 @@ namespace Dynamics.Crm.Extensions
                 .FirstOrDefault()?
                 .Label.UserLocalizedLabel.Label;
         }
+
+        public static CalculateRollupFieldResponse CalculateRollupField(
+            this IOrganizationService service,
+            String entityName,
+            Guid entityId,
+            String attributeName)
+        {
+            var request = new CalculateRollupFieldRequest
+            {
+                Target = new EntityReference(entityName, entityId),
+                FieldName = attributeName
+            };
+            var response = service.Execute<CalculateRollupFieldResponse>(request);
+
+            return response;
+        }
     }
 }

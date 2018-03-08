@@ -1,4 +1,5 @@
 ﻿using Dynamics.Crm.Core;
+using Dynamics.Crm.Extensions;
 using Dynamics.Crm.Plugins;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
@@ -192,14 +193,7 @@ namespace Dynamics.Crm.Interfaces
             Guid entityId,
             String attributeName)
         {
-            var request = new CalculateRollupFieldRequest
-            {
-                Target = new EntityReference(entityName, entityId),
-                FieldName = attributeName
-            };
-            var response = (CalculateRollupFieldResponse)context.OrganizationService.Execute(request);
-
-            return response;
+            return context.OrganizationService.CalculateRollupField(entityName, entityId, attributeName);
         }
 
         #endregion
