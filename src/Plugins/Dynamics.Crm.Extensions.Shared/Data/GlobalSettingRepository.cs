@@ -45,7 +45,7 @@ namespace Dynamics.Crm.Data
                             Key = o.GetAttributeValue<String>(GlobalSettingEntity.KeyFieldName(_prefix)),
                             Value = o.GetAttributeValue<String>(GlobalSettingEntity.ValueFieldName(_prefix)),
                             Type = o.GetAttributeValue<OptionSetValue>(GlobalSettingEntity.TypeFieldName(_prefix)),
-                            LogicalName = o.GetAttributeValue<String>(GlobalSettingEntity.LogicalNameFieldName(_prefix))
+                            ReferenceType = o.GetAttributeValue<String>(GlobalSettingEntity.ReferenceTypeFieldName(_prefix))
                         };
 
             var array = query.ToArray();
@@ -58,7 +58,7 @@ namespace Dynamics.Crm.Data
                     Name = o.Name,
                     Value = o.Value,
                     Type = o.Type.ToEnum<GlobalSettingType>() ?? GlobalSettingType.String,
-                    LogicalName = array[0].LogicalName
+                    ReferenceType = o.ReferenceType
                 }).ToArray();
         }
 
@@ -73,7 +73,7 @@ namespace Dynamics.Crm.Data
                             Key = o.GetAttributeValue<String>(GlobalSettingEntity.KeyFieldName(_prefix)),
                             Value = o.GetAttributeValue<String>(GlobalSettingEntity.ValueFieldName(_prefix)),
                             Type = o.GetAttributeValue<OptionSetValue>(GlobalSettingEntity.TypeFieldName(_prefix)),
-                            LogicalName = o.GetAttributeValue<String>(GlobalSettingEntity.LogicalNameFieldName(_prefix))
+                            ReferenceType = o.GetAttributeValue<String>(GlobalSettingEntity.ReferenceTypeFieldName(_prefix))
                         };
 
             var array = query.ToArray();
@@ -85,7 +85,7 @@ namespace Dynamics.Crm.Data
                 Name = array[0].Name,
                 Value = array[0].Value,
                 Type = array[0].Type.ToEnum<GlobalSettingType>() ?? GlobalSettingType.String,
-                LogicalName = array[0].LogicalName
+                ReferenceType = array[0].ReferenceType
             } : null;
         }
     }

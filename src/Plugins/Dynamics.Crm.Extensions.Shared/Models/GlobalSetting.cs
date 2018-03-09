@@ -53,7 +53,7 @@ namespace Dynamics.Crm.Models
             get; set;
         }
 
-        public String LogicalName
+        public String ReferenceType
         {
             get; set;
         }

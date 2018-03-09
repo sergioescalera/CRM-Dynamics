@@ -140,6 +140,8 @@ namespace Dynamics.Crm.Data
 
             public const String ToFieldName = "to";
 
+            public const String RegardingObjectFieldName = "regardingobjectid";
+
             public const String SubjectFieldName = "subject";
 
             public const String DescriptionFieldName = "description";
@@ -161,7 +163,7 @@ namespace Dynamics.Crm.Data
 
             public static readonly Func<String, String> DescriptionFieldName = prefix => $"{prefix}_description";
 
-            public static readonly Func<String, String> LogicalNameFieldName = prefix => $"{prefix}_logicalname";
+            public static readonly Func<String, String> ReferenceTypeFieldName = prefix => $"{prefix}_valuetype";
         }
 
         public static class LeadEntity
