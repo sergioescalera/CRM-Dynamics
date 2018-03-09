@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xrm.Sdk;
 using System;
+using System.Linq;
 using System.Text;
 
 namespace Dynamics.Crm.Diagnostics
@@ -20,7 +21,14 @@ namespace Dynamics.Crm.Diagnostics
         {
             InnerTracingService?.Trace(format, args);
 
-            StringBuilder.AppendFormat(format, args);
+            if (args.Any())
+            {
+                StringBuilder.AppendFormat(format, args);
+            }
+            else
+            {
+                StringBuilder.Append(format);
+            }
             StringBuilder.AppendLine();
         }
 
