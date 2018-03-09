@@ -16,8 +16,8 @@
     };
 
     export function init(): void {
-
-        console.log("Siboney.Crm.Widgets.LookupWidget.init");
+        
+        console.log("CustomLookupWidget.init");
 
         searchLink = $("#search");
         searchLink.click(open);
@@ -28,11 +28,11 @@
 
     export function overrideConfig(config: IConfig): void {
 
-        console.log("Siboney.Crm.Widgets.LookupWidget.overrideConfig");
+        console.log("CustomLookupWidget.overrideConfig");
     }
 
     function open(): void {
-
+        
         var options: any = new xrm.DialogOptions();
 
         options.width = 550;

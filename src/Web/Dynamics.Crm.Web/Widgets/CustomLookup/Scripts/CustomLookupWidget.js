@@ -13,14 +13,14 @@ var CustomLookupWidget;
         types: [1, 2]
     };
     function init() {
-        console.log("Siboney.Crm.Widgets.LookupWidget.init");
+        console.log("CustomLookupWidget.init");
         searchLink = $("#search");
         searchLink.click(open);
         config = parseConfig(getParameterByName("data", window.location.search) || getParameterByName("Data", window.location.search));
     }
     CustomLookupWidget.init = init;
     function overrideConfig(config) {
-        console.log("Siboney.Crm.Widgets.LookupWidget.overrideConfig");
+        console.log("CustomLookupWidget.overrideConfig");
     }
     CustomLookupWidget.overrideConfig = overrideConfig;
     function open() {

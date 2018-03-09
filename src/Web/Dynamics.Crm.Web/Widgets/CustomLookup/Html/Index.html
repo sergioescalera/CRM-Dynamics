@@ -11,30 +11,30 @@
         }
 
         a {
-            border: 1px solid #c6c6c6;
             color: #1160B7;
             display: inline-block;
-            font-size: 12px;
-            padding: 1px;
+            font-size: 11px;
             text-decoration: none;
-            vertical-align: top;
         }
 
             a:hover {
-                text-decoration: underline;
+                text-decoration: none;
             }
 
             a img {
-                border: 0;
-                display: inline-block;
-                vertical-align: top;
+                border: none;
             }
     </style>
-</head>
-<body onload="CustomLookupWidget.init()">
-    <a href="javascript:void(0);" id="search">
-        <img src="/_imgs/search_normal.gif" title="Select a value" /></a>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="../Scripts/CustomLookupWidget.js"></script>
+</head>
+<body onload="CustomLookupWidget.init()">
+    <a href="javascript:void(0);" id="search" title="Select value">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20">
+            <g>
+                <path id="path1" transform="rotate(0,10,10) translate(4.0002070600442,4) scale(0.374988243352413,0.374988243352413)  " fill="#1160B7" d="M11.170988,2.0000026C6.1139962,2.0000026 1.9999944,6.1120075 1.9999944,11.16603 1.9999944,16.219991 6.1139962,20.331996 11.170988,20.331996 16.227981,20.331996 20.341006,16.219991 20.341006,11.16603 20.341006,6.1120075 16.227981,2.0000026 11.170988,2.0000026z M11.170988,0C17.33003,0 22.341001,5.0089787 22.341001,11.16603 22.341001,13.76351 21.449155,16.156669 19.95551,18.055608L19.942527,18.071714 31.999898,30.615001 30.5589,32.001003 18.567029,19.525854 18.476871,19.605846C16.516895,21.303544 13.961804,22.332 11.170988,22.332 5.0119487,22.332 1.6168633E-07,17.32302 0,11.16603 1.6168633E-07,5.0089787 5.0119487,0 11.170988,0z" />
+            </g>
+        </svg>
+    </a>
 </body>
 </html>

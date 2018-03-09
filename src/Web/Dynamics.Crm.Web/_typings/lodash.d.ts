@@ -29,7 +29,8 @@ interface Lodash<T> {
     filter(pred: (t: T) => boolean): Lodash<T>;
     groupBy<M>(func: (t: T) => M): Lodash<any>;
     map<M>(func: (t: T) => M): Lodash<M>;
+    sortBy(sort: string[]): Lodash<T>;
     sortBy<S>(sort: (t: T) => S): Lodash<T>;
     uniq(): Lodash<T>;
-    value(): T[];
+    value(): any;
 }
