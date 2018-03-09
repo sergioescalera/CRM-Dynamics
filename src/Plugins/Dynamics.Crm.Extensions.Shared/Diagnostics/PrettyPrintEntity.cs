@@ -18,6 +18,11 @@ namespace Dynamics.Crm.Diagnostics
             return entity.ToJson(paddingLeft: 0);
         }
 
+        public static string ToJson(this EntityCollection entities)
+        {
+            return entities.ToJson(paddingLeft: 0);
+        }
+
         private static string ToJson(this IEnumerable entities, Int32 paddingLeft)
         {
             if (entities == null)
@@ -36,7 +41,26 @@ namespace Dynamics.Crm.Diagnostics
 
             return str.ToString();
         }
-        
+
+        private static string ToJson(this EntityCollection entities, Int32 paddingLeft)
+        {
+            if (entities == null)
+                return "<null>";
+
+            var str = new StringBuilder($"<{entities.EntityName}>[".PadLeft(paddingLeft, ' '));
+
+            str.AppendLine();
+
+            foreach (var entity in entities.Entities)
+            {
+                str.AppendLine(DisplayValue(entity, paddingLeft + 3));
+            }
+
+            str.AppendLine("]".PadLeft(paddingLeft, ' '));
+
+            return str.ToString();
+        }
+
         private static string ToJson(this Entity entity, Int32 paddingLeft)
         {
             if (entity == null)
@@ -102,6 +126,13 @@ namespace Dynamics.Crm.Diagnostics
                 var entity = (Entity)value;
 
                 return ToJson(entity, paddingLeft);
+            }
+
+            if (value is EntityCollection)
+            {
+                var entities = (EntityCollection)value;
+
+                return ToJson(entities, paddingLeft);
             }
 
             if (value is ValueType || value is String)
