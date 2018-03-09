@@ -44,6 +44,7 @@ declare interface ICrmForms {
     getIsDirty(): boolean;
     isCreateForm(): boolean;
     isUpdateForm(): boolean;
+    isBulkEditForm(): boolean;
     supportsIFrames(): boolean;
 }
 

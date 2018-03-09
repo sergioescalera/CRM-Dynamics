@@ -40,6 +40,10 @@ var Dynamics;
                 return getFormType() === Forms.FormType.Update;
             }
             Forms.isUpdateForm = isUpdateForm;
+            function isBulkEditForm() {
+                return getFormType() === Forms.FormType.BulkEdit;
+            }
+            Forms.isBulkEditForm = isBulkEditForm;
             function supportsIFrames() {
                 return getIsDesktop();
             }

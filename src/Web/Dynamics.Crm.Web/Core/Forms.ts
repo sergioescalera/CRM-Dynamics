@@ -47,6 +47,11 @@
         return getFormType() === FormType.Update;
     }
 
+    export function isBulkEditForm(): boolean {
+
+        return getFormType() === FormType.BulkEdit;
+    }
+
     export function supportsIFrames(): boolean {
 
         return getIsDesktop();
