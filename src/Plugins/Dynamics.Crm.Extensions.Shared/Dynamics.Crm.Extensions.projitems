@@ -30,6 +30,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\AccountRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\BusinessUnitRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ContactRepository.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\EmailRepository.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\EmailTemplateRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\GlobalSettingRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\LogEntryRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\TaskRepository.cs" />
@@ -67,6 +69,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Address.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\BusinessUnit.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Contact.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\EmailTemplate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Enums.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\GlobalSetting.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\LogEntry.cs" />

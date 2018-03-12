@@ -60,6 +60,17 @@ namespace Dynamics.Crm.Data
             public const String WebsiteFieldName = "websiteurl";
         }
 
+        public class ActivityPartyEntity
+        {
+            public const String TypeName = "activityparty";
+
+            public const String IdFieldName = "activitypartyid";
+
+            public const String PartyFieldName = "partyid";
+
+            public const String ActivityFieldName = "activityid";
+        }
+
         public static class AddressStruct
         {
             public static readonly Func<String, String> CityFieldFormat = (s) => $"{s}city";
@@ -147,6 +158,21 @@ namespace Dynamics.Crm.Data
             public const String DescriptionFieldName = "description";
 
             public const String DirectionCodeFieldName = "directioncode";
+        }
+
+        public static class EmailTemplateEntity
+        {
+            public const String TypeName = "template";
+
+            public const String IdFieldName = "templateid";
+
+            public const String BodyFieldName = "body";
+
+            public const String DescriptionFieldName = "description";
+
+            public const String SubjectFieldName = "subject";
+
+            public const String TitleFieldName = "title";
         }
 
         public static class GlobalSettingEntity
