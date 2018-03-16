@@ -37,7 +37,7 @@ declare interface ICrmForms {
     Notifications: ICrmNotifications;
     Tabs: ICrmTabs;
     Sections: ICrmSections;
-    getClientType(): string;
+    getClientType(): "Web" | "Outlook" | "Mobile";
     getFormType(): number;
     getFormFactor(): number;
     getIsDesktop(): boolean;
@@ -46,6 +46,8 @@ declare interface ICrmForms {
     isUpdateForm(): boolean;
     isBulkEditForm(): boolean;
     supportsIFrames(): boolean;
+    current(): FormSelectorItem;
+    find(label: string): FormSelectorItem;
 }
 
 declare interface ICrmAttributes {
