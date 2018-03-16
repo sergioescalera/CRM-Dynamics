@@ -35,10 +35,16 @@ var Notifications;
             }
         };
         WebNotificationService.prototype.test = function () {
-            return _.isFunction(Notification)
-                && _.isString(Notification.permission)
-                && _.isFunction(Notification.requestPermission)
-                && Notification.permission !== "denied";
+            try {
+                return _.isFunction(Notification)
+                    && _.isString(Notification.permission)
+                    && _.isFunction(Notification.requestPermission)
+                    && Notification.permission !== "denied";
+            }
+            catch (e) {
+                console.warn(e);
+                return false;
+            }
         };
         WebNotificationService.prototype.createNotification = function (title, content, icon) {
             if (!this._granted) {

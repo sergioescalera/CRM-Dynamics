@@ -81,10 +81,17 @@ var Notifications;
             }
         };
         CrmFormNotificationService.prototype.test = function () {
-            return !_.isUndefined(Xrm) && !_.isNull(Xrm)
-                && !_.isUndefined(Xrm.Page) && !_.isNull(Xrm.Page)
-                && !_.isUndefined(Xrm.Page.ui) && !_.isNull(Xrm.Page.ui)
-                && _.isFunction(Xrm.Page.ui.setFormNotification);
+            try {
+                return typeof Xrm !== "undefined"
+                    && !!Xrm
+                    && !!Xrm.Page
+                    && !!Xrm.Page.ui
+                    && _.isFunction(Xrm.Page.ui.setFormNotification);
+            }
+            catch (e) {
+                console.warn(e);
+                return false;
+            }
         };
         return CrmFormNotificationService;
     }());
@@ -98,7 +105,7 @@ var Notifications;
         function ToastrNotificationService() {
         }
         ToastrNotificationService.prototype.init = function () {
-            if (!this.test) {
+            if (!this.test()) {
                 throw new Error("Not supported");
             }
             Dynamics.Crm.ScriptManager.loadStylesheet("https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css", window);
@@ -116,7 +123,16 @@ var Notifications;
             }
         };
         ToastrNotificationService.prototype.test = function () {
-            return !_.isUndefined(toastr);
+            try {
+                return typeof $ === "function"
+                    && _.isObject($.fn)
+                    && _.isString($.fn.jquery)
+                    && _.isObject(toastr);
+            }
+            catch (e) {
+                console.warn(e);
+                return false;
+            }
         };
         return ToastrNotificationService;
     }());
@@ -137,10 +153,26 @@ var Notifications;
         DefaultNotifications.prototype.hide = function (id) {
         };
         DefaultNotifications.prototype.show = function (options) {
-            alert(options.message);
+            try {
+                Xrm.Utility.alertDialog(options.message, function () { });
+            }
+            catch (e) {
+                alert(options.message);
+                console.warn(e);
+            }
         };
         DefaultNotifications.prototype.test = function () {
-            return _.isFunction(alert);
+            try {
+                return (typeof Xrm !== "undefined"
+                    && !!Xrm
+                    && !!Xrm.Utility
+                    && !!Xrm.Utility.alertDialog)
+                    || typeof alert === "function";
+            }
+            catch (e) {
+                console.warn(e);
+                return false;
+            }
         };
         return DefaultNotifications;
     }());
@@ -184,10 +216,16 @@ var Notifications;
             }
         };
         WebNotificationService.prototype.test = function () {
-            return _.isFunction(Notification)
-                && _.isString(Notification.permission)
-                && _.isFunction(Notification.requestPermission)
-                && Notification.permission !== "denied";
+            try {
+                return _.isFunction(Notification)
+                    && _.isString(Notification.permission)
+                    && _.isFunction(Notification.requestPermission)
+                    && Notification.permission !== "denied";
+            }
+            catch (e) {
+                console.warn(e);
+                return false;
+            }
         };
         WebNotificationService.prototype.createNotification = function (title, content, icon) {
             if (!this._granted) {
@@ -248,8 +286,9 @@ var Notifications;
 (function (Notifications) {
     "use strict";
     Notifications.toastProviders = [
-        Notifications.web = new Notifications.WebNotificationService(),
+        //web = new WebNotificationService(),
         Notifications.toast = new Notifications.ToastrNotificationService(),
+        Notifications.forms = new Notifications.CrmFormNotificationService(),
         Notifications.basic = new Notifications.DefaultNotifications()
     ];
     Notifications.providers = [

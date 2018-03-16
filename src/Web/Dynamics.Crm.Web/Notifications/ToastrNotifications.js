@@ -5,7 +5,7 @@ var Notifications;
         function ToastrNotificationService() {
         }
         ToastrNotificationService.prototype.init = function () {
-            if (!this.test) {
+            if (!this.test()) {
                 throw new Error("Not supported");
             }
             Dynamics.Crm.ScriptManager.loadStylesheet("https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css", window);
@@ -23,7 +23,16 @@ var Notifications;
             }
         };
         ToastrNotificationService.prototype.test = function () {
-            return !_.isUndefined(toastr);
+            try {
+                return typeof $ === "function"
+                    && _.isObject($.fn)
+                    && _.isString($.fn.jquery)
+                    && _.isObject(toastr);
+            }
+            catch (e) {
+                console.warn(e);
+                return false;
+            }
         };
         return ToastrNotificationService;
     }());

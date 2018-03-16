@@ -9,8 +9,9 @@
     export var basic: DefaultNotifications;
 
     export var toastProviders: NotificationService[] = [
-        web = new WebNotificationService(),
+        //web = new WebNotificationService(),
         toast = new ToastrNotificationService(),
+        forms = new CrmFormNotificationService(),
         basic = new DefaultNotifications()
     ];
 

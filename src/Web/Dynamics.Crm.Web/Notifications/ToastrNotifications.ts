@@ -5,7 +5,7 @@
     export class ToastrNotificationService implements NotificationService {
 
         init(): void {
-            if (!this.test) {
+            if (!this.test()) {
                 throw new Error("Not supported");
             }
             Dynamics.Crm.ScriptManager.loadStylesheet(
@@ -28,7 +28,15 @@
 
         test(): boolean {
 
-            return !_.isUndefined(toastr);
+            try {
+                return typeof $ === "function"
+                    && _.isObject($.fn)
+                    && _.isString($.fn.jquery)
+                    && _.isObject(toastr);
+            } catch (e) {
+                console.warn(e);
+                return false;
+            }
         }
     }
 }

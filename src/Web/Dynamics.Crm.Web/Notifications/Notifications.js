@@ -2,8 +2,9 @@ var Notifications;
 (function (Notifications) {
     "use strict";
     Notifications.toastProviders = [
-        Notifications.web = new Notifications.WebNotificationService(),
+        //web = new WebNotificationService(),
         Notifications.toast = new Notifications.ToastrNotificationService(),
+        Notifications.forms = new Notifications.CrmFormNotificationService(),
         Notifications.basic = new Notifications.DefaultNotifications()
     ];
     Notifications.providers = [

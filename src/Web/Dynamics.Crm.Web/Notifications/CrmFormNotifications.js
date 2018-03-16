@@ -21,10 +21,17 @@ var Notifications;
             }
         };
         CrmFormNotificationService.prototype.test = function () {
-            return !_.isUndefined(Xrm) && !_.isNull(Xrm)
-                && !_.isUndefined(Xrm.Page) && !_.isNull(Xrm.Page)
-                && !_.isUndefined(Xrm.Page.ui) && !_.isNull(Xrm.Page.ui)
-                && _.isFunction(Xrm.Page.ui.setFormNotification);
+            try {
+                return typeof Xrm !== "undefined"
+                    && !!Xrm
+                    && !!Xrm.Page
+                    && !!Xrm.Page.ui
+                    && _.isFunction(Xrm.Page.ui.setFormNotification);
+            }
+            catch (e) {
+                console.warn(e);
+                return false;
+            }
         };
         return CrmFormNotificationService;
     }());

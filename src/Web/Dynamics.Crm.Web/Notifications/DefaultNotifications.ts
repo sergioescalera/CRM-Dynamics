@@ -15,12 +15,26 @@
         }
 
         show(options: NotificationServiceOptions): void {
-            alert(options.message);
+            try {
+                Xrm.Utility.alertDialog(options.message, () => { });
+            } catch (e) {
+                alert(options.message);
+                console.warn(e);
+            }
         }
 
         test(): boolean {
 
-            return _.isFunction(alert);
+            try {
+                return (typeof Xrm !== "undefined"
+                    && !!Xrm
+                    && !!Xrm.Utility
+                    && !!Xrm.Utility.alertDialog)
+                    || typeof alert === "function";
+            } catch (e) {
+                console.warn(e);
+                return false;
+            }
         }
     }
 }

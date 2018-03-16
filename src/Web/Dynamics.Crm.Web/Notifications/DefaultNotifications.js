@@ -12,10 +12,26 @@ var Notifications;
         DefaultNotifications.prototype.hide = function (id) {
         };
         DefaultNotifications.prototype.show = function (options) {
-            alert(options.message);
+            try {
+                Xrm.Utility.alertDialog(options.message, function () { });
+            }
+            catch (e) {
+                alert(options.message);
+                console.warn(e);
+            }
         };
         DefaultNotifications.prototype.test = function () {
-            return _.isFunction(alert);
+            try {
+                return (typeof Xrm !== "undefined"
+                    && !!Xrm
+                    && !!Xrm.Utility
+                    && !!Xrm.Utility.alertDialog)
+                    || typeof alert === "function";
+            }
+            catch (e) {
+                console.warn(e);
+                return false;
+            }
         };
         return DefaultNotifications;
     }());
