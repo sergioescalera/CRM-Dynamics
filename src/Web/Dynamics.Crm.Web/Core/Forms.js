@@ -48,6 +48,32 @@ var Dynamics;
                 return getIsDesktop();
             }
             Forms.supportsIFrames = supportsIFrames;
+            function current() {
+                // The formSelectoritems collection does not exist and the formSelector.getCurrentItem method isn't supported for Dynamics 365 mobile clients (phones and tablets) and the interactive service hub.
+                // https://msdn.microsoft.com/en-in/library/gg327828.aspx#formSelector
+                if (!Xrm.Page.ui ||
+                    !Xrm.Page.ui.formSelector ||
+                    !Xrm.Page.ui.formSelector.items) {
+                    return null;
+                }
+                // When only one form is available this method will return null.
+                return Xrm.Page.ui.formSelector.getCurrentItem()
+                    || Xrm.Page.ui.formSelector.items.get(0)
+                    || null;
+            }
+            Forms.current = current;
+            function find(label) {
+                if (!Xrm.Page.ui ||
+                    !Xrm.Page.ui.formSelector ||
+                    !Xrm.Page.ui.formSelector.items) {
+                    return null;
+                }
+                var filter = Xrm.Page.ui.formSelector.items
+                    .get()
+                    .filter(function (f) { return f.getLabel() === label; });
+                return filter[0] || null;
+            }
+            Forms.find = find;
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));

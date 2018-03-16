@@ -4,6 +4,14 @@
 
     export function get(itemName: string, required: boolean = false): NavigationItem {
 
+        // This collection does not exist with Microsoft Dynamics 365 for tablets.
+        // https://msdn.microsoft.com/en-in/library/gg327828.aspx#BKMK_navigation
+        if (!Xrm.Page.ui ||
+            !Xrm.Page.ui.navigation ||
+            !Xrm.Page.ui.navigation.items) {
+            return null;
+        }
+
         var item = Xrm.Page.ui.navigation.items.get(itemName);
 
         if (item) {

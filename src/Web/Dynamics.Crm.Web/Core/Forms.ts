@@ -2,9 +2,9 @@
 
     "use strict";
 
-    export function getClientType(): string {
+    export function getClientType(): "Web" | "Outlook" | "Mobile" {
 
-        return Xrm.Page.context.client.getClient();
+        return <any>Xrm.Page.context.client.getClient();
     }
 
     export function getFormType(): FormType {
@@ -55,5 +55,36 @@
     export function supportsIFrames(): boolean {
 
         return getIsDesktop();
+    }
+
+    export function current(): FormSelectorItem {
+
+        // The formSelectoritems collection does not exist and the formSelector.getCurrentItem method isn't supported for Dynamics 365 mobile clients (phones and tablets) and the interactive service hub.
+        // https://msdn.microsoft.com/en-in/library/gg327828.aspx#formSelector
+        if (!Xrm.Page.ui ||
+            !Xrm.Page.ui.formSelector ||
+            !Xrm.Page.ui.formSelector.items) {
+            return null;
+        }
+
+        // When only one form is available this method will return null.
+        return Xrm.Page.ui.formSelector.getCurrentItem()
+            || Xrm.Page.ui.formSelector.items.get(0)
+            || null;
+    }
+
+    export function find(label: string): FormSelectorItem {
+
+        if (!Xrm.Page.ui ||
+            !Xrm.Page.ui.formSelector ||
+            !Xrm.Page.ui.formSelector.items) {
+            return null;
+        }
+
+        var filter = Xrm.Page.ui.formSelector.items
+            .get()
+            .filter((f: FormSelectorItem) => f.getLabel() === label);
+
+        return filter[0] || null;
     }
 }
