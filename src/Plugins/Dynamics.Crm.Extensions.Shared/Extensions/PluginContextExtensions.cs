@@ -187,7 +187,7 @@ namespace Dynamics.Crm.Interfaces
 
         #region Roll-up
 
-        public static CalculateRollupFieldResponse Calculate(
+        public static CalculateRollupFieldResponse CalculateRollupField(
             this IPluginContext context,
             String entityName,
             Guid entityId,
