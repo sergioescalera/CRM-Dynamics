@@ -4,19 +4,19 @@
 
     export function get(tabName: string, sectionName: string, required: boolean = true): Section {
 
-        var tab = Tabs.get(tabName, required);
+        let tab = Tabs.get(tabName, required);
 
         if (!tab) {
             return null;
         }
 
-        var section = tab.sections.get(sectionName);
+        let section = tab.sections.get(sectionName);
 
         if (section) {
             return section;
         }
 
-        var msg = "The specified section could not be found: " + tabName + " - " + sectionName;
+        let msg = "The specified section could not be found: " + tabName + " - " + sectionName;
 
         if (required) {
             throw new Error(msg);
@@ -49,11 +49,11 @@
 
         if (Array.isArray(names)) {
 
-            for (var i = 0; i < names.length; i++) {
+            for (let i = 0; i < names.length; i++) {
 
-                var name: string = names[i];
-                var pair = name.split("|");
-                var section;
+                let name: string = names[i];
+                let pair = name.split("|");
+                let section;
 
                 if (pair && pair.length === 2) {
                     section = get(pair[0], pair[1], false);

@@ -99,39 +99,6 @@ var Dynamics;
                     }
                 }
                 Controls.setVisible = setVisible;
-                // auto-complete
-                function autoComplete(controlName, query, commands, required) {
-                    if (commands === void 0) { commands = null; }
-                    if (required === void 0) { required = true; }
-                    var control = get(controlName, required);
-                    if (!control) {
-                        return;
-                    }
-                    control.addOnKeyPress(function () {
-                        var input = control.getValue();
-                        query(input)
-                            .then(function (results) {
-                            if (results || results.length > 0) {
-                                control.showAutoComplete({
-                                    results: results
-                                        .filter(function (o) { return !!o; })
-                                        .map(function (o, i) {
-                                        return {
-                                            id: o.id || i,
-                                            icon: o.icon,
-                                            fields: o.fields || [o.value || o]
-                                        };
-                                    }),
-                                    commands: commands
-                                });
-                            }
-                            else {
-                                control.hideAutoComplete();
-                            }
-                        });
-                    });
-                }
-                Controls.autoComplete = autoComplete;
             })(Controls = Forms.Controls || (Forms.Controls = {}));
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));

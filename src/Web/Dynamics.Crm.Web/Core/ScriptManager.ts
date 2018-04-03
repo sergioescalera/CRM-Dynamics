@@ -7,14 +7,14 @@ module Dynamics.Crm.ScriptManager {
 
     "use strict";
 
-    var _scripts = {};
-    var _stylesheets = [];
+    let _scripts = {};
+    let _stylesheets = [];
 
     export function loadScripts(
         scripts: string[],
         win: JQueryWindow): JQueryPromise<JQueryPromise<void>[]> {
 
-        var deferreds = scripts.map((s: string) => loadScript(s, win));
+        let deferreds = scripts.map((s: string) => loadScript(s, win));
 
         return win.$.when.apply(win.$, deferreds);
     }
@@ -25,7 +25,7 @@ module Dynamics.Crm.ScriptManager {
 
         console.log("Dynamics.Crm.ScriptManager.loadScript: " + script);
 
-        var promise = _scripts[script];
+        let promise = _scripts[script];
 
         if (!!promise) {
             return promise;
@@ -33,7 +33,7 @@ module Dynamics.Crm.ScriptManager {
 
         _scripts[script] = promise = win.$.Deferred<void>();
 
-        var element = win.document.createElement("script");
+        let element = win.document.createElement("script");
 
         element.defer = true;
         element.type = "text/javascript";
@@ -61,7 +61,7 @@ module Dynamics.Crm.ScriptManager {
 
         console.log("Dynamics.Crm.ScriptManager.loadStylesheet: " + stylesheet);
 
-        var filter = _stylesheets.filter((s: string) => s === stylesheet);
+        let filter = _stylesheets.filter((s: string) => s === stylesheet);
 
         if (filter.length > 0) {
             return;

@@ -8,81 +8,97 @@ interface GetGlobalContext {
 
 interface Xrm {
     Page: Page;
-
-    /**
-      * The Xrm.Utility object provides a container for useful functions not directly related to the current page.
-      */
     Utility: Utility;
+    Navigation: Navigation;
 }
 
 interface Utility {
-    /**
-      * Displays a dialog box containing an application-defined message
-      * @param message The text of the message to display in the dialog.
-      * @param onCloseCallback A function to execute when the OK button is clicked
-      */
-    alertDialog(message: string, onCloseCallback: DialogCallback): void;
+    getGlobalContext(): Context;
+}
 
-    /**
-      * Displays a confirmation dialog box that contains an optional message as well as OK and Cancel buttons
-      * @param message The text of the message to display in the dialog.
-      * @param yesCloseCallback A function to execute when the OK button is clicked
-      * @param noCloseCallback A function to execute when the CANCEL button is clicked
-      */
-    confirmDialog(message: string, yesCloseCallback: DialogCallback, noCloseCallback: DialogCallback): void;
+interface Navigation {
+    openAlertDialog(strings: AlertDialogStrings, options?: OpenOptions): DialogResult;
+    openConfirmDialog(strings: ConfirmDialogStrings, options?: OpenOptions): DialogResult;
+    openErrorDialog(options?: ErrorOptions): DialogResult;
+    openFile(file: FileProperties, options?: number); /* 1: Open, 2: Save */
+    openForm(options: EntityFormOptions, formParameters?: any): void;
+    openUrl(url: string, options?: OpenOptions): void;
+    openWebResource(name: string, options?: OpenWindowOptions, data?: string);
+}
 
-    /**
-      * Determine if an entity is an activity entity
-      * @param entityName The logicalName of an entity
-      * @returns True if the entity is an activity entity, otherwise false
-      */
-    isActivityType(entityName: string): boolean;
+interface AlertDialogStrings {
+    confirmButtonLabel?: string;
+    text: string;
+}
 
-    openEntityForm(name: string, id?: string, parameters?: Object, windowOptions?: Object): Object; //Opens an entity form.
-    openWebResource(webResourceName: string, webResourceData?: string, width?: number, height?: number): Window; //Opens an HTML web resource.
+interface OpenOptions {
+    height?: number;
+    width?: number;
+}
+
+interface OpenWindowOptions extends OpenOptions {
+    openInNewWindow?: boolean;
+}
+
+interface ConfirmDialogStrings {
+    cancelButtonLabel?: string;
+    confirmButtonLabel?: string;
+    subtitle?: string;
+    text: string;
+    title?: string;
+}
+
+interface ErrorOptions {
+    details?: string;
+    errorCode?: number;
+    message?: string;
+}
+
+interface DialogResult {
+    then(successCallback?: Function, errorCallback?: Function): void;
+}
+
+interface FileProperties {
+    fileContent: string;
+    fileName: string;
+    fileSize: number;
+    mimeType: string;
+}
+
+interface EntityFormOptions extends OpenWindowOptions {
+    cmdbar?: boolean;
+    createFromEntity?: LookupControlItem;
+    entityId?: string;
+    entityName?: string;
+    formId?: string;
+    navBar?: "on" | "off" | "entity";
+    windowPosition?: number; // 1: Center, 2: Side
+    useQuickCreateForm?: boolean;
 }
 
 interface Page {
-    context: Context;
     data: data;
     ui: ui;
-    getAttribute(): Attribute[]; // Returns one or more controls depending on the arguments passed. 
-    getAttribute(argument: string): Attribute; // Returns The control where the name matches the argument
-    getAttribute(argument: number): Attribute; // Returns The control where the index matches the number
-    getAttribute(argument: AttributeFunctionCallback): Attribute[]; // Return Value The tab where the index matches the number
-    getControl(): Control[]; // Returns one or more controls depending on the arguments passed. 
-    getControl(argument: string): Control; // Returns The control where the name matches the argument
-    getControl(argument: number): Control; // Returns The control where the index matches the number
-    getControl(argument: AttributeFunctionCallback): Control[]; // Return Value The tab where the index matches the number    
+    getAttribute(): Attribute[]; 
+    getAttribute(argument: string): Attribute;
+    getAttribute(argument: number): Attribute;
+    getAttribute(argument: AttributeFunctionCallback): Attribute[];
+    getControl(): Control[];
+    getControl(argument: string): Control;
+    getControl(argument: number): Control;
+    getControl(argument: AttributeFunctionCallback): Control[];
 }
 
 interface ui {
-    /**
-      * Use this method to remove form level notifications
-      * @param uniqueId A unique identifier for the message used with setFormNotification to set the notification
-      * @returns True if the method succeeded, otherwise false
-      */
     clearFormNotification(uniqueId: string): boolean;
-
-    /**
-      * Use this method to display form level notifications. 
-      * You can display any number of notifications and they will be displayed until they are removed using clearFormNotification. 
-      * The height of the notification area is limited so each new message will be added to the top. Users can scroll down to view older messages that have not yet been removed
-      * @param message The text of the message 
-      * @param level The level of the message; ERROR, WARNING, or INFO
-      * @param uniqueId unique identifier for the message used with clearFormNotification to remove the notification
-      * @returns True if the method succeeded, otherwise false
-      */
     setFormNotification(message: string, level: string, uniqueId: string): boolean;
-
     setFormHtmlNotification(message: string, level: string, uniqueId: string): boolean;
-
-    close(): void; // Closes the form.
-    getCurrentControl(): Object; //  Returns the control object that currently has focus on the form.
-    getFormType(): number;  // Indicates the form context for the record.
-    getViewPortHeight(): number; // Returns the height of the viewport in pixels. 
-    getViewPortWidth(): number; //  Returns the width of the viewport in pixels. 
-    refreshRibbon(): void; // Causes the ribbon to re-evaluate data that controls what is displayed in it.
+    close(): void;
+    getCurrentControl(): Object;
+    getFormType(): number;
+    getViewPortHeight(): number;
+    getViewPortWidth(): number;
+    refreshRibbon(): void;
     controls: Collection<Control>;
     navigation: Navigation;
     formSelector: FormSelector;
@@ -92,14 +108,13 @@ interface ui {
 
 interface FormSelector {
     items: Collection<FormSelectorItem>;
-    getCurrentItem(): FormSelectorItem; // Returns a reference to the form currently being shown.
-
+    getCurrentItem(): FormSelectorItem;
 }
 
 interface FormSelectorItem {
-    getId(): string; // Returns the GUID ID of the roleForm.
-    getLabel(): string; // Returns the label of the roleForm.
-    navigate(): void; // Opens the specified roleForm.
+    getId(): string;
+    getLabel(): string;
+    navigate(): void;
 }
 
 interface Navigation {
@@ -107,12 +122,12 @@ interface Navigation {
 }
 
 interface TabsCollection {
-    forEach(argument: TabFunctionCallback): void; // Applies the action contained within a delegate function. 
-    get(): Tab[]; // Return Value All the tabs.
-    get(argument: string): Tab; // Return Value The tab where the name matches the argument.
-    get(argument: number): Tab; // Return Value The tab where the index matches the number
-    get(argument: TabFunctionCallback): Tab[]; // Return Value The tab where the index matches the number
-    getLength(): number; // Returns the number of tabs  in the collection
+    forEach(argument: TabFunctionCallback): void;
+    get(): Tab[];
+    get(argument: string): Tab;
+    get(argument: number): Tab;
+    get(argument: TabFunctionCallback): Tab[];
+    getLength(): number;
 }
 
 interface DialogCallback {
@@ -154,18 +169,18 @@ interface Section {
     getName(): string;
     getParent(): Object;
     getVisible(): boolean;
-    setLabel(arg: string): void; //Sets the label for the section.
-    setVisible(arg: boolean): void; //Sets a value that indicates whether the section is visible.
+    setLabel(arg: string): void;
+    setVisible(arg: boolean): void;
     controls: Collection<Control>;
 
 }
 interface TabSections {
-    forEach(argument: SectionFunctionCallback); // Applies the action contained within a delegate function. 
-    get(): Section[]; // Returns one or more controls depending on the arguments passed. 
-    get(argument: string): Section; // Returns The control where the name matches the argument
-    get(argument: number): Section; // Returns The control where the index matches the number
-    get(argument: AttributeFunctionCallback): Section[]; // Return Value The tab where the index matches the number
-    getLength(): number; // Returns the number of controls in the collection
+    forEach(argument: SectionFunctionCallback);
+    get(): Section[];
+    get(argument: string): Section;
+    get(argument: number): Section;
+    get(argument: AttributeFunctionCallback): Section[];
+    getLength(): number;
 }
 
 interface NavigationArray {
@@ -175,105 +190,96 @@ interface NavigationArray {
     (index: number): NavigationItem;
 }
 interface NavigationItemCollection {
-    forEach(argument: NavigationFunctionCallback): void; // Applies the action contained within a delegate function.    
-    get(): NavigationArray; // Returns one or more controls depending on the arguments passed. 
-    get(argument: string): NavigationItem; // Returns The control where the name matches the argument
-    get(argument: number): NavigationItem; // Returns The control where the index matches the number
-    get(argument: AttributeFunctionCallback): NavigationArray; // Return Value The tab where the index matches the number
-    getLength(): number; // Returns the number of controls in the collection
+    forEach(argument: NavigationFunctionCallback): void;
+    get(): NavigationArray;
+    get(argument: string): NavigationItem;
+    get(argument: number): NavigationItem;
+    get(argument: AttributeFunctionCallback): NavigationArray;
+    getLength(): number;
 }
 
 interface Context {
-    getCurrentTheme(): string; //  Returns a string representing the current Microsoft Office Outlook theme chosen by the user.
-    getOrgLcid(): Number;  /// Returns the LCID value that represents the Microsoft Dynamics CRM Language Pack that is the base language for the organization.
-    getOrgUniqueName(): string; /// Returns the unique text value of the organizations name.
-    getQueryStringParameters(): any;  /// Returns an array of key value pairs representing the query string arguments that were passed to the page.
-    getClientUrl(): string;  /// Returns the base URL that was used to access the application This method is new in Microsoft Dynamics CRM 2011 Update Rollup 12 and the Microsoft Dynamics CRM December 2012 Service Update
-    getUserId(): string; // Returns the GUID value of the SystemUser.id value for the current user.
-    getUserLcid(): Number; // Returns the LCID value that represents the Microsoft Dynamics CRM Language Pack that is the user selected as their preferred language.
-
-    /**
-      * Returns the name of the current user
-      */
-    getUserName(): string;
-    getUserRoles(): string[]; // Returns an array of strings representing the GUID values of each of the security roles that the user is associated with.
+    client: Client;
+    organizationSettings: OrganizationSettings;
+    userSettings: UserSettings;
+    getClientUrl(): string;
+    getCurrentAppUrl(): string;
     getVersion(): string;
-    isOutlookClient(): boolean; // Returns a Boolean value indicating if the user is using Microsoft Dynamics CRM for Microsoft Office Outlook.
-    isOutlookOnline(): boolean; /// Returns a Boolean value indicating whether the user is connected to the Microsoft Dynamics CRM server while using Microsoft Dynamics CRM for Microsoft Office Outlook with Offline Access. When this function returns false, the user is not connected to the server. The user is interacting with an instance of Microsoft Dynamics CRM running on the local computer.
-    prependOrgName(sPath: string): string; // Prepends the organization name to the specified path.
-    client: Client
+    prependOrgName(path: string): string;
 }
 
 interface Client {
     getFormFactor(): number;
-    getClient(): string;
+    getClient(): ClientType;
+    getClientState(): ClientState;
+    isOffline(): boolean;
+}
+
+declare type ClientType = "Web" | "Outlook" | "Mobile";
+declare type ClientState = "Online" | "Offline";
+
+interface OrganizationSettings {
+    attributes: any;
+    baseCurrencyId: string;
+    defaultCountryCode: string;
+    isAutoSaveEnabled: boolean;
+    languageId: number;
+    organizationId: string;
+    uniqueName: string;
+    useSkypeProtocol: boolean;
+}
+
+interface UserSettings {
+    defaultCountryCode: string;
+    isGuidedHelpEnabled: boolean;
+    isHighContrastEnabled: boolean;
+    isRTL: boolean;
+    languageId: number;
+    securityRoles: string[];
+    transactionCurrencyId: string;
+    userId: string;
+    userName: string;
 }
 
 interface data {
     addOnLoad(callback): void;
     removeOnLoad(callback): void;
-
-    /**
-      * Asynchronously refreshes and optionally saves all the data of the form without reloading the page
-      * @param save A Boolean value to indicate if data should be saved after it is refreshed
-      */
     refresh(save: boolean): DataRefreshResult;
-
-    /**
-      * Saves the record asynchronously with the option to set callback functions to be executed after the save operation is completed
-      */
     save(): DataRefreshResult;
     entity: Entity;
     process: ProcessData;
 }
 
 interface DataRefreshError {
-    /**
-      * The error code.
-      */
     errorCode: number;
-
-    /**
-      * A localized error message
-      */
     message: string;
 }
 interface DataRefreshResult {
-    /**
-      * Set callback functions to the data refresh request
-      * @param successCallback A function to call when the operation succeeds
-      * @param errorCallback A function to call when the operation fails
-      */
     then(successCallback: () => void, errorCallback: (error: DataRefreshError) => void);
 }
 
 interface Entity {
     attributes: AttributeCollection;
-    addOnSave(ev: any): void;  // Sets a function to be called when the record is saved.    
-    getDataXml(): string;  //  Returns a string representing the xml that will be sent to the server when the record is saved.
-    getEntityName(): string;  // Returns a string representing the logical name of the entity for the record.
+    addOnSave(ev: any): void;
+    getDataXml(): string;
+    getEntityName(): string;
     getEntitySetName(): string;
-    getId(): string;  // Returns a string representing the GUID id value for the record.
-    getIsDirty(): boolean;  // Returns a Boolean value that indicates if any fields in the form have been modified.
-
-    /**
-      * Gets a string for the value of the primary attribute of the entity.
-      * @returns The value of the primary attribute of the entity
-      */
+    getId(): string;
+    getIsDirty(): boolean;
     getPrimaryAttributeValue(): string;
-    removeOnSave();  // Removes a function from the OnSave event hander.
-    save(): void;  // Saves the record. This method has three possible parameters.
-    save(param: string): void;  // Saves the record. This method has three possible parameters. "" , "saveandclose" and "saveandnew"
+    removeOnSave();
+    save(): void;
+    save(param: string): void;
 }
 interface AttributeCollection {
     length: number;
     item(index: number): Attribute;
-    forEach(argument: AttributeFunctionCallback): void; // Applies the action contained within a delegate function.    
-    get(): Attribute[]; // Returns one or more controls depending on the arguments passed. 
-    get(argument: string): Attribute; // Returns The control where the name matches the argument
-    get(argument: number): Attribute; // Returns The control where the index matches the number
-    get(argument: AttributeFunctionCallback): Attribute[]; // Return Value The tab where the index matches the number
-    getLength(): number; // Returns the number of controls in the collection
+    forEach(argument: AttributeFunctionCallback): void;
+    get(): Attribute[];
+    get(argument: string): Attribute;
+    get(argument: number): Attribute;
+    get(argument: AttributeFunctionCallback): Attribute[];
+    getLength(): number;
 }
 
 interface Attribute {
@@ -288,20 +294,20 @@ interface Attribute {
     getMaxLength(): number;
     getMin(): number;
     getName(): string;
-    getOption(value: string): Object; // review
-    getOption(value: number): Object; // review
+    getOption(value: string): Object;
+    getOption(value: number): Object;
     getOptions(): Option[];
     getParent(): Entity;
     getPrecision(): number;
     getRequiredLevel(): string;
-    getSelectedOption(): Option; // review
+    getSelectedOption(): Option;
     getSubmitMode(): string;
     getText(): string;
-    getUserPrivilege(): UserPrivilege; // review
+    getUserPrivilege(): UserPrivilege;
     getValue(): any;
     removeOnChange(ev: any): void;
     setRequiredLevel(requirementLevel: string): void;
-    setSubmitMode(SubmitMode: string): void; // review
+    setSubmitMode(SubmitMode: string): void;
     setValue(value: any);
 }
 interface UserPrivilege {
@@ -317,18 +323,18 @@ interface Lookup {
 }
 
 interface ExecutionContext {
-    getContext(): Context; //  Returns the Xrm.Page.context object.
-    getDepth(): number; //  Returns a value that indicates the order in which this handler is executed. 
-    getEventArgs(): SaveEventArgs; //  Returns an object with methods to manage the Save event.
-    getEventSource(): Attribute; //  Returns a reference to the object that the event occurred on.
-    getSharedVariable(key: string): Object; // Retrieves a variable set using setSharedVariable.
-    setSharedVariable(key: string, value: Object); // Sets the value of a variable to be used by a handler after the current handler completes.
+    getContext(): Context;
+    getDepth(): number;
+    getEventArgs(): SaveEventArgs;
+    getEventSource(): Attribute;
+    getSharedVariable(key: string): Object;
+    setSharedVariable(key: string, value: Object);
 }
 
 interface SaveEventArgs {
-    getSaveMode(): number; //   Returns a value indicating how the save event was initiated by the user.
-    isDefaultPrevented(): boolean; //   Returns a value indicating whether the save event has been canceled because the preventDefault method was used in this event handler or a previous event handler.
-    preventDefault(): void; //  Cancels the save operation, but all remaining handlers for the event will still be executed.
+    getSaveMode(): number;
+    isDefaultPrevented(): boolean;
+    preventDefault(): void;
 }
 
 interface Option {
@@ -337,46 +343,38 @@ interface Option {
 }
 
 interface Control {
-    addCustomView(viewId: string, entityName: string, viewDisplayName: string, fetchXml: string, layoutXml: string, isDefault: boolean): void; //Adds a new view for the lookup dialog.
-    addOption(option: Object, index?: number): void;  // Adds an option to an Option set control.
-    clearNotification(uniqueId: string): void; // Remove a message already displayed for a control.
-    clearOptions(): void; //  Clears all options from an Option Set control.
-    getAttribute(): Attribute; //  Returns the attribute that the control is bound to.
+    addCustomView(viewId: string, entityName: string, viewDisplayName: string, fetchXml: string, layoutXml: string, isDefault: boolean): void;
+    addOption(option: Object, index?: number): void;
+    clearNotification(uniqueId: string): void;
+    clearOptions(): void;
+    getAttribute(): Attribute;
     getControlType(): "standard" | "iframe" | "lookup" | "optionset" | "subgrid" | "webresource" | "notes" | "timercontrol" | "kbsearch" | "customcontrol" | "customsubgrid";
-    getData(): string; //  Returns the value of the data query string parameter passed to a Silverlight Web resource. 
-    getDefaultView(): string; //  Returns the ID value of the default lookup dialog view.
-    getDisabled(): boolean; // Returns a value that indicates whether the control is disabled.
-    getLabel(): string; //  Returns the label for the control
-    getName(): string; //  Returns the name assigned to the control.
-    getParent(): Object; //  Returns a reference to the section object that contains the control.
-    getSrc(): string; //  Returns the current URL being displayed in an IFRAME.
-    getInitialUrl(): string; //  Returns the default URL that an IFrame control is configured to display.
-    getObject(): HTMLFrameElement; //  Returns the object in the form representing an IFrame or Web resource.
-    getVisible(): boolean; //  Returns a value that indicates whether the control is currently visible.
-    refresh(): void; //  Refreshes the data displayed in a Sub-Grid
-    removeOption(value: number): void; //  Removes an option from an Option Set control.
-    setData(value: string): void; //  Sets the value of the data query string parameter passed to a Silverlight Web resource.
-    setDefaultView(viewGuid: string): void; //  Sets the default view for the lookup control dialog.
-    setDisabled(value: boolean): void; //  Sets a value that indicates whether the control is disabled.
-    setFocus(): void; //  Sets the focus on the control.
-    setLabel(label: string): void; //  Sets the label for the control.
-    setNotification(message: string, uniqueId: string): void; // Display a message near the control to indicate that data isn’t valid.
-    setSrc(value: string): void; //  Sets the URL to be displayed in an IFrame.
-    setVisible(value: boolean): void; //  Sets a value that indicates whether the control is visible.
-
+    getData(): string;
+    getDefaultView(): string;
+    getDisabled(): boolean;
+    getLabel(): string;
+    getName(): string;
+    getParent(): Object;
+    getSrc(): string;
+    getInitialUrl(): string;
+    getObject(): HTMLFrameElement;
+    getVisible(): boolean;
+    refresh(): void;
+    removeOption(value: number): void;
+    setData(value: string): void;
+    setDefaultView(viewGuid: string): void;
+    setDisabled(value: boolean): void;
+    setFocus(): void;
+    setLabel(label: string): void;
+    setNotification(message: string, uniqueId: string): void;
+    setSrc(value: string): void;
+    setVisible(value: boolean): void;
     addNotification(options: ControlNotificationOptions): void;
-
-    addOnLoad(func: Function): void; // Add event handlers to a Sub-Grid
-    removeOnLoad(func: Function): void; // Remove event handlers to a Sub-Grid
+    addOnLoad(func: Function): void;
+    removeOnLoad(func: Function): void;
     getGrid(): Grid;
     getEntityName(): string;
-
-    addOnKeyPress(func: Function): void;
-
-    getValue(): any; // Gets the latest value in a control as the user types characters in a specific text or number field. This method helps you to build interactive experiences by validating data and alerting users as they type characters in a control.
-
-    showAutoComplete(options: AutoCompleteOptions): void;
-    hideAutoComplete(): void;
+    getValue(): any;
 }
 
 interface Grid {
@@ -413,12 +411,12 @@ interface NotificationAction {
 }
 
 interface NavigationItem {
-    getId(): string; //  Returns the name of the item. 
-    getLabel(): string; //  Returns the label for the item
-    getVisible(): boolean; //  Returns a value that indicates whether the item is currently visible.
-    setFocus(): void; //  Sets the focus on the item.
-    setLabel(label: string): void; //  Sets the label for the item.
-    setVisible(value: boolean): void; //  Sets a value that indicates whether the item is visible.
+    getId(): string;
+    getLabel(): string;
+    getVisible(): boolean;
+    setFocus(): void;
+    setLabel(label: string): void;
+    setVisible(value: boolean): void;
 }
 
 interface LookupControlItem {

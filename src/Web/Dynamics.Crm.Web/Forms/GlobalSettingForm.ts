@@ -4,12 +4,12 @@
 
     // properties
 
-    var _prefix: string;
+    let _prefix: string;
 
-    var _type: Attribute;
-    var _valueName: Attribute;
-    var _valueType: Attribute;
-    var _lookup: Control;
+    let _type: Attribute;
+    let _valueName: Attribute;
+    let _valueType: Attribute;
+    let _lookup: Control;
 
     // event handlers
 
@@ -56,9 +56,9 @@
 
     function SetReferenceFieldsVisibility(): void {
 
-        var visible = _type.getValue() === Core.GlobalSettingType.Reference;
+        let visible = _type.getValue() === Core.GlobalSettingType.Reference;
 
-        var fields = [
+        let fields = [
             _valueName.getName(),
             _valueType.getName()
         ];

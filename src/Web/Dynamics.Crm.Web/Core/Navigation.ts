@@ -12,13 +12,13 @@
             return null;
         }
 
-        var item = Xrm.Page.ui.navigation.items.get(itemName);
+        let item = Xrm.Page.ui.navigation.items.get(itemName);
 
         if (item) {
             return item;
         }
 
-        var msg = "The specified navigation item could not be found: " + itemName;
+        let msg = "The specified navigation item could not be found: " + itemName;
 
         if (required) {
             throw new Error(msg);
@@ -46,11 +46,11 @@
         }
 
         if (Array.isArray(items)) {
-            var value = !!visible;
+            let value = !!visible;
 
-            for (var i = 0; i < items.length; i++) {
+            for (let i = 0; i < items.length; i++) {
 
-                var item = get(items[i]);
+                let item = get(items[i]);
 
                 if (!item) {
                     continue;

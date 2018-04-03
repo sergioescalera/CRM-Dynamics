@@ -2,11 +2,11 @@
 
     "use strict";
 
-    var xrm: Xrm;
-    var link: HTMLAnchorElement;
-    var message: HTMLElement;
-    var attributeName: string;
-    var attribute: Attribute;
+    let xrm: Xrm;
+    let link: HTMLAnchorElement;
+    let message: HTMLElement;
+    let attributeName: string;
+    let attribute: Attribute;
 
     export function init(): void {
 
@@ -51,13 +51,13 @@
 
     function getXrmObject(): Xrm {
 
-        var parent = <ICrmWindow>window.parent;
+        let parent = <ICrmWindow>window.parent;
 
         if (isCrmFormsFrame(parent)) {
             return parent.Xrm;
         } else {
-            for (var i = 0; i < parent.frames.length; i++) {
-                var child = <ICrmWindow>parent.frames[i];
+            for (let i = 0; i < parent.frames.length; i++) {
+                let child = <ICrmWindow>parent.frames[i];
                 if (isCrmFormsFrame(child)) {
                     return child.Xrm;
                 }
@@ -83,11 +83,11 @@
 
     function getParameterByName(name: string, url: string): string {
 
-        var str: string = name.replace(/[\[\]]/g, "\\$&");
+        let str: string = name.replace(/[\[\]]/g, "\\$&");
 
-        var regex = new RegExp("[?&]" + str + "(=([^&#]*)|&|#|$)");
+        let regex = new RegExp("[?&]" + str + "(=([^&#]*)|&|#|$)");
 
-        var results = regex.exec(url);
+        let results = regex.exec(url);
 
         if (!results) {
             return null;
@@ -102,7 +102,7 @@
 
     function setLinkVisibility(): void {
 
-        var lookup = <LookupControlItem[]>attribute.getValue();
+        let lookup = <LookupControlItem[]>attribute.getValue();
 
         if (!lookup || !lookup.length) {
             link.style.display = "none";
@@ -113,13 +113,15 @@
 
     function openEntity(): void {
 
-        var lookup = <LookupControlItem[]>attribute.getValue();
+        let lookup = <LookupControlItem[]>attribute.getValue();
 
         if (!lookup || !lookup.length) {
             return;
         }
 
-        xrm.Utility.openEntityForm(lookup[0].entityType, lookup[0].id, null, {
+        xrm.Navigation.openForm({
+            entityName: lookup[0].entityType,
+            entityId: lookup[0].id,
             openInNewWindow: true
         });
     }

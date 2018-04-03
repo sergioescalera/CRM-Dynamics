@@ -20,7 +20,7 @@ var Dynamics;
             function getUrl(dialogId, entityName, entityId) {
                 if (entityName === void 0) { entityName = Xrm.Page.data.entity.getEntityName(); }
                 if (entityId === void 0) { entityId = Xrm.Page.data.entity.getId(); }
-                var url = Xrm.Page.context.getClientUrl() +
+                var url = Xrm.Utility.getGlobalContext().getClientUrl() +
                     "/cs/dialog/rundialog.aspx?DialogId={dialogId}&EntityName={type}&ObjectId={id}"
                         .replace("{type}", entityName)
                         .replace("{id}", entityId);

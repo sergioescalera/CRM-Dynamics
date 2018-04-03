@@ -4,13 +4,13 @@
 
     export function get(tabName: string, required: boolean = true): Tab {
 
-        var tab = Xrm.Page.ui.tabs.get(tabName);
+        let tab = Xrm.Page.ui.tabs.get(tabName);
 
         if (tab) {
             return tab;
         }
 
-        var msg = "The specified tab could not be found: " + tabName;
+        let msg = "The specified tab could not be found: " + tabName;
 
         if (required) {
             throw new Error(msg);
@@ -45,9 +45,9 @@
 
         if (Array.isArray(tabNames)) {
 
-            for (var i = 0; i < tabNames.length; i++) {
+            for (let i = 0; i < tabNames.length; i++) {
 
-                var tab = get(tabNames[i], false);
+                let tab = get(tabNames[i], false);
 
                 if (tab) {
                     tab.setVisible(value);
@@ -84,9 +84,9 @@
 
         if (Array.isArray(tabNames)) {
 
-            for (var i = 0; i < tabNames.length; i++) {
+            for (let i = 0; i < tabNames.length; i++) {
 
-                var tab = get(tabNames[i], false);
+                let tab = get(tabNames[i], false);
 
                 if (tab) {
                     tab.setDisplayState(value ? "expanded" : "collapsed");

@@ -13,11 +13,11 @@ var Dynamics;
             function getContext() {
                 var context;
                 if (typeof Xrm !== "undefined" &&
-                    typeof Xrm.Page !== "undefined" &&
-                    typeof Xrm.Page.context !== "undefined") {
-                    context = Xrm.Page.context;
+                    typeof Xrm.Utility !== "undefined" &&
+                    typeof Xrm.Utility.getGlobalContext === "function") {
+                    context = Xrm.Utility.getGlobalContext();
                 }
-                else if (typeof GetGlobalContext !== "undefined") {
+                else if (typeof GetGlobalContext === "function") {
                     context = GetGlobalContext();
                 }
                 if (!context) {

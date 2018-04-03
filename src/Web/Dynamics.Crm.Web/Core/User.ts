@@ -4,14 +4,14 @@
 
     export function getId(): string {
 
-        var userId = Xrm.Page.context.getUserId();
+        let userId = Xrm.Utility.getGlobalContext().userSettings.userId;
 
         return Core.parseIdentifier(userId);
     }
 
     export function hasRole(roleId: string): boolean {
 
-        var roles: string[] = Xrm.Page.context.getUserRoles();
+        let roles: string[] = Xrm.Utility.getGlobalContext().userSettings.securityRoles;
 
         return roles.filter((r: string) => Core.identifiersAreEqual(r, roleId)).length > 0;
     }

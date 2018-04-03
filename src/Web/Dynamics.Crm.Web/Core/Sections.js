@@ -45,9 +45,9 @@ var Dynamics;
                     }
                     if (Array.isArray(names)) {
                         for (var i = 0; i < names.length; i++) {
-                            var name = names[i];
-                            var pair = name.split("|");
-                            var section;
+                            var name_1 = names[i];
+                            var pair = name_1.split("|");
+                            var section = void 0;
                             if (pair && pair.length === 2) {
                                 section = get(pair[0], pair[1], false);
                             }

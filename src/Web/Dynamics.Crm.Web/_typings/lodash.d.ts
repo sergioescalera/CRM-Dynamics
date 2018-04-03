@@ -1434,7 +1434,7 @@ declare module _ {
 
         sortBy<T, TSort>(
             iteratees: ListIterator<T, TSort>[]): LoDashArrayWrapper<T>;
-
+        
         /**
         * @see _.filter
         **/
@@ -2362,6 +2362,11 @@ declare module _ {
         sortBy<W, T>(
             collection: List<T>,
             whereValue: W): T[];
+
+        orderBy<T>(
+            collection: List<T>,
+            iteratees: any[] | Function[] | string[],
+            orders?: string[]): T[];
     }
 
     //_.toArray

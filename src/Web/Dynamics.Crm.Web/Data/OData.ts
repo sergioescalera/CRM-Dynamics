@@ -9,15 +9,15 @@
 
     function getContext(): Context {
 
-        var context;
+        let context;
 
         if (typeof Xrm !== "undefined" &&
-            typeof Xrm.Page !== "undefined" &&
-            typeof Xrm.Page.context !== "undefined") {
+            typeof Xrm.Utility !== "undefined" &&
+            typeof Xrm.Utility.getGlobalContext === "function") {
 
-            context = Xrm.Page.context;
+            context = Xrm.Utility.getGlobalContext();
 
-        } else if (typeof GetGlobalContext !== "undefined") {
+        } else if (typeof GetGlobalContext === "function") {
 
             context = GetGlobalContext();
         }
@@ -31,7 +31,7 @@
 
     function getVersion(): string {
 
-        var version = getContext().getVersion(); // 8.2.0.780
+        let version = getContext().getVersion(); // 8.2.0.780
 
         if (version === undefined) {
 
@@ -65,9 +65,9 @@
             return null;
         }
 
-        var idFieldName = entityIdFieldName(entityName);
+        let idFieldName = entityIdFieldName(entityName);
 
-        var entity = {
+        let entity = {
             id: obj[idFieldName],
             type: entityName
         };
@@ -78,7 +78,7 @@
                 return;
             }
 
-            var value = obj[key];
+            let value = obj[key];
 
             if (value !== undefined) {
                 entity[key] = value;
@@ -90,7 +90,7 @@
 
     function stringifyEntity(entity: Core.IEntity): string {
 
-        var data = {};
+        let data = {};
 
         Object
             .keys(entity)
@@ -119,9 +119,9 @@
         Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
         Validation.ensureNotNullOrEmpty(entityId, "entityId");
 
-        var baseUrl: string = getContext().getClientUrl();
+        let baseUrl: string = getContext().getClientUrl();
 
-        var url = `${baseUrl}/api/data/${getVersion()}/${entitySetName}(${Core.parseIdentifier(entityId)})?$select=${attributes.join(",") }`;
+        let url = `${baseUrl}/api/data/${getVersion()}/${entitySetName}(${Core.parseIdentifier(entityId)})?$select=${attributes.join(",") }`;
 
         if (expand) {
 
@@ -161,11 +161,11 @@
         Validation.ensureNotNullOrEmpty(entityName, "entityName");
         Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
 
-        var baseUrl: string = getContext().getClientUrl();
+        let baseUrl: string = getContext().getClientUrl();
 
-        var filterJoin = !filterType || filterType === FilterType.And ? " and " : " or ";
+        let filterJoin = !filterType || filterType === FilterType.And ? " and " : " or ";
 
-        var url = `${baseUrl}/api/data/${getVersion()}/${entitySetName}?$select=${attributes.join(",")}&$filter=${filters.join(filterJoin)}`;
+        let url = `${baseUrl}/api/data/${getVersion()}/${entitySetName}?$select=${attributes.join(",")}&$filter=${filters.join(filterJoin)}`;
 
         if (orderBy) {
 
@@ -184,7 +184,7 @@
             })
             .then((data: any) => {
 
-                var results = <any[]>data.value;
+                let results = <any[]>data.value;
 
                 return results.map((o: any) => toEntity(entityName, attributes, o));
             })
@@ -209,9 +209,9 @@
         Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
         Validation.ensureNotNullOrEmpty(entityId, "entityId");
 
-        var baseUrl: string = getContext().getClientUrl();
+        let baseUrl: string = getContext().getClientUrl();
 
-        var url = `${baseUrl}/api/data/${getVersion()}/${entitySetName}(${Core.parseIdentifier(entityId)})`;
+        let url = `${baseUrl}/api/data/${getVersion()}/${entitySetName}(${Core.parseIdentifier(entityId)})`;
 
         return $
             .ajax({
@@ -240,17 +240,17 @@
         Validation.ensureNotNullOrUndefined(entity, "entity");
         Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
 
-        var baseUrl: string = getContext().getClientUrl();
-        var idFieldName = entityIdFieldName(entity.type);
+        let baseUrl: string = getContext().getClientUrl();
+        let idFieldName = entityIdFieldName(entity.type);
 
         attributes = attributes || [];
         if (attributes.indexOf(idFieldName) < 0) {
             attributes.push(idFieldName);
         }
 
-        var url = `${baseUrl}/api/data/${getVersion()}/${entitySetName}?$select=${attributes.join(",")}`;
+        let url = `${baseUrl}/api/data/${getVersion()}/${entitySetName}?$select=${attributes.join(",")}`;
 
-        var data = stringifyEntity(entity);
+        let data = stringifyEntity(entity);
 
         return $
             .ajax({
@@ -286,11 +286,11 @@
         Validation.ensureNotNullOrUndefined(entity, "entity");
         Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
 
-        var baseUrl: string = getContext().getClientUrl();
+        let baseUrl: string = getContext().getClientUrl();
 
-        var url = `${baseUrl}/api/data/${getVersion()}/${entitySetName}(${Core.parseIdentifier(entity.id)})`;
+        let url = `${baseUrl}/api/data/${getVersion()}/${entitySetName}(${Core.parseIdentifier(entity.id)})`;
 
-        var data = stringifyEntity(entity);
+        let data = stringifyEntity(entity);
 
         return $
             .ajax({
@@ -316,9 +316,9 @@
 
     export function fetch(entitySetName: string, fetchXml: string): JQueryPromise<any> {
 
-        var baseUrl: string = getContext().getClientUrl();
+        let baseUrl: string = getContext().getClientUrl();
 
-        var url = `${baseUrl}/api/data/${getVersion()}/${entitySetName}?fetchXml=${encodeURIComponent(fetchXml)}`;
+        let url = `${baseUrl}/api/data/${getVersion()}/${entitySetName}?fetchXml=${encodeURIComponent(fetchXml)}`;
 
         return $.ajax({
             url: url,
@@ -338,7 +338,7 @@
 
     // meta-data
 
-    var entityDefinitionAttributes: string[] = [
+    let entityDefinitionAttributes: string[] = [
         "MetadataId",
         "DisplayName",
         "LogicalName",
@@ -349,9 +349,9 @@
     export function entityDefinitions(
         attributes: string[] = entityDefinitionAttributes): JQueryPromise<IEntityDefinition[]> {
 
-        var baseUrl: string = getContext().getClientUrl();
+        let baseUrl: string = getContext().getClientUrl();
 
-        var url = `${baseUrl}/api/data/${getVersion()}/EntityDefinitions?$select=${attributes.join(",")}`;
+        let url = `${baseUrl}/api/data/${getVersion()}/EntityDefinitions?$select=${attributes.join(",")}`;
 
         return $
             .ajax({
@@ -364,7 +364,7 @@
             });
     }
 
-    var entityAttributeDefinitionAttributes: string[] = [
+    let entityAttributeDefinitionAttributes: string[] = [
         "MetadataId",
         "DisplayName",
         "LogicalName",
@@ -378,9 +378,9 @@
 
         Validation.ensureNotNullOrEmpty(metadataId, "metadataId");
 
-        var baseUrl: string = getContext().getClientUrl();
+        let baseUrl: string = getContext().getClientUrl();
 
-        var url = `${baseUrl}/api/data/${getVersion()}/EntityDefinitions(${metadataId})/Attributes?$select=${attributes.join(",")}`;
+        let url = `${baseUrl}/api/data/${getVersion()}/EntityDefinitions(${metadataId})/Attributes?$select=${attributes.join(",")}`;
 
         return $
             .ajax({
@@ -400,9 +400,9 @@
         Validation.ensureNotNullOrEmpty(metadataId, "metadataId");
         Validation.ensureNotNullOrEmpty(attributeMetadataId, "attributeMetadataId");
 
-        var baseUrl: string = getContext().getClientUrl();
+        let baseUrl: string = getContext().getClientUrl();
 
-        var url = `${baseUrl}/api/data/v8.0/EntityDefinitions(${metadataId})/Attributes(${attributeMetadataId})/Microsoft.Dynamics.CRM.PicklistAttributeMetadata/OptionSet?$select=Options`;
+        let url = `${baseUrl}/api/data/v8.0/EntityDefinitions(${metadataId})/Attributes(${attributeMetadataId})/Microsoft.Dynamics.CRM.PicklistAttributeMetadata/OptionSet?$select=Options`;
 
         return $
             .ajax({

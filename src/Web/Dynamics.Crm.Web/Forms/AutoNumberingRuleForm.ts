@@ -4,8 +4,8 @@
 
     // fields
 
-    var _prefix: string;
-    var _type: Attribute;
+    let _prefix: string;
+    let _type: Attribute;
 
     // event handlers
 
@@ -45,11 +45,11 @@
 
     function ConfigureGlobalSection(): void {
 
-        var type = _type.getValue();
+        let type = _type.getValue();
 
-        var section = Sections.get("tabGeneral", "sectionGlobal");
+        let section = Sections.get("tabGeneral", "sectionGlobal");
 
-        var disabled = !isGlobal(type);
+        let disabled = !isGlobal(type);
 
         section.controls.forEach((c: Control) => c.setDisabled(disabled));
 
@@ -61,11 +61,11 @@
 
     function ConfigureDailyConfigSection(): void {
 
-        var type = _type.getValue();
+        let type = _type.getValue();
 
-        var section = Sections.get("tabGeneral", "sectionDailyConfig");
+        let section = Sections.get("tabGeneral", "sectionDailyConfig");
 
-        var disabled = !isDaily(type);
+        let disabled = !isDaily(type);
 
         section.controls.forEach((c: Control) => c.setDisabled(disabled));
 
@@ -77,11 +77,11 @@
 
     function ConfigureYearConfigSection(): void {
 
-        var type = _type.getValue();
+        let type = _type.getValue();
 
-        var section = Sections.get("tabGeneral", "sectionYearConfig");
+        let section = Sections.get("tabGeneral", "sectionYearConfig");
 
-        var disabled = !isYearly(type) && !isDaily(type)
+        let disabled = !isYearly(type) && !isDaily(type)
         
         section.controls.forEach((c: Control) => c.setDisabled(disabled));
 
@@ -93,11 +93,11 @@
 
     function ConfigureParentedSection(): void {
 
-        var type = _type.getValue();
+        let type = _type.getValue();
 
-        var section = Sections.get("tabGeneral", "sectionParented");
+        let section = Sections.get("tabGeneral", "sectionParented");
 
-        var disabled = isGlobal(type);
+        let disabled = isGlobal(type);
 
         section.controls.forEach((c: Control) => c.setDisabled(disabled));
 

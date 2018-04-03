@@ -4,13 +4,13 @@
 
     export function get(attributeName: string, required: boolean = true): Attribute {
 
-        var attribute = Xrm.Page.getAttribute(attributeName);
+        let attribute = Xrm.Page.getAttribute(attributeName);
 
         if (attribute) {
             return attribute;
         }
 
-        var msg = "The specified attribute could not be found: " + attributeName;
+        let msg = "The specified attribute could not be found: " + attributeName;
 
         if (required) {
             throw new Error(msg);
@@ -45,9 +45,9 @@
         }
 
         if (Array.isArray(attributeNames)) {
-            for (var i = 0; i < attributeNames.length; i++) {
+            for (let i = 0; i < attributeNames.length; i++) {
 
-                var attribute = get(attributeNames[i], false);
+                let attribute = get(attributeNames[i], false);
 
                 if (attribute) {
                     attribute.setRequiredLevel(requirementLevel);
@@ -62,7 +62,7 @@
 
     export function setRequiredOrOptional(attributeName: string, required: boolean, attributeRequired: boolean = false): void {
 
-        var attribute = get(attributeName, attributeRequired);
+        let attribute = get(attributeName, attributeRequired);
 
         if (attribute) {
             attribute.setRequiredLevel(required ? AttributeRequiredLevel.Required : AttributeRequiredLevel.None);
@@ -73,17 +73,17 @@
 
     export function hideOptions(attribute: Attribute, hide?: (o: number) => boolean): void {
 
-        var options = attribute.getOptions();
+        let options = attribute.getOptions();
 
         attribute
             .controls
             .forEach((control: Control) => {
 
-                for (var i = 0; i < options.length; i++) {
+                for (let i = 0; i < options.length; i++) {
 
-                    var option = options[i];
+                    let option = options[i];
 
-                    var value = parseInt(option.value);
+                    let value = parseInt(option.value);
 
                     if (hide === undefined || hide(value)) {
 
@@ -97,14 +97,14 @@
 
     export function getLookupValue(attributeName: string, required: boolean = true): LookupControlItem {
 
-        var attribute = get(attributeName, required);
+        let attribute = get(attributeName, required);
 
         if (!attribute) {
 
             return null;
         }
 
-        var lookup = <any[]>attribute.getValue();
+        let lookup = <any[]>attribute.getValue();
 
         if (!lookup || !lookup.length) {
 
@@ -116,13 +116,13 @@
 
     export function setLookupValue(attributeName: string, entityType: string, name: string, id: string, required: boolean = true): void {
 
-        var attribute = get(attributeName, required);
+        let attribute = get(attributeName, required);
 
         if (!attribute) {
             return;
         }
 
-        var value = !id ? null : [{
+        let value = !id ? null : [{
             id: `{${Core.parseIdentifier(id)}}`,
             name: name,
             entityType: entityType

@@ -18,7 +18,7 @@
         }
 
         show(options: NotificationServiceOptions): void {
-            var str: string = options.type.toLowerCase();
+            let str: string = options.type.toLowerCase();
             if (toastr[str]) {
                 toastr[str](options.message, options.title);
             } else {

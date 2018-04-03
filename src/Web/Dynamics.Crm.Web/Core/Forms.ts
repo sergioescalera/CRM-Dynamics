@@ -4,7 +4,7 @@
 
     export function getClientType(): "Web" | "Outlook" | "Mobile" {
 
-        return <any>Xrm.Page.context.client.getClient();
+        return Xrm.Utility.getGlobalContext().client.getClient();
     }
 
     export function getFormType(): FormType {
@@ -14,16 +14,16 @@
 
     export function getFormFactor(): FormFactor {
 
-        if (!Xrm.Page.context.client.getFormFactor) {
+        if (!Xrm.Utility.getGlobalContext().client.getFormFactor) {
             return FormFactor.Unknown;
         }
 
-        return Xrm.Page.context.client.getFormFactor();
+        return Xrm.Utility.getGlobalContext().client.getFormFactor();
     }
 
     export function getIsDesktop(): boolean {
 
-        var formFactor = getFormFactor();
+        let formFactor = getFormFactor();
 
         if (formFactor !== FormFactor.Unknown) {
             return formFactor === FormFactor.Desktop;
@@ -81,7 +81,7 @@
             return null;
         }
 
-        var filter = Xrm.Page.ui.formSelector.items
+        let filter = Xrm.Page.ui.formSelector.items
             .get()
             .filter((f: FormSelectorItem) => f.getLabel() === label);
 

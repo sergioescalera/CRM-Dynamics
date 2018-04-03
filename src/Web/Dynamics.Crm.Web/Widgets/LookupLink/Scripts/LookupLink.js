@@ -92,7 +92,9 @@ var LookupLink;
         if (!lookup || !lookup.length) {
             return;
         }
-        xrm.Utility.openEntityForm(lookup[0].entityType, lookup[0].id, null, {
+        xrm.Navigation.openForm({
+            entityName: lookup[0].entityType,
+            entityId: lookup[0].id,
             openInNewWindow: true
         });
     }

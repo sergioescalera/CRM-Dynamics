@@ -10,9 +10,9 @@
         height: number = 600,
         modal: string = "yes"): void {
 
-        var url = getUrl(dialogId, entityName, entityId);
+        let url = getUrl(dialogId, entityName, entityId);
 
-        var features = "center=yes,width={w},height={h},modal={m}"
+        let features = "center=yes,width={w},height={h},modal={m}"
             .replace("{m}", modal)
             .replace("{h}", height.toString())
             .replace("{w}", width.toString());
@@ -25,7 +25,7 @@
         entityName: string = Xrm.Page.data.entity.getEntityName(),
         entityId: string = Xrm.Page.data.entity.getId()): string {
 
-        var url = Xrm.Page.context.getClientUrl() +
+        let url = Xrm.Utility.getGlobalContext().getClientUrl() +
             "/cs/dialog/rundialog.aspx?DialogId={dialogId}&EntityName={type}&ObjectId={id}"
             .replace("{type}", entityName)
             .replace("{id}", entityId);

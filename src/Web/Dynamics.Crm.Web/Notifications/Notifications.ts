@@ -21,8 +21,8 @@
         basic = new DefaultNotifications()
     ];
 
-    var provider: NotificationService;
-    var toastProvider: NotificationService;
+    let provider: NotificationService;
+    let toastProvider: NotificationService;
 
     export function show(options: NotificationServiceOptions): void {
 
@@ -74,8 +74,8 @@
 
     function resolve(): NotificationService {
 
-        for (var i: number = 0; i < providers.length; i++) {
-            var service: NotificationService = providers[i];
+        for (let i: number = 0; i < providers.length; i++) {
+            let service: NotificationService = providers[i];
             if (service && service.test()) {
                 return service;
             }
@@ -85,8 +85,8 @@
 
     function resolveToast(): NotificationService {
 
-        for (var i: number = 0; i < toastProviders.length; i++) {
-            var service: NotificationService = toastProviders[i];
+        for (let i: number = 0; i < toastProviders.length; i++) {
+            let service: NotificationService = toastProviders[i];
             if (service && service.test()) {
                 return service;
             }

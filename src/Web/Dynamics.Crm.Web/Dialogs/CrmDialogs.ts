@@ -15,9 +15,11 @@
 
         Show(): JQueryPromise<void> {
 
-            var deferred: JQueryDeferred<void> = this._window.$.Deferred<void>();
+            let deferred: JQueryDeferred<void> = this._window.$.Deferred<void>();
 
-            Xrm.Utility.alertDialog(this._message, () => {
+            Xrm.Navigation.openAlertDialog({
+                text: this._message
+            }, () => {
                 deferred.resolve();
             });
 
@@ -32,18 +34,23 @@
 
         private _window: JQueryWindow;
         private _message: string;
+        private _title: string;
 
-        constructor(window: JQueryWindow, message: string) {
+        constructor(window: JQueryWindow, message: string, title: string) {
 
             this._window = window;
             this._message = message;
+            this._title = title;
         }
 
         Show(): JQueryPromise<boolean> {
 
-            var deferred: JQueryDeferred<boolean> = this._window.$.Deferred<boolean>();
+            let deferred: JQueryDeferred<boolean> = this._window.$.Deferred<boolean>();
 
-            Xrm.Utility.confirmDialog(this._message, () => {
+            Xrm.Navigation.openConfirmDialog({
+                text: this._message,
+                title: this._title
+            }).then(() => {
                 deferred.resolve(true);
             }, () => {
                 deferred.reject();
@@ -67,7 +74,7 @@
 
         Alert(message: string, title: string): JQueryPromise<IDialog<void>> {
 
-            var deferred: JQueryDeferred<IDialog<void>> = this._window.$.Deferred<IDialog<void>>();
+            let deferred: JQueryDeferred<IDialog<void>> = this._window.$.Deferred<IDialog<void>>();
 
             deferred.resolve(new CrmAlertDialog(this._window, message));
 
@@ -76,9 +83,9 @@
 
         Confirm(message: string, title: string): JQueryPromise<IDialog<boolean>> {
 
-            var deferred: JQueryDeferred<IDialog<boolean>> = this._window.$.Deferred<IDialog<boolean>>();
+            let deferred: JQueryDeferred<IDialog<boolean>> = this._window.$.Deferred<IDialog<boolean>>();
 
-            deferred.resolve(new CrmConfirmDialog(this._window, message));
+            deferred.resolve(new CrmConfirmDialog(this._window, message, title));
 
             return deferred;
         }

@@ -35,7 +35,7 @@
                 debugger;
             }
 
-            var entry = createLogEntry(this._prefix, message, error);
+            let entry = createLogEntry(this._prefix, message, error);
 
             console.error(entry);
         }
@@ -66,7 +66,7 @@
                 debugger;
             }
 
-            var entry = createLogEntry(this._prefix, message, error);
+            let entry = createLogEntry(this._prefix, message, error);
 
             console.error(entry);
 
@@ -101,7 +101,7 @@
     export function printArguments(...args: any[]): void {
 
         console.log(`Function ${arguments[0]} called with arguments: {`);
-        for (var i = 1; i < arguments.length; i++) {
+        for (let i = 1; i < arguments.length; i++) {
             console.log(arguments[i]);
         }
         console.log("}");
@@ -111,23 +111,23 @@
 
     function createLogEntry(prefix: string, message: string, error: IError): Core.ILogEntry {
 
-        var entityName = getEntityName();
-        var entityId = getEntityId();
-        var formType = getFormType();
-        var clientType = getClientType();
-        var formFactor = getFormFactor();
-        var stack = error.stack || error.stacktrace || "<none>";
-        var desc = error.description || "<none>";
+        let entityName = getEntityName();
+        let entityId = getEntityId();
+        let formType = getFormType();
+        let clientType = getClientType();
+        let formFactor = getFormFactor();
+        let stack = error.stack || error.stacktrace || "<none>";
+        let desc = error.description || "<none>";
 
-        var source = `JavaScript::${clientType},${formFactor},${formType}:${entityName}(${entityId})`;
-        var description = `Stack: ${stack}\nDescription: ${desc}`;
+        let source = `JavaScript::${clientType},${formFactor},${formType}:${entityName}(${entityId})`;
+        let description = `Stack: ${stack}\nDescription: ${desc}`;
 
-        var entry: Core.ILogEntry = {
+        let entry: Core.ILogEntry = {
             type: Data.Schema.LogEntryEntity.type(prefix)
         };
 
-        var name = error.type ? `${error.type}:${message}` : message;
-        var msg = message === error.message ? message : (`${message}. ${error.message}`.trim());
+        let name = error.type ? `${error.type}:${message}` : message;
+        let msg = message === error.message ? message : (`${message}. ${error.message}`.trim());
 
         entry[Data.Schema.LogEntryEntity.nameField(prefix)]
             = Validation.Strings.left(name, 300);

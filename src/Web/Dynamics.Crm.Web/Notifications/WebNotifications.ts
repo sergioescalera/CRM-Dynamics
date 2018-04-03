@@ -63,7 +63,7 @@
                 return;
             }
 
-            var notification: Notification = new Notification(title, {
+            let notification: Notification = new Notification(title, {
                 body: content,
                 icon: icon
             });

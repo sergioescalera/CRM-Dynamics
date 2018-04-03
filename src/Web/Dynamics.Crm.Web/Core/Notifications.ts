@@ -2,7 +2,7 @@
 
     "use strict";
 
-    var undefinedstr: string = "undefined";
+    let undefinedstr: string = "undefined";
 
     export function show(
         message: string,

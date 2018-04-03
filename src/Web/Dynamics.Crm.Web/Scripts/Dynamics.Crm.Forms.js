@@ -305,39 +305,6 @@ var Dynamics;
                     }
                 }
                 Controls.setVisible = setVisible;
-                // auto-complete
-                function autoComplete(controlName, query, commands, required) {
-                    if (commands === void 0) { commands = null; }
-                    if (required === void 0) { required = true; }
-                    var control = get(controlName, required);
-                    if (!control) {
-                        return;
-                    }
-                    control.addOnKeyPress(function () {
-                        var input = control.getValue();
-                        query(input)
-                            .then(function (results) {
-                            if (results || results.length > 0) {
-                                control.showAutoComplete({
-                                    results: results
-                                        .filter(function (o) { return !!o; })
-                                        .map(function (o, i) {
-                                        return {
-                                            id: o.id || i,
-                                            icon: o.icon,
-                                            fields: o.fields || [o.value || o]
-                                        };
-                                    }),
-                                    commands: commands
-                                });
-                            }
-                            else {
-                                control.hideAutoComplete();
-                            }
-                        });
-                    });
-                }
-                Controls.autoComplete = autoComplete;
             })(Controls = Forms.Controls || (Forms.Controls = {}));
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
@@ -525,7 +492,7 @@ var Dynamics;
             function getUrl(dialogId, entityName, entityId) {
                 if (entityName === void 0) { entityName = Xrm.Page.data.entity.getEntityName(); }
                 if (entityId === void 0) { entityId = Xrm.Page.data.entity.getId(); }
-                var url = Xrm.Page.context.getClientUrl() +
+                var url = Xrm.Utility.getGlobalContext().getClientUrl() +
                     "/cs/dialog/rundialog.aspx?DialogId={dialogId}&EntityName={type}&ObjectId={id}"
                         .replace("{type}", entityName)
                         .replace("{id}", entityId);
@@ -632,7 +599,7 @@ var Dynamics;
         (function (Forms) {
             "use strict";
             function getClientType() {
-                return Xrm.Page.context.client.getClient();
+                return Xrm.Utility.getGlobalContext().client.getClient();
             }
             Forms.getClientType = getClientType;
             function getFormType() {
@@ -640,10 +607,10 @@ var Dynamics;
             }
             Forms.getFormType = getFormType;
             function getFormFactor() {
-                if (!Xrm.Page.context.client.getFormFactor) {
+                if (!Xrm.Utility.getGlobalContext().client.getFormFactor) {
                     return Forms.FormFactor.Unknown;
                 }
-                return Xrm.Page.context.client.getFormFactor();
+                return Xrm.Utility.getGlobalContext().client.getFormFactor();
             }
             Forms.getFormFactor = getFormFactor;
             function getIsDesktop() {
@@ -836,7 +803,7 @@ var Dynamics;
                 if (entityId === void 0) { entityId = null; }
                 if (entityCode === void 0) { entityCode = null; }
                 if (action === void 0) { action = "run"; }
-                var url = Xrm.Page.context.getClientUrl();
+                var url = Xrm.Utility.getGlobalContext().getClientUrl();
                 var reportUrl = url + "/crmreports/viewer/viewer.aspx?action={action}&helpID={name}&id={{id}}"
                     .replace("{action}", encodeURIComponent(action))
                     .replace("{name}", encodeURIComponent(reportName))
@@ -950,9 +917,9 @@ var Dynamics;
                     }
                     if (Array.isArray(names)) {
                         for (var i = 0; i < names.length; i++) {
-                            var name = names[i];
-                            var pair = name.split("|");
-                            var section;
+                            var name_1 = names[i];
+                            var pair = name_1.split("|");
+                            var section = void 0;
                             if (pair && pair.length === 2) {
                                 section = get(pair[0], pair[1], false);
                             }
@@ -1147,12 +1114,12 @@ var Dynamics;
         (function (User) {
             "use strict";
             function getId() {
-                var userId = Xrm.Page.context.getUserId();
+                var userId = Xrm.Utility.getGlobalContext().userSettings.userId;
                 return Crm.Core.parseIdentifier(userId);
             }
             User.getId = getId;
             function hasRole(roleId) {
-                var roles = Xrm.Page.context.getUserRoles();
+                var roles = Xrm.Utility.getGlobalContext().userSettings.securityRoles;
                 return roles.filter(function (r) { return Crm.Core.identifiersAreEqual(r, roleId); }).length > 0;
             }
             User.hasRole = hasRole;
@@ -1326,11 +1293,11 @@ var Dynamics;
             function getContext() {
                 var context;
                 if (typeof Xrm !== "undefined" &&
-                    typeof Xrm.Page !== "undefined" &&
-                    typeof Xrm.Page.context !== "undefined") {
-                    context = Xrm.Page.context;
+                    typeof Xrm.Utility !== "undefined" &&
+                    typeof Xrm.Utility.getGlobalContext === "function") {
+                    context = Xrm.Utility.getGlobalContext();
                 }
-                else if (typeof GetGlobalContext !== "undefined") {
+                else if (typeof GetGlobalContext === "function") {
                     context = GetGlobalContext();
                 }
                 if (!context) {

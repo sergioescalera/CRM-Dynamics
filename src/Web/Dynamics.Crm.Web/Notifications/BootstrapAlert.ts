@@ -2,7 +2,7 @@
 
     "use strict";
 
-    var $notificationWrapper: JQuery;
+    let $notificationWrapper: JQuery;
 
     export class BoostrapAlert implements NotificationService {
 
@@ -20,9 +20,9 @@
 
         show(options: NotificationServiceOptions): void {
 
-            var dismissible: boolean = !!options.dismissible;
-            var message: string = options.message;
-            var type: string = options.type;
+            let dismissible: boolean = !!options.dismissible;
+            let message: string = options.message;
+            let type: string = options.type;
 
             $notificationWrapper
                 .removeClass("hidden")

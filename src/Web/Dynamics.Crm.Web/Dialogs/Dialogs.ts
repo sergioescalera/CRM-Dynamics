@@ -27,7 +27,7 @@
         Create<TResult>(config: IDialogConfig<TResult>): JQueryPromise<IDialog<TResult>>;
     }
 
-    var provider: IDialogProvider;
+    let provider: IDialogProvider;
 
     function getProvider(): IDialogProvider {
 
@@ -40,8 +40,8 @@
 
     export function alert(message: string, title: string): JQueryPromise<void> {
 
-        var win = <JQueryWindow>window.top;
-        var deferred: JQueryDeferred<void> = win.$.Deferred<void>();
+        let win = <JQueryWindow>window.top;
+        let deferred: JQueryDeferred<void> = win.$.Deferred<void>();
 
         getProvider()
             .Alert(message, title)
@@ -57,8 +57,8 @@
 
     export function confirm(message: string, title: string): JQueryPromise<boolean> {
 
-        var win = <JQueryWindow>window.top;
-        var deferred: JQueryDeferred<boolean> = win.$.Deferred<boolean>();
+        let win = <JQueryWindow>window.top;
+        let deferred: JQueryDeferred<boolean> = win.$.Deferred<boolean>();
 
         getProvider()
             .Confirm(message, title)
@@ -74,8 +74,8 @@
 
     export function create<TResult>(config: IDialogConfig<TResult>): JQueryPromise<TResult> {
 
-        var win = <JQueryWindow>window.top;
-        var deferred: JQueryDeferred<TResult> = win.$.Deferred<TResult>();
+        let win = <JQueryWindow>window.top;
+        let deferred: JQueryDeferred<TResult> = win.$.Deferred<TResult>();
 
         getProvider()
             .Create(config)
@@ -83,7 +83,7 @@
                 .Show()
                 .done(() => {
 
-                    var result: TResult = config.Done();
+                    let result: TResult = config.Done();
 
                     deferred.resolve(result);
                 })
@@ -97,7 +97,7 @@
 
     export function init(prefix: string): void {
 
-        var win = <JQueryWindow>window.top;
+        let win = <JQueryWindow>window.top;
 
         prefix = prefix || Publishers.bootstrap;
 

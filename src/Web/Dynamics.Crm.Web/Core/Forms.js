@@ -6,7 +6,7 @@ var Dynamics;
         (function (Forms) {
             "use strict";
             function getClientType() {
-                return Xrm.Page.context.client.getClient();
+                return Xrm.Utility.getGlobalContext().client.getClient();
             }
             Forms.getClientType = getClientType;
             function getFormType() {
@@ -14,10 +14,10 @@ var Dynamics;
             }
             Forms.getFormType = getFormType;
             function getFormFactor() {
-                if (!Xrm.Page.context.client.getFormFactor) {
+                if (!Xrm.Utility.getGlobalContext().client.getFormFactor) {
                     return Forms.FormFactor.Unknown;
                 }
-                return Xrm.Page.context.client.getFormFactor();
+                return Xrm.Utility.getGlobalContext().client.getFormFactor();
             }
             Forms.getFormFactor = getFormFactor;
             function getIsDesktop() {

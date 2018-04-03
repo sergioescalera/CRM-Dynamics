@@ -13,7 +13,9 @@ var Notifications;
         };
         DefaultNotifications.prototype.show = function (options) {
             try {
-                Xrm.Utility.alertDialog(options.message, function () { });
+                Xrm.Navigation.openAlertDialog({
+                    text: options.message
+                });
             }
             catch (e) {
                 alert(options.message);
@@ -24,8 +26,8 @@ var Notifications;
             try {
                 return (typeof Xrm !== "undefined"
                     && !!Xrm
-                    && !!Xrm.Utility
-                    && !!Xrm.Utility.alertDialog)
+                    && !!Xrm.Navigation
+                    && !!Xrm.Navigation.openAlertDialog)
                     || typeof alert === "function";
             }
             catch (e) {

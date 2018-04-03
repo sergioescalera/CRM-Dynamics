@@ -12,7 +12,9 @@ var Dynamics;
                 }
                 CrmAlertDialog.prototype.Show = function () {
                     var deferred = this._window.$.Deferred();
-                    Xrm.Utility.alertDialog(this._message, function () {
+                    Xrm.Navigation.openAlertDialog({
+                        text: this._message
+                    }, function () {
                         deferred.resolve();
                     });
                     return deferred;
@@ -23,13 +25,17 @@ var Dynamics;
             }());
             Dialogs.CrmAlertDialog = CrmAlertDialog;
             var CrmConfirmDialog = (function () {
-                function CrmConfirmDialog(window, message) {
+                function CrmConfirmDialog(window, message, title) {
                     this._window = window;
                     this._message = message;
+                    this._title = title;
                 }
                 CrmConfirmDialog.prototype.Show = function () {
                     var deferred = this._window.$.Deferred();
-                    Xrm.Utility.confirmDialog(this._message, function () {
+                    Xrm.Navigation.openConfirmDialog({
+                        text: this._message,
+                        title: this._title
+                    }).then(function () {
                         deferred.resolve(true);
                     }, function () {
                         deferred.reject();
@@ -52,7 +58,7 @@ var Dynamics;
                 };
                 CrmDialogProvider.prototype.Confirm = function (message, title) {
                     var deferred = this._window.$.Deferred();
-                    deferred.resolve(new CrmConfirmDialog(this._window, message));
+                    deferred.resolve(new CrmConfirmDialog(this._window, message, title));
                     return deferred;
                 };
                 CrmDialogProvider.prototype.Create = function (config) {

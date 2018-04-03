@@ -8,10 +8,10 @@
         executeAll?: boolean;
     }
 
-    var executeTaskErrorHtmlMessage: string = `Something went wrong.<br />
+    let executeTaskErrorHtmlMessage: string = `Something went wrong.<br />
 Clearing your browser's cache <u>(using Ctrl + F5)</u> may help solve the problem.`;
-    var executeTaskErrorMessage: string = `Something went wrong. Clearing your browser's cache (using Ctrl + F5) may help solve the problem.`;
-    var executeTaskErrorNotificationId: string = "ExecuteTaskErrorNotification";
+    let executeTaskErrorMessage: string = `Something went wrong. Clearing your browser's cache (using Ctrl + F5) may help solve the problem.`;
+    let executeTaskErrorNotificationId: string = "ExecuteTaskErrorNotification";
 
     export function execute(
         tasks: ((() => boolean) | (() => void))[],
@@ -27,8 +27,8 @@ Clearing your browser's cache <u>(using Ctrl + F5)</u> may help solve the proble
             Diagnostics.printArguments("Tasks.execute", tasks, config);
         }
 
-        var results: any[] = [];
-        var errors: IError[] = [];
+        let results: any[] = [];
+        let errors: IError[] = [];
 
         if (!Array.isArray(tasks)) {
 
@@ -36,13 +36,13 @@ Clearing your browser's cache <u>(using Ctrl + F5)</u> may help solve the proble
 
         } else {
 
-            for (var i: number = 0; i < tasks.length; i++) {
+            for (let i: number = 0; i < tasks.length; i++) {
 
-                var task: () => boolean = tasks[i];
+                let task: () => boolean = tasks[i];
 
                 try {
 
-                    var result: boolean = task();
+                    let result: boolean = task();
 
                     results.push(result);
 
@@ -101,7 +101,7 @@ Clearing your browser's cache <u>(using Ctrl + F5)</u> may help solve the proble
             return "";
         }
 
-        var result = /^function\s+([\w\$]+)\s*\(/.exec(task.toString());
+        let result = /^function\s+([\w\$]+)\s*\(/.exec(task.toString());
 
         return result ? result[1] : "";
     }

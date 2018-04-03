@@ -9,7 +9,7 @@ var Dynamics;
                 if (entityId === void 0) { entityId = null; }
                 if (entityCode === void 0) { entityCode = null; }
                 if (action === void 0) { action = "run"; }
-                var url = Xrm.Page.context.getClientUrl();
+                var url = Xrm.Utility.getGlobalContext().getClientUrl();
                 var reportUrl = url + "/crmreports/viewer/viewer.aspx?action={action}&helpID={name}&id={{id}}"
                     .replace("{action}", encodeURIComponent(action))
                     .replace("{name}", encodeURIComponent(reportName))

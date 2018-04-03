@@ -9,9 +9,9 @@
         entityCode: string = null,
         action: string = "run"): string {
 
-        var url = Xrm.Page.context.getClientUrl();
+        let url = Xrm.Utility.getGlobalContext().getClientUrl();
 
-        var reportUrl = url + "/crmreports/viewer/viewer.aspx?action={action}&helpID={name}&id={{id}}"
+        let reportUrl = url + "/crmreports/viewer/viewer.aspx?action={action}&helpID={name}&id={{id}}"
             .replace("{action}", encodeURIComponent(action))
             .replace("{name}", encodeURIComponent(reportName))
             .replace("{id}", encodeURIComponent(reportId));

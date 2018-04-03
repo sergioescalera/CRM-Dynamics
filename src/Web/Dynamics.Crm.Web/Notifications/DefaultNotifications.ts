@@ -16,7 +16,9 @@
 
         show(options: NotificationServiceOptions): void {
             try {
-                Xrm.Utility.alertDialog(options.message, () => { });
+                Xrm.Navigation.openAlertDialog({
+                    text: options.message
+                });
             } catch (e) {
                 alert(options.message);
                 console.warn(e);
@@ -28,8 +30,8 @@
             try {
                 return (typeof Xrm !== "undefined"
                     && !!Xrm
-                    && !!Xrm.Utility
-                    && !!Xrm.Utility.alertDialog)
+                    && !!Xrm.Navigation
+                    && !!Xrm.Navigation.openAlertDialog)
                     || typeof alert === "function";
             } catch (e) {
                 console.warn(e);

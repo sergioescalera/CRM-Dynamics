@@ -127,7 +127,7 @@
 
         private Init(prefix: string): void {
 
-            var baseUrl: string = `../WebResources/${prefix}_/Libs/bootstrap/`;
+            let baseUrl: string = `../WebResources/${prefix}_/Libs/bootstrap/`;
 
             this._loading = ScriptManager.loadScript(baseUrl + "js/bootstrap.min.js", this._window);
 
