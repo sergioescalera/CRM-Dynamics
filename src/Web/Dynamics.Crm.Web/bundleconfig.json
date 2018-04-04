@@ -2,6 +2,7 @@
   {
     "outputFileName": "Widgets/MetadataBrowser/Scripts/Bundle.js",
     "inputFiles": [
+      "Core/Constants.js",
       "Core/Diagnostics.js",
       "Core/Validation.js",
       "Data/OData.js",

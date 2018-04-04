@@ -254,6 +254,7 @@
     <TypeScriptCompile Include="_typings\lodash.d.ts" />
     <TypeScriptCompile Include="_typings\moment.d.ts" />
     <TypeScriptCompile Include="_typings\Notification.d.ts" />
+    <TypeScriptCompile Include="_typings\Promise.d.ts" />
     <TypeScriptCompile Include="_typings\SDK.MetaData.d.ts" />
     <TypeScriptCompile Include="_typings\toastr.d.ts" />
     <TypeScriptCompile Include="_typings\Xrm.d.ts" />

@@ -15,7 +15,12 @@ var Dynamics;
                 Notifications.show = show;
                 function showHtml(message, id, level) {
                     if (level === void 0) { level = Dynamics.Crm.Forms.FormNotificationType.Information; }
-                    Xrm.Page.ui.setFormHtmlNotification(message, level, id);
+                    if (typeof Xrm.Page.ui.setFormHtmlNotification === "function") {
+                        Xrm.Page.ui.setFormHtmlNotification(message, level, id);
+                    }
+                    else {
+                        Xrm.Page.ui.setFormNotification(message, level, id);
+                    }
                 }
                 Notifications.showHtml = showHtml;
                 function hide(id, afterSeconds) {

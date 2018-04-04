@@ -99,8 +99,8 @@
 
             return this._dataService
                 .GetAttributes(this.vm.entity)
-                .then(((array: IAttributeDefinition[]) => {
-
+                .then((array: IAttributeDefinition[]) => {
+                    
                     this.vm.entityAttributes = array.sort((a1: IAttributeDefinition, a2: IAttributeDefinition) => {
 
                         if (a1.LogicalName < a2.LogicalName) {
@@ -113,7 +113,9 @@
                     });
 
                     this.showAttributes();
-                }).bind(this))
+
+                    return this.vm.entityAttributes;
+                })
                 .finally(this.loadEntityMetadataCompleted.bind(this));
         }
 

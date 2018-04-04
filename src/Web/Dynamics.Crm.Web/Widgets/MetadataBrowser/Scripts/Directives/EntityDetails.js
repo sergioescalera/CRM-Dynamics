@@ -54,7 +54,7 @@ var MetadataBrower;
                 this.vm.isBusy = true;
                 return this._dataService
                     .GetAttributes(this.vm.entity)
-                    .then((function (array) {
+                    .then(function (array) {
                     _this.vm.entityAttributes = array.sort(function (a1, a2) {
                         if (a1.LogicalName < a2.LogicalName) {
                             return -1;
@@ -65,7 +65,8 @@ var MetadataBrower;
                         return 0;
                     });
                     _this.showAttributes();
-                }).bind(this))
+                    return _this.vm.entityAttributes;
+                })
                     .finally(this.loadEntityMetadataCompleted.bind(this));
             };
             EntityDetails.prototype.loadEntityMetadataCompleted = function () {

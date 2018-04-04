@@ -17,7 +17,11 @@
         id: string,
         level: string = Dynamics.Crm.Forms.FormNotificationType.Information): void {
 
-        Xrm.Page.ui.setFormHtmlNotification(message, level, id);
+        if (typeof Xrm.Page.ui.setFormHtmlNotification === "function") {
+            Xrm.Page.ui.setFormHtmlNotification(message, level, id);
+        } else {
+            Xrm.Page.ui.setFormNotification(message, level, id);
+        }
     }
 
     export function hide(id: string, afterSeconds: number = null): void {

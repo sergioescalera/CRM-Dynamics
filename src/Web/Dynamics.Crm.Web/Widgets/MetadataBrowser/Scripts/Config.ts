@@ -2,6 +2,10 @@
 
     "use strict";
 
+    window["ENTITY_SET_NAMES"] = window["ENTITY_SET_NAMES"] || JSON.stringify({
+        "entitydefinition": "EntityDefinitions"
+    });
+
     export var moduleName = "metadata-browser";
 
     function init() {

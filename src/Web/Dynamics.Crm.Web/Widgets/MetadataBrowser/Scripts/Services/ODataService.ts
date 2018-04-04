@@ -14,14 +14,14 @@
         GetEntities(): ng.IPromise<IEntityDefinition[]> {
 
             var defer: ng.IDeferred<IEntityDefinition[]> = this._$q.defer<IEntityDefinition[]>();
-
+            
             Dynamics.Crm.OData
                 .entityDefinitions()
-                .done((array: IEntityDefinition[]) => {
+                .then((array: IEntityDefinition[]) => {
 
                     defer.resolve(array);
                 })
-                .fail(() => {
+                .catch(() => {
                     defer.reject();
                 });
 
@@ -34,7 +34,7 @@
 
             Dynamics.Crm.OData
                 .entityAttributesDefinition(entityDefinition.MetadataId)
-                .done((array: IAttributeDefinition[]) => {
+                .then((array: IAttributeDefinition[]) => {
 
                     defer.resolve(array);
                 })

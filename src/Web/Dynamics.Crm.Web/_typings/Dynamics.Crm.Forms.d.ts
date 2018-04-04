@@ -146,23 +146,28 @@ declare interface ICrmDialogConfig<TResult> {
 }
 
 declare interface ICrmOData {
+
     createEntity(
         entity: IEntity,
         entitySetName: string,
-        attributes?: string[]): JQueryPromise<IEntity>;
+        attributes?: string[]): Promise<IEntity, WebApiError>;
+
     deleteEntity(
         entityName: string,
         entitySetName: string,
-        entityId: string): JQueryPromise<void>;
+        entityId: string): Promise<IEntity, WebApiError>;
+
     updateEntity(
         entity: IEntity,
-        entitySetName: string): JQueryPromise<void>;
+        entitySetName: string): Promise<IEntity, WebApiError>;
+
     retrieve(
         entityName: string,
         entitySetName: string,
         entityId: string,
         attributes: string[],
-        expand?: string[]): JQueryPromise<IEntity>;
+        expand?: string[]): Promise<IEntity, WebApiError>;
+
     retrieveMultiple(
         entityName: string,
         entitySetName: string,
@@ -170,8 +175,14 @@ declare interface ICrmOData {
         filters: string[],
         filterType?: number,
         orderBy?: string[],
-        expand?: string[]): JQueryPromise<IEntity[]>;
-    fetch(entitySetName: string, fetchXml: string): JQueryPromise<any>;
+        expand?: string[],
+        pageSize?: number): Promise<IEntity[], WebApiError>;
+
+    fetch(
+        entityName: string,
+        entitySetName: string,
+        fetchXml: string,
+        pageSize?: number): Promise<any, WebApiError>;
 }
 
 declare interface IEntity {

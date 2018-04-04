@@ -36,7 +36,12 @@
         if (version === undefined) {
 
             Diagnostics.log.Warning("getContext().getVersion() is undefined");
-            return "v8.0";
+
+            return "v9.0";
+        }
+
+        if (version >= "9.0") {
+            return "v9.0";
         }
 
         if (version >= "8.2") {
@@ -87,8 +92,8 @@
 
         return entity;
     }
-
-    function stringifyEntity(entity: Core.IEntity): string {
+    
+    function sanitizeEntity(entity: Core.IEntity): any {
 
         let data = {};
 
@@ -103,7 +108,7 @@
                 data[k] = entity[k];
             });
 
-        return JSON.stringify(data);
+        return data;
     }
 
     // entities CRUD
@@ -113,40 +118,37 @@
         entitySetName: string,
         entityId: string,
         attributes: string[],
-        expand?: string[]): JQueryPromise<Core.IEntity> {
-
+        expand?: string[]): Promise<Core.IEntity, WebApiError> {
+        
         Validation.ensureNotNullOrEmpty(entityName, "entityName");
         Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
         Validation.ensureNotNullOrEmpty(entityId, "entityId");
+        
+        let query = `?$select=${attributes.join(",")}`;
 
-        let baseUrl: string = getContext().getClientUrl();
+        if (expand && expand.length) {
 
-        let url = `${baseUrl}/api/data/${getVersion()}/${entitySetName}(${Core.parseIdentifier(entityId)})?$select=${attributes.join(",") }`;
-
-        if (expand) {
-
-            url += `&$expand=${expand.join(",")}`;
+            query += `&$expand=${expand.join(",")}`;
         }
 
-        return $
-            .ajax({
-                url: url,
-                dataType: "json"
-            })
-            .then((data: any) => {
+        return new Promise((resolve, reject) => {
 
-                return toEntity(entityName, attributes, data);
-            })
-            .fail((response: any) => {
+            Xrm.WebApi.retrieveRecord(entityName, entityId, query)
+                .then((entity: any) => {
 
-                if (!response || !response.responseJSON || !response.responseJSON.error) {
-                    return;
-                }
+                    resolve(toEntity(entityName, attributes, entity));
 
-                Diagnostics.log.Error(
-                    `${response.responseJSON.error.message} retrieve ${url}`,
-                    response.responseJSON.error.innererror || response.responseJSON.error);
-            });
+                }, (error) => {
+                    
+                    Diagnostics.log.Error(`${error.message} retrieve ${entityName}:${entityId}:${query}`, {
+                        message: error.message,
+                        description: `Code: ${error.errorCode}`,
+                        name: "WebApiError"
+                    });
+
+                    reject(error);
+                });
+        });
     }
 
     export function retrieveMultiple(
@@ -156,184 +158,183 @@
         filters: string[],
         filterType: FilterType = null,
         orderBy: string[] = null,
-        expand: string[] = null): JQueryPromise<Core.IEntity[]> {
+        expand: string[] = null,
+        pageSize: number = 1000): Promise<Core.IEntity[], WebApiError> {
 
         Validation.ensureNotNullOrEmpty(entityName, "entityName");
         Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
-
-        let baseUrl: string = getContext().getClientUrl();
-
+        
         let filterJoin = !filterType || filterType === FilterType.And ? " and " : " or ";
 
-        let url = `${baseUrl}/api/data/${getVersion()}/${entitySetName}?$select=${attributes.join(",")}&$filter=${filters.join(filterJoin)}`;
+        let query = `?$select=${attributes.join(",")}&$filter=${filters.join(filterJoin)}`;
 
         if (orderBy) {
 
-            url += `&$orderby=${orderBy.join(",")}`;
+            query += `&$orderby=${orderBy.join(",")}`;
         }
 
         if (expand) {
 
-            url += `&$expand=${expand.join(",")}`;
+            query += `&$expand=${expand.join(",")}`;
         }
 
-        return $
-            .ajax({
-                url: url,
-                dataType: "json"
-            })
-            .then((data: any) => {
+        return new Promise((resolve, reject) => {
 
-                let results = <any[]>data.value;
+            Xrm.WebApi.retrieveMultipleRecords(entityName, query, pageSize)
+                .then(response => {
 
-                return results.map((o: any) => toEntity(entityName, attributes, o));
-            })
-            .fail((response: any) => {
+                    resolve(response.entities.map(entity => toEntity(entityName, attributes, entity)));
 
-                if (!response || !response.responseJSON || !response.responseJSON.error) {
-                    return;
-                }
+                }, (error) => {
 
-                Diagnostics.log.Error(
-                    `${response.responseJSON.error.message} retrieve multiple ${url}`,
-                    response.responseJSON.error.innererror || response.responseJSON.error);
-            });
+                    Diagnostics.log.Error(`${error.message} retrieve multiple ${entityName}:${query}`, {
+                        message: error.message,
+                        description: `Code: ${error.errorCode}`,
+                        name: "WebApiError"
+                    });
+
+                    reject(error);
+                });
+        });
     }
 
     export function deleteEntity(
         entityName: string,
         entitySetName: string,
-        entityId: string): JQueryPromise<void> {
+        entityId: string): Promise<IEntity, WebApiError> {
 
         Validation.ensureNotNullOrEmpty(entityName, "entityName");
         Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
         Validation.ensureNotNullOrEmpty(entityId, "entityId");
 
-        let baseUrl: string = getContext().getClientUrl();
+        return new Promise((resolve, reject) => {
 
-        let url = `${baseUrl}/api/data/${getVersion()}/${entitySetName}(${Core.parseIdentifier(entityId)})`;
+            Xrm.WebApi.deleteRecord(entityName, entityId)
+                .then((entityType: string, id: string, name: string) => {
 
-        return $
-            .ajax({
-                url: url,
-                dataType: "json",
-                type: "DELETE"
-            })
-            .fail((response: any) => {
+                    resolve({
+                        type: entityType,
+                        id: id,
+                        name: name
+                    });
 
-                if (!response || !response.responseJSON || !response.responseJSON.error) {
-                    return;
-                }
+                }, (error) => {
 
-                Diagnostics.log.Error(
-                    `${response.responseJSON.error.message} delete ${url}`,
-                    response.responseJSON.error.innererror || response.responseJSON.error);
-            });
+                    Diagnostics.log.Error(`${error.message} delete ${entityName}`, {
+                        message: error.message,
+                        description: `Code: ${error.errorCode}`,
+                        name: "WebApiError"
+                    });
+
+                    reject(error);
+                });
+        });
     }
 
     export function createEntity(
         entity: Core.IEntity,
         entitySetName: string,
         attributes: string[] = null,
-        logError = true): JQueryPromise<Core.IEntity> {
+        logError = true): Promise<Core.IEntity, WebApiError> {
 
         Validation.ensureNotNullOrUndefined(entity, "entity");
         Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
 
-        let baseUrl: string = getContext().getClientUrl();
         let idFieldName = entityIdFieldName(entity.type);
 
         attributes = attributes || [];
+
         if (attributes.indexOf(idFieldName) < 0) {
             attributes.push(idFieldName);
         }
 
-        let url = `${baseUrl}/api/data/${getVersion()}/${entitySetName}?$select=${attributes.join(",")}`;
+        let query = `?$select=${attributes.join(",")}`;
 
-        let data = stringifyEntity(entity);
+        let data = sanitizeEntity(entity);
 
-        return $
-            .ajax({
-                url: url,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                type: "POST",
-                data: data,
-                headers: {
-                    Prefer: "return=representation"
-                }
-            })
-            .then((data: any) => {
+        return new Promise((resolve, reject) => {
 
-                return toEntity(entity.type, attributes, data);
-            })
-            .fail((response: any) => {
+            Xrm.WebApi.createRecord(entity.type, data)
+                .then((entityType: string, id: string) => {
 
-                if (!response || !response.responseJSON || !response.responseJSON.error) {
-                    return;
-                }
+                    resolve({
+                        type: entityType,
+                        id: id
+                    });
 
-                if (logError) {
-                    Diagnostics.log.Error(
-                        `${response.responseJSON.error.message} create ${url}`,
-                        response.responseJSON.error.innererror || response.responseJSON.error);
-                }
-            });
+                }, (error) => {
+
+                    if (logError) {
+                        Diagnostics.log.Error(`${error.message} create ${entity.type}`, {
+                            message: error.message,
+                            description: `Code: ${error.errorCode}`,
+                            name: "WebApiError"
+                        });
+                    }
+
+                    reject(error);
+                });
+        });
     }
 
-    export function updateEntity(entity: Core.IEntity, entitySetName: string): JQueryPromise<void> {
+    export function updateEntity(entity: Core.IEntity, entitySetName: string): Promise<Core.IEntity, WebApiError> {
 
         Validation.ensureNotNullOrUndefined(entity, "entity");
         Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
+        
+        let data = sanitizeEntity(entity);
 
-        let baseUrl: string = getContext().getClientUrl();
+        return new Promise((resolve, reject) => {
 
-        let url = `${baseUrl}/api/data/${getVersion()}/${entitySetName}(${Core.parseIdentifier(entity.id)})`;
+            Xrm.WebApi.updateRecord(entity.type, entity.id, data)
+                .then((entityType: string, id: string) => {
 
-        let data = stringifyEntity(entity);
+                    resolve({
+                        type: entityType,
+                        id: id
+                    });
 
-        return $
-            .ajax({
-                url: url,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                type: "PATCH",
-                data: data
-            })
-            .fail((response: any) => {
+                }, (error) => {
 
-                if (!response || !response.responseJSON || !response.responseJSON.error) {
-                    return;
-                }
+                    Diagnostics.log.Error(`${error.message} update ${entity.type}:${entity.id}`, {
+                        message: error.message,
+                        description: `Code: ${error.errorCode}`,
+                        name: "WebApiError"
+                    });
 
-                Diagnostics.log.Error(
-                    `${response.responseJSON.error.message} update ${url}`,
-                    response.responseJSON.error.innererror || response.responseJSON.error);
-            });
+                    reject(error);
+                });
+        });
     }
 
     // fetch
 
-    export function fetch(entitySetName: string, fetchXml: string): JQueryPromise<any> {
+    export function fetch(
+        entityName: string,
+        entitySetName: string,
+        fetchXml: string,
+        pageSize: number = 500): Promise<any, WebApiError> {
+        
+        let query = `?fetchXml=${encodeURIComponent(fetchXml)}`;
 
-        let baseUrl: string = getContext().getClientUrl();
+        return new Promise((resolve, reject) => {
 
-        let url = `${baseUrl}/api/data/${getVersion()}/${entitySetName}?fetchXml=${encodeURIComponent(fetchXml)}`;
+            Xrm.WebApi.retrieveMultipleRecords(entityName, query, pageSize)
+                .then(response => {
 
-        return $.ajax({
-            url: url,
-            dataType: "json",
-        })
-            .fail((response: any) => {
+                    resolve(response);
 
-                if (!response || !response.responseJSON || !response.responseJSON.error) {
-                    return;
-                }
+                }, (error) => {
 
-                Diagnostics.log.Error(
-                    `${response.responseJSON.error.message} create ${url}`,
-                    response.responseJSON.error.innererror || response.responseJSON.error);
-            });
+                    Diagnostics.log.Error(`${error.message} fetch ${entityName}:${query}`, {
+                        message: error.message,
+                        description: `Code: ${error.errorCode}`,
+                        name: "WebApiError"
+                    });
+
+                    reject(error);
+                });
+        });
     }
 
     // meta-data
@@ -347,21 +348,24 @@
     ];
 
     export function entityDefinitions(
-        attributes: string[] = entityDefinitionAttributes): JQueryPromise<IEntityDefinition[]> {
+        attributes: string[] = entityDefinitionAttributes): Promise<IEntityDefinition[], WebApiError> {
+        
+        let query = `?$select=${attributes.join(",")}`;
 
-        let baseUrl: string = getContext().getClientUrl();
+        return new Promise((resolve, reject) => {
+            
+            Xrm.WebApi.retrieveMultipleRecords("EntityDefinition", query, 500)
+                .then((response) => {
+                    
+                    resolve(response.entities);
 
-        let url = `${baseUrl}/api/data/${getVersion()}/EntityDefinitions?$select=${attributes.join(",")}`;
+                }, (error) => {
 
-        return $
-            .ajax({
-                url: url,
-                dataType: "json"
-            })
-            .then((data: IODataResponse<IEntityDefinition[]>) => {
+                    console.error(error);
 
-                return !data ? [] : data.value;
-            });
+                    reject(error);
+                });
+        });
     }
 
     let entityAttributeDefinitionAttributes: string[] = [

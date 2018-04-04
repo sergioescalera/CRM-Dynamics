@@ -11,10 +11,10 @@ var MetadataBrower;
                 var defer = this._$q.defer();
                 Dynamics.Crm.OData
                     .entityDefinitions()
-                    .done(function (array) {
+                    .then(function (array) {
                     defer.resolve(array);
                 })
-                    .fail(function () {
+                    .catch(function () {
                     defer.reject();
                 });
                 return defer.promise;
@@ -23,7 +23,7 @@ var MetadataBrower;
                 var defer = this._$q.defer();
                 Dynamics.Crm.OData
                     .entityAttributesDefinition(entityDefinition.MetadataId)
-                    .done(function (array) {
+                    .then(function (array) {
                     defer.resolve(array);
                 })
                     .fail(function () {

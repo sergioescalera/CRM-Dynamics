@@ -2,6 +2,64 @@ var Dynamics;
 (function (Dynamics) {
     var Crm;
     (function (Crm) {
+        "use strict";
+        Crm.componentName = function (prefix, name) { return (prefix + "_" + name); };
+    })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
+})(Dynamics || (Dynamics = {}));
+var Dynamics;
+(function (Dynamics) {
+    var Crm;
+    (function (Crm) {
+        var Publishers;
+        (function (Publishers) {
+            "use strict";
+            Publishers.bootstrap = "cc";
+            Publishers.logEntry = "cc";
+        })(Publishers = Crm.Publishers || (Crm.Publishers = {}));
+    })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
+})(Dynamics || (Dynamics = {}));
+var Dynamics;
+(function (Dynamics) {
+    var Crm;
+    (function (Crm) {
+        var Forms;
+        (function (Forms) {
+            "use strict";
+            var FormNotificationType = (function () {
+                function FormNotificationType() {
+                }
+                FormNotificationType.Error = "ERROR";
+                FormNotificationType.Warning = "WARNING";
+                FormNotificationType.Information = "INFO";
+                return FormNotificationType;
+            }());
+            Forms.FormNotificationType = FormNotificationType;
+            var ClientType = (function () {
+                function ClientType() {
+                }
+                ClientType.Browser = "Web";
+                ClientType.Outlook = "Outlook";
+                ClientType.Mobile = "Mobile";
+                return ClientType;
+            }());
+            Forms.ClientType = ClientType;
+            var AttributeRequiredLevel = (function () {
+                function AttributeRequiredLevel() {
+                }
+                AttributeRequiredLevel.None = "none";
+                AttributeRequiredLevel.Required = "required";
+                AttributeRequiredLevel.Recommended = "recommended";
+                return AttributeRequiredLevel;
+            }());
+            Forms.AttributeRequiredLevel = AttributeRequiredLevel;
+        })(Forms = Crm.Forms || (Crm.Forms = {}));
+    })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
+})(Dynamics || (Dynamics = {}));
+
+var Dynamics;
+(function (Dynamics) {
+    var Crm;
+    (function (Crm) {
         var Diagnostics;
         (function (Diagnostics) {
             "use strict";
@@ -256,7 +314,10 @@ var Dynamics;
                 var version = getContext().getVersion(); // 8.2.0.780
                 if (version === undefined) {
                     Crm.Diagnostics.log.Warning("getContext().getVersion() is undefined");
-                    return "v8.0";
+                    return "v9.0";
+                }
+                if (version >= "9.0") {
+                    return "v9.0";
                 }
                 if (version >= "8.2") {
                     return "v8.2";
@@ -292,7 +353,7 @@ var Dynamics;
                 });
                 return entity;
             }
-            function stringifyEntity(entity) {
+            function sanitizeEntity(entity) {
                 var data = {};
                 Object
                     .keys(entity)
@@ -302,63 +363,59 @@ var Dynamics;
                     }
                     data[k] = entity[k];
                 });
-                return JSON.stringify(data);
+                return data;
             }
             // entities CRUD
             function retrieve(entityName, entitySetName, entityId, attributes, expand) {
                 Validation.ensureNotNullOrEmpty(entityName, "entityName");
                 Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
                 Validation.ensureNotNullOrEmpty(entityId, "entityId");
-                var baseUrl = getContext().getClientUrl();
-                var url = baseUrl + "/api/data/" + getVersion() + "/" + entitySetName + "(" + Crm.Core.parseIdentifier(entityId) + ")?$select=" + attributes.join(",");
-                if (expand) {
-                    url += "&$expand=" + expand.join(",");
+                var query = "?$select=" + attributes.join(",");
+                if (expand && expand.length) {
+                    query += "&$expand=" + expand.join(",");
                 }
-                return $
-                    .ajax({
-                    url: url,
-                    dataType: "json"
-                })
-                    .then(function (data) {
-                    return toEntity(entityName, attributes, data);
-                })
-                    .fail(function (response) {
-                    if (!response || !response.responseJSON || !response.responseJSON.error) {
-                        return;
-                    }
-                    Crm.Diagnostics.log.Error(response.responseJSON.error.message + " retrieve " + url, response.responseJSON.error.innererror || response.responseJSON.error);
+                return new Promise(function (resolve, reject) {
+                    Xrm.WebApi.retrieveRecord(entityName, entityId, query)
+                        .then(function (entity) {
+                        resolve(toEntity(entityName, attributes, entity));
+                    }, function (error) {
+                        Crm.Diagnostics.log.Error(error.message + " retrieve " + entityName + ":" + entityId + ":" + query, {
+                            message: error.message,
+                            description: "Code: " + error.errorCode,
+                            name: "WebApiError"
+                        });
+                        reject(error);
+                    });
                 });
             }
             OData.retrieve = retrieve;
-            function retrieveMultiple(entityName, entitySetName, attributes, filters, filterType, orderBy, expand) {
+            function retrieveMultiple(entityName, entitySetName, attributes, filters, filterType, orderBy, expand, pageSize) {
                 if (filterType === void 0) { filterType = null; }
                 if (orderBy === void 0) { orderBy = null; }
                 if (expand === void 0) { expand = null; }
+                if (pageSize === void 0) { pageSize = 1000; }
                 Validation.ensureNotNullOrEmpty(entityName, "entityName");
                 Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
-                var baseUrl = getContext().getClientUrl();
                 var filterJoin = !filterType || filterType === FilterType.And ? " and " : " or ";
-                var url = baseUrl + "/api/data/" + getVersion() + "/" + entitySetName + "?$select=" + attributes.join(",") + "&$filter=" + filters.join(filterJoin);
+                var query = "?$select=" + attributes.join(",") + "&$filter=" + filters.join(filterJoin);
                 if (orderBy) {
-                    url += "&$orderby=" + orderBy.join(",");
+                    query += "&$orderby=" + orderBy.join(",");
                 }
                 if (expand) {
-                    url += "&$expand=" + expand.join(",");
+                    query += "&$expand=" + expand.join(",");
                 }
-                return $
-                    .ajax({
-                    url: url,
-                    dataType: "json"
-                })
-                    .then(function (data) {
-                    var results = data.value;
-                    return results.map(function (o) { return toEntity(entityName, attributes, o); });
-                })
-                    .fail(function (response) {
-                    if (!response || !response.responseJSON || !response.responseJSON.error) {
-                        return;
-                    }
-                    Crm.Diagnostics.log.Error(response.responseJSON.error.message + " retrieve multiple " + url, response.responseJSON.error.innererror || response.responseJSON.error);
+                return new Promise(function (resolve, reject) {
+                    Xrm.WebApi.retrieveMultipleRecords(entityName, query, pageSize)
+                        .then(function (response) {
+                        resolve(response.entities.map(function (entity) { return toEntity(entityName, attributes, entity); }));
+                    }, function (error) {
+                        Crm.Diagnostics.log.Error(error.message + " retrieve multiple " + entityName + ":" + query, {
+                            message: error.message,
+                            description: "Code: " + error.errorCode,
+                            name: "WebApiError"
+                        });
+                        reject(error);
+                    });
                 });
             }
             OData.retrieveMultiple = retrieveMultiple;
@@ -366,19 +423,22 @@ var Dynamics;
                 Validation.ensureNotNullOrEmpty(entityName, "entityName");
                 Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
                 Validation.ensureNotNullOrEmpty(entityId, "entityId");
-                var baseUrl = getContext().getClientUrl();
-                var url = baseUrl + "/api/data/" + getVersion() + "/" + entitySetName + "(" + Crm.Core.parseIdentifier(entityId) + ")";
-                return $
-                    .ajax({
-                    url: url,
-                    dataType: "json",
-                    type: "DELETE"
-                })
-                    .fail(function (response) {
-                    if (!response || !response.responseJSON || !response.responseJSON.error) {
-                        return;
-                    }
-                    Crm.Diagnostics.log.Error(response.responseJSON.error.message + " delete " + url, response.responseJSON.error.innererror || response.responseJSON.error);
+                return new Promise(function (resolve, reject) {
+                    Xrm.WebApi.deleteRecord(entityName, entityId)
+                        .then(function (entityType, id, name) {
+                        resolve({
+                            type: entityType,
+                            id: id,
+                            name: name
+                        });
+                    }, function (error) {
+                        Crm.Diagnostics.log.Error(error.message + " delete " + entityName, {
+                            message: error.message,
+                            description: "Code: " + error.errorCode,
+                            name: "WebApiError"
+                        });
+                        reject(error);
+                    });
                 });
             }
             OData.deleteEntity = deleteEntity;
@@ -387,73 +447,71 @@ var Dynamics;
                 if (logError === void 0) { logError = true; }
                 Validation.ensureNotNullOrUndefined(entity, "entity");
                 Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
-                var baseUrl = getContext().getClientUrl();
                 var idFieldName = entityIdFieldName(entity.type);
                 attributes = attributes || [];
                 if (attributes.indexOf(idFieldName) < 0) {
                     attributes.push(idFieldName);
                 }
-                var url = baseUrl + "/api/data/" + getVersion() + "/" + entitySetName + "?$select=" + attributes.join(",");
-                var data = stringifyEntity(entity);
-                return $
-                    .ajax({
-                    url: url,
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    type: "POST",
-                    data: data,
-                    headers: {
-                        Prefer: "return=representation"
-                    }
-                })
-                    .then(function (data) {
-                    return toEntity(entity.type, attributes, data);
-                })
-                    .fail(function (response) {
-                    if (!response || !response.responseJSON || !response.responseJSON.error) {
-                        return;
-                    }
-                    if (logError) {
-                        Crm.Diagnostics.log.Error(response.responseJSON.error.message + " create " + url, response.responseJSON.error.innererror || response.responseJSON.error);
-                    }
+                var query = "?$select=" + attributes.join(",");
+                var data = sanitizeEntity(entity);
+                return new Promise(function (resolve, reject) {
+                    Xrm.WebApi.createRecord(entity.type, data)
+                        .then(function (entityType, id) {
+                        resolve({
+                            type: entityType,
+                            id: id
+                        });
+                    }, function (error) {
+                        if (logError) {
+                            Crm.Diagnostics.log.Error(error.message + " create " + entity.type, {
+                                message: error.message,
+                                description: "Code: " + error.errorCode,
+                                name: "WebApiError"
+                            });
+                        }
+                        reject(error);
+                    });
                 });
             }
             OData.createEntity = createEntity;
             function updateEntity(entity, entitySetName) {
                 Validation.ensureNotNullOrUndefined(entity, "entity");
                 Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
-                var baseUrl = getContext().getClientUrl();
-                var url = baseUrl + "/api/data/" + getVersion() + "/" + entitySetName + "(" + Crm.Core.parseIdentifier(entity.id) + ")";
-                var data = stringifyEntity(entity);
-                return $
-                    .ajax({
-                    url: url,
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    type: "PATCH",
-                    data: data
-                })
-                    .fail(function (response) {
-                    if (!response || !response.responseJSON || !response.responseJSON.error) {
-                        return;
-                    }
-                    Crm.Diagnostics.log.Error(response.responseJSON.error.message + " update " + url, response.responseJSON.error.innererror || response.responseJSON.error);
+                var data = sanitizeEntity(entity);
+                return new Promise(function (resolve, reject) {
+                    Xrm.WebApi.updateRecord(entity.type, entity.id, data)
+                        .then(function (entityType, id) {
+                        resolve({
+                            type: entityType,
+                            id: id
+                        });
+                    }, function (error) {
+                        Crm.Diagnostics.log.Error(error.message + " update " + entity.type + ":" + entity.id, {
+                            message: error.message,
+                            description: "Code: " + error.errorCode,
+                            name: "WebApiError"
+                        });
+                        reject(error);
+                    });
                 });
             }
             OData.updateEntity = updateEntity;
             // fetch
-            function fetch(entitySetName, fetchXml) {
-                var baseUrl = getContext().getClientUrl();
-                var url = baseUrl + "/api/data/" + getVersion() + "/" + entitySetName + "?fetchXml=" + encodeURIComponent(fetchXml);
-                return $.ajax({
-                    url: url,
-                    dataType: "json",
-                })
-                    .fail(function (response) {
-                    if (!response || !response.responseJSON || !response.responseJSON.error) {
-                        return;
-                    }
-                    Crm.Diagnostics.log.Error(response.responseJSON.error.message + " create " + url, response.responseJSON.error.innererror || response.responseJSON.error);
+            function fetch(entityName, entitySetName, fetchXml, pageSize) {
+                if (pageSize === void 0) { pageSize = 500; }
+                var query = "?fetchXml=" + encodeURIComponent(fetchXml);
+                return new Promise(function (resolve, reject) {
+                    Xrm.WebApi.retrieveMultipleRecords(entityName, query, pageSize)
+                        .then(function (response) {
+                        resolve(response);
+                    }, function (error) {
+                        Crm.Diagnostics.log.Error(error.message + " fetch " + entityName + ":" + query, {
+                            message: error.message,
+                            description: "Code: " + error.errorCode,
+                            name: "WebApiError"
+                        });
+                        reject(error);
+                    });
                 });
             }
             OData.fetch = fetch;
@@ -467,15 +525,15 @@ var Dynamics;
             ];
             function entityDefinitions(attributes) {
                 if (attributes === void 0) { attributes = entityDefinitionAttributes; }
-                var baseUrl = getContext().getClientUrl();
-                var url = baseUrl + "/api/data/" + getVersion() + "/EntityDefinitions?$select=" + attributes.join(",");
-                return $
-                    .ajax({
-                    url: url,
-                    dataType: "json"
-                })
-                    .then(function (data) {
-                    return !data ? [] : data.value;
+                var query = "?$select=" + attributes.join(",");
+                return new Promise(function (resolve, reject) {
+                    Xrm.WebApi.retrieveMultipleRecords("EntityDefinition", query, 500)
+                        .then(function (response) {
+                        resolve(response.entities);
+                    }, function (error) {
+                        console.error(error);
+                        reject(error);
+                    });
                 });
             }
             OData.entityDefinitions = entityDefinitions;
@@ -525,6 +583,9 @@ var MetadataBrower;
     var Config;
     (function (Config) {
         "use strict";
+        window["ENTITY_SET_NAMES"] = window["ENTITY_SET_NAMES"] || JSON.stringify({
+            "entitydefinition": "EntityDefinitions"
+        });
         Config.moduleName = "metadata-browser";
         function init() {
             angular.bootstrap(document, [
@@ -589,10 +650,10 @@ var MetadataBrower;
                 var defer = this._$q.defer();
                 Dynamics.Crm.OData
                     .entityDefinitions()
-                    .done(function (array) {
+                    .then(function (array) {
                     defer.resolve(array);
                 })
-                    .fail(function () {
+                    .catch(function () {
                     defer.reject();
                 });
                 return defer.promise;
@@ -601,7 +662,7 @@ var MetadataBrower;
                 var defer = this._$q.defer();
                 Dynamics.Crm.OData
                     .entityAttributesDefinition(entityDefinition.MetadataId)
-                    .done(function (array) {
+                    .then(function (array) {
                     defer.resolve(array);
                 })
                     .fail(function () {
@@ -687,7 +748,7 @@ var MetadataBrower;
                 this.vm.isBusy = true;
                 return this._dataService
                     .GetAttributes(this.vm.entity)
-                    .then((function (array) {
+                    .then(function (array) {
                     _this.vm.entityAttributes = array.sort(function (a1, a2) {
                         if (a1.LogicalName < a2.LogicalName) {
                             return -1;
@@ -698,7 +759,8 @@ var MetadataBrower;
                         return 0;
                     });
                     _this.showAttributes();
-                }).bind(this))
+                    return _this.vm.entityAttributes;
+                })
                     .finally(this.loadEntityMetadataCompleted.bind(this));
             };
             EntityDetails.prototype.loadEntityMetadataCompleted = function () {
@@ -889,7 +951,7 @@ var MetadataBrower;
                 this.total = 0;
                 this.isBusy = true;
                 this.dataService.GetEntities()
-                    .then((function (data) {
+                    .then(function (data) {
                     _this.entities = data.sort(function (e1, e2) {
                         if (e1.LogicalName < e2.LogicalName) {
                             return -1;
@@ -901,7 +963,6 @@ var MetadataBrower;
                     });
                     _this.showEntities();
                 })
-                    .bind(this))
                     .finally(this.loadEntitiesCompleted.bind(this));
             };
             EntityListController.prototype.loadEntitiesCompleted = function () {

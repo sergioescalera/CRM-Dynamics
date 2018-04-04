@@ -10,10 +10,17 @@ interface Xrm {
     Page: Page;
     Utility: Utility;
     Navigation: Navigation;
+    WebApi: WebApi;
 }
 
 interface Utility {
     getGlobalContext(): Context;
+    getEntityMetadata(entityName: string, attributes?: string[]): EntityMetadataPromise;
+    getEntitySetName(entityName: string): string;
+}
+
+interface EntityMetadataPromise {
+    then(successCallback: Function, errorCallback?: Function);
 }
 
 interface Navigation {
@@ -560,4 +567,66 @@ interface AutoCompleteCommand {
     id: any;
     label: string;
     action: () => void;
+}
+
+interface WebApi {
+
+    createRecord(entityLogicalName: string, data: any): WebApiPromise<(entityType: string, id: string) => void>;
+
+    deleteRecord(entityLogicalName: string, id: string): WebApiPromise<(entityType: string, id: string, name: string) => void>;
+
+    updateRecord(entityLogicalName: string, id: string, data: any): WebApiPromise<(entityType: string, id: string) => void>;
+
+    retrieveRecord(entityLogicalName: string, id: string, query?: string): WebApiPromise<(entity: any) => void>;
+
+    retrieveMultipleRecords(entityLogicalName: string, query?: string, maxPageSize?: number): WebApiPromise<(collection: WebApiRetrieveMultipleResponse) => void>;
+
+    execute(request: WebApiExecuteRequest): WebApiPromise<(response: WebApiExecuteResponse) => void>;
+}
+
+interface WebApiPromise<SuccessCallback> {
+    then(
+        successCallback: SuccessCallback,
+        errorCallback: (error: WebApiError) => void);
+}
+
+interface WebApiError {
+    errorCode: number;
+    message: string;
+}
+
+interface WebApiExecuteRequest {
+    getMetadata(): WebApiExecuteRequestMetadata;
+}
+
+interface WebApiExecuteRequestMetadata {
+    boundParameter?: string;
+    operationName?: string;
+    operationType?: number; // 0: Action, 1: Function, 2: CRUD
+    parameterTypes: WebApiExecuteRequestParameters;
+}
+
+interface WebApiExecuteRequestParameters {
+    [key: string]: WebApiExecuteRequestParameter;
+}
+
+interface WebApiExecuteRequestParameter {
+    enumProperties?;
+    structuralProperty: number;
+    typeName: string;
+}
+
+interface WebApiRetrieveMultipleResponse {
+    entities: any[];
+    nextLink: string;
+}
+
+interface WebApiExecuteResponse {
+    body?;
+    headers;
+    ok: boolean;
+    status: number;
+    statusText: string;
+    type: "" | "arraybuffer" | "blob" | "document" | "json" | "text";
+    url: string;
 }

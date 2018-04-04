@@ -72,8 +72,8 @@
             this.isBusy = true;
 
             this.dataService.GetEntities()
-                .then(((data: IEntityDefinition[]) => {
-
+                .then((data: IEntityDefinition[]) => {
+                    
                     this.entities = data.sort((e1: IEntityDefinition, e2: IEntityDefinition) => {
 
                         if (e1.LogicalName < e2.LogicalName) {
@@ -88,7 +88,6 @@
                     this.showEntities();
 
                 })
-                    .bind(this))
                 .finally(this.loadEntitiesCompleted.bind(this));
         }
 

@@ -42,7 +42,7 @@ var MetadataBrower;
                 this.total = 0;
                 this.isBusy = true;
                 this.dataService.GetEntities()
-                    .then((function (data) {
+                    .then(function (data) {
                     _this.entities = data.sort(function (e1, e2) {
                         if (e1.LogicalName < e2.LogicalName) {
                             return -1;
@@ -54,7 +54,6 @@ var MetadataBrower;
                     });
                     _this.showEntities();
                 })
-                    .bind(this))
                     .finally(this.loadEntitiesCompleted.bind(this));
             };
             EntityListController.prototype.loadEntitiesCompleted = function () {
