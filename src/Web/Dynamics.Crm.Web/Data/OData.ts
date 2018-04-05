@@ -313,7 +313,7 @@
         entityName: string,
         entitySetName: string,
         fetchXml: string,
-        pageSize: number = 500): Promise<any, WebApiError> {
+        pageSize: number = 500): Promise<WebApiRetrieveMultipleResponse, WebApiError> {
         
         let query = `?fetchXml=${encodeURIComponent(fetchXml)}`;
 

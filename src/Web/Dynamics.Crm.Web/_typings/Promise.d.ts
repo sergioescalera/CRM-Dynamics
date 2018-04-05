@@ -8,6 +8,6 @@
 
 interface Promise<TValue, TError> extends Function {
     catch(onRejected: (reason?: TError) => void): Promise<TValue, TError>;
-    then(onFulfilled: (value?: TValue) => void): Promise<TValue, TError>;
+    then<TMappedValue>(onFulfilled: (value?: TValue) => TMappedValue): Promise<TMappedValue, TError>;
     finally(onFinally: Function): Promise<TValue, TError>;
 }

@@ -182,7 +182,7 @@ declare interface ICrmOData {
         entityName: string,
         entitySetName: string,
         fetchXml: string,
-        pageSize?: number): Promise<any, WebApiError>;
+        pageSize?: number): Promise<WebApiRetrieveMultipleResponse, WebApiError>;
 }
 
 declare interface IEntity {
