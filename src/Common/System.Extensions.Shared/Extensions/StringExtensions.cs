@@ -33,5 +33,10 @@
         {
             return String.IsNullOrWhiteSpace(str);
         }
+
+        public static String Arrange(this String str, params Object[] args)
+        {
+            return String.Format(str, args);
+        }
     }
 }
