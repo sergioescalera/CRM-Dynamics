@@ -290,11 +290,11 @@ var Dynamics;
         var OData;
         (function (OData) {
             "use strict";
+            var FilterType;
             (function (FilterType) {
                 FilterType[FilterType["And"] = 1] = "And";
                 FilterType[FilterType["Or"] = 2] = "Or";
-            })(OData.FilterType || (OData.FilterType = {}));
-            var FilterType = OData.FilterType;
+            })(FilterType = OData.FilterType || (OData.FilterType = {}));
             function getContext() {
                 var context;
                 if (typeof Xrm !== "undefined" &&
@@ -642,7 +642,7 @@ var MetadataBrower;
     var Core;
     (function (Core) {
         "use strict";
-        var ODataService = (function () {
+        var ODataService = /** @class */ (function () {
             function ODataService($q) {
                 this._$q = $q;
             }

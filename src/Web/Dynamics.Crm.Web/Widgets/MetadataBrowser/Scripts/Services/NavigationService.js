@@ -3,7 +3,7 @@ var MetadataBrower;
     var Core;
     (function (Core) {
         "use strict";
-        var NavigationService = (function () {
+        var NavigationService = /** @class */ (function () {
             function NavigationService() {
                 this.EntityTabs = [];
             }

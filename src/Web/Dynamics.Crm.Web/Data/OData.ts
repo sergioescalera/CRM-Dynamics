@@ -118,7 +118,7 @@
         entitySetName: string,
         entityId: string,
         attributes: string[],
-        expand?: string[]): Promise<Core.IEntity, WebApiError> {
+        expand?: string[]): Promise<Core.IEntity> {
         
         Validation.ensureNotNullOrEmpty(entityName, "entityName");
         Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
@@ -159,7 +159,7 @@
         filterType: FilterType = null,
         orderBy: string[] = null,
         expand: string[] = null,
-        pageSize: number = 1000): Promise<Core.IEntity[], WebApiError> {
+        pageSize: number = 1000): Promise<Core.IEntity[]> {
 
         Validation.ensureNotNullOrEmpty(entityName, "entityName");
         Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
@@ -201,7 +201,7 @@
     export function deleteEntity(
         entityName: string,
         entitySetName: string,
-        entityId: string): Promise<IEntity, WebApiError> {
+        entityId: string): Promise<IEntity> {
 
         Validation.ensureNotNullOrEmpty(entityName, "entityName");
         Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
@@ -235,7 +235,7 @@
         entity: Core.IEntity,
         entitySetName: string,
         attributes: string[] = null,
-        logError = true): Promise<Core.IEntity, WebApiError> {
+        logError = true): Promise<Core.IEntity> {
 
         Validation.ensureNotNullOrUndefined(entity, "entity");
         Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
@@ -277,7 +277,7 @@
         });
     }
 
-    export function updateEntity(entity: Core.IEntity, entitySetName: string): Promise<Core.IEntity, WebApiError> {
+    export function updateEntity(entity: Core.IEntity, entitySetName: string): Promise<Core.IEntity> {
 
         Validation.ensureNotNullOrUndefined(entity, "entity");
         Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
@@ -313,7 +313,7 @@
         entityName: string,
         entitySetName: string,
         fetchXml: string,
-        pageSize: number = 500): Promise<WebApiRetrieveMultipleResponse, WebApiError> {
+        pageSize: number = 500): Promise<WebApiRetrieveMultipleResponse> {
         
         let query = `?fetchXml=${encodeURIComponent(fetchXml)}`;
 
@@ -348,7 +348,7 @@
     ];
 
     export function entityDefinitions(
-        attributes: string[] = entityDefinitionAttributes): Promise<IEntityDefinition[], WebApiError> {
+        attributes: string[] = entityDefinitionAttributes): Promise<IEntityDefinition[]> {
         
         let query = `?$select=${attributes.join(",")}`;
 

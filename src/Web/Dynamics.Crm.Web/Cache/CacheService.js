@@ -1,7 +1,7 @@
 var Caching;
 (function (Caching) {
     "use strict";
-    var CacheService = (function () {
+    var CacheService = /** @class */ (function () {
         function CacheService(storage) {
             if (storage === void 0) { storage = localStorage; }
             Validation.ensureNotNullOrUndefined(storage, "storage");

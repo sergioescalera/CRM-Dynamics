@@ -38,11 +38,11 @@ Clearing your browser's cache <u>(using Ctrl + F5)</u> may help solve the proble
 
             for (let i: number = 0; i < tasks.length; i++) {
 
-                let task: () => boolean = tasks[i];
+                let task: (() => boolean) | (() => void ) = tasks[i];
 
                 try {
 
-                    let result: boolean = task();
+                    let result: boolean | void = task();
 
                     results.push(result);
 
@@ -95,7 +95,7 @@ Clearing your browser's cache <u>(using Ctrl + F5)</u> may help solve the proble
         }
     }
 
-    function getTaskName(task: () => boolean): string {
+    function getTaskName(task: Function): string {
 
         if (typeof task !== "function") {
             return "";

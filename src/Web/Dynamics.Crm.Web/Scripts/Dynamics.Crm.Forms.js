@@ -151,10 +151,9 @@ var Dynamics;
     var Crm;
     (function (Crm) {
         "use strict";
-        Crm.componentName = function (prefix, name) { return (prefix + "_" + name); };
+        Crm.componentName = function (prefix, name) { return prefix + "_" + name; };
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-var Dynamics;
 (function (Dynamics) {
     var Crm;
     (function (Crm) {
@@ -166,14 +165,13 @@ var Dynamics;
         })(Publishers = Crm.Publishers || (Crm.Publishers = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-var Dynamics;
 (function (Dynamics) {
     var Crm;
     (function (Crm) {
         var Forms;
         (function (Forms) {
             "use strict";
-            var FormNotificationType = (function () {
+            var FormNotificationType = /** @class */ (function () {
                 function FormNotificationType() {
                 }
                 FormNotificationType.Error = "ERROR";
@@ -182,7 +180,7 @@ var Dynamics;
                 return FormNotificationType;
             }());
             Forms.FormNotificationType = FormNotificationType;
-            var ClientType = (function () {
+            var ClientType = /** @class */ (function () {
                 function ClientType() {
                 }
                 ClientType.Browser = "Web";
@@ -191,7 +189,7 @@ var Dynamics;
                 return ClientType;
             }());
             Forms.ClientType = ClientType;
-            var AttributeRequiredLevel = (function () {
+            var AttributeRequiredLevel = /** @class */ (function () {
                 function AttributeRequiredLevel() {
                 }
                 AttributeRequiredLevel.None = "none";
@@ -319,7 +317,7 @@ var Dynamics;
             "use strict";
             Diagnostics.debug = true;
             Diagnostics.trace = true;
-            var ConsoleLogger = (function () {
+            var ConsoleLogger = /** @class */ (function () {
                 function ConsoleLogger(prefix) {
                     this._prefix = prefix;
                 }
@@ -338,7 +336,7 @@ var Dynamics;
                 };
                 return ConsoleLogger;
             }());
-            var LogEntryLogger = (function () {
+            var LogEntryLogger = /** @class */ (function () {
                 function LogEntryLogger(prefix) {
                     this._prefix = prefix;
                 }
@@ -372,7 +370,7 @@ var Dynamics;
             function printArguments() {
                 var args = [];
                 for (var _i = 0; _i < arguments.length; _i++) {
-                    args[_i - 0] = arguments[_i];
+                    args[_i] = arguments[_i];
                 }
                 console.log("Function " + arguments[0] + " called with arguments: {");
                 for (var i = 1; i < arguments.length; i++) {
@@ -535,6 +533,7 @@ var Dynamics;
         var Forms;
         (function (Forms) {
             "use strict";
+            var FormType;
             (function (FormType) {
                 FormType[FormType["Undefined"] = 0] = "Undefined";
                 FormType[FormType["Create"] = 1] = "Create";
@@ -544,25 +543,24 @@ var Dynamics;
                 FormType[FormType["QuickCreate"] = 5] = "QuickCreate";
                 FormType[FormType["BulkEdit"] = 6] = "BulkEdit";
                 FormType[FormType["ReadOptimized"] = 11] = "ReadOptimized";
-            })(Forms.FormType || (Forms.FormType = {}));
-            var FormType = Forms.FormType;
+            })(FormType = Forms.FormType || (Forms.FormType = {}));
+            var FormFactor;
             (function (FormFactor) {
                 FormFactor[FormFactor["Unknown"] = 0] = "Unknown";
                 FormFactor[FormFactor["Desktop"] = 1] = "Desktop";
                 FormFactor[FormFactor["Tablet"] = 2] = "Tablet";
                 FormFactor[FormFactor["Phone"] = 3] = "Phone";
-            })(Forms.FormFactor || (Forms.FormFactor = {}));
-            var FormFactor = Forms.FormFactor;
+            })(FormFactor = Forms.FormFactor || (Forms.FormFactor = {}));
         })(Forms = Crm.Forms || (Crm.Forms = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-var Dynamics;
 (function (Dynamics) {
     var Crm;
     (function (Crm) {
         var Core;
         (function (Core) {
             "use strict";
+            var AutoNumberingRuleType;
             (function (AutoNumberingRuleType) {
                 AutoNumberingRuleType[AutoNumberingRuleType["Global"] = 0] = "Global";
                 AutoNumberingRuleType[AutoNumberingRuleType["GlobalPerDay"] = 3] = "GlobalPerDay";
@@ -570,23 +568,22 @@ var Dynamics;
                 AutoNumberingRuleType[AutoNumberingRuleType["Parented"] = 2] = "Parented";
                 AutoNumberingRuleType[AutoNumberingRuleType["ParentedPerDay"] = 5] = "ParentedPerDay";
                 AutoNumberingRuleType[AutoNumberingRuleType["ParentedPerYear"] = 4] = "ParentedPerYear";
-            })(Core.AutoNumberingRuleType || (Core.AutoNumberingRuleType = {}));
-            var AutoNumberingRuleType = Core.AutoNumberingRuleType;
+            })(AutoNumberingRuleType = Core.AutoNumberingRuleType || (Core.AutoNumberingRuleType = {}));
+            var GlobalSettingType;
             (function (GlobalSettingType) {
                 GlobalSettingType[GlobalSettingType["String"] = 0] = "String";
                 GlobalSettingType[GlobalSettingType["Int"] = 1] = "Int";
                 GlobalSettingType[GlobalSettingType["Decimal"] = 2] = "Decimal";
                 GlobalSettingType[GlobalSettingType["Boolean"] = 3] = "Boolean";
                 GlobalSettingType[GlobalSettingType["Reference"] = 4] = "Reference";
-            })(Core.GlobalSettingType || (Core.GlobalSettingType = {}));
-            var GlobalSettingType = Core.GlobalSettingType;
+            })(GlobalSettingType = Core.GlobalSettingType || (Core.GlobalSettingType = {}));
+            var LogEntryType;
             (function (LogEntryType) {
                 LogEntryType[LogEntryType["Trace"] = 0] = "Trace";
                 LogEntryType[LogEntryType["Warning"] = 1] = "Warning";
                 LogEntryType[LogEntryType["Error"] = 2] = "Error";
                 LogEntryType[LogEntryType["Info"] = 3] = "Info";
-            })(Core.LogEntryType || (Core.LogEntryType = {}));
-            var LogEntryType = Core.LogEntryType;
+            })(LogEntryType = Core.LogEntryType || (Core.LogEntryType = {}));
         })(Core = Crm.Core || (Crm.Core = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
@@ -1169,7 +1166,6 @@ var Validation;
     }
     Validation.ensureNumberInRange = ensureNumberInRange;
 })(Validation || (Validation = {}));
-var Validation;
 (function (Validation) {
     var Strings;
     (function (Strings) {
@@ -1202,7 +1198,7 @@ var Validation;
 var Caching;
 (function (Caching) {
     "use strict";
-    var CacheService = (function () {
+    var CacheService = /** @class */ (function () {
         function CacheService(storage) {
             if (storage === void 0) { storage = localStorage; }
             Validation.ensureNotNullOrUndefined(storage, "storage");
@@ -1290,11 +1286,11 @@ var Dynamics;
         var OData;
         (function (OData) {
             "use strict";
+            var FilterType;
             (function (FilterType) {
                 FilterType[FilterType["And"] = 1] = "And";
                 FilterType[FilterType["Or"] = 2] = "Or";
-            })(OData.FilterType || (OData.FilterType = {}));
-            var FilterType = OData.FilterType;
+            })(FilterType = OData.FilterType || (OData.FilterType = {}));
             function getContext() {
                 var context;
                 if (typeof Xrm !== "undefined" &&
@@ -1585,7 +1581,7 @@ var Dynamics;
         var Data;
         (function (Data) {
             "use strict";
-            var LogEntryRepository = (function () {
+            var LogEntryRepository = /** @class */ (function () {
                 function LogEntryRepository(prefix) {
                     this._prefix = prefix;
                 }
@@ -1595,7 +1591,7 @@ var Dynamics;
                 return LogEntryRepository;
             }());
             Data.LogEntryRepository = LogEntryRepository;
-            var UnitOfWork = (function () {
+            var UnitOfWork = /** @class */ (function () {
                 function UnitOfWork() {
                 }
                 UnitOfWork.prototype.GetLogEntryRepository = function (prefix) {
@@ -1608,7 +1604,6 @@ var Dynamics;
         })(Data = Crm.Data || (Crm.Data = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-var Dynamics;
 (function (Dynamics) {
     var Crm;
     (function (Crm) {
@@ -1617,7 +1612,7 @@ var Dynamics;
             var Schema;
             (function (Schema) {
                 "use strict";
-                var LogEntryEntity = (function () {
+                var LogEntryEntity = /** @class */ (function () {
                     function LogEntryEntity() {
                     }
                     LogEntryEntity.type = function (prefix) { return Crm.componentName(prefix, "logentry"); };
@@ -1643,7 +1638,7 @@ var Resources;
     var nullOrEmptyArgumentMessageFormat = "Argument cannot be null or empty string '{paramName}'.";
     var invalidTypeMessageFormat = "Invalid argument type '{actualType}' expecting type '{expectedType}'.";
     var outOfRangeMessageFormat = "Argument '{paramName}' was out of the range of valid values.";
-    var Strings = (function () {
+    var Strings = /** @class */ (function () {
         function Strings() {
         }
         Strings.NullArgumentMessageFormat = function (paramName) { return nullArgumentMessageFormat

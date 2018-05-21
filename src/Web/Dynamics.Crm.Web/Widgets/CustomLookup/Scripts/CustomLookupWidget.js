@@ -1,9 +1,7 @@
 var CustomLookupWidget;
 (function (CustomLookupWidget) {
     "use strict";
-    var urlTemplate = function (config) {
-        return ("/_controls/lookup/lookupinfo.aspx?LookupStyle=" + config.style + "&ShowNewButton=" + (config.new ? 1 : 0) + "&browse=false&dType=1&mrsh=false&objecttypes=" + (config.types).join(","));
-    };
+    var urlTemplate = function (config) { return "/_controls/lookup/lookupinfo.aspx?LookupStyle=" + config.style + "&ShowNewButton=" + (config.new ? 1 : 0) + "&browse=false&dType=1&mrsh=false&objecttypes=" + (config.types).join(","); };
     var xrm = parent.Xrm;
     var mscrm = parent.Mscrm;
     var searchLink;

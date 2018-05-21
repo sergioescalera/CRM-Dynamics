@@ -17,11 +17,10 @@
 
             let deferred: JQueryDeferred<void> = this._window.$.Deferred<void>();
 
-            Xrm.Navigation.openAlertDialog({
-                text: this._message
-            }, () => {
-                deferred.resolve();
-            });
+            Xrm.Navigation
+                .openAlertDialog({
+                    text: this._message
+                }).then(() => deferred.resolve());
 
             return deferred;
         }

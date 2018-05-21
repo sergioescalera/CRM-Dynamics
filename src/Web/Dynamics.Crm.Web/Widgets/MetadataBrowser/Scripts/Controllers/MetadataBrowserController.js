@@ -3,7 +3,7 @@ var MetadataBrower;
     var Controllers;
     (function (Controllers) {
         "use strict";
-        var MetadataBrowserController = (function () {
+        var MetadataBrowserController = /** @class */ (function () {
             function MetadataBrowserController(navigationService) {
                 var vm = this;
                 vm.navigationService = navigationService;

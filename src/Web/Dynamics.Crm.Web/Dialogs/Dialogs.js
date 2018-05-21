@@ -5,12 +5,12 @@ var Dynamics;
         var Dialogs;
         (function (Dialogs) {
             "use strict";
+            var DialogType;
             (function (DialogType) {
                 DialogType[DialogType["Alert"] = 0] = "Alert";
                 DialogType[DialogType["Confirm"] = 1] = "Confirm";
                 DialogType[DialogType["Custom"] = 2] = "Custom";
-            })(Dialogs.DialogType || (Dialogs.DialogType = {}));
-            var DialogType = Dialogs.DialogType;
+            })(DialogType = Dialogs.DialogType || (Dialogs.DialogType = {}));
             var provider;
             function getProvider() {
                 if (!provider) {

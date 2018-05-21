@@ -5,14 +5,14 @@ var Dynamics;
         var Dialogs;
         (function (Dialogs) {
             "use strict";
-            var BootstrapDialogTemplates = (function () {
+            var BootstrapDialogTemplates = /** @class */ (function () {
                 function BootstrapDialogTemplates() {
                 }
-                BootstrapDialogTemplates.alert = function (message, title) { return ("\n            <div class='modal fade' tabindex='-1' role='dialog'>\n            <div class='modal-dialog' role='document'>\n               <div class='modal-content'>\n                   <div class='modal-header'>\n                       <button type='button' class='close' data-dismiss='modal' aria-label='Close'>\n                           <span aria-hidden='true' >&times;</span></button>\n                       <h4 class='modal-title'>" + title + "</h4>\n                   </div>\n                   <div class='modal-body'>" + message + "</div>\n                   <div class='modal-footer'>\n                       <button type='button' class='btn btn-primary' data-dismiss='modal'>OK</button>\n                   </div>\n               </div>\n            </div>\n            </div>"); };
-                BootstrapDialogTemplates.confirm = function (message, title) { return ("\n            <div class='modal fade' tabindex='-1' role='dialog'>\n            <div class='modal-dialog' role='document'>\n               <div class='modal-content'>\n                   <div class='modal-header'>\n                       <button type='button' class='close' data-dismiss='modal' aria-label='Close'>\n                           <span aria-hidden='true' >&times;</span></button>\n                       <h4 class='modal-title'>" + title + "</h4>\n                   </div>\n                   <div class='modal-body'>" + message + "</div>\n                   <div class='modal-footer'>\n                       <button type='button' class='btn btn-primary' data-dismiss='modal'>OK</button>\n                       <button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>\n                   </div>\n               </div>\n            </div>\n            </div>"); };
+                BootstrapDialogTemplates.alert = function (message, title) { return "\n            <div class='modal fade' tabindex='-1' role='dialog'>\n            <div class='modal-dialog' role='document'>\n               <div class='modal-content'>\n                   <div class='modal-header'>\n                       <button type='button' class='close' data-dismiss='modal' aria-label='Close'>\n                           <span aria-hidden='true' >&times;</span></button>\n                       <h4 class='modal-title'>" + title + "</h4>\n                   </div>\n                   <div class='modal-body'>" + message + "</div>\n                   <div class='modal-footer'>\n                       <button type='button' class='btn btn-primary' data-dismiss='modal'>OK</button>\n                   </div>\n               </div>\n            </div>\n            </div>"; };
+                BootstrapDialogTemplates.confirm = function (message, title) { return "\n            <div class='modal fade' tabindex='-1' role='dialog'>\n            <div class='modal-dialog' role='document'>\n               <div class='modal-content'>\n                   <div class='modal-header'>\n                       <button type='button' class='close' data-dismiss='modal' aria-label='Close'>\n                           <span aria-hidden='true' >&times;</span></button>\n                       <h4 class='modal-title'>" + title + "</h4>\n                   </div>\n                   <div class='modal-body'>" + message + "</div>\n                   <div class='modal-footer'>\n                       <button type='button' class='btn btn-primary' data-dismiss='modal'>OK</button>\n                       <button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>\n                   </div>\n               </div>\n            </div>\n            </div>"; };
                 return BootstrapDialogTemplates;
             }());
-            var BootstrapDialog = (function () {
+            var BootstrapDialog = /** @class */ (function () {
                 function BootstrapDialog(window, content, init) {
                     this._content = content;
                     this._window = window;
@@ -67,7 +67,7 @@ var Dynamics;
                 return BootstrapDialog;
             }());
             Dialogs.BootstrapDialog = BootstrapDialog;
-            var BootstrapDialogProvider = (function () {
+            var BootstrapDialogProvider = /** @class */ (function () {
                 function BootstrapDialogProvider(window, prefix) {
                     this._window = window;
                     this.Init(prefix);

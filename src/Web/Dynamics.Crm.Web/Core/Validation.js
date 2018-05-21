@@ -35,7 +35,6 @@ var Validation;
     }
     Validation.ensureNumberInRange = ensureNumberInRange;
 })(Validation || (Validation = {}));
-var Validation;
 (function (Validation) {
     var Strings;
     (function (Strings) {

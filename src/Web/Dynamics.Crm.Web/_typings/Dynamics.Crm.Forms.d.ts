@@ -150,23 +150,23 @@ declare interface ICrmOData {
     createEntity(
         entity: IEntity,
         entitySetName: string,
-        attributes?: string[]): Promise<IEntity, WebApiError>;
+        attributes?: string[]): Promise<IEntity>;
 
     deleteEntity(
         entityName: string,
         entitySetName: string,
-        entityId: string): Promise<IEntity, WebApiError>;
+        entityId: string): Promise<IEntity>;
 
     updateEntity(
         entity: IEntity,
-        entitySetName: string): Promise<IEntity, WebApiError>;
+        entitySetName: string): Promise<IEntity>;
 
     retrieve(
         entityName: string,
         entitySetName: string,
         entityId: string,
         attributes: string[],
-        expand?: string[]): Promise<IEntity, WebApiError>;
+        expand?: string[]): Promise<IEntity>;
 
     retrieveMultiple(
         entityName: string,
@@ -176,13 +176,13 @@ declare interface ICrmOData {
         filterType?: number,
         orderBy?: string[],
         expand?: string[],
-        pageSize?: number): Promise<IEntity[], WebApiError>;
+        pageSize?: number): Promise<IEntity[]>;
 
     fetch(
         entityName: string,
         entitySetName: string,
         fetchXml: string,
-        pageSize?: number): Promise<WebApiRetrieveMultipleResponse, WebApiError>;
+        pageSize?: number): Promise<WebApiRetrieveMultipleResponse>;
 }
 
 declare interface IEntity {

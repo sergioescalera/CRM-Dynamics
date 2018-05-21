@@ -2,7 +2,7 @@ var Notifications;
 (function (Notifications) {
     "use strict";
     var $notificationWrapper;
-    var BoostrapAlert = (function () {
+    var BoostrapAlert = /** @class */ (function () {
         function BoostrapAlert() {
         }
         BoostrapAlert.prototype.init = function () {

@@ -1,7 +1,7 @@
 var Notifications;
 (function (Notifications) {
     "use strict";
-    var ToastrNotificationService = (function () {
+    var ToastrNotificationService = /** @class */ (function () {
         function ToastrNotificationService() {
         }
         ToastrNotificationService.prototype.init = function () {

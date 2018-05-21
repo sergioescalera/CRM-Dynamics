@@ -30,7 +30,7 @@
 
         GetAttributes(entityDefinition: IEntityDefinition): ng.IPromise<IAttributeDefinition[]> {
 
-            var defer: ng.IDeferred<IEntityDefinition> = this._$q.defer<IEntityDefinition>();
+            var defer: ng.IDeferred<IAttributeDefinition[]> = this._$q.defer<IAttributeDefinition[]>();
 
             Dynamics.Crm.OData
                 .entityAttributesDefinition(entityDefinition.MetadataId)

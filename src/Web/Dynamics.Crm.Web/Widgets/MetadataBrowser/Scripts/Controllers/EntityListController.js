@@ -3,7 +3,7 @@ var MetadataBrower;
     var Controllers;
     (function (Controllers) {
         "use strict";
-        var EntityListController = (function () {
+        var EntityListController = /** @class */ (function () {
             function EntityListController($scope, navigationService, dataService) {
                 this.advancedView = false;
                 this.currentPage = 1;

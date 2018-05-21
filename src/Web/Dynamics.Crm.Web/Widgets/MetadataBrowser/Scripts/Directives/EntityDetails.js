@@ -13,7 +13,7 @@ var MetadataBrower;
                 templateUrl: "templates/entity_details.html"
             };
         }
-        var EntityDetails = (function () {
+        var EntityDetails = /** @class */ (function () {
             function EntityDetails(scope, dataService) {
                 this._dataService = dataService;
                 scope.vm = {

@@ -1,7 +1,7 @@
 var Notifications;
 (function (Notifications) {
     "use strict";
-    var DefaultNotifications = (function () {
+    var DefaultNotifications = /** @class */ (function () {
         function DefaultNotifications() {
         }
         DefaultNotifications.prototype.init = function () {

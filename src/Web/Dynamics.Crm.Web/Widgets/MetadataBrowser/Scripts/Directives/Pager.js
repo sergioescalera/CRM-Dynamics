@@ -15,7 +15,7 @@ var MetadataBrower;
                 template: "<span class=\"pager\">\n    <span ng-bind=\"currentPage\"></span> of <span ng-bind=\"pages\"></span>\n    <md-button ng-click=\"prev()\">Prev</md-button>\n    <md-button ng-click=\"next()\">Next</md-button>\n</span>"
             };
         }
-        var PagerController = (function () {
+        var PagerController = /** @class */ (function () {
             function PagerController(scope) {
                 this._scope = scope;
                 this._scope.$watch("total", this.updatePages.bind(this));

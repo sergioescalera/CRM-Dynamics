@@ -1,7 +1,7 @@
 var Notifications;
 (function (Notifications) {
     "use strict";
-    var WebNotificationService = (function () {
+    var WebNotificationService = /** @class */ (function () {
         function WebNotificationService() {
         }
         WebNotificationService.prototype.init = function () {
@@ -37,9 +37,7 @@ var Notifications;
         WebNotificationService.prototype.test = function () {
             try {
                 return _.isFunction(Notification)
-                    && _.isString(Notification.permission)
-                    && _.isFunction(Notification.requestPermission)
-                    && Notification.permission !== "denied";
+                    && _.isFunction(Notification.requestPermission);
             }
             catch (e) {
                 console.warn(e);

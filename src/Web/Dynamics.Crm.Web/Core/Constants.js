@@ -3,10 +3,9 @@ var Dynamics;
     var Crm;
     (function (Crm) {
         "use strict";
-        Crm.componentName = function (prefix, name) { return (prefix + "_" + name); };
+        Crm.componentName = function (prefix, name) { return prefix + "_" + name; };
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-var Dynamics;
 (function (Dynamics) {
     var Crm;
     (function (Crm) {
@@ -18,14 +17,13 @@ var Dynamics;
         })(Publishers = Crm.Publishers || (Crm.Publishers = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-var Dynamics;
 (function (Dynamics) {
     var Crm;
     (function (Crm) {
         var Forms;
         (function (Forms) {
             "use strict";
-            var FormNotificationType = (function () {
+            var FormNotificationType = /** @class */ (function () {
                 function FormNotificationType() {
                 }
                 FormNotificationType.Error = "ERROR";
@@ -34,7 +32,7 @@ var Dynamics;
                 return FormNotificationType;
             }());
             Forms.FormNotificationType = FormNotificationType;
-            var ClientType = (function () {
+            var ClientType = /** @class */ (function () {
                 function ClientType() {
                 }
                 ClientType.Browser = "Web";
@@ -43,7 +41,7 @@ var Dynamics;
                 return ClientType;
             }());
             Forms.ClientType = ClientType;
-            var AttributeRequiredLevel = (function () {
+            var AttributeRequiredLevel = /** @class */ (function () {
                 function AttributeRequiredLevel() {
                 }
                 AttributeRequiredLevel.None = "none";

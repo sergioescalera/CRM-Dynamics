@@ -5,7 +5,7 @@ var Dynamics;
         var Data;
         (function (Data) {
             "use strict";
-            var LogEntryRepository = (function () {
+            var LogEntryRepository = /** @class */ (function () {
                 function LogEntryRepository(prefix) {
                     this._prefix = prefix;
                 }
@@ -15,7 +15,7 @@ var Dynamics;
                 return LogEntryRepository;
             }());
             Data.LogEntryRepository = LogEntryRepository;
-            var UnitOfWork = (function () {
+            var UnitOfWork = /** @class */ (function () {
                 function UnitOfWork() {
                 }
                 UnitOfWork.prototype.GetLogEntryRepository = function (prefix) {
@@ -28,7 +28,6 @@ var Dynamics;
         })(Data = Crm.Data || (Crm.Data = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-var Dynamics;
 (function (Dynamics) {
     var Crm;
     (function (Crm) {
@@ -37,7 +36,7 @@ var Dynamics;
             var Schema;
             (function (Schema) {
                 "use strict";
-                var LogEntryEntity = (function () {
+                var LogEntryEntity = /** @class */ (function () {
                     function LogEntryEntity() {
                     }
                     LogEntryEntity.type = function (prefix) { return Crm.componentName(prefix, "logentry"); };

@@ -48,9 +48,7 @@
 
             try {
                 return _.isFunction(Notification)
-                    && _.isString(Notification.permission)
                     && _.isFunction(Notification.requestPermission)
-                    && Notification.permission !== "denied";
             } catch (e) {
                 console.warn(e);
                 return false;

@@ -5,18 +5,17 @@ var Dynamics;
         var Dialogs;
         (function (Dialogs) {
             "use strict";
-            var CrmAlertDialog = (function () {
+            var CrmAlertDialog = /** @class */ (function () {
                 function CrmAlertDialog(window, message) {
                     this._window = window;
                     this._message = message;
                 }
                 CrmAlertDialog.prototype.Show = function () {
                     var deferred = this._window.$.Deferred();
-                    Xrm.Navigation.openAlertDialog({
+                    Xrm.Navigation
+                        .openAlertDialog({
                         text: this._message
-                    }, function () {
-                        deferred.resolve();
-                    });
+                    }).then(function () { return deferred.resolve(); });
                     return deferred;
                 };
                 CrmAlertDialog.prototype.Destroy = function () {
@@ -24,7 +23,7 @@ var Dynamics;
                 return CrmAlertDialog;
             }());
             Dialogs.CrmAlertDialog = CrmAlertDialog;
-            var CrmConfirmDialog = (function () {
+            var CrmConfirmDialog = /** @class */ (function () {
                 function CrmConfirmDialog(window, message, title) {
                     this._window = window;
                     this._message = message;
@@ -47,7 +46,7 @@ var Dynamics;
                 return CrmConfirmDialog;
             }());
             Dialogs.CrmConfirmDialog = CrmConfirmDialog;
-            var CrmDialogProvider = (function () {
+            var CrmDialogProvider = /** @class */ (function () {
                 function CrmDialogProvider(window) {
                     this._window = window;
                 }

@@ -3,7 +3,7 @@ var MetadataBrower;
     var Core;
     (function (Core) {
         "use strict";
-        var ODataService = (function () {
+        var ODataService = /** @class */ (function () {
             function ODataService($q) {
                 this._$q = $q;
             }

@@ -1,7 +1,7 @@
 var Notifications;
 (function (Notifications) {
     "use strict";
-    var CrmFormNotificationService = (function () {
+    var CrmFormNotificationService = /** @class */ (function () {
         function CrmFormNotificationService() {
         }
         CrmFormNotificationService.prototype.hide = function (id) {

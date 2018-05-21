@@ -7,7 +7,7 @@ var Dynamics;
             "use strict";
             Diagnostics.debug = true;
             Diagnostics.trace = true;
-            var ConsoleLogger = (function () {
+            var ConsoleLogger = /** @class */ (function () {
                 function ConsoleLogger(prefix) {
                     this._prefix = prefix;
                 }
@@ -26,7 +26,7 @@ var Dynamics;
                 };
                 return ConsoleLogger;
             }());
-            var LogEntryLogger = (function () {
+            var LogEntryLogger = /** @class */ (function () {
                 function LogEntryLogger(prefix) {
                     this._prefix = prefix;
                 }
@@ -60,7 +60,7 @@ var Dynamics;
             function printArguments() {
                 var args = [];
                 for (var _i = 0; _i < arguments.length; _i++) {
-                    args[_i - 0] = arguments[_i];
+                    args[_i] = arguments[_i];
                 }
                 console.log("Function " + arguments[0] + " called with arguments: {");
                 for (var i = 1; i < arguments.length; i++) {

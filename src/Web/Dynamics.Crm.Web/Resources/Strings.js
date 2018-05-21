@@ -5,7 +5,7 @@ var Resources;
     var nullOrEmptyArgumentMessageFormat = "Argument cannot be null or empty string '{paramName}'.";
     var invalidTypeMessageFormat = "Invalid argument type '{actualType}' expecting type '{expectedType}'.";
     var outOfRangeMessageFormat = "Argument '{paramName}' was out of the range of valid values.";
-    var Strings = (function () {
+    var Strings = /** @class */ (function () {
         function Strings() {
         }
         Strings.NullArgumentMessageFormat = function (paramName) { return nullArgumentMessageFormat
