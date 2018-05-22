@@ -1,4 +1,5 @@
-﻿using Dynamics.Crm.Interfaces;
+﻿using Dynamics.Crm.Extensions;
+using Dynamics.Crm.Interfaces;
 using Dynamics.Crm.Models;
 using Microsoft.Xrm.Sdk.Client;
 using System;
@@ -31,26 +32,22 @@ namespace Dynamics.Crm.Data
         {
             this.EnsureNotEmpty(templateId);
 
-            var query = from o in Context.CreateQuery(EntityName)
-                        where o.GetAttributeValue<Guid>(EmailTemplateEntity.IdFieldName) == templateId
-                        select new
-                        {
-                            Id = o.GetAttributeValue<Guid>(EmailTemplateEntity.IdFieldName),
-                            Body = o.GetAttributeValue<String>(EmailTemplateEntity.BodyFieldName),
-                            Description = o.GetAttributeValue<String>(EmailTemplateEntity.DescriptionFieldName),
-                            Subject = o.GetAttributeValue<String>(EmailTemplateEntity.SubjectFieldName),
-                            Title = o.GetAttributeValue<String>(EmailTemplateEntity.TitleFieldName)
-                        };
-
-            var array = query.ToArray();
-
-            return array.Empty() ? null : new EmailTemplate
+            var entity = Service.Retrieve(
+                EntityName,
+                templateId,
+                EmailTemplateEntity.IdFieldName,
+                EmailTemplateEntity.BodyFieldName,
+                EmailTemplateEntity.DescriptionFieldName,
+                EmailTemplateEntity.SubjectFieldName,
+                EmailTemplateEntity.TitleFieldName);
+            
+            return entity == null ? null : new EmailTemplate
             {
-                Body = array[0].Body,
-                Description = array[0].Description,
-                Id = array[0].Id,
-                Subject = array[0].Subject,
-                Title = array[0].Title
+                Id = entity.Id,
+                Body = entity.GetAttributeValue<String>(EmailTemplateEntity.BodyFieldName),
+                Description = entity.GetAttributeValue<String>(EmailTemplateEntity.DescriptionFieldName),
+                Subject = entity.GetAttributeValue<String>(EmailTemplateEntity.SubjectFieldName),
+                Title = entity.GetAttributeValue<String>(EmailTemplateEntity.TitleFieldName)
             };
         }
     }

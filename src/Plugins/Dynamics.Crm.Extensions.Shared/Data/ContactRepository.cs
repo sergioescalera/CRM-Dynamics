@@ -32,33 +32,29 @@ namespace Dynamics.Crm.Data
 
         public virtual Contact GetById(Guid contactId)
         {
-            var query = from o in Context.CreateQuery(EntityName)
-                        where o.GetAttributeValue<Guid>(ContactEntity.IdFieldName) == contactId
-                        select new
-                        {
-                            Id = o.GetAttributeValue<Guid>(ContactEntity.IdFieldName),
-                            FullName = o.GetAttributeValue<String>(ContactEntity.FullNameFieldName),
-                            ParentCustomer = o.GetAttributeValue<EntityReference>(ContactEntity.ParentCustomerFieldName),
-                            Email = o.GetAttributeValue<String>(ContactEntity.EmailFieldName),
-                            MobilePhone = o.GetAttributeValue<String>(ContactEntity.MobilePhoneFieldName),
-                            Phone = o.GetAttributeValue<String>(ContactEntity.PhoneFieldName),
-                            State = o.GetAttributeValue<OptionSetValue>(Common.StateFieldName),
-                            Status = o.GetAttributeValue<OptionSetValue>(Common.StatusFieldName)
-                        };
-
-            var array = query.ToArray();
-
-            return array.Any() ? new Contact
+            var entity = Service.Retrieve(
+                EntityName,
+                contactId,
+                ContactEntity.IdFieldName,
+                ContactEntity.FullNameFieldName,
+                ContactEntity.ParentCustomerFieldName,
+                ContactEntity.EmailFieldName,
+                ContactEntity.MobilePhoneFieldName,
+                ContactEntity.PhoneFieldName,
+                Common.StateFieldName,
+                Common.StatusFieldName);
+            
+            return entity == null ? null : new Contact
             {
-                Id = array[0].Id,
-                FullName = array[0].FullName,
-                ParentCustomer = array[0].ParentCustomer,
-                Email = array[0].Email,
-                MobilePhone = array[0].MobilePhone,
-                Phone = array[0].Phone,
-                State = array[0].State.ToEnum<StateCode>().Value,
-                Status = array[0].Status.ToEnum<StatusCode>().Value
-            } : null;
+                Id = entity.Id,
+                FullName = entity.GetAttributeValue<String>(ContactEntity.FullNameFieldName),
+                ParentCustomer = entity.GetAttributeValue<EntityReference>(ContactEntity.ParentCustomerFieldName),
+                Email = entity.GetAttributeValue<String>(ContactEntity.EmailFieldName),
+                MobilePhone = entity.GetAttributeValue<String>(ContactEntity.MobilePhoneFieldName),
+                Phone = entity.GetAttributeValue<String>(ContactEntity.PhoneFieldName),
+                State = entity.GetAttributeValue<OptionSetValue>(Common.StateFieldName).ToEnum<StateCode>().Value,
+                Status = entity.GetAttributeValue<OptionSetValue>(Common.StatusFieldName).ToEnum<StatusCode>().Value
+            };
         }
 
         public virtual IEnumerable<Contact> FindByNameAndEmail(String name, String email)

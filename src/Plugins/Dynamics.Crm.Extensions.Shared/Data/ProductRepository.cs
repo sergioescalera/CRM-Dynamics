@@ -1,4 +1,5 @@
-﻿using Dynamics.Crm.Interfaces;
+﻿using Dynamics.Crm.Extensions;
+using Dynamics.Crm.Interfaces;
 using Dynamics.Crm.Models;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
@@ -32,28 +33,21 @@ namespace Dynamics.Crm.Data
         {
             this.EnsureNotEmpty(productId);
 
-            var query = from o in Context.CreateQuery(EntityName)
-                        where o.GetAttributeValue<Guid>(ProductEntity.IdFieldName) == productId
-                        select new
-                        {
-                            Id = o.GetAttributeValue<Guid>(ProductEntity.IdFieldName),
-                            Name = o.GetAttributeValue<String>(Common.NameFieldName),
-                            Number = o.GetAttributeValue<String>(ProductEntity.NumberFieldName),
-                            UnitGroup = o.GetAttributeValue<EntityReference>(ProductEntity.UnitGroupFieldName),
-                            DefaultUnit = o.GetAttributeValue<EntityReference>(ProductEntity.DefaultUnitFieldName)
-                        };
-
-            var array = query.ToArray();
-
-            var item = array.FirstOrDefault();
-
-            return item == null ? null : new Product
+            var entity = Service.Retrieve(
+                EntityName,
+                productId,
+                ProductEntity.NumberFieldName,
+                ProductEntity.UnitGroupFieldName,
+                ProductEntity.DefaultUnitFieldName,
+                Common.NameFieldName);
+            
+            return entity == null ? null : new Product
             {
-                Id = item.Id,
-                Name = item.Name,
-                Number = item.Number,
-                UnitGroup = item.UnitGroup,
-                DefaultUnit = item.DefaultUnit
+                Id = entity.Id,
+                Name = entity.GetAttributeValue<String>(Common.NameFieldName),
+                Number = entity.GetAttributeValue<String>(ProductEntity.NumberFieldName),
+                UnitGroup = entity.GetAttributeValue<EntityReference>(ProductEntity.UnitGroupFieldName),
+                DefaultUnit = entity.GetAttributeValue<EntityReference>(ProductEntity.DefaultUnitFieldName)
             };
         }
     }

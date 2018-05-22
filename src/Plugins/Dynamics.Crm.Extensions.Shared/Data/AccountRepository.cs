@@ -32,29 +32,25 @@ namespace Dynamics.Crm.Data
 
         public virtual Account GetById(Guid accountId)
         {
-            var query = from o in Context.CreateQuery(EntityName)
-                        where o.GetAttributeValue<Guid>(AccountEntity.IdFieldName) == accountId
-                        select new
-                        {
-                            Id = o.GetAttributeValue<Guid>(AccountEntity.IdFieldName),
-                            Name = o.GetAttributeValue<String>(Common.NameFieldName),
-                            ParentAccount = o.GetAttributeValue<EntityReference>(AccountEntity.ParentAccountFieldName),
-                            PrimaryContact = o.GetAttributeValue<EntityReference>(AccountEntity.PrimaryContactFieldName),
-                            State = o.GetAttributeValue<OptionSetValue>(Common.StateFieldName),
-                            Status = o.GetAttributeValue<OptionSetValue>(Common.StatusFieldName)
-                        };
-
-            var array = query.ToArray();
-
-            return array.Any() ? new Account
+            var entity = Service.Retrieve(
+                EntityName,
+                accountId,
+                AccountEntity.IdFieldName,
+                AccountEntity.ParentAccountFieldName,
+                AccountEntity.PrimaryContactFieldName,
+                Common.NameFieldName,
+                Common.StateFieldName,
+                Common.StatusFieldName);
+            
+            return entity == null ? null : new Account
             {
-                Id = array[0].Id,
-                Name = array[0].Name,
-                ParentAccount = array[0].ParentAccount,
-                PrimaryContact = array[0].PrimaryContact,
-                State = array[0].State.ToEnum<StateCode>().Value,
-                Status = array[0].Status.ToEnum<StatusCode>().Value
-            } : null;
+                Id = entity.Id,
+                Name = entity.GetAttributeValue<String>(Common.NameFieldName),
+                ParentAccount = entity.GetAttributeValue<EntityReference>(AccountEntity.ParentAccountFieldName),
+                PrimaryContact = entity.GetAttributeValue<EntityReference>(AccountEntity.PrimaryContactFieldName),
+                State = entity.GetAttributeValue<OptionSetValue>(Common.StateFieldName).ToEnum<StateCode>().Value,
+                Status = entity.GetAttributeValue<OptionSetValue>(Common.StatusFieldName).ToEnum<StatusCode>().Value
+            };
         }
 
         public virtual IEnumerable<Account> FindByName(String name)
