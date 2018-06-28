@@ -345,6 +345,8 @@ namespace Dynamics.Crm.Data
             public const String HomePhoneFieldName = "homephone";
 
             public const String EmailFieldName = "internalemailaddress";
+
+            public const String ManagerFieldName = "parentsystemuserid";
         }
 
         public static class TaskEntity
