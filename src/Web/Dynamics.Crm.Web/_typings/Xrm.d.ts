@@ -10,7 +10,7 @@ interface Xrm {
     Page: Page;
     Utility: Utility;
     Navigation: Navigation;
-    WebApi: WebApi;
+    WebApi: WebApiStatic;
 }
 
 interface Utility {
@@ -28,9 +28,28 @@ interface Navigation {
     openConfirmDialog(strings: ConfirmDialogStrings, options?: OpenOptions): DialogResult;
     openErrorDialog(options?: ErrorOptions): DialogResult;
     openFile(file: FileProperties, options?: number); /* 1: Open, 2: Save */
-    openForm(options: EntityFormOptions, formParameters?: any): void;
+    openForm(options: EntityFormOptions, formParameters?: any): OpenFormResult;
     openUrl(url: string, options?: OpenOptions): void;
     openWebResource(name: string, options?: OpenWindowOptions, data?: string);
+}
+
+interface OpenFormResult {
+    then(
+        successCallback: (result: OpenFormSuccessResult) => void,
+        errorCallback?: (result: OpenFormErrorResult) => void): void;
+}
+
+interface OpenFormSuccessResult {
+    savedEntityReference: SavedEntityReference[];
+}
+
+interface SavedEntityReference {
+    entityType: string;
+    id: string;
+    name: string;
+}
+
+interface OpenFormErrorResult {
 }
 
 interface AlertDialogStrings {
@@ -86,7 +105,7 @@ interface EntityFormOptions extends OpenWindowOptions {
 interface Page {
     data: data;
     ui: ui;
-    getAttribute(): Attribute[]; 
+    getAttribute(): Attribute[];
     getAttribute(argument: string): Attribute;
     getAttribute(argument: number): Attribute;
     getAttribute(argument: AttributeFunctionCallback): Attribute[];
@@ -481,7 +500,7 @@ interface ProcessFlowStage {
 }
 
 interface ProcessFlowStageCategory {
-    getValue(): ProcessFlowStageCategoryValue;    
+    getValue(): ProcessFlowStageCategoryValue;
 }
 
 declare enum ProcessFlowStageCategoryValue {
@@ -569,19 +588,30 @@ interface AutoCompleteCommand {
     action: () => void;
 }
 
+interface WebApiStatic extends WebApi {
+    online: WebApi;
+    offline: WebApi;
+}
+
 interface WebApi {
 
-    createRecord(entityLogicalName: string, data: any): WebApiPromise<(entityType: string, id: string) => void>;
+    createRecord(entityLogicalName: string, data: any): WebApiPromise<(entity: WebApiEntityRef) => void>;
 
-    deleteRecord(entityLogicalName: string, id: string): WebApiPromise<(entityType: string, id: string, name: string) => void>;
+    deleteRecord(entityLogicalName: string, id: string): WebApiPromise<(entity: WebApiEntityRef) => void>;
 
-    updateRecord(entityLogicalName: string, id: string, data: any): WebApiPromise<(entityType: string, id: string) => void>;
+    updateRecord(entityLogicalName: string, id: string, data: any): WebApiPromise<(entity: WebApiEntityRef) => void>;
 
     retrieveRecord(entityLogicalName: string, id: string, query?: string): WebApiPromise<(entity: any) => void>;
 
     retrieveMultipleRecords(entityLogicalName: string, query?: string, maxPageSize?: number): WebApiPromise<(collection: WebApiRetrieveMultipleResponse) => void>;
 
     execute(request: WebApiExecuteRequest): WebApiPromise<(response: WebApiExecuteResponse) => void>;
+}
+
+interface WebApiEntityRef {
+    entityType: string;
+    id: string;
+    name?: string;
 }
 
 interface WebApiPromise<SuccessCallback> {
@@ -617,8 +647,8 @@ interface WebApiExecuteRequestParameter {
 }
 
 interface WebApiRetrieveMultipleResponse {
-    entities: any[];
-    nextLink: string;
+    entities?: any[];
+    nextLink?: string;
 }
 
 interface WebApiExecuteResponse {
