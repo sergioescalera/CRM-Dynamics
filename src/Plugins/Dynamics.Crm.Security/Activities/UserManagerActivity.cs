@@ -16,7 +16,7 @@ namespace Dynamics.Crm.Security.Activities
 
         [Output("Manager")]
         [ReferenceTarget("systemuser")]
-        public InArgument<EntityReference> Manager { get; set; }
+        public OutArgument<EntityReference> Manager { get; set; }
 
         protected override void Execute(IWorkflowActivityContext context)
         {
