@@ -61,7 +61,7 @@ var Dynamics;
 var Notifications;
 (function (Notifications) {
     "use strict";
-    var CrmFormNotificationService = (function () {
+    var CrmFormNotificationService = /** @class */ (function () {
         function CrmFormNotificationService() {
         }
         CrmFormNotificationService.prototype.hide = function (id) {
@@ -101,7 +101,7 @@ var Notifications;
 var Notifications;
 (function (Notifications) {
     "use strict";
-    var ToastrNotificationService = (function () {
+    var ToastrNotificationService = /** @class */ (function () {
         function ToastrNotificationService() {
         }
         ToastrNotificationService.prototype.init = function () {
@@ -142,7 +142,7 @@ var Notifications;
 var Notifications;
 (function (Notifications) {
     "use strict";
-    var DefaultNotifications = (function () {
+    var DefaultNotifications = /** @class */ (function () {
         function DefaultNotifications() {
         }
         DefaultNotifications.prototype.init = function () {
@@ -253,7 +253,7 @@ var Notifications;
 (function (Notifications) {
     "use strict";
     var $notificationWrapper;
-    var BoostrapAlert = (function () {
+    var BoostrapAlert = /** @class */ (function () {
         function BoostrapAlert() {
         }
         BoostrapAlert.prototype.init = function () {

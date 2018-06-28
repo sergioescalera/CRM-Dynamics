@@ -1,11 +1,16 @@
 Dynamics.Crm.Diagnostics.debug = false;
 Dynamics.Crm.Diagnostics.useConsoleLogger();
 
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -15,7 +20,7 @@ var Dynamics;
             var Mocks;
             (function (Mocks) {
                 "use strict";
-                var VisibleObject = (function () {
+                var VisibleObject = /** @class */ (function () {
                     function VisibleObject() {
                     }
                     VisibleObject.prototype.getVisible = function () {
@@ -26,7 +31,7 @@ var Dynamics;
                     };
                     return VisibleObject;
                 }());
-                var PageMock = (function () {
+                var PageMock = /** @class */ (function () {
                     function PageMock() {
                         this.ageAttribute = new AttributeMock("age", true);
                         this.attributes = {};
@@ -55,7 +60,7 @@ var Dynamics;
                     return PageMock;
                 }());
                 Mocks.PageMock = PageMock;
-                var AttributeMock = (function () {
+                var AttributeMock = /** @class */ (function () {
                     function AttributeMock(name, header, footer) {
                         this.controls = {
                             forEach: this.forEach.bind(this)
@@ -87,12 +92,13 @@ var Dynamics;
                     return AttributeMock;
                 }());
                 Mocks.AttributeMock = AttributeMock;
-                var ControlMock = (function (_super) {
+                var ControlMock = /** @class */ (function (_super) {
                     __extends(ControlMock, _super);
                     function ControlMock(name) {
-                        _super.call(this);
-                        this.name = name;
-                        this.notifications = {};
+                        var _this = _super.call(this) || this;
+                        _this.name = name;
+                        _this.notifications = {};
+                        return _this;
                     }
                     ControlMock.prototype.getDisabled = function () {
                         return this._disabled;
@@ -109,15 +115,16 @@ var Dynamics;
                     return ControlMock;
                 }(VisibleObject));
                 Mocks.ControlMock = ControlMock;
-                var TabMock = (function (_super) {
+                var TabMock = /** @class */ (function (_super) {
                     __extends(TabMock, _super);
                     function TabMock() {
-                        _super.call(this);
-                        this.mainSection = new SectionMock();
-                        this._sections = { "mainSection": this.mainSection };
-                        this.sections = {
-                            get: this.getSection.bind(this)
+                        var _this = _super.call(this) || this;
+                        _this.mainSection = new SectionMock();
+                        _this._sections = { "mainSection": _this.mainSection };
+                        _this.sections = {
+                            get: _this.getSection.bind(_this)
                         };
+                        return _this;
                     }
                     TabMock.prototype.getDisplayState = function () {
                         return this._displayState;
@@ -134,10 +141,10 @@ var Dynamics;
                     return TabMock;
                 }(VisibleObject));
                 Mocks.TabMock = TabMock;
-                var SectionMock = (function (_super) {
+                var SectionMock = /** @class */ (function (_super) {
                     __extends(SectionMock, _super);
                     function SectionMock() {
-                        _super.apply(this, arguments);
+                        return _super !== null && _super.apply(this, arguments) || this;
                     }
                     return SectionMock;
                 }(VisibleObject));

@@ -1421,11 +1421,11 @@ var Dynamics;
                 Validation.ensureNotNullOrEmpty(entityId, "entityId");
                 return new Promise(function (resolve, reject) {
                     Xrm.WebApi.deleteRecord(entityName, entityId)
-                        .then(function (entityType, id, name) {
+                        .then(function (entity) {
                         resolve({
-                            type: entityType,
-                            id: id,
-                            name: name
+                            type: entity.entityType,
+                            id: entity.id,
+                            name: entity.name
                         });
                     }, function (error) {
                         Crm.Diagnostics.log.Error(error.message + " delete " + entityName, {
@@ -1452,10 +1452,10 @@ var Dynamics;
                 var data = sanitizeEntity(entity);
                 return new Promise(function (resolve, reject) {
                     Xrm.WebApi.createRecord(entity.type, data)
-                        .then(function (entityType, id) {
+                        .then(function (entity) {
                         resolve({
-                            type: entityType,
-                            id: id
+                            type: entity.entityType,
+                            id: entity.id
                         });
                     }, function (error) {
                         if (logError) {
@@ -1476,10 +1476,10 @@ var Dynamics;
                 var data = sanitizeEntity(entity);
                 return new Promise(function (resolve, reject) {
                     Xrm.WebApi.updateRecord(entity.type, entity.id, data)
-                        .then(function (entityType, id) {
+                        .then(function (entity) {
                         resolve({
-                            type: entityType,
-                            id: id
+                            type: entity.entityType,
+                            id: entity.id
                         });
                     }, function (error) {
                         Crm.Diagnostics.log.Error(error.message + " update " + entity.type + ":" + entity.id, {

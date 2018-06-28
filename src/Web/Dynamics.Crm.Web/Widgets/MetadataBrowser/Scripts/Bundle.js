@@ -3,10 +3,9 @@ var Dynamics;
     var Crm;
     (function (Crm) {
         "use strict";
-        Crm.componentName = function (prefix, name) { return (prefix + "_" + name); };
+        Crm.componentName = function (prefix, name) { return prefix + "_" + name; };
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-var Dynamics;
 (function (Dynamics) {
     var Crm;
     (function (Crm) {
@@ -18,14 +17,13 @@ var Dynamics;
         })(Publishers = Crm.Publishers || (Crm.Publishers = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
-var Dynamics;
 (function (Dynamics) {
     var Crm;
     (function (Crm) {
         var Forms;
         (function (Forms) {
             "use strict";
-            var FormNotificationType = (function () {
+            var FormNotificationType = /** @class */ (function () {
                 function FormNotificationType() {
                 }
                 FormNotificationType.Error = "ERROR";
@@ -34,7 +32,7 @@ var Dynamics;
                 return FormNotificationType;
             }());
             Forms.FormNotificationType = FormNotificationType;
-            var ClientType = (function () {
+            var ClientType = /** @class */ (function () {
                 function ClientType() {
                 }
                 ClientType.Browser = "Web";
@@ -43,7 +41,7 @@ var Dynamics;
                 return ClientType;
             }());
             Forms.ClientType = ClientType;
-            var AttributeRequiredLevel = (function () {
+            var AttributeRequiredLevel = /** @class */ (function () {
                 function AttributeRequiredLevel() {
                 }
                 AttributeRequiredLevel.None = "none";
@@ -65,7 +63,7 @@ var Dynamics;
             "use strict";
             Diagnostics.debug = true;
             Diagnostics.trace = true;
-            var ConsoleLogger = (function () {
+            var ConsoleLogger = /** @class */ (function () {
                 function ConsoleLogger(prefix) {
                     this._prefix = prefix;
                 }
@@ -84,7 +82,7 @@ var Dynamics;
                 };
                 return ConsoleLogger;
             }());
-            var LogEntryLogger = (function () {
+            var LogEntryLogger = /** @class */ (function () {
                 function LogEntryLogger(prefix) {
                     this._prefix = prefix;
                 }
@@ -118,7 +116,7 @@ var Dynamics;
             function printArguments() {
                 var args = [];
                 for (var _i = 0; _i < arguments.length; _i++) {
-                    args[_i - 0] = arguments[_i];
+                    args[_i] = arguments[_i];
                 }
                 console.log("Function " + arguments[0] + " called with arguments: {");
                 for (var i = 1; i < arguments.length; i++) {
@@ -253,7 +251,6 @@ var Validation;
     }
     Validation.ensureNumberInRange = ensureNumberInRange;
 })(Validation || (Validation = {}));
-var Validation;
 (function (Validation) {
     var Strings;
     (function (Strings) {
@@ -425,11 +422,11 @@ var Dynamics;
                 Validation.ensureNotNullOrEmpty(entityId, "entityId");
                 return new Promise(function (resolve, reject) {
                     Xrm.WebApi.deleteRecord(entityName, entityId)
-                        .then(function (entityType, id, name) {
+                        .then(function (entity) {
                         resolve({
-                            type: entityType,
-                            id: id,
-                            name: name
+                            type: entity.entityType,
+                            id: entity.id,
+                            name: entity.name
                         });
                     }, function (error) {
                         Crm.Diagnostics.log.Error(error.message + " delete " + entityName, {
@@ -456,10 +453,10 @@ var Dynamics;
                 var data = sanitizeEntity(entity);
                 return new Promise(function (resolve, reject) {
                     Xrm.WebApi.createRecord(entity.type, data)
-                        .then(function (entityType, id) {
+                        .then(function (entity) {
                         resolve({
-                            type: entityType,
-                            id: id
+                            type: entity.entityType,
+                            id: entity.id
                         });
                     }, function (error) {
                         if (logError) {
@@ -480,10 +477,10 @@ var Dynamics;
                 var data = sanitizeEntity(entity);
                 return new Promise(function (resolve, reject) {
                     Xrm.WebApi.updateRecord(entity.type, entity.id, data)
-                        .then(function (entityType, id) {
+                        .then(function (entity) {
                         resolve({
-                            type: entityType,
-                            id: id
+                            type: entity.entityType,
+                            id: entity.id
                         });
                     }, function (error) {
                         Crm.Diagnostics.log.Error(error.message + " update " + entity.type + ":" + entity.id, {
@@ -606,7 +603,7 @@ var MetadataBrower;
     var Core;
     (function (Core) {
         "use strict";
-        var NavigationService = (function () {
+        var NavigationService = /** @class */ (function () {
             function NavigationService() {
                 this.EntityTabs = [];
             }
@@ -707,7 +704,7 @@ var MetadataBrower;
                 templateUrl: "templates/entity_details.html"
             };
         }
-        var EntityDetails = (function () {
+        var EntityDetails = /** @class */ (function () {
             function EntityDetails(scope, dataService) {
                 this._dataService = dataService;
                 scope.vm = {
@@ -803,7 +800,7 @@ var MetadataBrower;
                 template: "<span class=\"pager\">\n    <span ng-bind=\"currentPage\"></span> of <span ng-bind=\"pages\"></span>\n    <md-button ng-click=\"prev()\">Prev</md-button>\n    <md-button ng-click=\"next()\">Next</md-button>\n</span>"
             };
         }
-        var PagerController = (function () {
+        var PagerController = /** @class */ (function () {
             function PagerController(scope) {
                 this._scope = scope;
                 this._scope.$watch("total", this.updatePages.bind(this));
@@ -853,7 +850,7 @@ var MetadataBrower;
                 template: "\n<a href=\"javascript:void(0);\" class=\"picklist-toggle\" ng-click=\"load()\">+\n    <md-tooltip md-direction=\"right\" class=\"picklist\">\n        <span ng-if=\"!options\">Click to load options</span>\n        <span ng-if=\"options && !options.length\">Loading...</span>\n        <ul class=\"options\" ng-if=\"options && options.length\">\n            <li class=\"option\" ng-repeat=\"option in options\">\n                <span ng-bind=\"option.Label.UserLocalizedLabel.Label\"></span>\n                <span ng-if=\"option.Value !== null\">&nbsp;=&nbsp;</span>\n                <span ng-bind=\"option.Value\"></span>\n            </li>\n        </ul>\n    </md-tooltip>\n</a>"
             };
         }
-        var PicklistController = (function () {
+        var PicklistController = /** @class */ (function () {
             function PicklistController(scope, dataService) {
                 scope.load = function () {
                     if (scope.options) {
@@ -912,7 +909,7 @@ var MetadataBrower;
     var Controllers;
     (function (Controllers) {
         "use strict";
-        var EntityListController = (function () {
+        var EntityListController = /** @class */ (function () {
             function EntityListController($scope, navigationService, dataService) {
                 this.advancedView = false;
                 this.currentPage = 1;
@@ -996,7 +993,7 @@ var MetadataBrower;
     var Controllers;
     (function (Controllers) {
         "use strict";
-        var MetadataBrowserController = (function () {
+        var MetadataBrowserController = /** @class */ (function () {
             function MetadataBrowserController(navigationService) {
                 var vm = this;
                 vm.navigationService = navigationService;
