@@ -22,7 +22,7 @@ namespace Dynamics.Crm.Extensions.UnitTests
                 Assert.IsNull(entry.Description);
                 Assert.IsNull(entry.User);
                 Assert.AreEqual(Guid.Empty, entry.Id);
-                Assert.AreEqual(Schema.LogEntryEntity.TypeName, entry.TypeName);
+                Assert.AreEqual(Schema.LogEntryEntity.TypeName(Schema.DefaultPrefix), entry.TypeName);
             }
 
             [TestMethod]
@@ -43,7 +43,7 @@ namespace Dynamics.Crm.Extensions.UnitTests
                 Assert.AreEqual("description", entry.Description);
                 Assert.AreEqual(LogEntryType.Info, entry.Type);                
                 Assert.AreEqual(Guid.Empty, entry.Id);
-                Assert.AreEqual(Schema.LogEntryEntity.TypeName, entry.TypeName);
+                Assert.AreEqual(Schema.LogEntryEntity.TypeName(Schema.DefaultPrefix), entry.TypeName);
             }
 
             [TestMethod]
@@ -69,7 +69,7 @@ namespace Dynamics.Crm.Extensions.UnitTests
                 Assert.AreEqual(new String('d', Schema.LogEntryEntity.DescriptionFieldLength), entry.Description);
                 Assert.AreEqual(LogEntryType.Trace, entry.Type);
                 Assert.AreEqual(Guid.Empty, entry.Id);
-                Assert.AreEqual(Schema.LogEntryEntity.TypeName, entry.TypeName);
+                Assert.AreEqual(Schema.LogEntryEntity.TypeName(Schema.DefaultPrefix), entry.TypeName);
             }
         }
     }
