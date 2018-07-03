@@ -80,6 +80,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Activities\CurrentUserActivity.cs" />
     <Compile Include="Activities\ShareEntity.cs" />
     <Compile Include="Activities\ShareWorkflowActivityBase.cs" />
     <Compile Include="Activities\UpdateUserRole.cs" />
