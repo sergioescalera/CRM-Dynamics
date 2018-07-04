@@ -4,13 +4,14 @@ using Dynamics.Crm.Interfaces;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Workflow;
 using System.Activities;
+using static Dynamics.Crm.Data.Schema;
 
 namespace Dynamics.Crm.Security.Activities
 {
     public class CurrentUserActivity : WorkflowActivityBase
     {
         [Output("User")]
-        [ReferenceTarget("systemuser")]
+        [ReferenceTarget(SystemUserEntity.TypeName)]
         public OutArgument<EntityReference> User { get; set; }
 
         protected override void Execute(IWorkflowActivityContext context)

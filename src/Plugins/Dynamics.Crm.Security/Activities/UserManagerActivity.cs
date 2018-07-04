@@ -11,11 +11,11 @@ namespace Dynamics.Crm.Security.Activities
     public class UserManagerActivity : WorkflowActivityBase
     {
         [Input("User")]
-        [ReferenceTarget("systemuser")]
+        [ReferenceTarget(SystemUserEntity.TypeName)]
         public InArgument<EntityReference> User { get; set; }
 
         [Output("Manager")]
-        [ReferenceTarget("systemuser")]
+        [ReferenceTarget(SystemUserEntity.TypeName)]
         public OutArgument<EntityReference> Manager { get; set; }
 
         protected override void Execute(IWorkflowActivityContext context)

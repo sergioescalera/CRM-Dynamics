@@ -151,6 +151,10 @@ namespace Dynamics.Crm.Data
 
             public const String ToFieldName = "to";
 
+            public const String CcFieldName = "cc";
+
+            public const String BccFieldName = "bcc";
+
             public const String RegardingObjectFieldName = "regardingobjectid";
 
             public const String SubjectFieldName = "subject";

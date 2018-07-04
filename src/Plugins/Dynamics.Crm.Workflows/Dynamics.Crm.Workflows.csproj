@@ -76,6 +76,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EmailUtilities\UpdateEmailRecipientActivity.cs" />
     <Compile Include="EntityReferenceAttributeActivity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringUtilities\LowerCaseActivity.cs" />
