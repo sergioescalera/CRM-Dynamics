@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xrm.Sdk;
 using System;
+using System.Linq;
 
 namespace Dynamics.Crm.Extensions
 {
@@ -11,6 +12,19 @@ namespace Dynamics.Crm.Extensions
                 return null;
 
             return new OptionSetValue(Convert.ToInt32(value));
+        }
+
+        public static OptionSetValueCollection ToOptionSetValueColleciton<TEnum>(this TEnum[] values)
+        {
+            if (values == null || values.Empty())
+                return null;
+
+            var list = values
+                .OfType<Enum>()
+                .Select(o => o.ToOptionSetValue())
+                .ToArray();
+
+            return new OptionSetValueCollection(list);
         }
     }
 }
