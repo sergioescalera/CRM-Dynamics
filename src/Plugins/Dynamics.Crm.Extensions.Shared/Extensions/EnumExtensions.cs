@@ -14,7 +14,7 @@ namespace Dynamics.Crm.Extensions
             return new OptionSetValue(Convert.ToInt32(value));
         }
 
-        public static OptionSetValueCollection ToOptionSetValueColleciton<TEnum>(this TEnum[] values)
+        public static OptionSetValueCollection ToOptionSetValueCollection<TEnum>(this TEnum[] values)
         {
             if (values == null || values.Empty())
                 return null;

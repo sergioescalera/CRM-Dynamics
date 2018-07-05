@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Dynamics.Crm.Extensions</id>
-    <version>0.1.2.2-alpha</version>
+    <version>0.1.2.3-alpha</version>
     <authors>Sergio Escalera</authors>
     <owners>Sergio Escalera</owners>    
     <projectUrl>https://github.com/sergioescalera/CRM-Dynamics/</projectUrl>    
