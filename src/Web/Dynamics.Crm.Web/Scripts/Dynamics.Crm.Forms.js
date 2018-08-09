@@ -480,20 +480,15 @@ var Dynamics;
                 if (height === void 0) { height = 600; }
                 if (modal === void 0) { modal = "yes"; }
                 var url = getUrl(dialogId, entityName, entityId);
-                var features = "center=yes,width={w},height={h},modal={m}"
-                    .replace("{m}", modal)
-                    .replace("{h}", height.toString())
-                    .replace("{w}", width.toString());
+                var features = "center=yes,width=" + width + ",height=" + height + ",modal=" + modal;
                 window.open(url, dialogId, features, false);
             }
             Dialogs.open = open;
             function getUrl(dialogId, entityName, entityId) {
-                if (entityName === void 0) { entityName = Xrm.Page.data.entity.getEntityName(); }
-                if (entityId === void 0) { entityId = Xrm.Page.data.entity.getId(); }
-                var url = Xrm.Utility.getGlobalContext().getClientUrl() +
-                    "/cs/dialog/rundialog.aspx?DialogId={dialogId}&EntityName={type}&ObjectId={id}"
-                        .replace("{type}", entityName)
-                        .replace("{id}", entityId);
+                if (entityName === void 0) { entityName = Crm.Forms.getEntityName(); }
+                if (entityId === void 0) { entityId = Crm.Forms.getEntityId(); }
+                var baseUrl = Xrm.Utility.getGlobalContext().getClientUrl();
+                var url = baseUrl + "/cs/dialog/rundialog.aspx?DialogId=" + dialogId + "&EntityName=" + entityName + "&ObjectId=" + entityId;
                 return url;
             }
             Dialogs.getUrl = getUrl;
@@ -599,6 +594,33 @@ var Dynamics;
                 return Xrm.Utility.getGlobalContext().client.getClient();
             }
             Forms.getClientType = getClientType;
+            function getEntityId() {
+                try {
+                    return Crm.Core.parseIdentifier(Xrm.Page.data.entity.getId());
+                }
+                catch (e) {
+                    throw new Error("Unable to retrieve entity id");
+                }
+            }
+            Forms.getEntityId = getEntityId;
+            function getEntityName() {
+                try {
+                    return Xrm.Page.data.entity.getEntityName();
+                }
+                catch (e) {
+                    throw new Error("Unable to retrieve entity name");
+                }
+            }
+            Forms.getEntityName = getEntityName;
+            function getEntitySetName() {
+                try {
+                    return Xrm.Page.data.entity.getEntitySetName();
+                }
+                catch (e) {
+                    throw new Error("Unable to retrieve entity set name");
+                }
+            }
+            Forms.getEntitySetName = getEntitySetName;
             function getFormType() {
                 return Xrm.Page.ui.getFormType();
             }
@@ -754,7 +776,7 @@ var Dynamics;
                         Xrm.Page.ui.setFormHtmlNotification(message, level, id);
                     }
                     else {
-                        Xrm.Page.ui.setFormNotification(message, level, id);
+                        Xrm.Page.ui.setFormNotification(Crm.Utility.htmlToText(message), level, id);
                     }
                 }
                 Notifications.showHtml = showHtml;
@@ -1126,6 +1148,26 @@ var Dynamics;
             }
             User.hasRole = hasRole;
         })(User = Crm.User || (Crm.User = {}));
+    })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
+})(Dynamics || (Dynamics = {}));
+
+var Dynamics;
+(function (Dynamics) {
+    var Crm;
+    (function (Crm) {
+        var Utility;
+        (function (Utility) {
+            "use strict";
+            function htmlToText(html) {
+                if (!html) {
+                    return html;
+                }
+                var elem = document.createElement("span");
+                elem.innerHTML = html;
+                return elem.innerText;
+            }
+            Utility.htmlToText = htmlToText;
+        })(Utility = Crm.Utility || (Crm.Utility = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
 

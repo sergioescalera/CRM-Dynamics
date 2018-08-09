@@ -22,6 +22,7 @@ declare interface ICrmDynamics {
     ScriptManager: IScriptManager;
     Tasks: ITasks;
     User: ICrmUser;
+    Utility: ICrmUtility;
 }
 
 declare interface ICrmCore {
@@ -42,6 +43,9 @@ declare interface ICrmForms {
     getFormFactor(): number;
     getIsDesktop(): boolean;
     getIsDirty(): boolean;
+    getEntityId(): string;
+    getEntityName(): string;
+    getEntitySetName(): string;
     isCreateForm(): boolean;
     isUpdateForm(): boolean;
     isBulkEditForm(): boolean;
@@ -193,6 +197,10 @@ declare interface IEntity {
 declare interface ICrmUser {
     getId(): string;
     hasRole(roleId: string): boolean;
+}
+
+declare interface ICrmUtility {
+    htmlToText(html: string): string;
 }
 
 declare interface ICrmDiagnostics {

@@ -12,23 +12,18 @@
 
         let url = getUrl(dialogId, entityName, entityId);
 
-        let features = "center=yes,width={w},height={h},modal={m}"
-            .replace("{m}", modal)
-            .replace("{h}", height.toString())
-            .replace("{w}", width.toString());
+        let features = `center=yes,width=${width},height=${height},modal=${modal}`;
 
         window.open(url, dialogId, features, false);
     }
 
     export function getUrl(
         dialogId: string,
-        entityName: string = Xrm.Page.data.entity.getEntityName(),
-        entityId: string = Xrm.Page.data.entity.getId()): string {
+        entityName: string = Forms.getEntityName(),
+        entityId: string = Forms.getEntityId()): string {
 
-        let url = Xrm.Utility.getGlobalContext().getClientUrl() +
-            "/cs/dialog/rundialog.aspx?DialogId={dialogId}&EntityName={type}&ObjectId={id}"
-            .replace("{type}", entityName)
-            .replace("{id}", entityId);
+        let baseUrl = Xrm.Utility.getGlobalContext().getClientUrl();
+        let url = `${baseUrl}/cs/dialog/rundialog.aspx?DialogId=${dialogId}&EntityName=${entityName}&ObjectId=${entityId}`;
 
         return url;
     }

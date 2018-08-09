@@ -208,6 +208,7 @@
     <TypeScriptCompile Include="Core\Tabs.ts" />
     <TypeScriptCompile Include="Core\Tasks.ts" />
     <TypeScriptCompile Include="Core\User.ts" />
+    <TypeScriptCompile Include="Core\Utility.ts" />
     <TypeScriptCompile Include="Core\Validation.ts" />
     <TypeScriptCompile Include="Data\Interfaces.ts" />
     <TypeScriptCompile Include="Data\OData.ts" />

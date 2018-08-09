@@ -7,6 +7,44 @@
         return Xrm.Utility.getGlobalContext().client.getClient();
     }
 
+    export function getEntityId(): string {
+
+        try {
+
+            return Core.parseIdentifier(
+                Xrm.Page.data.entity.getId());
+
+        } catch (e) {
+
+            throw new Error("Unable to retrieve entity id");
+        }
+    }
+
+    export function getEntityName(): string {
+
+        try {
+
+            return Xrm.Page.data.entity.getEntityName();
+
+        } catch (e) {
+
+            throw new Error("Unable to retrieve entity name");
+        }
+    }
+
+
+    export function getEntitySetName(): string {
+
+        try {
+
+            return Xrm.Page.data.entity.getEntitySetName();
+
+        } catch (e) {
+
+            throw new Error("Unable to retrieve entity set name");
+        }
+    }
+
     export function getFormType(): FormType {
 
         return Xrm.Page.ui.getFormType();

@@ -10,20 +10,15 @@ var Dynamics;
                 if (height === void 0) { height = 600; }
                 if (modal === void 0) { modal = "yes"; }
                 var url = getUrl(dialogId, entityName, entityId);
-                var features = "center=yes,width={w},height={h},modal={m}"
-                    .replace("{m}", modal)
-                    .replace("{h}", height.toString())
-                    .replace("{w}", width.toString());
+                var features = "center=yes,width=" + width + ",height=" + height + ",modal=" + modal;
                 window.open(url, dialogId, features, false);
             }
             Dialogs.open = open;
             function getUrl(dialogId, entityName, entityId) {
-                if (entityName === void 0) { entityName = Xrm.Page.data.entity.getEntityName(); }
-                if (entityId === void 0) { entityId = Xrm.Page.data.entity.getId(); }
-                var url = Xrm.Utility.getGlobalContext().getClientUrl() +
-                    "/cs/dialog/rundialog.aspx?DialogId={dialogId}&EntityName={type}&ObjectId={id}"
-                        .replace("{type}", entityName)
-                        .replace("{id}", entityId);
+                if (entityName === void 0) { entityName = Crm.Forms.getEntityName(); }
+                if (entityId === void 0) { entityId = Crm.Forms.getEntityId(); }
+                var baseUrl = Xrm.Utility.getGlobalContext().getClientUrl();
+                var url = baseUrl + "/cs/dialog/rundialog.aspx?DialogId=" + dialogId + "&EntityName=" + entityName + "&ObjectId=" + entityId;
                 return url;
             }
             Dialogs.getUrl = getUrl;

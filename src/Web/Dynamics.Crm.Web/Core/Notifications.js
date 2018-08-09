@@ -19,7 +19,7 @@ var Dynamics;
                         Xrm.Page.ui.setFormHtmlNotification(message, level, id);
                     }
                     else {
-                        Xrm.Page.ui.setFormNotification(message, level, id);
+                        Xrm.Page.ui.setFormNotification(Crm.Utility.htmlToText(message), level, id);
                     }
                 }
                 Notifications.showHtml = showHtml;

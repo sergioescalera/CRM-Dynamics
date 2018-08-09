@@ -9,6 +9,33 @@ var Dynamics;
                 return Xrm.Utility.getGlobalContext().client.getClient();
             }
             Forms.getClientType = getClientType;
+            function getEntityId() {
+                try {
+                    return Crm.Core.parseIdentifier(Xrm.Page.data.entity.getId());
+                }
+                catch (e) {
+                    throw new Error("Unable to retrieve entity id");
+                }
+            }
+            Forms.getEntityId = getEntityId;
+            function getEntityName() {
+                try {
+                    return Xrm.Page.data.entity.getEntityName();
+                }
+                catch (e) {
+                    throw new Error("Unable to retrieve entity name");
+                }
+            }
+            Forms.getEntityName = getEntityName;
+            function getEntitySetName() {
+                try {
+                    return Xrm.Page.data.entity.getEntitySetName();
+                }
+                catch (e) {
+                    throw new Error("Unable to retrieve entity set name");
+                }
+            }
+            Forms.getEntitySetName = getEntitySetName;
             function getFormType() {
                 return Xrm.Page.ui.getFormType();
             }
