@@ -210,7 +210,7 @@
         return new Promise((resolve, reject) => {
 
             Xrm.WebApi.deleteRecord(entityName, entityId)
-                .then((entity: WebApiEntityRef) => {
+                .then((entity: EntityReference) => {
 
                     resolve({
                         type: entity.entityType,
@@ -255,7 +255,7 @@
         return new Promise((resolve, reject) => {
 
             Xrm.WebApi.createRecord(entity.type, data)
-                .then((entity: WebApiEntityRef) => {
+                .then((entity: EntityReference) => {
 
                     resolve({
                         type: entity.entityType,
@@ -287,7 +287,7 @@
         return new Promise((resolve, reject) => {
 
             Xrm.WebApi.updateRecord(entity.type, entity.id, data)
-                .then((entity: WebApiEntityRef) => {
+                .then((entity: EntityReference) => {
 
                     resolve({
                         type: entity.entityType,

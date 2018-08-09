@@ -19,6 +19,20 @@ interface Utility {
     getEntitySetName(entityName: string): string;
     closeProgressIndicator(): void;
     showProgressIndicator(message: string);
+    lookupObjects(options: LookupObjectsOptions): LookupObjectsPromise;
+}
+
+interface LookupObjectsOptions {
+    allowMultiSelect?: boolean;
+    defaultEntityType?: string;
+    defaultViewId?: string;
+    entityTypes?: string[];
+    showBarcodeScanner?: boolean;
+    viewIds?: string[];
+}
+
+interface LookupObjectsPromise {
+    then(successCallback: (entity: EntityReference) => void, errorCallback?: Function);
 }
 
 interface EntityMetadataPromise {
@@ -597,11 +611,11 @@ interface WebApiStatic extends WebApi {
 
 interface WebApi {
 
-    createRecord(entityLogicalName: string, data: any): WebApiPromise<(entity: WebApiEntityRef) => void>;
+    createRecord(entityLogicalName: string, data: any): WebApiPromise<(entity: EntityReference) => void>;
 
-    deleteRecord(entityLogicalName: string, id: string): WebApiPromise<(entity: WebApiEntityRef) => void>;
+    deleteRecord(entityLogicalName: string, id: string): WebApiPromise<(entity: EntityReference) => void>;
 
-    updateRecord(entityLogicalName: string, id: string, data: any): WebApiPromise<(entity: WebApiEntityRef) => void>;
+    updateRecord(entityLogicalName: string, id: string, data: any): WebApiPromise<(entity: EntityReference) => void>;
 
     retrieveRecord(entityLogicalName: string, id: string, query?: string): WebApiPromise<(entity: any) => void>;
 
@@ -610,7 +624,7 @@ interface WebApi {
     execute(request: WebApiExecuteRequest): WebApiPromise<(response: WebApiExecuteResponse) => void>;
 }
 
-interface WebApiEntityRef {
+interface EntityReference {
     entityType: string;
     id: string;
     name?: string;
