@@ -17,6 +17,8 @@ interface Utility {
     getGlobalContext(): Context;
     getEntityMetadata(entityName: string, attributes?: string[]): EntityMetadataPromise;
     getEntitySetName(entityName: string): string;
+    closeProgressIndicator(): void;
+    showProgressIndicator(message: string);
 }
 
 interface EntityMetadataPromise {
