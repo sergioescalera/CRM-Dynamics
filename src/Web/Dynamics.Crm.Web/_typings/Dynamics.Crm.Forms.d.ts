@@ -134,9 +134,9 @@ declare interface ICrmDialogs {
         dialogId: string,
         entityName?: string,
         entityId?: string): string;
-    alert(message: string, title: string): JQueryPromise<void>;
-    confirm(message: string, title: string): JQueryPromise<boolean>;
-    create<TResult>(config: ICrmDialogConfig<TResult>): JQueryPromise<TResult>;
+    alert(message: string, title: string): Promise<void>;
+    confirm(message: string, title: string): Promise<boolean>;
+    create<TResult>(config: ICrmDialogConfig<TResult>): Promise<TResult>;
     init(prefix?: string): void;
     bootstrapEnabled: boolean;
 }
@@ -223,10 +223,10 @@ declare interface ICrmReports {
 declare interface IScriptManager {
     loadScripts(
         scripts: string[],
-        window: Window): JQueryPromise<void>;
+        window: Window): Promise<void>;
     loadScript(
         script: string,
-        window: Window): JQueryPromise<void>;
+        window: Window): Promise<void>;
     loadStylesheets(
         stylesheets: string[],
         window: Window): void;

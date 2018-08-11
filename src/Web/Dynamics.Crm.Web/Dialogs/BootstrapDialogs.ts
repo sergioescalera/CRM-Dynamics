@@ -45,7 +45,9 @@
         private _content: string;
         private _window: JQueryWindow;
         private _dialog: Bootstrap;
-        private _deferred: JQueryDeferred<TResult>;
+        private _promise: Promise<TResult>;
+        private _resolve: Function;
+        private _reject: Function;
         private _init: (dialog: JQuery) => void;
 
         constructor(window: JQueryWindow, content: string, init?: (dialog: JQuery) => void) {
@@ -57,25 +59,30 @@
 
         private Resolve(): void {
 
-            this.deferred.resolve();
+            let r = this._resolve;
+
+            if (r) { r(); }
         }
 
         private Reject(): void {
 
-            this.deferred.reject();
+            let r = this._reject;
+
+            if (r) { r(); }
         }
 
-        Show(): JQueryPromise<TResult> {
+        Show(): Promise<TResult> {
 
             this.dialog.modal("show");
 
-            return this.deferred;
+            return this.promise;
         }
 
         Destroy(): void {
-            if (this._dialog) {
-                this._dialog.remove();
-            }
+
+            let d = this._dialog;
+
+            if (d) { d.remove(); }
         }
 
         get dialog(): Bootstrap {
@@ -102,21 +109,25 @@
             return this._dialog;
         }
 
-        get deferred(): JQueryDeferred<TResult> {
+        get promise(): Promise<TResult> {
 
-            if (!this._deferred) {
+            if (!this._promise) {
 
-                this._deferred = $.Deferred<TResult>();
+                this._promise = new Promise((resolve, reject) => {
+
+                    this._resolve = resolve;
+                    this._reject = reject;
+                });
             }
 
-            return this._deferred;
+            return this._promise;
         }
     }
 
     export class BootstrapDialogProvider implements IDialogProvider {
 
         private _window: JQueryWindow;
-        private _loading: JQueryPromise<any>;
+        private _loading: Promise<void>;
 
         constructor(window: JQueryWindow, prefix: string) {
 
@@ -134,25 +145,32 @@
             ScriptManager.loadStylesheet(baseUrl + "css/bootstrap.min.css", this._window);
         }
 
-        Alert(message: string, title: string): JQueryPromise<IDialog<void>> {
+        Alert(message: string, title: string): Promise<IDialog<void>> {
 
             return this
                 ._loading
-                .then(() => new BootstrapDialog<void>(this._window, BootstrapDialogTemplates.alert(message, title)));
+                .then(() => new BootstrapDialog<void>(
+                    this._window,
+                    BootstrapDialogTemplates.alert(message, title)));
         }
 
-        Confirm(message: string, title: string): JQueryPromise<IDialog<boolean>> {
+        Confirm(message: string, title: string): Promise<IDialog<boolean>> {
 
             return this
                 ._loading
-                .then(() => new BootstrapDialog<boolean>(this._window, BootstrapDialogTemplates.confirm(message, title)));
+                .then(() => new BootstrapDialog<boolean>(
+                    this._window,
+                    BootstrapDialogTemplates.confirm(message, title)));
         }
 
-        Create<TResult>(config: IDialogConfig<TResult>): JQueryPromise<IDialog<TResult>> {
+        Create<TResult>(config: IDialogConfig<TResult>): Promise<IDialog<TResult>> {
 
             return this
                 ._loading
-                .then(() => new BootstrapDialog<TResult>(this._window, config.Template, config.Init));
+                .then(() => new BootstrapDialog<TResult>(
+                    this._window,
+                    config.Template,
+                    config.Init));
         }
     }
 }

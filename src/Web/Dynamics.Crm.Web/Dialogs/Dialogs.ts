@@ -10,7 +10,7 @@
 
     export interface IDialog<TResult> {
         Destroy(): void;
-        Show(): JQueryPromise<TResult>;
+        Show(): Promise<TResult>;
     }
 
     export interface IDialogConfig<TResult> {
@@ -22,9 +22,9 @@
     }
 
     export interface IDialogProvider {
-        Alert(message: string, title: string): JQueryPromise<IDialog<void>>;
-        Confirm(message: string, title: string): JQueryPromise<IDialog<boolean>>;
-        Create<TResult>(config: IDialogConfig<TResult>): JQueryPromise<IDialog<TResult>>;
+        Alert(message: string, title: string): Promise<IDialog<void>>;
+        Confirm(message: string, title: string): Promise<IDialog<boolean>>;
+        Create<TResult>(config: IDialogConfig<TResult>): Promise<IDialog<TResult>>;
     }
 
     let provider: IDialogProvider;
@@ -38,59 +38,63 @@
         return provider;
     }
 
-    export function alert(message: string, title: string): JQueryPromise<void> {
+    export function alert(message: string, title: string): Promise<void> {
 
-        let win = <JQueryWindow>window.top;
-        let deferred: JQueryDeferred<void> = win.$.Deferred<void>();
+        return new Promise((resolve, reject) => {
 
-        getProvider()
-            .Alert(message, title)
-            .done((d: IDialog<void>) => d
-                .Show()
-                .done(() => deferred.resolve())
-                .fail(() => deferred.reject())
-                .always(() => d.Destroy()))
-            .fail(() => deferred.reject());
-
-        return deferred;
+            getProvider()
+                .Alert(message, title)
+                .then((d: IDialog<void>) => d
+                    .Show()
+                    .then(() => {
+                        resolve();
+                        d.Destroy();
+                    })
+                    .catch(() => {
+                        reject();
+                        d.Destroy();
+                    }))
+                .catch(() => reject());
+        });
     }
 
-    export function confirm(message: string, title: string): JQueryPromise<boolean> {
+    export function confirm(message: string, title: string): Promise<boolean> {
 
-        let win = <JQueryWindow>window.top;
-        let deferred: JQueryDeferred<boolean> = win.$.Deferred<boolean>();
+        return new Promise((resolve, reject) => {
 
-        getProvider()
-            .Confirm(message, title)
-            .done((d: IDialog<void>) => d
-                .Show()
-                .done(() => deferred.resolve(true))
-                .fail(() => deferred.reject())
-                .always(() => d.Destroy()))
-            .fail(() => deferred.reject());
-
-        return deferred;
+            getProvider()
+                .Confirm(message, title)
+                .then((d: IDialog<boolean>) => d
+                    .Show()
+                    .then(() => {
+                        resolve(true);
+                        d.Destroy();
+                    })
+                    .catch(() => {
+                        reject();
+                        d.Destroy();
+                    }))
+                .catch(() => reject());
+        });
     }
 
-    export function create<TResult>(config: IDialogConfig<TResult>): JQueryPromise<TResult> {
+    export function create<TResult>(config: IDialogConfig<TResult>): Promise<TResult> {
 
-        let win = <JQueryWindow>window.top;
-        let deferred: JQueryDeferred<TResult> = win.$.Deferred<TResult>();
+        return new Promise((resolve, reject) => {
 
-        getProvider()
-            .Create(config)
-            .done((d: IDialog<TResult>) => d
-                .Show()
-                .done(() => {
+            getProvider()
+                .Create(config)
+                .then((d: IDialog<TResult>) => d
+                    .Show()
+                    .then(() => {
 
-                    let result: TResult = config.Done();
+                        let result: TResult = config.Done();
 
-                    deferred.resolve(result);
-                })
-                .fail(() => deferred.reject()))
-            .fail(() => deferred.reject());
-
-        return deferred;
+                        resolve(result);
+                    })
+                    .catch(() => reject()))
+                .catch(() => reject());
+        });
     }
 
     export var bootstrapEnabled: boolean = true;
@@ -103,6 +107,6 @@
 
         provider = bootstrapEnabled ?
             new BootstrapDialogProvider(win, prefix) :
-            new CrmDialogProvider(win);
+            new CrmDialogProvider();
     }
 }

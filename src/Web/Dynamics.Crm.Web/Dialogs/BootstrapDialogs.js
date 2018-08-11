@@ -19,18 +19,25 @@ var Dynamics;
                     this._init = init;
                 }
                 BootstrapDialog.prototype.Resolve = function () {
-                    this.deferred.resolve();
+                    var r = this._resolve;
+                    if (r) {
+                        r();
+                    }
                 };
                 BootstrapDialog.prototype.Reject = function () {
-                    this.deferred.reject();
+                    var r = this._reject;
+                    if (r) {
+                        r();
+                    }
                 };
                 BootstrapDialog.prototype.Show = function () {
                     this.dialog.modal("show");
-                    return this.deferred;
+                    return this.promise;
                 };
                 BootstrapDialog.prototype.Destroy = function () {
-                    if (this._dialog) {
-                        this._dialog.remove();
+                    var d = this._dialog;
+                    if (d) {
+                        d.remove();
                     }
                 };
                 Object.defineProperty(BootstrapDialog.prototype, "dialog", {
@@ -54,12 +61,16 @@ var Dynamics;
                     enumerable: true,
                     configurable: true
                 });
-                Object.defineProperty(BootstrapDialog.prototype, "deferred", {
+                Object.defineProperty(BootstrapDialog.prototype, "promise", {
                     get: function () {
-                        if (!this._deferred) {
-                            this._deferred = $.Deferred();
+                        var _this = this;
+                        if (!this._promise) {
+                            this._promise = new Promise(function (resolve, reject) {
+                                _this._resolve = resolve;
+                                _this._reject = reject;
+                            });
                         }
-                        return this._deferred;
+                        return this._promise;
                     },
                     enumerable: true,
                     configurable: true

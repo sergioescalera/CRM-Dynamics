@@ -19,47 +19,54 @@ var Dynamics;
                 return provider;
             }
             function alert(message, title) {
-                var win = window.top;
-                var deferred = win.$.Deferred();
-                getProvider()
-                    .Alert(message, title)
-                    .done(function (d) { return d
-                    .Show()
-                    .done(function () { return deferred.resolve(); })
-                    .fail(function () { return deferred.reject(); })
-                    .always(function () { return d.Destroy(); }); })
-                    .fail(function () { return deferred.reject(); });
-                return deferred;
+                return new Promise(function (resolve, reject) {
+                    getProvider()
+                        .Alert(message, title)
+                        .then(function (d) { return d
+                        .Show()
+                        .then(function () {
+                        resolve();
+                        d.Destroy();
+                    })
+                        .catch(function () {
+                        reject();
+                        d.Destroy();
+                    }); })
+                        .catch(function () { return reject(); });
+                });
             }
             Dialogs.alert = alert;
             function confirm(message, title) {
-                var win = window.top;
-                var deferred = win.$.Deferred();
-                getProvider()
-                    .Confirm(message, title)
-                    .done(function (d) { return d
-                    .Show()
-                    .done(function () { return deferred.resolve(true); })
-                    .fail(function () { return deferred.reject(); })
-                    .always(function () { return d.Destroy(); }); })
-                    .fail(function () { return deferred.reject(); });
-                return deferred;
+                return new Promise(function (resolve, reject) {
+                    getProvider()
+                        .Confirm(message, title)
+                        .then(function (d) { return d
+                        .Show()
+                        .then(function () {
+                        resolve(true);
+                        d.Destroy();
+                    })
+                        .catch(function () {
+                        reject();
+                        d.Destroy();
+                    }); })
+                        .catch(function () { return reject(); });
+                });
             }
             Dialogs.confirm = confirm;
             function create(config) {
-                var win = window.top;
-                var deferred = win.$.Deferred();
-                getProvider()
-                    .Create(config)
-                    .done(function (d) { return d
-                    .Show()
-                    .done(function () {
-                    var result = config.Done();
-                    deferred.resolve(result);
-                })
-                    .fail(function () { return deferred.reject(); }); })
-                    .fail(function () { return deferred.reject(); });
-                return deferred;
+                return new Promise(function (resolve, reject) {
+                    getProvider()
+                        .Create(config)
+                        .then(function (d) { return d
+                        .Show()
+                        .then(function () {
+                        var result = config.Done();
+                        resolve(result);
+                    })
+                        .catch(function () { return reject(); }); })
+                        .catch(function () { return reject(); });
+                });
             }
             Dialogs.create = create;
             Dialogs.bootstrapEnabled = true;
@@ -68,7 +75,7 @@ var Dynamics;
                 prefix = prefix || Crm.Publishers.bootstrap;
                 provider = Dialogs.bootstrapEnabled ?
                     new Dialogs.BootstrapDialogProvider(win, prefix) :
-                    new Dialogs.CrmDialogProvider(win);
+                    new Dialogs.CrmDialogProvider();
             }
             Dialogs.init = init;
         })(Dialogs = Crm.Dialogs || (Crm.Dialogs = {}));

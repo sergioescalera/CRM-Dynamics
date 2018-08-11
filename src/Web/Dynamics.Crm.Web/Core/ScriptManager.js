@@ -8,8 +8,8 @@ var Dynamics;
             var _scripts = {};
             var _stylesheets = [];
             function loadScripts(scripts, win) {
-                var deferreds = scripts.map(function (s) { return loadScript(s, win); });
-                return win.$.when.apply(win.$, deferreds);
+                var promises = scripts.map(function (s) { return loadScript(s, win); });
+                return Promise.all(promises);
             }
             ScriptManager.loadScripts = loadScripts;
             function loadScript(script, win) {
@@ -18,15 +18,16 @@ var Dynamics;
                 if (!!promise) {
                     return promise;
                 }
-                _scripts[script] = promise = win.$.Deferred();
-                var element = win.document.createElement("script");
-                element.defer = true;
-                element.type = "text/javascript";
-                element.src = script;
-                element.addEventListener("load", function onLoaded() {
-                    promise.resolveWith(element);
+                _scripts[script] = promise = new Promise(function (resolve, reject) {
+                    var element = win.document.createElement("script");
+                    element.defer = true;
+                    element.type = "text/javascript";
+                    element.src = script;
+                    element.addEventListener("load", function onLoaded() {
+                        resolve();
+                    });
+                    win.document.body.appendChild(element);
                 });
-                win.document.body.appendChild(element);
                 return promise;
             }
             ScriptManager.loadScript = loadScript;

@@ -7,21 +7,21 @@ module Dynamics.Crm.ScriptManager {
 
     "use strict";
 
-    let _scripts = {};
-    let _stylesheets = [];
+    let _scripts: _.Dictionary<Promise<void>> = {};
+    let _stylesheets: string[] = [];
 
     export function loadScripts(
         scripts: string[],
-        win: JQueryWindow): JQueryPromise<JQueryPromise<void>[]> {
+        win: JQueryWindow): Promise<void> {
 
-        let deferreds = scripts.map((s: string) => loadScript(s, win));
+        let promises: Promise<void>[] = scripts.map((s: string) => loadScript(s, win));
 
-        return win.$.when.apply(win.$, deferreds);
+        return Promise.all(promises);
     }
 
     export function loadScript(
         script: string,
-        win: JQueryWindow): JQueryPromise<void> {
+        win: JQueryWindow): Promise<void> {
 
         console.log("Dynamics.Crm.ScriptManager.loadScript: " + script);
 
@@ -31,19 +31,20 @@ module Dynamics.Crm.ScriptManager {
             return promise;
         }
 
-        _scripts[script] = promise = win.$.Deferred<void>();
+        _scripts[script] = promise = new Promise((resolve, reject) => {
 
-        let element = win.document.createElement("script");
+            let element = win.document.createElement("script");
 
-        element.defer = true;
-        element.type = "text/javascript";
-        element.src = script;
-        element.addEventListener("load", function onLoaded(): void {
+            element.defer = true;
+            element.type = "text/javascript";
+            element.src = script;
+            element.addEventListener("load", function onLoaded(): void {
 
-            promise.resolveWith(element);
+                resolve();
+            });
+
+            win.document.body.appendChild(element);
         });
-
-        win.document.body.appendChild(element);
 
         return promise;
     }

@@ -6,17 +6,18 @@ var Dynamics;
         (function (Dialogs) {
             "use strict";
             var CrmAlertDialog = /** @class */ (function () {
-                function CrmAlertDialog(window, message) {
-                    this._window = window;
+                function CrmAlertDialog(message) {
                     this._message = message;
                 }
                 CrmAlertDialog.prototype.Show = function () {
-                    var deferred = this._window.$.Deferred();
-                    Xrm.Navigation
-                        .openAlertDialog({
-                        text: this._message
-                    }).then(function () { return deferred.resolve(); });
-                    return deferred;
+                    var _this = this;
+                    return new Promise(function (resolve, reject) {
+                        Xrm.Navigation
+                            .openAlertDialog({
+                            confirmButtonLabel: "Ok",
+                            text: _this._message
+                        }).then(function () { return resolve(); });
+                    });
                 };
                 CrmAlertDialog.prototype.Destroy = function () {
                 };
@@ -24,22 +25,22 @@ var Dynamics;
             }());
             Dialogs.CrmAlertDialog = CrmAlertDialog;
             var CrmConfirmDialog = /** @class */ (function () {
-                function CrmConfirmDialog(window, message, title) {
-                    this._window = window;
+                function CrmConfirmDialog(message, title) {
                     this._message = message;
                     this._title = title;
                 }
                 CrmConfirmDialog.prototype.Show = function () {
-                    var deferred = this._window.$.Deferred();
-                    Xrm.Navigation.openConfirmDialog({
-                        text: this._message,
-                        title: this._title
-                    }).then(function () {
-                        deferred.resolve(true);
-                    }, function () {
-                        deferred.reject();
+                    var _this = this;
+                    return new Promise(function (resolve, reject) {
+                        Xrm.Navigation.openConfirmDialog({
+                            text: _this._message,
+                            title: _this._title
+                        }).then(function () {
+                            resolve(true);
+                        }, function () {
+                            reject();
+                        });
                     });
-                    return deferred;
                 };
                 CrmConfirmDialog.prototype.Destroy = function () {
                 };
@@ -47,18 +48,13 @@ var Dynamics;
             }());
             Dialogs.CrmConfirmDialog = CrmConfirmDialog;
             var CrmDialogProvider = /** @class */ (function () {
-                function CrmDialogProvider(window) {
-                    this._window = window;
+                function CrmDialogProvider() {
                 }
                 CrmDialogProvider.prototype.Alert = function (message, title) {
-                    var deferred = this._window.$.Deferred();
-                    deferred.resolve(new CrmAlertDialog(this._window, message));
-                    return deferred;
+                    return Promise.resolve(new CrmAlertDialog(message));
                 };
                 CrmDialogProvider.prototype.Confirm = function (message, title) {
-                    var deferred = this._window.$.Deferred();
-                    deferred.resolve(new CrmConfirmDialog(this._window, message, title));
-                    return deferred;
+                    return Promise.resolve(new CrmConfirmDialog(message, title));
                 };
                 CrmDialogProvider.prototype.Create = function (config) {
                     throw Error("Not supported.");

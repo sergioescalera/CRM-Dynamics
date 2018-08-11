@@ -4,25 +4,23 @@
 
     export class CrmAlertDialog implements IDialog<void> {
 
-        private _window: JQueryWindow;
         private _message: string;
 
-        constructor(window: JQueryWindow, message: string) {
+        constructor(message: string) {
 
-            this._window = window;
             this._message = message;
         }
 
-        Show(): JQueryPromise<void> {
+        Show(): Promise<void> {
 
-            let deferred: JQueryDeferred<void> = this._window.$.Deferred<void>();
+            return new Promise((resolve, reject) => {
 
-            Xrm.Navigation
-                .openAlertDialog({
-                    text: this._message
-                }).then(() => deferred.resolve());
-
-            return deferred;
+                Xrm.Navigation
+                    .openAlertDialog({
+                        confirmButtonLabel: "Ok",
+                        text: this._message
+                    }).then(() => resolve());
+            });
         }
 
         Destroy(): void {
@@ -31,31 +29,28 @@
 
     export class CrmConfirmDialog implements IDialog<boolean> {
 
-        private _window: JQueryWindow;
         private _message: string;
         private _title: string;
 
-        constructor(window: JQueryWindow, message: string, title: string) {
+        constructor(message: string, title: string) {
 
-            this._window = window;
             this._message = message;
             this._title = title;
         }
 
-        Show(): JQueryPromise<boolean> {
+        Show(): Promise<boolean> {
 
-            let deferred: JQueryDeferred<boolean> = this._window.$.Deferred<boolean>();
+            return new Promise((resolve, reject) => {
 
-            Xrm.Navigation.openConfirmDialog({
-                text: this._message,
-                title: this._title
-            }).then(() => {
-                deferred.resolve(true);
-            }, () => {
-                deferred.reject();
+                Xrm.Navigation.openConfirmDialog({
+                    text: this._message,
+                    title: this._title
+                }).then(() => {
+                    resolve(true);
+                }, () => {
+                    reject();
+                });
             });
-
-            return deferred;
         }
 
         Destroy(): void {
@@ -64,32 +59,17 @@
 
     export class CrmDialogProvider implements IDialogProvider {
 
-        private _window: JQueryWindow;
+        Alert(message: string, title: string): Promise<IDialog<void>> {
 
-        constructor(window: JQueryWindow) {
-
-            this._window = window;
+            return Promise.resolve(new CrmAlertDialog(message));
         }
 
-        Alert(message: string, title: string): JQueryPromise<IDialog<void>> {
+        Confirm(message: string, title: string): Promise<IDialog<boolean>> {
 
-            let deferred: JQueryDeferred<IDialog<void>> = this._window.$.Deferred<IDialog<void>>();
-
-            deferred.resolve(new CrmAlertDialog(this._window, message));
-
-            return deferred;
+            return Promise.resolve(new CrmConfirmDialog(message, title));
         }
 
-        Confirm(message: string, title: string): JQueryPromise<IDialog<boolean>> {
-
-            let deferred: JQueryDeferred<IDialog<boolean>> = this._window.$.Deferred<IDialog<boolean>>();
-
-            deferred.resolve(new CrmConfirmDialog(this._window, message, title));
-
-            return deferred;
-        }
-
-        Create<TResult>(config: IDialogConfig<TResult>): JQueryPromise<IDialog<TResult>> {
+        Create<TResult>(config: IDialogConfig<TResult>): Promise<IDialog<TResult>> {
 
             throw Error("Not supported.");
         }
