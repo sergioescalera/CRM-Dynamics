@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>MS Dynamics CRM - Record Counter</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <script src="https://ajax.aspnetcdn.com/ajax/modernizr/modernizr-2.8.3.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.10/angular-material.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <link rel="stylesheet" href="../Styles/stylesheet.css" />
+</head>
+<body>
+    <header>
+        <md-toolbar class="md-primary">
+            <div class="md-toolbar-tools">
+                <h2>CRM Record Counter</h2>
+            </div>
+        </md-toolbar>
+    </header>
+    <section class="crm-record-counter"
+             style="display: none"
+             ng-style="{ display: 'block' }"
+             ng-controller="recordCounter.ui.controllers.mainController as vm">
+        <md-content class="md-padding">
+            <md-progress-linear md-mode="indeterminate" ng-show="vm.isBusy"></md-progress-linear>
+            <form name="SearchForm">
+                <md-card>
+                    <md-card-title>
+                        <md-card-title-text>
+                            <span class="md-headline">Filter Entities</span>
+                        </md-card-title-text>
+                    </md-card-title>
+
+                    <md-card-content layout="column">
+
+                        <md-input-container class="md-block">
+                            <input ng-model="vm.filter"
+                                   type="text"
+                                   placeholder="Logical Name"
+                                   required />
+                        </md-input-container>
+
+                    </md-card-content>
+
+                    <md-card-actions layout="row"
+                                     layout-align="end center">
+
+                        <md-button class="md-raised md-primary"
+                                   type="submit"
+                                   ng-disabled="SearchForm.$invalid || vm.isBusy"
+                                   ng-click="vm.search()"
+                                   title="Search">
+                            <md-icon>search</md-icon> Search
+                        </md-button>
+
+                        <md-button class="md-raised"
+                                   ng-disabled="vm.isBusy"
+                                   ng-click="vm.clear()"
+                                   title="Clear filter">
+                            <md-icon>clear</md-icon> Clear
+                        </md-button>
+
+                        <md-button class="md-raised"
+                                   ng-disabled="vm.isBusy"
+                                   ng-click="vm.process()"
+                                   title="Count Records">
+                            <md-icon>settings</md-icon> Count
+                        </md-button>
+
+                        <md-button class="md-raised"
+                                   ng-disabled="vm.isBusy"
+                                   ng-click="vm.export()"
+                                   title="Export to CSV">
+                            <md-icon>save</md-icon> Export
+                        </md-button>
+
+                    </md-card-actions>
+                </md-card>
+            </form>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Display Name</th>
+                        <th>Schema Name</th>
+                        <th>Logical Name</th>
+                        <th>Record Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="entity in vm.entities">
+                        <td>
+                            <span ng-hide="entity.DisplayName.UserLocalizedLabel.Label">N/A</span>
+                            <span ng-bind="entity.DisplayName.UserLocalizedLabel.Label"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="entity.SchemaName"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="entity.LogicalName"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="vm.counter[entity.LogicalName]"></span>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4">
+                            <pager data-current-page="vm.currentPage"
+                                   data-total="vm.total"
+                                   data-page-size="vm.pageSize"></pager>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </md-content>
+    </section>
+    <footer></footer>
+    <script src="../../../../ClientGlobalContext.js.aspx"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular-messages.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular-sanitize.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.10/angular-material.min.js"></script>
+    <script src="../Scripts/Bundle.js"></script>
+</body>
+</html>

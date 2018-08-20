@@ -168,6 +168,12 @@
       <DependentUpon>SDK.MetaData.js</DependentUpon>
     </Content>
     <Content Include="Widgets\MetadataBrowser\Styles\stylesheet.css" />
+    <Content Include="Widgets\RecordCounter\Html\main.html" />
+    <Content Include="Widgets\RecordCounter\Scripts\Bundle.js" />
+    <Content Include="Widgets\RecordCounter\Scripts\Bundle.min.js">
+      <DependentUpon>Bundle.js</DependentUpon>
+    </Content>
+    <Content Include="Widgets\RecordCounter\Styles\stylesheet.css" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -249,6 +255,8 @@
     <TypeScriptCompile Include="Widgets\MetadataBrowser\Scripts\Directives\PropertyBrowser.ts" />
     <TypeScriptCompile Include="Widgets\MetadataBrowser\Scripts\Services\NavigationService.ts" />
     <TypeScriptCompile Include="Widgets\MetadataBrowser\Scripts\Services\ODataService.ts" />
+    <TypeScriptCompile Include="Widgets\RecordCounter\Scripts\Config.ts" />
+    <TypeScriptCompile Include="Widgets\RecordCounter\Scripts\Controllers\MainController.ts" />
     <TypeScriptCompile Include="_typings\angular.d.ts" />
     <TypeScriptCompile Include="_typings\bootstrap.d.ts" />
     <TypeScriptCompile Include="_typings\Dynamics.Crm.Forms.d.ts" />

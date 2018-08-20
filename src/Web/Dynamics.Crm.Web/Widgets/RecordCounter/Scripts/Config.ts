@@ -1,4 +1,4 @@
-﻿module MetadataBrower.Config {
+﻿module RecordCounter.Config {
 
     "use strict";
 
@@ -6,7 +6,7 @@
         "entitydefinition": "EntityDefinitions"
     });
 
-    export var moduleName = "metadata-browser";
+    export var moduleName = "record-counter";
 
     function init() {
         angular.bootstrap(document, [
@@ -14,13 +14,11 @@
         ]);
     }
 
-    angular.module(moduleName, []);
-
     angular.module(moduleName, [
         "ngMaterial",
         "ngMessages",
-        Core.dataService,
-        Controllers.pager
+        MetadataBrower.Core.dataService,
+        MetadataBrower.Controllers.pager
     ]);
 
     angular.element(document)

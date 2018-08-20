@@ -1560,7 +1560,9 @@ var Dynamics;
                 "DisplayName",
                 "LogicalName",
                 "ObjectTypeCode",
-                "SchemaName"
+                "SchemaName",
+                "EntitySetName",
+                "PrimaryIdAttribute"
             ];
             function entityDefinitions(attributes) {
                 if (attributes === void 0) { attributes = entityDefinitionAttributes; }

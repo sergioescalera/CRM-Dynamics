@@ -10,7 +10,9 @@
 
     let executeTaskErrorHtmlMessage: string = `Something went wrong.<br />
 Clearing your browser's cache <u>(using Ctrl + F5)</u> may help solve the problem.`;
+
     let executeTaskErrorMessage: string = `Something went wrong. Clearing your browser's cache (using Ctrl + F5) may help solve the problem.`;
+
     let executeTaskErrorNotificationId: string = "ExecuteTaskErrorNotification";
 
     export function execute(

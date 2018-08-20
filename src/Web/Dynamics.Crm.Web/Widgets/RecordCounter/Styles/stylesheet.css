@@ -1,0 +1,28 @@
+﻿[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+table {
+    border-spacing: 0;
+    width: 100%;
+}
+
+    table thead th {
+        background-color: #4c9ef0;
+        color: #fff;
+        padding: 12px 16px;
+        text-align: left;
+    }
+
+    table tbody td {
+        background-color: #e3ecf5;
+        color: hsla(0, 0%, 0%, 0.87);
+        padding: 12px 16px;
+        text-align: left;
+    }
+
+    table tfoot td {
+        color: hsla(0, 0%, 0%, 0.87);
+        padding: 12px 16px;
+        text-align: left;
+    }

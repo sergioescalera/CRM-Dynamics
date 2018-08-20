@@ -68,6 +68,8 @@
         }
     }
 
-    angular.module(Config.moduleName)
-        .directive("pager", pagerFactory);
+    export var pager: string = "pager";
+
+    angular.module(pager, [])
+        .directive(pager, pagerFactory);
 }

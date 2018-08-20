@@ -44,7 +44,8 @@ var MetadataBrower;
             PagerController.$inject = ["$scope"];
             return PagerController;
         }());
-        angular.module(MetadataBrower.Config.moduleName)
-            .directive("pager", pagerFactory);
+        Controllers.pager = "pager";
+        angular.module(Controllers.pager, [])
+            .directive(Controllers.pager, pagerFactory);
     })(Controllers = MetadataBrower.Controllers || (MetadataBrower.Controllers = {}));
 })(MetadataBrower || (MetadataBrower = {}));

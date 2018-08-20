@@ -14,6 +14,19 @@
     ]
   },
   {
+    "outputFileName": "Widgets/RecordCounter/Scripts/Bundle.js",
+    "inputFiles": [
+      "Core/Constants.js",
+      "Core/Diagnostics.js",
+      "Core/Validation.js",
+      "Data/OData.js",
+      "Widgets/MetadataBrowser/Scripts/Services/ODataService.js",
+      "Widgets/MetadataBrowser/Scripts/Directives/Pager.js",
+      "Widgets/RecordCounter/Scripts/Config.js",
+      "Widgets/RecordCounter/Scripts/Controllers/*.js"
+    ]
+  },
+  {
     "outputFileName": "Scripts/Libs/SDK.MetaData.min.js",
     "inputFiles": [
       "Scripts/Libs/SDK.MetaData.js"

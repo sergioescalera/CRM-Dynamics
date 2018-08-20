@@ -344,7 +344,9 @@
         "DisplayName",
         "LogicalName",
         "ObjectTypeCode",
-        "SchemaName"
+        "SchemaName",
+        "EntitySetName",
+        "PrimaryIdAttribute"
     ];
 
     export function entityDefinitions(
@@ -429,6 +431,8 @@ interface IEntityDefinition {
     MetadataId?: string;
     ObjectTypeCode?: number;
     SchemaName?: string;
+    EntitySetName?: string;
+    PrimaryIdAttribute?: string;
 }
 
 interface IAttributeDefinition {

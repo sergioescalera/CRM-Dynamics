@@ -579,68 +579,6 @@ var Dynamics;
 
 var MetadataBrower;
 (function (MetadataBrower) {
-    var Config;
-    (function (Config) {
-        "use strict";
-        window["ENTITY_SET_NAMES"] = window["ENTITY_SET_NAMES"] || JSON.stringify({
-            "entitydefinition": "EntityDefinitions"
-        });
-        Config.moduleName = "metadata-browser";
-        function init() {
-            angular.bootstrap(document, [
-                Config.moduleName
-            ]);
-        }
-        angular.module(Config.moduleName, []);
-        angular.module(Config.moduleName, [
-            "ngMaterial",
-            "ngMessages",
-            MetadataBrower.Core.dataService,
-            MetadataBrower.Controllers.pager
-        ]);
-        angular.element(document)
-            .ready(init);
-    })(Config = MetadataBrower.Config || (MetadataBrower.Config = {}));
-})(MetadataBrower || (MetadataBrower = {}));
-
-var MetadataBrower;
-(function (MetadataBrower) {
-    var Core;
-    (function (Core) {
-        "use strict";
-        var NavigationService = /** @class */ (function () {
-            function NavigationService() {
-                this.EntityTabs = [];
-            }
-            NavigationService.prototype.AddEntityTab = function (entity) {
-                var filtered = this.EntityTabs
-                    .filter(function (x) { return x.entity.LogicalName === entity.LogicalName; });
-                if (filtered.length > 0) {
-                    this.SelectedIndex = this.EntityTabs.indexOf(filtered[0]) + 1;
-                }
-                else {
-                    this.EntityTabs.push({
-                        entity: entity,
-                        title: entity.SchemaName
-                    });
-                    this.SelectedIndex = this.EntityTabs.length;
-                }
-            };
-            NavigationService.prototype.DeleteEntityTab = function (tab) {
-                _.remove(this.EntityTabs, function (t) { return t.entity.LogicalName === tab.entity.LogicalName; });
-            };
-            return NavigationService;
-        }());
-        function NavigationServiceFactory() {
-            return new NavigationService();
-        }
-        angular.module(MetadataBrower.Config.moduleName)
-            .factory("metadataBrowser.core.navigationService", [NavigationServiceFactory]);
-    })(Core = MetadataBrower.Core || (MetadataBrower.Core = {}));
-})(MetadataBrower || (MetadataBrower = {}));
-
-var MetadataBrower;
-(function (MetadataBrower) {
     var Core;
     (function (Core) {
         "use strict";
@@ -697,100 +635,6 @@ var MetadataBrower;
 
 var MetadataBrower;
 (function (MetadataBrower) {
-    var Controller;
-    (function (Controller) {
-        "use strict";
-        function entityDetailsFactory() {
-            return {
-                controller: EntityDetails,
-                restrict: "E",
-                scope: {
-                    entity: "="
-                },
-                templateUrl: "templates/entity_details.html"
-            };
-        }
-        var EntityDetails = /** @class */ (function () {
-            function EntityDetails(scope, dataService) {
-                this._dataService = dataService;
-                scope.vm = {
-                    advancedView: false,
-                    attributes: [],
-                    currentPage: 1,
-                    entity: scope.entity,
-                    entityAttributes: [],
-                    isBusy: false,
-                    filter: "",
-                    pageSize: 20,
-                    total: 0
-                };
-                scope.clear = this.clear.bind(this);
-                scope.search = this.search.bind(this);
-                scope.export = this.export.bind(this);
-                this.vm = scope.vm;
-                this.loadEntityMetadata();
-                scope.$watch("vm.currentPage", this.filterAttributes.bind(this));
-            }
-            EntityDetails.prototype.clear = function () {
-                this.vm.currentPage = 1;
-                this.vm.filter = "";
-                this.showAttributes();
-            };
-            EntityDetails.prototype.export = function () {
-                console.warn("Not implemented");
-            };
-            EntityDetails.prototype.filterAttributes = function () {
-                var filter = this.vm.filter;
-                var attributes = this.vm.entityAttributes.filter(function (att) {
-                    return att.LogicalName.indexOf(filter) >= 0;
-                });
-                this.showAttributes(attributes);
-            };
-            EntityDetails.prototype.loadEntityMetadata = function () {
-                var _this = this;
-                this.vm.isBusy = true;
-                return this._dataService
-                    .GetAttributes(this.vm.entity)
-                    .then(function (array) {
-                    _this.vm.entityAttributes = array.sort(function (a1, a2) {
-                        if (a1.LogicalName < a2.LogicalName) {
-                            return -1;
-                        }
-                        if (a1.LogicalName > a2.LogicalName) {
-                            return 1;
-                        }
-                        return 0;
-                    });
-                    _this.showAttributes();
-                    return _this.vm.entityAttributes;
-                })
-                    .finally(this.loadEntityMetadataCompleted.bind(this));
-            };
-            EntityDetails.prototype.loadEntityMetadataCompleted = function () {
-                this.vm.isBusy = false;
-            };
-            EntityDetails.prototype.search = function () {
-                this.vm.currentPage = 1;
-                this.filterAttributes();
-            };
-            EntityDetails.prototype.showAttributes = function (attributes) {
-                attributes = attributes || this.vm.entityAttributes;
-                var pageSize = this.vm.pageSize;
-                var skip = (this.vm.currentPage - 1) * pageSize;
-                this.vm.total = attributes.length;
-                this.vm.attributes = attributes
-                    .filter(function (a, index) { return index >= skip && index < skip + pageSize; });
-            };
-            EntityDetails.$inject = ["$scope", "metadataBrowser.core.dataService"];
-            return EntityDetails;
-        }());
-        angular.module(MetadataBrower.Config.moduleName)
-            .directive("entityDetails", entityDetailsFactory);
-    })(Controller = MetadataBrower.Controller || (MetadataBrower.Controller = {}));
-})(MetadataBrower || (MetadataBrower = {}));
-
-var MetadataBrower;
-(function (MetadataBrower) {
     var Controllers;
     (function (Controllers) {
         "use strict";
@@ -841,122 +685,151 @@ var MetadataBrower;
     })(Controllers = MetadataBrower.Controllers || (MetadataBrower.Controllers = {}));
 })(MetadataBrower || (MetadataBrower = {}));
 
-var MetadataBrower;
-(function (MetadataBrower) {
+var RecordCounter;
+(function (RecordCounter) {
+    var Config;
+    (function (Config) {
+        "use strict";
+        window["ENTITY_SET_NAMES"] = window["ENTITY_SET_NAMES"] || JSON.stringify({
+            "entitydefinition": "EntityDefinitions"
+        });
+        Config.moduleName = "record-counter";
+        function init() {
+            angular.bootstrap(document, [
+                Config.moduleName
+            ]);
+        }
+        angular.module(Config.moduleName, [
+            "ngMaterial",
+            "ngMessages",
+            MetadataBrower.Core.dataService,
+            MetadataBrower.Controllers.pager
+        ]);
+        angular.element(document)
+            .ready(init);
+    })(Config = RecordCounter.Config || (RecordCounter.Config = {}));
+})(RecordCounter || (RecordCounter = {}));
+
+var RecordCounter;
+(function (RecordCounter) {
     var Controllers;
     (function (Controllers) {
         "use strict";
-        function picklistFactory() {
-            return {
-                controller: PicklistController,
-                restrict: "E",
-                scope: {
-                    entity: "=",
-                    attribute: "="
-                },
-                template: "\n<a href=\"javascript:void(0);\" class=\"picklist-toggle\" ng-click=\"load()\">+\n    <md-tooltip md-direction=\"right\" class=\"picklist\">\n        <span ng-if=\"!options\">Click to load options</span>\n        <span ng-if=\"options && !options.length\">Loading...</span>\n        <ul class=\"options\" ng-if=\"options && options.length\">\n            <li class=\"option\" ng-repeat=\"option in options\">\n                <span ng-bind=\"option.Label.UserLocalizedLabel.Label\"></span>\n                <span ng-if=\"option.Value !== null\">&nbsp;=&nbsp;</span>\n                <span ng-bind=\"option.Value\"></span>\n            </li>\n        </ul>\n    </md-tooltip>\n</a>"
-            };
-        }
-        var PicklistController = /** @class */ (function () {
-            function PicklistController(scope, dataService) {
-                scope.load = function () {
-                    if (scope.options) {
-                        return;
-                    }
-                    scope.options = [];
-                    dataService
-                        .GetOptionSets(scope.entity, scope.attribute)
-                        .then(function (optionSets) {
-                        scope.options = optionSets;
-                        if (!scope.options.length) {
-                            scope.options.push({
-                                Label: {
-                                    UserLocalizedLabel: {
-                                        Label: "No values"
-                                    }
-                                },
-                                Value: null
-                            });
-                        }
-                    })
-                        .catch(function () {
-                        scope.options = null;
-                    });
-                };
+        function executeInBatch(q, array, task, start, size, continueOnError) {
+            if (start === void 0) { start = 0; }
+            if (size === void 0) { size = 3; }
+            if (continueOnError === void 0) { continueOnError = true; }
+            if (start >= array.length) {
+                return q.resolve();
             }
-            PicklistController.$inject = ["$scope", "metadataBrowser.core.dataService"];
-            return PicklistController;
-        }());
-        angular.module(MetadataBrower.Config.moduleName)
-            .directive("picklist", picklistFactory);
-    })(Controllers = MetadataBrower.Controllers || (MetadataBrower.Controllers = {}));
-})(MetadataBrower || (MetadataBrower = {}));
-
-var MetadataBrower;
-(function (MetadataBrower) {
-    var Controllers;
-    (function (Controllers) {
-        "use strict";
-        function propertyBrowser() {
-            return {
-                restrict: "E",
-                scope: {
-                    object: "="
-                },
-                templateUrl: "templates/property_browser.html"
+            var batch = array.slice(start, start + size);
+            var tasks = batch.map(function (o) { return task(o); });
+            var defer = q.defer();
+            var next = function () {
+                executeInBatch(q, array, task, start + size, size)
+                    .then(function () {
+                    defer.resolve();
+                })
+                    .catch(function (reason) {
+                    if (continueOnError) {
+                        defer.resolve();
+                    }
+                    else {
+                        defer.reject(reason);
+                    }
+                });
             };
+            q.all(tasks)
+                .then(function () {
+                next();
+            })
+                .catch(function (reason) {
+                if (continueOnError) {
+                    next();
+                }
+                else {
+                    defer.reject(reason);
+                }
+            });
+            return defer.promise;
         }
-        angular.module(MetadataBrower.Config.moduleName)
-            .directive("propertyBrowser", propertyBrowser);
-    })(Controllers = MetadataBrower.Controllers || (MetadataBrower.Controllers = {}));
-})(MetadataBrower || (MetadataBrower = {}));
-
-var MetadataBrower;
-(function (MetadataBrower) {
-    var Controllers;
-    (function (Controllers) {
-        "use strict";
-        var EntityListController = /** @class */ (function () {
-            function EntityListController($scope, navigationService, dataService) {
-                this.advancedView = false;
+        var MainController = /** @class */ (function () {
+            function MainController(scope, q, http, dataService) {
+                this._q = q;
+                this._http = http;
+                this._dataService = dataService;
+                this.counter = {};
                 this.currentPage = 1;
+                this.data = [];
                 this.entities = [];
-                this.entitiesToShow = [];
                 this.filter = "";
                 this.isBusy = false;
                 this.pageSize = 20;
                 this.total = 0;
-                this.navigationService = navigationService;
-                this.dataService = dataService;
-                $scope.$watch("vm.currentPage", this.filterEntities.bind(this));
+                scope.$watch("vm.currentPage", this.filterEntities.bind(this));
                 this.loadEntities();
             }
-            EntityListController.prototype.clear = function () {
+            MainController.prototype.search = function () {
+                this.currentPage = 1;
+                this.filterEntities();
+            };
+            MainController.prototype.clear = function () {
                 this.currentPage = 1;
                 this.filter = "";
                 this.showEntities();
             };
-            EntityListController.prototype.exportToCsv = function () {
+            MainController.prototype.process = function () {
+                var _this = this;
+                this.isBusy = true;
+                executeInBatch(this._q, this.data, function (entity) {
+                    var fetch = "<fetch aggregate=\"true\">\n<entity name=\"" + entity.LogicalName + "\">\n    <attribute name=\"" + entity.PrimaryIdAttribute + "\" aggregate=\"count\" alias=\"count\" />\n</entity>\n</fetch>";
+                    var url = Xrm.Utility.getGlobalContext().getClientUrl() + "/api/data/v9.0/" + entity.EntitySetName + "?fetchXml=" + encodeURIComponent(fetch);
+                    _this.counter[entity.LogicalName] = "Counting...";
+                    return _this._http.get(url)
+                        .then(function (response) {
+                        try {
+                            _this.counter[entity.LogicalName] = response.data.value[0].count;
+                        }
+                        catch (e) {
+                            _this.counter[entity.LogicalName] = null;
+                            console.warn(e);
+                        }
+                    })
+                        .catch(function (response) {
+                        try {
+                            _this.counter[entity.LogicalName] = response.data.error.message;
+                        }
+                        catch (e) {
+                            _this.counter[entity.LogicalName] = "Something went wrong";
+                            console.warn(e);
+                        }
+                    });
+                }, 0, 10)
+                    .finally(function () {
+                    _this.isBusy = false;
+                });
+            };
+            MainController.prototype.exportToCsv = function () {
                 console.warn("Not implemented");
             };
-            EntityListController.prototype.filterEntities = function () {
+            MainController.prototype.filterEntities = function () {
                 var filter = this.filter;
-                var entities = this.entities.filter(function (e) {
+                var entities = this.data.filter(function (e) {
                     return e.LogicalName.indexOf(filter) >= 0;
                 });
                 this.showEntities(entities);
             };
-            EntityListController.prototype.loadEntities = function () {
+            MainController.prototype.loadEntities = function () {
                 var _this = this;
                 this.currentPage = 1;
+                this.data = [];
                 this.entities = [];
-                this.entitiesToShow = [];
                 this.filter = "";
                 this.total = 0;
                 this.isBusy = true;
-                this.dataService.GetEntities()
+                this._dataService.GetEntities()
                     .then(function (data) {
-                    _this.entities = data.sort(function (e1, e2) {
+                    _this.data = data.sort(function (e1, e2) {
                         if (e1.LogicalName < e2.LogicalName) {
                             return -1;
                         }
@@ -967,48 +840,27 @@ var MetadataBrower;
                     });
                     _this.showEntities();
                 })
-                    .finally(this.loadEntitiesCompleted.bind(this));
+                    .finally(function () {
+                    _this.isBusy = false;
+                });
             };
-            EntityListController.prototype.loadEntitiesCompleted = function () {
-                this.isBusy = false;
-            };
-            EntityListController.prototype.showEntities = function (entities) {
-                entities = entities || this.entities;
+            MainController.prototype.showEntities = function (entities) {
+                entities = entities || this.data;
                 var pageSize = this.pageSize;
                 var skip = (this.currentPage - 1) * pageSize;
                 this.total = entities.length;
-                this.entitiesToShow = entities
+                this.entities = entities
                     .filter(function (e, index) { return index >= skip && index < skip + pageSize; });
             };
-            EntityListController.prototype.openEntity = function (entity) {
-                this.navigationService.AddEntityTab(entity);
-            };
-            EntityListController.prototype.search = function () {
-                this.currentPage = 1;
-                this.filterEntities();
-            };
-            EntityListController.$inject = ["$scope", "metadataBrowser.core.navigationService", "metadataBrowser.core.dataService"];
-            return EntityListController;
+            MainController.$inject = [
+                "$scope",
+                "$q",
+                "$http",
+                "metadataBrowser.core.dataService"
+            ];
+            return MainController;
         }());
-        angular.module(MetadataBrower.Config.moduleName)
-            .controller("metadataBrowser.ui.controllers.entityList", EntityListController);
-    })(Controllers = MetadataBrower.Controllers || (MetadataBrower.Controllers = {}));
-})(MetadataBrower || (MetadataBrower = {}));
-
-var MetadataBrower;
-(function (MetadataBrower) {
-    var Controllers;
-    (function (Controllers) {
-        "use strict";
-        var MetadataBrowserController = /** @class */ (function () {
-            function MetadataBrowserController(navigationService) {
-                var vm = this;
-                vm.navigationService = navigationService;
-            }
-            MetadataBrowserController.$inject = ["metadataBrowser.core.navigationService"];
-            return MetadataBrowserController;
-        }());
-        angular.module(MetadataBrower.Config.moduleName)
-            .controller("metadataBrowser.ui.controllers.crmMetadataBrowser", MetadataBrowserController);
-    })(Controllers = MetadataBrower.Controllers || (MetadataBrower.Controllers = {}));
-})(MetadataBrower || (MetadataBrower = {}));
+        angular.module(RecordCounter.Config.moduleName)
+            .controller("recordCounter.ui.controllers.mainController", MainController);
+    })(Controllers = RecordCounter.Controllers || (RecordCounter.Controllers = {}));
+})(RecordCounter || (RecordCounter = {}));
