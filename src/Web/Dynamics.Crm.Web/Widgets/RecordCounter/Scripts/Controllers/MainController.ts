@@ -151,19 +151,19 @@ module RecordCounter.Controllers {
 
             return executeInBatch(this._q, this.data, (entity) => {
 
+                let counter: Counter = {};
+
+                this.counter[entity.LogicalName] = counter;
+
                 if (entity.ExternalName) {
 
-                    this.counter[entity.LogicalName] = {
-                        error: "Unable to count virtual entity"
-                    };
+                    counter.error = "Unable to count virtual entity";
                     
                     return this._q.resolve();
 
                 } else {
 
-                    this.counter[entity.LogicalName] = {
-                        busy: true
-                    };
+                    counter.busy = true;
 
                     let defer = this._q.defer();
 
@@ -171,26 +171,50 @@ module RecordCounter.Controllers {
                         .then(response => {
 
                             try {
-                                this.counter[entity.LogicalName].value = response.data.value[0].count;
+
+                                counter.busy = false;
+                                counter.value = response.data.value[0].count;
+
                             } catch (e) {
-                                this.counter[entity.LogicalName].error = "Unable to retrieve count";
+
+                                counter.error = "Unable to retrieve count";
                                 console.warn(e);
                             }
+
                             defer.resolve();
                         })
                         .catch(response => {
 
                             try {
-                                this.counter[entity.LogicalName].error = response.data.error.message
-                            } catch (e) {
-                                this.counter[entity.LogicalName].error = "Something went wrong";
-                                console.warn(e);
-                            }
-                            defer.resolve();
-                        })
-                        .finally(() => {
 
-                            this.counter[entity.LogicalName].busy = false;
+                                let message = response.data.error.message;
+
+                                if (message.indexOf("AggregateQueryRecordLimit") >= 0) {
+
+                                    this.fetchAll(entity)
+                                        .then(() => {
+
+                                            counter.busy = false;
+                                            defer.resolve();
+                                        })
+                                        .catch(() => {
+
+                                            counter.busy = false;
+                                            defer.resolve();
+                                        });
+
+                                } else {
+
+                                    counter.busy = false;
+                                    counter.error = message;
+                                    defer.resolve();
+                                }
+                            } catch (e) {
+
+                                counter.error = "Something went wrong";
+                                console.warn(e);
+                                defer.resolve();
+                            }
                         });
 
                     return defer.promise;
@@ -205,15 +229,99 @@ module RecordCounter.Controllers {
 
         private fetchAggregateCount(entity: IEntityDefinition): ng.IHttpPromise<any> {
 
-            let fetch = `<fetch aggregate="true">
-<entity name="${entity.LogicalName}">
-    <attribute name="${entity.PrimaryIdAttribute}" aggregate="count" alias="count" />
-</entity>
+            let fetch = `
+<fetch aggregate="true">
+    <entity name="${entity.LogicalName}">
+        <attribute name="${entity.PrimaryIdAttribute}" aggregate="count" alias="count" />
+    </entity>
 </fetch>`;
 
             let url = `${Xrm.Utility.getGlobalContext().getClientUrl()}/api/data/v9.0/${entity.EntitySetName}?fetchXml=${encodeURIComponent(fetch)}`;
 
             return this._http.get<any>(url);
+        }
+
+        private fetchAll(entity: IEntityDefinition): ng.IPromise<any> {
+
+            let counter = this.counter[entity.LogicalName];
+
+            let defer = this._q.defer<any>();
+
+            let url = `${Xrm.Utility.getGlobalContext().getClientUrl()}/api/data/v9.0/${entity.EntitySetName}?$select=${entity.PrimaryIdAttribute}&$count=true`;
+
+            this._http.get<any>(url, {
+                headers: {
+                    "OData-MaxVersion": "4.0",
+                    "OData-Version": "4.0",
+                    "Prefer": "odata.maxpagesize=5000"
+                }
+            })
+                .then(response => {
+
+                    let next: string = response.data["@odata.nextLink"];
+                    let count: number = response.data["@odata.count"];
+
+                    counter.value = count;
+
+                    if (next) {
+
+                        this.fetchNext(entity, counter, next)
+                            .then(() => {
+                                defer.resolve();
+                            });
+
+                    } else {
+
+                        defer.resolve();
+                    }
+                })
+                .catch(() => {
+
+                    counter.error = "Unable to retrieve all records";
+
+                    defer.resolve();
+                });
+
+            return defer.promise;
+        }
+
+        private fetchNext(entity: IEntityDefinition, counter: Counter, url: string): ng.IPromise<any> {
+
+            let defer = this._q.defer();
+
+            this._http.get<any>(url, {
+                headers: {
+                    "OData-MaxVersion": "4.0",
+                    "OData-Version": "4.0"
+                }
+            })
+                .then(response => {
+
+                    let next: string = response.data["@odata.nextLink"];
+                    
+                    if (next) {
+
+                        counter.value += response.data["@odata.count"];
+
+                        this.fetchNext(entity, counter, next)
+                            .then(() => {
+
+                                defer.resolve();
+                            });
+
+                    } else {
+
+                        defer.resolve();
+
+                        counter.value += response.data.value.length;
+                    }
+                })
+                .catch(response => {
+
+                    defer.resolve();
+                });
+
+            return defer.promise;
         }
 
         private filterEntities(): void {

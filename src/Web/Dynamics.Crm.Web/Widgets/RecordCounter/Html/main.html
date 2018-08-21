@@ -120,10 +120,12 @@
                                                   class="md-hue-2"
                                                   md-diameter="18px"></md-progress-circular>
                             <a ng-if="vm.counter[entity.LogicalName].error"
+                               ng-hide="vm.counter[entity.LogicalName].busy"
                                title="{{ vm.counter[entity.LogicalName].error }}">
                                 <md-icon>warning</md-icon>
                             </a>
-                            <span ng-bind="vm.counter[entity.LogicalName].value"></span>
+                            <span ng-bind="vm.counter[entity.LogicalName].value"
+                                  ng-hide="vm.counter[entity.LogicalName].busy"></span>
                         </td>
                     </tr>
                 </tbody>

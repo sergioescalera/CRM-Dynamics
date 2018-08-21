@@ -86,40 +86,52 @@ var RecordCounter;
                 var _this = this;
                 this.isBusy = true;
                 return executeInBatch(this._q, this.data, function (entity) {
+                    var counter = {};
+                    _this.counter[entity.LogicalName] = counter;
                     if (entity.ExternalName) {
-                        _this.counter[entity.LogicalName] = {
-                            error: "Unable to count virtual entity"
-                        };
+                        counter.error = "Unable to count virtual entity";
                         return _this._q.resolve();
                     }
                     else {
-                        _this.counter[entity.LogicalName] = {
-                            busy: true
-                        };
+                        counter.busy = true;
                         var defer_1 = _this._q.defer();
                         _this.fetchAggregateCount(entity)
                             .then(function (response) {
                             try {
-                                _this.counter[entity.LogicalName].value = response.data.value[0].count;
+                                counter.busy = false;
+                                counter.value = response.data.value[0].count;
                             }
                             catch (e) {
-                                _this.counter[entity.LogicalName].error = "Unable to retrieve count";
+                                counter.error = "Unable to retrieve count";
                                 console.warn(e);
                             }
                             defer_1.resolve();
                         })
                             .catch(function (response) {
                             try {
-                                _this.counter[entity.LogicalName].error = response.data.error.message;
+                                var message = response.data.error.message;
+                                if (message.indexOf("AggregateQueryRecordLimit") >= 0) {
+                                    _this.fetchAll(entity)
+                                        .then(function () {
+                                        counter.busy = false;
+                                        defer_1.resolve();
+                                    })
+                                        .catch(function () {
+                                        counter.busy = false;
+                                        defer_1.resolve();
+                                    });
+                                }
+                                else {
+                                    counter.busy = false;
+                                    counter.error = message;
+                                    defer_1.resolve();
+                                }
                             }
                             catch (e) {
-                                _this.counter[entity.LogicalName].error = "Something went wrong";
+                                counter.error = "Something went wrong";
                                 console.warn(e);
+                                defer_1.resolve();
                             }
-                            defer_1.resolve();
-                        })
-                            .finally(function () {
-                            _this.counter[entity.LogicalName].busy = false;
                         });
                         return defer_1.promise;
                     }
@@ -129,9 +141,69 @@ var RecordCounter;
                 });
             };
             MainController.prototype.fetchAggregateCount = function (entity) {
-                var fetch = "<fetch aggregate=\"true\">\n<entity name=\"" + entity.LogicalName + "\">\n    <attribute name=\"" + entity.PrimaryIdAttribute + "\" aggregate=\"count\" alias=\"count\" />\n</entity>\n</fetch>";
+                var fetch = "\n<fetch aggregate=\"true\">\n    <entity name=\"" + entity.LogicalName + "\">\n        <attribute name=\"" + entity.PrimaryIdAttribute + "\" aggregate=\"count\" alias=\"count\" />\n    </entity>\n</fetch>";
                 var url = Xrm.Utility.getGlobalContext().getClientUrl() + "/api/data/v9.0/" + entity.EntitySetName + "?fetchXml=" + encodeURIComponent(fetch);
                 return this._http.get(url);
+            };
+            MainController.prototype.fetchAll = function (entity) {
+                var _this = this;
+                var counter = this.counter[entity.LogicalName];
+                var defer = this._q.defer();
+                var url = Xrm.Utility.getGlobalContext().getClientUrl() + "/api/data/v9.0/" + entity.EntitySetName + "?$select=" + entity.PrimaryIdAttribute + "&$count=true";
+                this._http.get(url, {
+                    headers: {
+                        "OData-MaxVersion": "4.0",
+                        "OData-Version": "4.0",
+                        "Prefer": "odata.maxpagesize=5000"
+                    }
+                })
+                    .then(function (response) {
+                    var next = response.data["@odata.nextLink"];
+                    var count = response.data["@odata.count"];
+                    counter.value = count;
+                    if (next) {
+                        _this.fetchNext(entity, counter, next)
+                            .then(function () {
+                            defer.resolve();
+                        });
+                    }
+                    else {
+                        defer.resolve();
+                    }
+                })
+                    .catch(function () {
+                    counter.error = "Unable to retrieve all records";
+                    defer.resolve();
+                });
+                return defer.promise;
+            };
+            MainController.prototype.fetchNext = function (entity, counter, url) {
+                var _this = this;
+                var defer = this._q.defer();
+                this._http.get(url, {
+                    headers: {
+                        "OData-MaxVersion": "4.0",
+                        "OData-Version": "4.0"
+                    }
+                })
+                    .then(function (response) {
+                    var next = response.data["@odata.nextLink"];
+                    if (next) {
+                        counter.value += response.data["@odata.count"];
+                        _this.fetchNext(entity, counter, next)
+                            .then(function () {
+                            defer.resolve();
+                        });
+                    }
+                    else {
+                        defer.resolve();
+                        counter.value += response.data.value.length;
+                    }
+                })
+                    .catch(function (response) {
+                    defer.resolve();
+                });
+                return defer.promise;
             };
             MainController.prototype.filterEntities = function () {
                 var _this = this;
