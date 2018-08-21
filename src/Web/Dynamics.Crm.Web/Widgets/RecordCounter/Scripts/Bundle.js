@@ -520,7 +520,8 @@ var Dynamics;
                 "ObjectTypeCode",
                 "SchemaName",
                 "EntitySetName",
-                "PrimaryIdAttribute"
+                "PrimaryIdAttribute",
+                "ExternalName"
             ];
             function entityDefinitions(attributes) {
                 if (attributes === void 0) { attributes = entityDefinitionAttributes; }
@@ -766,9 +767,18 @@ var RecordCounter;
                 this.isBusy = false;
                 this.pageSize = 20;
                 this.total = 0;
+                this.operator = ">=";
+                this.compareValue = null;
                 scope.$watch("vm.currentPage", this.filterEntities.bind(this));
-                this.loadEntities();
+                this.refresh();
             }
+            MainController.prototype.refresh = function () {
+                var _this = this;
+                this.loadEntities()
+                    .then(function () {
+                    _this.count();
+                });
+            };
             MainController.prototype.search = function () {
                 this.currentPage = 1;
                 this.filterEntities();
@@ -778,44 +788,64 @@ var RecordCounter;
                 this.filter = "";
                 this.showEntities();
             };
-            MainController.prototype.process = function () {
+            MainController.prototype.exportToCsv = function () {
+                console.warn("Not implemented");
+            };
+            MainController.prototype.count = function () {
                 var _this = this;
                 this.isBusy = true;
                 executeInBatch(this._q, this.data, function (entity) {
-                    var fetch = "<fetch aggregate=\"true\">\n<entity name=\"" + entity.LogicalName + "\">\n    <attribute name=\"" + entity.PrimaryIdAttribute + "\" aggregate=\"count\" alias=\"count\" />\n</entity>\n</fetch>";
-                    var url = Xrm.Utility.getGlobalContext().getClientUrl() + "/api/data/v9.0/" + entity.EntitySetName + "?fetchXml=" + encodeURIComponent(fetch);
-                    _this.counter[entity.LogicalName] = "Counting...";
-                    return _this._http.get(url)
-                        .then(function (response) {
-                        try {
-                            _this.counter[entity.LogicalName] = response.data.value[0].count;
-                        }
-                        catch (e) {
-                            _this.counter[entity.LogicalName] = null;
-                            console.warn(e);
-                        }
-                    })
-                        .catch(function (response) {
-                        try {
-                            _this.counter[entity.LogicalName] = response.data.error.message;
-                        }
-                        catch (e) {
-                            _this.counter[entity.LogicalName] = "Something went wrong";
-                            console.warn(e);
-                        }
-                    });
+                    if (entity.ExternalName) {
+                        _this.counter[entity.LogicalName].error = "Unable to count virtual entity";
+                        return _this._q.resolve();
+                    }
+                    else {
+                        var fetch_1 = "<fetch aggregate=\"true\">\n<entity name=\"" + entity.LogicalName + "\">\n    <attribute name=\"" + entity.PrimaryIdAttribute + "\" aggregate=\"count\" alias=\"count\" />\n</entity>\n</fetch>";
+                        var url = Xrm.Utility.getGlobalContext().getClientUrl() + "/api/data/v9.0/" + entity.EntitySetName + "?fetchXml=" + encodeURIComponent(fetch_1);
+                        _this.counter[entity.LogicalName] = {
+                            busy: true
+                        };
+                        return _this._http.get(url)
+                            .then(function (response) {
+                            try {
+                                _this.counter[entity.LogicalName].value = response.data.value[0].count;
+                            }
+                            catch (e) {
+                                _this.counter[entity.LogicalName].error = "Unable to retrieve count";
+                                console.warn(e);
+                            }
+                        })
+                            .catch(function (response) {
+                            try {
+                                _this.counter[entity.LogicalName].error = response.data.error.message;
+                            }
+                            catch (e) {
+                                _this.counter[entity.LogicalName].error = "Something went wrong";
+                                console.warn(e);
+                            }
+                        })
+                            .finally(function () {
+                            _this.counter[entity.LogicalName].busy = false;
+                        });
+                    }
                 }, 0, 10)
                     .finally(function () {
                     _this.isBusy = false;
                 });
             };
-            MainController.prototype.exportToCsv = function () {
-                console.warn("Not implemented");
-            };
             MainController.prototype.filterEntities = function () {
+                var _this = this;
                 var filter = this.filter;
+                var compare = this.compareValue;
                 var entities = this.data.filter(function (e) {
-                    return e.LogicalName.indexOf(filter) >= 0;
+                    var value = true;
+                    if (filter && e.LogicalName.indexOf(filter) < 0) {
+                        value = false;
+                    }
+                    if (compare && _this.counter[e.LogicalName].value < compare) {
+                        value = false;
+                    }
+                    return value;
                 });
                 this.showEntities(entities);
             };
@@ -827,7 +857,7 @@ var RecordCounter;
                 this.filter = "";
                 this.total = 0;
                 this.isBusy = true;
-                this._dataService.GetEntities()
+                return this._dataService.GetEntities()
                     .then(function (data) {
                     _this.data = data.sort(function (e1, e2) {
                         if (e1.LogicalName < e2.LogicalName) {

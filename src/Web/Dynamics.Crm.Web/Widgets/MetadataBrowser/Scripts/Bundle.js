@@ -520,7 +520,8 @@ var Dynamics;
                 "ObjectTypeCode",
                 "SchemaName",
                 "EntitySetName",
-                "PrimaryIdAttribute"
+                "PrimaryIdAttribute",
+                "ExternalName"
             ];
             function entityDefinitions(attributes) {
                 if (attributes === void 0) { attributes = entityDefinitionAttributes; }

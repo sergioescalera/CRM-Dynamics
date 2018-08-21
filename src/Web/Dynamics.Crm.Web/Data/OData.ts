@@ -346,7 +346,8 @@
         "ObjectTypeCode",
         "SchemaName",
         "EntitySetName",
-        "PrimaryIdAttribute"
+        "PrimaryIdAttribute",
+        "ExternalName"
     ];
 
     export function entityDefinitions(
@@ -433,6 +434,7 @@ interface IEntityDefinition {
     SchemaName?: string;
     EntitySetName?: string;
     PrimaryIdAttribute?: string;
+    ExternalName?: string;
 }
 
 interface IAttributeDefinition {

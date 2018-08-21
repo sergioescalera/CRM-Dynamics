@@ -31,13 +31,24 @@
                         </md-card-title-text>
                     </md-card-title>
 
-                    <md-card-content layout="column">
+                    <md-card-content layout="row">
 
                         <md-input-container class="md-block">
                             <input ng-model="vm.filter"
                                    type="text"
-                                   placeholder="Logical Name"
-                                   required />
+                                   placeholder="Logical name" />
+                        </md-input-container>
+
+                        <md-input-container class="md-block">
+                            <md-select name="operator" ng-model="vm.operator">
+                                <md-option value=">=">>=</md-option>
+                            </md-select>
+                        </md-input-container>
+
+                        <md-input-container class="md-block">
+                            <input ng-model="vm.compareValue"
+                                   type="number"
+                                   placeholder="than value" />
                         </md-input-container>
 
                     </md-card-content>
@@ -60,11 +71,11 @@
                             <md-icon>clear</md-icon> Clear
                         </md-button>
 
-                        <md-button class="md-raised"
+                        <md-button class="md-raised md-primary"
                                    ng-disabled="vm.isBusy"
-                                   ng-click="vm.process()"
-                                   title="Count Records">
-                            <md-icon>settings</md-icon> Count
+                                   ng-click="vm.refresh()"
+                                   title="Refresh">
+                            <md-icon>refresh</md-icon> Refresh
                         </md-button>
 
                         <md-button class="md-raised"
@@ -99,7 +110,15 @@
                             <span ng-bind="entity.LogicalName"></span>
                         </td>
                         <td>
-                            <span ng-bind="vm.counter[entity.LogicalName]"></span>
+                            <md-progress-circular ng-if="vm.counter[entity.LogicalName].busy"
+                                                  class="md-hue-2"
+                                                  md-diameter="18px"></md-progress-circular>
+                            <a ng-if="vm.counter[entity.LogicalName].error"
+                               title="{{ vm.counter[entity.LogicalName].error }}">
+                                <md-icon>warning</md-icon>
+                            </a>
+                            <span ng-if="vm.counter[entity.LogicalName].value"
+                                  ng-bind="vm.counter[entity.LogicalName].value"></span>
                         </td>
                     </tr>
                 </tbody>

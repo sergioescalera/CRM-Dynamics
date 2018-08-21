@@ -50,6 +50,12 @@
         return defer.promise;
     }
 
+    interface Counter {
+        value?: number;
+        error?: string;
+        busy?: boolean;
+    }
+
     class MainController {
 
         static $inject = [
@@ -63,14 +69,17 @@
         private _http: ng.IHttpService;
         private _dataService: MetadataBrower.Core.IDataService;
 
-        counter: _.Dictionary<string>;
+        counter: _.Dictionary<Counter>;
         currentPage: number;
         data: IEntityDefinition[];
         entities: IEntityDefinition[];
-        filter: string;
         isBusy: boolean;
         pageSize: number;
         total: number;
+
+        filter: string;
+        operator: ">=";
+        compareValue: number;
 
         constructor(
             scope: ng.IScope,
@@ -91,9 +100,21 @@
             this.pageSize = 20;
             this.total = 0;
 
+            this.operator = ">=";
+            this.compareValue = null;
+
             scope.$watch("vm.currentPage", this.filterEntities.bind(this));
 
-            this.loadEntities();
+            this.refresh();
+        }
+
+        refresh(): void {
+
+            this.loadEntities()
+                .then(() => {
+
+                    this.count();
+                });
         }
 
         search(): void {
@@ -111,41 +132,61 @@
             this.showEntities();
         }
 
-        process(): void {
+        exportToCsv(): void {
+
+            console.warn("Not implemented");
+        }
+
+        private count(): void {
 
             this.isBusy = true;
 
             executeInBatch(this._q, this.data, (entity) => {
 
-                let fetch = `<fetch aggregate="true">
+                if (entity.ExternalName) {
+
+                    this.counter[entity.LogicalName].error = "Unable to count virtual entity";
+
+                    return this._q.resolve();
+
+                } else {
+
+                    let fetch = `<fetch aggregate="true">
 <entity name="${entity.LogicalName}">
     <attribute name="${entity.PrimaryIdAttribute}" aggregate="count" alias="count" />
 </entity>
 </fetch>`;
 
-                let url = `${Xrm.Utility.getGlobalContext().getClientUrl()}/api/data/v9.0/${entity.EntitySetName}?fetchXml=${encodeURIComponent(fetch)}`;
+                    let url = `${Xrm.Utility.getGlobalContext().getClientUrl()}/api/data/v9.0/${entity.EntitySetName}?fetchXml=${encodeURIComponent(fetch)}`;
 
-                this.counter[entity.LogicalName] = "Counting...";
+                    this.counter[entity.LogicalName] = {
+                        busy: true
+                    };
 
-                return this._http.get<any>(url)
-                    .then(response => {
+                    return this._http.get<any>(url)
+                        .then(response => {
 
-                        try {
-                            this.counter[entity.LogicalName] = response.data.value[0].count;
-                        } catch (e) {
-                            this.counter[entity.LogicalName] = null;
-                            console.warn(e);
-                        }
-                    })
-                    .catch(response => {
+                            try {
+                                this.counter[entity.LogicalName].value = response.data.value[0].count;
+                            } catch (e) {
+                                this.counter[entity.LogicalName].error = "Unable to retrieve count";
+                                console.warn(e);
+                            }
+                        })
+                        .catch(response => {
 
-                        try {
-                            this.counter[entity.LogicalName] = response.data.error.message
-                        } catch (e) {
-                            this.counter[entity.LogicalName] = "Something went wrong";
-                            console.warn(e);
-                        }
-                    });
+                            try {
+                                this.counter[entity.LogicalName].error = response.data.error.message
+                            } catch (e) {
+                                this.counter[entity.LogicalName].error = "Something went wrong";
+                                console.warn(e);
+                            }
+                        })
+                        .finally(() => {
+
+                            this.counter[entity.LogicalName].busy = false;
+                        });
+                }
 
             }, 0, 10)
                 .finally(() => {
@@ -154,24 +195,30 @@
                 });
         }
 
-        exportToCsv(): void {
-
-            console.warn("Not implemented");
-        }
-
         private filterEntities(): void {
 
             let filter: string = this.filter;
+            let compare: number = this.compareValue;
 
             let entities: IEntityDefinition[] = this.data.filter((e: IEntityDefinition) => {
 
-                return e.LogicalName.indexOf(filter) >= 0;
+                let value: boolean = true;
+
+                if (filter && e.LogicalName.indexOf(filter) < 0) {
+                    value = false;
+                }
+
+                if (compare && this.counter[e.LogicalName].value < compare) {
+                    value = false;
+                }
+
+                return value;
             });
 
             this.showEntities(entities);
         }
 
-        private loadEntities(): void {
+        private loadEntities(): ng.IPromise<void> {
 
             this.currentPage = 1;
             this.data = [];
@@ -180,7 +227,7 @@
             this.total = 0;
             this.isBusy = true;
 
-            this._dataService.GetEntities()
+            return this._dataService.GetEntities()
                 .then((data: IEntityDefinition[]) => {
 
                     this.data = data.sort((e1: IEntityDefinition, e2: IEntityDefinition) => {
