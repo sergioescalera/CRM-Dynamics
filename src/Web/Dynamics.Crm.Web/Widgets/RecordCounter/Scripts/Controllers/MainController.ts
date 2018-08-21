@@ -1,4 +1,6 @@
-﻿module RecordCounter.Controllers {
+﻿declare var Chart: any;
+
+module RecordCounter.Controllers {
 
     "use strict";
 
@@ -56,6 +58,8 @@
         busy?: boolean;
     }
 
+    let chart: any;
+    
     class MainController {
 
         static $inject = [
@@ -113,7 +117,11 @@
             this.loadEntities()
                 .then(() => {
 
-                    this.count();
+                    this.count()
+                        .then(() => {
+
+                            this.updateChart();
+                        });
                 });
         }
 
@@ -137,33 +145,29 @@
             console.warn("Not implemented");
         }
 
-        private count(): void {
+        private count(): ng.IPromise<any> {
 
             this.isBusy = true;
 
-            executeInBatch(this._q, this.data, (entity) => {
+            return executeInBatch(this._q, this.data, (entity) => {
 
                 if (entity.ExternalName) {
 
-                    this.counter[entity.LogicalName].error = "Unable to count virtual entity";
-
+                    this.counter[entity.LogicalName] = {
+                        error: "Unable to count virtual entity"
+                    };
+                    
                     return this._q.resolve();
 
                 } else {
-
-                    let fetch = `<fetch aggregate="true">
-<entity name="${entity.LogicalName}">
-    <attribute name="${entity.PrimaryIdAttribute}" aggregate="count" alias="count" />
-</entity>
-</fetch>`;
-
-                    let url = `${Xrm.Utility.getGlobalContext().getClientUrl()}/api/data/v9.0/${entity.EntitySetName}?fetchXml=${encodeURIComponent(fetch)}`;
 
                     this.counter[entity.LogicalName] = {
                         busy: true
                     };
 
-                    return this._http.get<any>(url)
+                    let defer = this._q.defer();
+
+                    this.fetchAggregateCount(entity)
                         .then(response => {
 
                             try {
@@ -172,6 +176,7 @@
                                 this.counter[entity.LogicalName].error = "Unable to retrieve count";
                                 console.warn(e);
                             }
+                            defer.resolve();
                         })
                         .catch(response => {
 
@@ -181,11 +186,14 @@
                                 this.counter[entity.LogicalName].error = "Something went wrong";
                                 console.warn(e);
                             }
+                            defer.resolve();
                         })
                         .finally(() => {
 
                             this.counter[entity.LogicalName].busy = false;
                         });
+
+                    return defer.promise;
                 }
 
             }, 0, 10)
@@ -193,6 +201,19 @@
 
                     this.isBusy = false;
                 });
+        }
+
+        private fetchAggregateCount(entity: IEntityDefinition): ng.IHttpPromise<any> {
+
+            let fetch = `<fetch aggregate="true">
+<entity name="${entity.LogicalName}">
+    <attribute name="${entity.PrimaryIdAttribute}" aggregate="count" alias="count" />
+</entity>
+</fetch>`;
+
+            let url = `${Xrm.Utility.getGlobalContext().getClientUrl()}/api/data/v9.0/${entity.EntitySetName}?fetchXml=${encodeURIComponent(fetch)}`;
+
+            return this._http.get<any>(url);
         }
 
         private filterEntities(): void {
@@ -208,7 +229,9 @@
                     value = false;
                 }
 
-                if (compare && this.counter[e.LogicalName].value < compare) {
+                let counter = this.counter[e.LogicalName] || {};
+
+                if (compare && (!counter.value || counter.value < compare)) {
                     value = false;
                 }
 
@@ -260,6 +283,55 @@
             this.total = entities.length;
             this.entities = entities
                 .filter((e: IEntityDefinition, index: number) => index >= skip && index < skip + pageSize);
+        }
+
+        private updateChart(top: number = 10): void {
+
+            let entities = this.entities.sort((e1, e2) => {
+
+                let c1 = (this.counter[e1.LogicalName] || {}).value || 0;
+                let c2 = (this.counter[e2.LogicalName] || {}).value || 0;
+
+                return c2 - c1;
+
+            }).filter((e1, index) => {
+
+                return index < top;
+            });
+
+            let labels = entities.map(e => e.LogicalName);
+            let data = entities.map(e => this.counter[e.LogicalName].value || 0);
+
+            let dataset = {
+                label: "Top Entities",
+                data: data,
+                backgroundColor: [
+                    "rgba(75, 192, 192, 0.2)",
+                    "rgba(54, 162, 235, 0.2)",
+                    "rgba(255, 206, 86, 0.2)",
+                    "rgba(153, 102, 255, 0.2)",
+                    "rgba(255, 159, 64, 0.2)",
+                    "rgba(255, 99, 132, 0.2)"
+                ],
+                borderWidth: 1
+            };
+
+            if (chart) {
+
+                chart.data.labels = labels;
+                chart.data.datasets[0] = dataset;
+                chart.update();
+
+            } else {
+
+                chart = new Chart("top-entities-chart", {
+                    type: "pie",
+                    data: {
+                        labels: labels,
+                        datasets: [dataset]
+                    }
+                });
+            }
         }
     }
 
