@@ -41,6 +41,9 @@ var RecordCounter;
             });
             return defer.promise;
         }
+        function toCsv(e, c) {
+            return e.LogicalName + "," + c.value + "," + (c.error || "");
+        }
         var chart;
         var MainController = /** @class */ (function () {
             function MainController(scope, q, http, dataService) {
@@ -77,10 +80,22 @@ var RecordCounter;
             MainController.prototype.clear = function () {
                 this.currentPage = 1;
                 this.filter = "";
+                this.compareValue = null;
                 this.showEntities();
             };
-            MainController.prototype.exportToCsv = function () {
-                console.warn("Not implemented");
+            MainController.prototype.export = function () {
+                var _this = this;
+                var blob = new Blob([
+                    "Entity Name,Record Count,Error\n" + this.data.map(function (e) { return toCsv(e, _this.counter[e.LogicalName]); }).join("\n")
+                ], {
+                    type: "text/csv"
+                });
+                var url = URL.createObjectURL(blob);
+                var filename = "record_counter.csv";
+                var download = document.getElementById("download");
+                download.href = url;
+                download.download = filename;
+                download.click();
             };
             MainController.prototype.count = function () {
                 var _this = this;
@@ -258,11 +273,13 @@ var RecordCounter;
             MainController.prototype.updateChart = function (top) {
                 var _this = this;
                 if (top === void 0) { top = 10; }
-                var entities = this.entities.sort(function (e1, e2) {
+                var entities = this.data
+                    .sort(function (e1, e2) {
                     var c1 = (_this.counter[e1.LogicalName] || {}).value || 0;
                     var c2 = (_this.counter[e2.LogicalName] || {}).value || 0;
                     return c2 - c1;
-                }).filter(function (e1, index) {
+                })
+                    .filter(function (e1, index) {
                     return index < top;
                 });
                 var labels = entities.map(function (e) { return e.LogicalName; });
@@ -276,7 +293,11 @@ var RecordCounter;
                         "rgba(255, 206, 86, 0.2)",
                         "rgba(153, 102, 255, 0.2)",
                         "rgba(255, 159, 64, 0.2)",
-                        "rgba(255, 99, 132, 0.2)"
+                        "rgba(255, 99, 132, 0.2)",
+                        "rgba(200, 99, 132, 0.2)",
+                        "rgba(200, 199, 132, 0.2)",
+                        "rgba(255, 50, 102, 0.2)",
+                        "rgba(200, 99, 232, 0.2)"
                     ],
                     borderWidth: 1
                 };
@@ -291,6 +312,10 @@ var RecordCounter;
                         data: {
                             labels: labels,
                             datasets: [dataset]
+                        },
+                        options: {
+                            responsive: false,
+                            maintainAspectRatio: true
                         }
                     });
                 }

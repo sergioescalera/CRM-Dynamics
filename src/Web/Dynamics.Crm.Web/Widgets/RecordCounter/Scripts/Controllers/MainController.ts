@@ -52,6 +52,11 @@ module RecordCounter.Controllers {
         return defer.promise;
     }
 
+    function toCsv(e: IEntityDefinition, c: Counter): string {
+
+        return `${e.LogicalName},${c.value},${(c.error || "")}`;
+    }
+
     interface Counter {
         value?: number;
         error?: string;
@@ -136,13 +141,27 @@ module RecordCounter.Controllers {
 
             this.currentPage = 1;
             this.filter = "";
+            this.compareValue = null;
 
             this.showEntities();
         }
 
-        exportToCsv(): void {
+        export(): void {
 
-            console.warn("Not implemented");
+            let blob: Blob = new Blob([
+                `Entity Name,Record Count,Error
+${this.data.map(e => toCsv(e, this.counter[e.LogicalName])).join("\n")}`], {
+                    type: "text/csv"
+                });
+
+            let url: string = URL.createObjectURL(blob);
+            let filename: string = "record_counter.csv";
+
+            let download = <HTMLAnchorElement>document.getElementById("download");
+
+            download.href = url;
+            download.download = filename;
+            download.click();
         }
 
         private count(): ng.IPromise<any> {
@@ -395,17 +414,18 @@ module RecordCounter.Controllers {
 
         private updateChart(top: number = 10): void {
 
-            let entities = this.entities.sort((e1, e2) => {
+            let entities = this.data
+                .sort((e1, e2) => {
 
-                let c1 = (this.counter[e1.LogicalName] || {}).value || 0;
-                let c2 = (this.counter[e2.LogicalName] || {}).value || 0;
+                    let c1 = (this.counter[e1.LogicalName] || {}).value || 0;
+                    let c2 = (this.counter[e2.LogicalName] || {}).value || 0;
 
-                return c2 - c1;
+                    return c2 - c1;
+                })
+                .filter((e1, index) => {
 
-            }).filter((e1, index) => {
-
-                return index < top;
-            });
+                    return index < top;
+                });
 
             let labels = entities.map(e => e.LogicalName);
             let data = entities.map(e => this.counter[e.LogicalName].value || 0);
@@ -419,7 +439,11 @@ module RecordCounter.Controllers {
                     "rgba(255, 206, 86, 0.2)",
                     "rgba(153, 102, 255, 0.2)",
                     "rgba(255, 159, 64, 0.2)",
-                    "rgba(255, 99, 132, 0.2)"
+                    "rgba(255, 99, 132, 0.2)",
+                    "rgba(200, 99, 132, 0.2)",
+                    "rgba(200, 199, 132, 0.2)",
+                    "rgba(255, 50, 102, 0.2)",
+                    "rgba(200, 99, 232, 0.2)"
                 ],
                 borderWidth: 1
             };
@@ -437,6 +461,10 @@ module RecordCounter.Controllers {
                     data: {
                         labels: labels,
                         datasets: [dataset]
+                    },
+                    options: {
+                        responsive: false,
+                        maintainAspectRatio: true
                     }
                 });
             }

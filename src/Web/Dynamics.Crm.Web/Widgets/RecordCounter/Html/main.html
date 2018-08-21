@@ -89,9 +89,13 @@
                     </md-card-actions>
                 </md-card>
             </form>
-            <md-card>
-                <md-card-content layout="row">
-                    <canvas id="top-entities-chart"></canvas>
+            <md-card ng-hide="vm.isBusy">
+                <md-card-content layout="row"
+                                 layout-align="center center">
+                    <canvas id="top-entities-chart"
+                            height="600"
+                            width="800"
+                            style="width: 800px; height: 600px"></canvas>
                 </md-card-content>
             </md-card>
             <table>
@@ -142,6 +146,7 @@
         </md-content>
     </section>
     <footer></footer>
+    <a id="download" style="display: none;"></a>
     <script src="../../../../ClientGlobalContext.js.aspx"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
