@@ -93,50 +93,35 @@ namespace Dynamics.Crm.Diagnostics
             if (value == null)
                 return "<null>";
 
-            if (value is EntityReference)
+            if (value is EntityReference reference)
             {
-                var reference = (EntityReference)value;
-
                 return $"EntityReference<{reference.LogicalName}>({reference.Id}, {reference.Name})";
             }
 
-            if (value is OptionSetValue)
+            if (value is OptionSetValue optionSet)
             {
-                var optionSet = (OptionSetValue)value;
-
                 return $"OptionSetValue({optionSet.Value})";
             }
 
-            if (value is AliasedValue)
+            if (value is AliasedValue aliased)
             {
-                var aliasedValue = (AliasedValue)value;
-
-                return $"AliasedValue({DisplayValue(aliasedValue.Value, paddingLeft)})";
+                return $"AliasedValue({DisplayValue(aliased.Value, paddingLeft)})";
             }
 
-            if (value is Money)
+            if (value is Money money)
             {
-                var moneyValue = (Money)value;
-
-                return $"Money({DisplayValue(moneyValue.Value, paddingLeft)})";
+                return $"Money({DisplayValue(money.Value, paddingLeft)})";
             }
 
-            if (value is Entity)
+            if (value is Entity entity)
             {
-                var entity = (Entity)value;
-
                 return ToJson(entity, paddingLeft);
             }
 
-            if (value is EntityCollection)
+            if (value is EntityCollection entities)
             {
-                var entities = (EntityCollection)value;
-
                 return ToJson(entities, paddingLeft);
             }
-
-            if (value is ValueType || value is String)
-                return $"<{value.GetType().FullName}, {value.ToString()}>";
 
             return $"<{value.GetType().FullName}, {value.ToString()}>";
         }

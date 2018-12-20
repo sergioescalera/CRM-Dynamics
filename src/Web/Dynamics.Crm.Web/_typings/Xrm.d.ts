@@ -441,15 +441,15 @@ interface GridEntity {
 }
 
 interface ControlNotificationOptions {
-    messages: string[];
+    messages?: string[];
     notificationLevel?: "ERROR" | "RECOMMENDATION";
     uniqueId?: string;
-    actions?: NotificationAction[];
+    actions?: ControlNotificationAction[];
 }
 
-interface NotificationAction {
-    message: string;
-    actions: (() => void)[];
+interface ControlNotificationAction {
+    message?: string;
+    actions?: Function[];
 }
 
 interface NavigationItem {

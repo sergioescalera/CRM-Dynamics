@@ -67,11 +67,13 @@ namespace Dynamics.Crm.Workflows.EmailUtilities
             var users = roleUsers.Union(teamUsers).ToArray();
 
             if (users.Any())
+            {
                 UpdateEmail(
                     context,
                     email,
                     applyTo,
                     users);
+            }
         }
 
         private IEnumerable<Entity> GetTeamUsers(IWorkflowActivityContext context, EntityReference team)
@@ -136,27 +138,38 @@ namespace Dynamics.Crm.Workflows.EmailUtilities
             String applyTo,
             Entity[] users)
         {
-            var update = new Entity(email.LogicalName, email.Id);
+            var attribute = applyTo.ToLower().Trim();
+            var entity = context.OrganizationService.Retrieve(email.LogicalName, email.Id, attribute);
 
-            update.AddOrUpdateAttribute(applyTo.ToLower().Trim(), ToActivityPartyList(users));
+            var collection = entity.GetAttributeValue<EntityCollection>(attribute);
 
-            context.OrganizationService.Update(update);
+            entity.AddOrUpdateAttribute(attribute, MergeActivityPartyList(collection, users));
+
+            context.OrganizationService.Update(entity);
         }
 
-        private EntityCollection ToActivityPartyList(params Entity[] entities)
+        private EntityCollection MergeActivityPartyList(EntityCollection collection, params Entity[] entities)
         {
-            var list = new EntityCollection(entities
+            var array = entities
                 .Select(entity =>
                 {
+                    if (collection?.Entities?.Any(
+                        e => e.GetAttributeValue<EntityReference>(
+                            ActivityPartyEntity.PartyFieldName)?.Id == entity.Id) == true)
+                    {
+                        return null;
+                    }
+
                     var party = new Entity(ActivityPartyEntity.TypeName);
 
                     party.AddOrUpdateAttribute(ActivityPartyEntity.PartyFieldName, entity.ToEntityReference());
 
                     return party;
                 })
-                .ToArray());
+                .Where(entity => entity.IsNotNull())
+                .ToArray();
 
-            return list;
+            return new EntityCollection(array.Union(collection.Entities).ToList());
         }
     }
 }
