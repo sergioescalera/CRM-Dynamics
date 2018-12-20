@@ -754,6 +754,10 @@ var RecordCounter;
             });
             return defer.promise;
         }
+        function toCsv(e, c) {
+            return e.LogicalName + "," + c.value + "," + (c.error || "");
+        }
+        var chart;
         var MainController = /** @class */ (function () {
             function MainController(scope, q, http, dataService) {
                 this._q = q;
@@ -776,7 +780,10 @@ var RecordCounter;
                 var _this = this;
                 this.loadEntities()
                     .then(function () {
-                    _this.count();
+                    _this.count()
+                        .then(function () {
+                        _this.updateChart();
+                    });
                 });
             };
             MainController.prototype.search = function () {
@@ -786,52 +793,145 @@ var RecordCounter;
             MainController.prototype.clear = function () {
                 this.currentPage = 1;
                 this.filter = "";
+                this.compareValue = null;
                 this.showEntities();
             };
-            MainController.prototype.exportToCsv = function () {
-                console.warn("Not implemented");
+            MainController.prototype.export = function () {
+                var _this = this;
+                var blob = new Blob([
+                    "Entity Name,Record Count,Error\n" + this.data.map(function (e) { return toCsv(e, _this.counter[e.LogicalName]); }).join("\n")
+                ], {
+                    type: "text/csv"
+                });
+                var url = URL.createObjectURL(blob);
+                var filename = "record_counter.csv";
+                var download = document.getElementById("download");
+                download.href = url;
+                download.download = filename;
+                download.click();
             };
             MainController.prototype.count = function () {
                 var _this = this;
                 this.isBusy = true;
-                executeInBatch(this._q, this.data, function (entity) {
+                return executeInBatch(this._q, this.data, function (entity) {
+                    var counter = {};
+                    _this.counter[entity.LogicalName] = counter;
                     if (entity.ExternalName) {
-                        _this.counter[entity.LogicalName].error = "Unable to count virtual entity";
+                        counter.error = "Unable to count virtual entity";
                         return _this._q.resolve();
                     }
                     else {
-                        var fetch_1 = "<fetch aggregate=\"true\">\n<entity name=\"" + entity.LogicalName + "\">\n    <attribute name=\"" + entity.PrimaryIdAttribute + "\" aggregate=\"count\" alias=\"count\" />\n</entity>\n</fetch>";
-                        var url = Xrm.Utility.getGlobalContext().getClientUrl() + "/api/data/v9.0/" + entity.EntitySetName + "?fetchXml=" + encodeURIComponent(fetch_1);
-                        _this.counter[entity.LogicalName] = {
-                            busy: true
-                        };
-                        return _this._http.get(url)
+                        counter.busy = true;
+                        var defer_1 = _this._q.defer();
+                        _this.fetchAggregateCount(entity)
                             .then(function (response) {
                             try {
-                                _this.counter[entity.LogicalName].value = response.data.value[0].count;
+                                counter.busy = false;
+                                counter.value = response.data.value[0].count;
                             }
                             catch (e) {
-                                _this.counter[entity.LogicalName].error = "Unable to retrieve count";
+                                counter.error = "Unable to retrieve count";
                                 console.warn(e);
                             }
+                            defer_1.resolve();
                         })
                             .catch(function (response) {
                             try {
-                                _this.counter[entity.LogicalName].error = response.data.error.message;
+                                var message = response.data.error.message;
+                                if (message.indexOf("AggregateQueryRecordLimit") >= 0) {
+                                    _this.fetchAll(entity)
+                                        .then(function () {
+                                        counter.busy = false;
+                                        defer_1.resolve();
+                                    })
+                                        .catch(function () {
+                                        counter.busy = false;
+                                        defer_1.resolve();
+                                    });
+                                }
+                                else {
+                                    counter.busy = false;
+                                    counter.error = message;
+                                    defer_1.resolve();
+                                }
                             }
                             catch (e) {
-                                _this.counter[entity.LogicalName].error = "Something went wrong";
+                                counter.error = "Something went wrong";
                                 console.warn(e);
+                                defer_1.resolve();
                             }
-                        })
-                            .finally(function () {
-                            _this.counter[entity.LogicalName].busy = false;
                         });
+                        return defer_1.promise;
                     }
                 }, 0, 10)
                     .finally(function () {
                     _this.isBusy = false;
                 });
+            };
+            MainController.prototype.fetchAggregateCount = function (entity) {
+                var fetch = "\n<fetch aggregate=\"true\">\n    <entity name=\"" + entity.LogicalName + "\">\n        <attribute name=\"" + entity.PrimaryIdAttribute + "\" aggregate=\"count\" alias=\"count\" />\n    </entity>\n</fetch>";
+                var url = Xrm.Utility.getGlobalContext().getClientUrl() + "/api/data/v9.0/" + entity.EntitySetName + "?fetchXml=" + encodeURIComponent(fetch);
+                return this._http.get(url);
+            };
+            MainController.prototype.fetchAll = function (entity) {
+                var _this = this;
+                var counter = this.counter[entity.LogicalName];
+                var defer = this._q.defer();
+                var url = Xrm.Utility.getGlobalContext().getClientUrl() + "/api/data/v9.0/" + entity.EntitySetName + "?$select=" + entity.PrimaryIdAttribute + "&$count=true";
+                this._http.get(url, {
+                    headers: {
+                        "OData-MaxVersion": "4.0",
+                        "OData-Version": "4.0",
+                        "Prefer": "odata.maxpagesize=5000"
+                    }
+                })
+                    .then(function (response) {
+                    var next = response.data["@odata.nextLink"];
+                    var count = response.data["@odata.count"];
+                    counter.value = count;
+                    if (next) {
+                        _this.fetchNext(entity, counter, next)
+                            .then(function () {
+                            defer.resolve();
+                        });
+                    }
+                    else {
+                        defer.resolve();
+                    }
+                })
+                    .catch(function () {
+                    counter.error = "Unable to retrieve all records";
+                    defer.resolve();
+                });
+                return defer.promise;
+            };
+            MainController.prototype.fetchNext = function (entity, counter, url) {
+                var _this = this;
+                var defer = this._q.defer();
+                this._http.get(url, {
+                    headers: {
+                        "OData-MaxVersion": "4.0",
+                        "OData-Version": "4.0"
+                    }
+                })
+                    .then(function (response) {
+                    var next = response.data["@odata.nextLink"];
+                    if (next) {
+                        counter.value += response.data["@odata.count"];
+                        _this.fetchNext(entity, counter, next)
+                            .then(function () {
+                            defer.resolve();
+                        });
+                    }
+                    else {
+                        defer.resolve();
+                        counter.value += response.data.value.length;
+                    }
+                })
+                    .catch(function (response) {
+                    defer.resolve();
+                });
+                return defer.promise;
             };
             MainController.prototype.filterEntities = function () {
                 var _this = this;
@@ -842,7 +942,8 @@ var RecordCounter;
                     if (filter && e.LogicalName.indexOf(filter) < 0) {
                         value = false;
                     }
-                    if (compare && _this.counter[e.LogicalName].value < compare) {
+                    var counter = _this.counter[e.LogicalName] || {};
+                    if (compare && (!counter.value || counter.value < compare)) {
                         value = false;
                     }
                     return value;
@@ -881,6 +982,56 @@ var RecordCounter;
                 this.total = entities.length;
                 this.entities = entities
                     .filter(function (e, index) { return index >= skip && index < skip + pageSize; });
+            };
+            MainController.prototype.updateChart = function (top) {
+                var _this = this;
+                if (top === void 0) { top = 10; }
+                var entities = this.data
+                    .sort(function (e1, e2) {
+                    var c1 = (_this.counter[e1.LogicalName] || {}).value || 0;
+                    var c2 = (_this.counter[e2.LogicalName] || {}).value || 0;
+                    return c2 - c1;
+                })
+                    .filter(function (e1, index) {
+                    return index < top;
+                });
+                var labels = entities.map(function (e) { return e.LogicalName; });
+                var data = entities.map(function (e) { return _this.counter[e.LogicalName].value || 0; });
+                var dataset = {
+                    label: "Top Entities",
+                    data: data,
+                    backgroundColor: [
+                        "rgba(75, 192, 192, 0.2)",
+                        "rgba(54, 162, 235, 0.2)",
+                        "rgba(255, 206, 86, 0.2)",
+                        "rgba(153, 102, 255, 0.2)",
+                        "rgba(255, 159, 64, 0.2)",
+                        "rgba(255, 99, 132, 0.2)",
+                        "rgba(200, 99, 132, 0.2)",
+                        "rgba(200, 199, 132, 0.2)",
+                        "rgba(255, 50, 102, 0.2)",
+                        "rgba(200, 99, 232, 0.2)"
+                    ],
+                    borderWidth: 1
+                };
+                if (chart) {
+                    chart.data.labels = labels;
+                    chart.data.datasets[0] = dataset;
+                    chart.update();
+                }
+                else {
+                    chart = new Chart("top-entities-chart", {
+                        type: "pie",
+                        data: {
+                            labels: labels,
+                            datasets: [dataset]
+                        },
+                        options: {
+                            responsive: false,
+                            maintainAspectRatio: true
+                        }
+                    });
+                }
             };
             MainController.$inject = [
                 "$scope",
