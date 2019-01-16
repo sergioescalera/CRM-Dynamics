@@ -108,7 +108,7 @@
     <Content Include="Libs\bootstrap\js\bootstrap.min.js">
       <DependentUpon>bootstrap.js</DependentUpon>
     </Content>
-    <Content Include="Libs\jquery\jquery-2.1.3.min.js" />
+    <Content Include="Libs\jquery\jquery-2.2.4.min.js" />
     <Content Include="Libs\lodash\lodash.min.js">
       <DependentUpon>lodash.js</DependentUpon>
     </Content>

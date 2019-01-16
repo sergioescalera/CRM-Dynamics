@@ -1264,6 +1264,11 @@ declare module _ {
             thisArg?: any): Dictionary<number>;
     }
 
+    //_.sum
+    interface LoDashStatic {
+        sum(collection: Collection<number>): number;
+    }
+
     interface LoDashArrayWrapper<T> {
 		/**
 		* @see _.countBy
@@ -1434,7 +1439,7 @@ declare module _ {
 
         sortBy<T, TSort>(
             iteratees: ListIterator<T, TSort>[]): LoDashArrayWrapper<T>;
-        
+
         /**
         * @see _.filter
         **/

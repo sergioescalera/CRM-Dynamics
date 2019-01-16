@@ -35,7 +35,7 @@
   {
     "outputFileName": "Scripts/Dynamics.Crm.Forms.js",
     "inputFiles": [
-      "libs/jquery/jquery-2.1.3.min.js",
+      "libs/jquery/jquery-2.2.4.min.js",
       "libs/moment/moment.min.js",
       "libs/lodash/lodash.min.js",
       "Core/*.js",

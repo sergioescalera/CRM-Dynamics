@@ -109,9 +109,14 @@ interface Moment {
     from(d: Date): string;
     from(s: string): string;
 
-    diff(b: Moment): number;
-    diff(b: Moment, soort: string): number;
-    diff(b: Moment, soort: string, round: boolean): number;
+    diff(b: Moment | Date | string): number;
+    diff(b: Moment | Date | string, soort: string): number;
+    diff(b: Moment | Date | string, soort: string, round: boolean): number;
+
+    isAfter(b: Moment | Date | string): boolean;
+    isBefore(b: Moment | Date | string): boolean;
+
+    isSame(b: Moment | Date | string): boolean;
 
     toDate(): Date;
     unix(): number;
