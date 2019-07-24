@@ -40,9 +40,9 @@ interface EntityMetadataPromise {
 }
 
 interface Navigation {
-    openAlertDialog(strings: AlertDialogStrings, options?: OpenOptions): DialogResult;
-    openConfirmDialog(strings: ConfirmDialogStrings, options?: OpenOptions): DialogResult;
-    openErrorDialog(options?: ErrorOptions): DialogResult;
+    openAlertDialog(strings: AlertDialogStrings, options?: OpenOptions): DialogResult<{}>;
+    openConfirmDialog(strings: ConfirmDialogStrings, options?: OpenOptions): DialogResult<{ confirmed: boolean }>;
+    openErrorDialog(options?: ErrorOptions): DialogResult<{}>;
     openFile(file: FileProperties, options?: number); /* 1: Open, 2: Save */
     openForm(options: EntityFormOptions, formParameters?: any): OpenFormResult;
     openUrl(url: string, options?: OpenOptions): void;
@@ -96,8 +96,8 @@ interface ErrorOptions {
     message?: string;
 }
 
-interface DialogResult {
-    then(successCallback?: Function, errorCallback?: Function): void;
+interface DialogResult<T> {
+    then(successCallback?: (result: T) => void, errorCallback?: Function): void;
 }
 
 interface FileProperties {
@@ -131,6 +131,10 @@ interface Page {
     getControl(argument: AttributeFunctionCallback): Control[];
 }
 
+interface QuickViewForm {
+    data: data;
+}
+
 interface ui {
     clearFormNotification(uniqueId: string): boolean;
     setFormNotification(message: string, level: string, uniqueId: string): boolean;
@@ -146,6 +150,7 @@ interface ui {
     formSelector: FormSelector;
     tabs: TabsCollection;
     process: ProcessUI;
+    quickForms: Collection<QuickViewForm>;
 }
 
 interface FormSelector {
@@ -569,8 +574,8 @@ interface Collection<T> {
     get(): T[];
     get(argument: string): T;
     get(argument: number): T;
-    getByIndex(argument: string): T;
-    getByName(argument: number): T;
+    getByIndex(argument: number): T;
+    getByName(argument: string): T;
     getAll(): T[];
     getLength(): number;
 }
