@@ -1,5 +1,5 @@
-var MetadataBrower;
-(function (MetadataBrower) {
+var Angular;
+(function (Angular) {
     var Core;
     (function (Core) {
         "use strict";
@@ -48,7 +48,8 @@ var MetadataBrower;
         function DataServiceFactory($q) {
             return new ODataService($q);
         }
-        angular.module(MetadataBrower.Config.moduleName)
+        Core.dataService = "data-service";
+        angular.module(Core.dataService, [])
             .factory("metadataBrowser.core.dataService", ["$q", DataServiceFactory]);
-    })(Core = MetadataBrower.Core || (MetadataBrower.Core = {}));
-})(MetadataBrower || (MetadataBrower = {}));
+    })(Core = Angular.Core || (Angular.Core = {}));
+})(Angular || (Angular = {}));

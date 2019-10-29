@@ -1,4 +1,4 @@
-﻿module MetadataBrower.Core {
+﻿module Angular.Core {
 
     "use strict";
 
@@ -72,6 +72,8 @@
         return new ODataService($q);
     }
 
-    angular.module(Config.moduleName)
+    export var dataService: string = "data-service";
+
+    angular.module(dataService, [])
         .factory("metadataBrowser.core.dataService", ["$q", DataServiceFactory]);
 }

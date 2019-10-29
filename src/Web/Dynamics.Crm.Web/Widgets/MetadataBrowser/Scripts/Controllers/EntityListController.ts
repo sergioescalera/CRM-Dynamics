@@ -14,11 +14,14 @@
         total: number;
 
         navigationService: Core.INavigationService;
-        dataService: Core.IDataService;
+        dataService: Angular.Core.IDataService;
 
         static $inject = ["$scope", "metadataBrowser.core.navigationService", "metadataBrowser.core.dataService"];
 
-        constructor($scope: ng.IScope, navigationService: Core.INavigationService, dataService: Core.IDataService) {
+        constructor(
+            $scope: ng.IScope,
+            navigationService: Core.INavigationService,
+            dataService: Angular.Core.IDataService) {
 
             this.advancedView = false;
             this.currentPage = 1;

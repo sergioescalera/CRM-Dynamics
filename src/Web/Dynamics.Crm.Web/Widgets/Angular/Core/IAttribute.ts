@@ -1,4 +1,4 @@
-﻿module MetadataBrower.Core {
+﻿module Angular.Core {
 
     "use strict";
 

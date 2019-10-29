@@ -19,8 +19,8 @@
     angular.module(moduleName, [
         "ngMaterial",
         "ngMessages",
-        Core.dataService,
-        Controllers.pager
+        Angular.Core.dataService,
+        Angular.Controllers.pager
     ]);
 
     angular.element(document)

@@ -1,5 +1,5 @@
-var MetadataBrower;
-(function (MetadataBrower) {
+var Angular;
+(function (Angular) {
     var Controllers;
     (function (Controllers) {
         "use strict";
@@ -47,5 +47,5 @@ var MetadataBrower;
         Controllers.pager = "pager";
         angular.module(Controllers.pager, [])
             .directive(Controllers.pager, pagerFactory);
-    })(Controllers = MetadataBrower.Controllers || (MetadataBrower.Controllers = {}));
-})(MetadataBrower || (MetadataBrower = {}));
+    })(Controllers = Angular.Controllers || (Angular.Controllers = {}));
+})(Angular || (Angular = {}));

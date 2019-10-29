@@ -1,4 +1,4 @@
-﻿module MetadataBrower.Controllers {
+﻿module Angular.Controllers {
 
     "use strict";
 

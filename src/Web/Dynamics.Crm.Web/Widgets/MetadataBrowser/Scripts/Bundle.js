@@ -575,70 +575,8 @@ var Dynamics;
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
 
-var MetadataBrower;
-(function (MetadataBrower) {
-    var Config;
-    (function (Config) {
-        "use strict";
-        window["ENTITY_SET_NAMES"] = window["ENTITY_SET_NAMES"] || JSON.stringify({
-            "entitydefinition": "EntityDefinitions"
-        });
-        Config.moduleName = "metadata-browser";
-        function init() {
-            angular.bootstrap(document, [
-                Config.moduleName
-            ]);
-        }
-        angular.module(Config.moduleName, []);
-        angular.module(Config.moduleName, [
-            "ngMaterial",
-            "ngMessages",
-            MetadataBrower.Core.dataService,
-            MetadataBrower.Controllers.pager
-        ]);
-        angular.element(document)
-            .ready(init);
-    })(Config = MetadataBrower.Config || (MetadataBrower.Config = {}));
-})(MetadataBrower || (MetadataBrower = {}));
-
-var MetadataBrower;
-(function (MetadataBrower) {
-    var Core;
-    (function (Core) {
-        "use strict";
-        var NavigationService = /** @class */ (function () {
-            function NavigationService() {
-                this.EntityTabs = [];
-            }
-            NavigationService.prototype.AddEntityTab = function (entity) {
-                var filtered = this.EntityTabs
-                    .filter(function (x) { return x.entity.LogicalName === entity.LogicalName; });
-                if (filtered.length > 0) {
-                    this.SelectedIndex = this.EntityTabs.indexOf(filtered[0]) + 1;
-                }
-                else {
-                    this.EntityTabs.push({
-                        entity: entity,
-                        title: entity.SchemaName
-                    });
-                    this.SelectedIndex = this.EntityTabs.length;
-                }
-            };
-            NavigationService.prototype.DeleteEntityTab = function (tab) {
-                _.remove(this.EntityTabs, function (t) { return t.entity.LogicalName === tab.entity.LogicalName; });
-            };
-            return NavigationService;
-        }());
-        function NavigationServiceFactory() {
-            return new NavigationService();
-        }
-        angular.module(MetadataBrower.Config.moduleName)
-            .factory("metadataBrowser.core.navigationService", [NavigationServiceFactory]);
-    })(Core = MetadataBrower.Core || (MetadataBrower.Core = {}));
-})(MetadataBrower || (MetadataBrower = {}));
-
-var MetadataBrower;
-(function (MetadataBrower) {
+var Angular;
+(function (Angular) {
     var Core;
     (function (Core) {
         "use strict";
@@ -687,8 +625,123 @@ var MetadataBrower;
         function DataServiceFactory($q) {
             return new ODataService($q);
         }
-        angular.module(MetadataBrower.Config.moduleName)
+        Core.dataService = "data-service";
+        angular.module(Core.dataService, [])
             .factory("metadataBrowser.core.dataService", ["$q", DataServiceFactory]);
+    })(Core = Angular.Core || (Angular.Core = {}));
+})(Angular || (Angular = {}));
+
+var Angular;
+(function (Angular) {
+    var Controllers;
+    (function (Controllers) {
+        "use strict";
+        function pagerFactory() {
+            return {
+                controller: PagerController,
+                restrict: "E",
+                scope: {
+                    currentPage: '=',
+                    pageSize: '=',
+                    total: '='
+                },
+                template: "<span class=\"pager\">\n    <span ng-bind=\"currentPage\"></span> of <span ng-bind=\"pages\"></span>\n    <md-button ng-click=\"prev()\">Prev</md-button>\n    <md-button ng-click=\"next()\">Next</md-button>\n</span>"
+            };
+        }
+        var PagerController = /** @class */ (function () {
+            function PagerController(scope) {
+                this._scope = scope;
+                this._scope.$watch("total", this.updatePages.bind(this));
+                this._scope.$watch("pageSize", this.updatePages.bind(this));
+                this._scope.next = this.next.bind(this);
+                this._scope.prev = this.prev.bind(this);
+            }
+            PagerController.prototype.updatePages = function () {
+                if (this._scope.pageSize === 0) {
+                    this._scope.pageSize = 10;
+                }
+                this._scope.pages = Math.ceil(this._scope.total / this._scope.pageSize);
+            };
+            PagerController.prototype.next = function () {
+                if (this._scope.currentPage >= this._scope.pages) {
+                    return;
+                }
+                this._scope.currentPage++;
+            };
+            PagerController.prototype.prev = function () {
+                if (this._scope.currentPage <= 1) {
+                    return;
+                }
+                this._scope.currentPage--;
+            };
+            PagerController.$inject = ["$scope"];
+            return PagerController;
+        }());
+        Controllers.pager = "pager";
+        angular.module(Controllers.pager, [])
+            .directive(Controllers.pager, pagerFactory);
+    })(Controllers = Angular.Controllers || (Angular.Controllers = {}));
+})(Angular || (Angular = {}));
+
+var MetadataBrower;
+(function (MetadataBrower) {
+    var Config;
+    (function (Config) {
+        "use strict";
+        window["ENTITY_SET_NAMES"] = window["ENTITY_SET_NAMES"] || JSON.stringify({
+            "entitydefinition": "EntityDefinitions"
+        });
+        Config.moduleName = "metadata-browser";
+        function init() {
+            angular.bootstrap(document, [
+                Config.moduleName
+            ]);
+        }
+        angular.module(Config.moduleName, []);
+        angular.module(Config.moduleName, [
+            "ngMaterial",
+            "ngMessages",
+            Angular.Core.dataService,
+            Angular.Controllers.pager
+        ]);
+        angular.element(document)
+            .ready(init);
+    })(Config = MetadataBrower.Config || (MetadataBrower.Config = {}));
+})(MetadataBrower || (MetadataBrower = {}));
+
+var MetadataBrower;
+(function (MetadataBrower) {
+    var Core;
+    (function (Core) {
+        "use strict";
+        var NavigationService = /** @class */ (function () {
+            function NavigationService() {
+                this.EntityTabs = [];
+            }
+            NavigationService.prototype.AddEntityTab = function (entity) {
+                var filtered = this.EntityTabs
+                    .filter(function (x) { return x.entity.LogicalName === entity.LogicalName; });
+                if (filtered.length > 0) {
+                    this.SelectedIndex = this.EntityTabs.indexOf(filtered[0]) + 1;
+                }
+                else {
+                    this.EntityTabs.push({
+                        entity: entity,
+                        title: entity.SchemaName
+                    });
+                    this.SelectedIndex = this.EntityTabs.length;
+                }
+            };
+            NavigationService.prototype.DeleteEntityTab = function (tab) {
+                _.remove(this.EntityTabs, function (t) { return t.entity.LogicalName === tab.entity.LogicalName; });
+            };
+            return NavigationService;
+        }());
+        function NavigationServiceFactory() {
+            return new NavigationService();
+        }
+        angular.module(MetadataBrower.Config.moduleName)
+            .factory("metadataBrowser.core.navigationService", [NavigationServiceFactory]);
     })(Core = MetadataBrower.Core || (MetadataBrower.Core = {}));
 })(MetadataBrower || (MetadataBrower = {}));
 
@@ -784,58 +837,6 @@ var MetadataBrower;
         angular.module(MetadataBrower.Config.moduleName)
             .directive("entityDetails", entityDetailsFactory);
     })(Controller = MetadataBrower.Controller || (MetadataBrower.Controller = {}));
-})(MetadataBrower || (MetadataBrower = {}));
-
-var MetadataBrower;
-(function (MetadataBrower) {
-    var Controllers;
-    (function (Controllers) {
-        "use strict";
-        function pagerFactory() {
-            return {
-                controller: PagerController,
-                restrict: "E",
-                scope: {
-                    currentPage: '=',
-                    pageSize: '=',
-                    total: '='
-                },
-                template: "<span class=\"pager\">\n    <span ng-bind=\"currentPage\"></span> of <span ng-bind=\"pages\"></span>\n    <md-button ng-click=\"prev()\">Prev</md-button>\n    <md-button ng-click=\"next()\">Next</md-button>\n</span>"
-            };
-        }
-        var PagerController = /** @class */ (function () {
-            function PagerController(scope) {
-                this._scope = scope;
-                this._scope.$watch("total", this.updatePages.bind(this));
-                this._scope.$watch("pageSize", this.updatePages.bind(this));
-                this._scope.next = this.next.bind(this);
-                this._scope.prev = this.prev.bind(this);
-            }
-            PagerController.prototype.updatePages = function () {
-                if (this._scope.pageSize === 0) {
-                    this._scope.pageSize = 10;
-                }
-                this._scope.pages = Math.ceil(this._scope.total / this._scope.pageSize);
-            };
-            PagerController.prototype.next = function () {
-                if (this._scope.currentPage >= this._scope.pages) {
-                    return;
-                }
-                this._scope.currentPage++;
-            };
-            PagerController.prototype.prev = function () {
-                if (this._scope.currentPage <= 1) {
-                    return;
-                }
-                this._scope.currentPage--;
-            };
-            PagerController.$inject = ["$scope"];
-            return PagerController;
-        }());
-        Controllers.pager = "pager";
-        angular.module(Controllers.pager, [])
-            .directive(Controllers.pager, pagerFactory);
-    })(Controllers = MetadataBrower.Controllers || (MetadataBrower.Controllers = {}));
 })(MetadataBrower || (MetadataBrower = {}));
 
 var MetadataBrower;

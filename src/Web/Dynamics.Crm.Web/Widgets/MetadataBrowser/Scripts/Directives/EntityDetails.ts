@@ -39,11 +39,11 @@
         static $inject = ["$scope", "metadataBrowser.core.dataService"];
 
         _entityId: Core.INavigationTab;
-        _dataService: Core.IDataService;
+        _dataService: Angular.Core.IDataService;
 
         vm: IEntityDetailsViewModel;
 
-        constructor(scope: IEntityDetailsScope, dataService: Core.IDataService) {
+        constructor(scope: IEntityDetailsScope, dataService: Angular.Core.IDataService) {
 
             this._dataService = dataService;
 
@@ -139,7 +139,7 @@
 
             this.vm.total = attributes.length;
             this.vm.attributes = attributes
-                .filter((a: Core.IAttribute, index: number) => index >= skip && index < skip + pageSize);
+                .filter((a: Angular.Core.IAttribute, index: number) => index >= skip && index < skip + pageSize);
         }
     }
 

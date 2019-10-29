@@ -16,8 +16,8 @@ var MetadataBrower;
         angular.module(Config.moduleName, [
             "ngMaterial",
             "ngMessages",
-            MetadataBrower.Core.dataService,
-            MetadataBrower.Controllers.pager
+            Angular.Core.dataService,
+            Angular.Controllers.pager
         ]);
         angular.element(document)
             .ready(init);

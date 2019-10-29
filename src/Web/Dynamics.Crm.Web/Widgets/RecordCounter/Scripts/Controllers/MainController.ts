@@ -76,7 +76,7 @@ module RecordCounter.Controllers {
 
         private _q: ng.IQService;
         private _http: ng.IHttpService;
-        private _dataService: MetadataBrower.Core.IDataService;
+        private _dataService: Angular.Core.IDataService;
 
         counter: _.Dictionary<Counter>;
         currentPage: number;
@@ -94,7 +94,7 @@ module RecordCounter.Controllers {
             scope: ng.IScope,
             q: ng.IQService,
             http: ng.IHttpService,
-            dataService: MetadataBrower.Core.IDataService) {
+            dataService: Angular.Core.IDataService) {
 
             this._q = q;
             this._http = http;

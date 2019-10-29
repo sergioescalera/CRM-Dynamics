@@ -575,8 +575,8 @@ var Dynamics;
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
 
-var MetadataBrower;
-(function (MetadataBrower) {
+var Angular;
+(function (Angular) {
     var Core;
     (function (Core) {
         "use strict";
@@ -625,13 +625,14 @@ var MetadataBrower;
         function DataServiceFactory($q) {
             return new ODataService($q);
         }
-        angular.module(MetadataBrower.Config.moduleName)
+        Core.dataService = "data-service";
+        angular.module(Core.dataService, [])
             .factory("metadataBrowser.core.dataService", ["$q", DataServiceFactory]);
-    })(Core = MetadataBrower.Core || (MetadataBrower.Core = {}));
-})(MetadataBrower || (MetadataBrower = {}));
+    })(Core = Angular.Core || (Angular.Core = {}));
+})(Angular || (Angular = {}));
 
-var MetadataBrower;
-(function (MetadataBrower) {
+var Angular;
+(function (Angular) {
     var Controllers;
     (function (Controllers) {
         "use strict";
@@ -679,8 +680,8 @@ var MetadataBrower;
         Controllers.pager = "pager";
         angular.module(Controllers.pager, [])
             .directive(Controllers.pager, pagerFactory);
-    })(Controllers = MetadataBrower.Controllers || (MetadataBrower.Controllers = {}));
-})(MetadataBrower || (MetadataBrower = {}));
+    })(Controllers = Angular.Controllers || (Angular.Controllers = {}));
+})(Angular || (Angular = {}));
 
 var RecordCounter;
 (function (RecordCounter) {
@@ -699,8 +700,8 @@ var RecordCounter;
         angular.module(Config.moduleName, [
             "ngMaterial",
             "ngMessages",
-            MetadataBrower.Core.dataService,
-            MetadataBrower.Controllers.pager
+            Angular.Core.dataService,
+            Angular.Controllers.pager
         ]);
         angular.element(document)
             .ready(init);

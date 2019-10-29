@@ -39,7 +39,7 @@
 
         static $inject = ["$scope", "metadataBrowser.core.dataService"];
 
-        constructor(scope: IPicklistScope, dataService: Core.IDataService) {
+        constructor(scope: IPicklistScope, dataService: Angular.Core.IDataService) {
 
             scope.load = () => {
                 
