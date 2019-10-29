@@ -2,59 +2,57 @@ var Dynamics;
 (function (Dynamics) {
     var Crm;
     (function (Crm) {
-        var Forms;
-        (function (Forms) {
-            var Notifications;
-            (function (Notifications) {
-                "use strict";
-                var undefinedstr = "undefined";
-                function show(message, id, level) {
-                    if (level === void 0) { level = Dynamics.Crm.Forms.FormNotificationType.Information; }
-                    Xrm.Page.ui.setFormNotification(message, level, id);
+        "use strict";
+        var undefinedstr = "undefined";
+        var Notifications = /** @class */ (function () {
+            function Notifications(page) {
+                Validation.ensureNotNullOrUndefined(page, "page");
+                this.page = page;
+            }
+            Notifications.prototype.show = function (message, id, level) {
+                if (level === void 0) { level = Dynamics.Crm.FormNotificationTypes.Information; }
+                this.page.ui.setFormNotification(message, level, id);
+            };
+            Notifications.prototype.showHtml = function (message, id, level) {
+                if (level === void 0) { level = Dynamics.Crm.FormNotificationTypes.Information; }
+                if (typeof this.page.ui.setFormHtmlNotification === "function") {
+                    this.page.ui.setFormHtmlNotification(message, level, id);
                 }
-                Notifications.show = show;
-                function showHtml(message, id, level) {
-                    if (level === void 0) { level = Dynamics.Crm.Forms.FormNotificationType.Information; }
-                    if (typeof Xrm.Page.ui.setFormHtmlNotification === "function") {
-                        Xrm.Page.ui.setFormHtmlNotification(message, level, id);
-                    }
-                    else {
-                        Xrm.Page.ui.setFormNotification(Crm.Utility.htmlToText(message), level, id);
-                    }
+                else {
+                    this.page.ui.setFormNotification(Crm.Utility.htmlToText(message), level, id);
                 }
-                Notifications.showHtml = showHtml;
-                function hide(id, afterSeconds) {
-                    if (afterSeconds === void 0) { afterSeconds = null; }
-                    if (_.isNumber(afterSeconds) && afterSeconds > 0) {
-                        setTimeout(function () { return Xrm.Page.ui.clearFormNotification(id); }, afterSeconds * 1000);
-                    }
-                    else {
-                        Xrm.Page.ui.clearFormNotification(id);
-                    }
+            };
+            Notifications.prototype.hide = function (id, afterSeconds) {
+                var _this = this;
+                if (afterSeconds === void 0) { afterSeconds = null; }
+                if (_.isNumber(afterSeconds) && afterSeconds > 0) {
+                    setTimeout(function () { return _this.page.ui.clearFormNotification(id); }, afterSeconds * 1000);
                 }
-                Notifications.hide = hide;
-                function htmlSupported() {
-                    if (typeof Xrm !== undefinedstr &&
-                        typeof Xrm.Page !== undefinedstr &&
-                        typeof Xrm.Page.ui !== undefinedstr &&
-                        typeof Xrm.Page.ui.setFormHtmlNotification !== undefinedstr) {
-                        return true;
-                    }
-                    return false;
+                else {
+                    this.page.ui.clearFormNotification(id);
                 }
-                Notifications.htmlSupported = htmlSupported;
-                function supported() {
-                    if (typeof Xrm !== undefinedstr &&
-                        typeof Xrm.Page !== undefinedstr &&
-                        typeof Xrm.Page.ui !== undefinedstr &&
-                        typeof Xrm.Page.ui.setFormNotification !== undefinedstr &&
-                        typeof Xrm.Page.ui.clearFormNotification !== undefinedstr) {
-                        return true;
-                    }
-                    return false;
+            };
+            Notifications.prototype.htmlSupported = function () {
+                if (typeof Xrm !== undefinedstr &&
+                    typeof this.page !== undefinedstr &&
+                    typeof this.page.ui !== undefinedstr &&
+                    typeof this.page.ui.setFormHtmlNotification !== undefinedstr) {
+                    return true;
                 }
-                Notifications.supported = supported;
-            })(Notifications = Forms.Notifications || (Forms.Notifications = {}));
-        })(Forms = Crm.Forms || (Crm.Forms = {}));
+                return false;
+            };
+            Notifications.prototype.supported = function () {
+                if (typeof Xrm !== undefinedstr &&
+                    typeof this.page !== undefinedstr &&
+                    typeof this.page.ui !== undefinedstr &&
+                    typeof this.page.ui.setFormNotification !== undefinedstr &&
+                    typeof this.page.ui.clearFormNotification !== undefinedstr) {
+                    return true;
+                }
+                return false;
+            };
+            return Notifications;
+        }());
+        Crm.Notifications = Notifications;
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));

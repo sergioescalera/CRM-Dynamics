@@ -202,7 +202,6 @@
     <TypeScriptCompile Include="Core\Constants.ts" />
     <TypeScriptCompile Include="Core\Controls.ts" />
     <TypeScriptCompile Include="Core\Diagnostics.ts" />
-    <TypeScriptCompile Include="Core\Dialogs.ts" />
     <TypeScriptCompile Include="Core\Enums.ts" />
     <TypeScriptCompile Include="Core\Forms.ts" />
     <TypeScriptCompile Include="Core\Entity.ts" />

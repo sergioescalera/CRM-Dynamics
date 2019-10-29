@@ -2,8 +2,8 @@ var CustomLookupWidget;
 (function (CustomLookupWidget) {
     "use strict";
     var urlTemplate = function (config) { return "/_controls/lookup/lookupinfo.aspx?LookupStyle=" + config.style + "&ShowNewButton=" + (config.new ? 1 : 0) + "&browse=false&dType=1&mrsh=false&objecttypes=" + (config.types).join(","); };
-    var xrm = parent.Xrm;
-    var mscrm = parent.Mscrm;
+    var xrm = parent["Xrm"];
+    var mscrm = parent["Mscrm"];
     var searchLink;
     var config = {
         new: true,
@@ -34,7 +34,7 @@ var CustomLookupWidget;
         setAttributeValue(config.attribute + "type", result.items.map(function (o) { return o.typename; }).join(", "));
     }
     function setAttributeValue(attributeName, value) {
-        var attribute = xrm.Page.getAttribute(attributeName);
+        var attribute = xrm["Page"].getAttribute(attributeName);
         if (!attribute) {
             console.warn("Unable to find attribute " + attributeName);
             return;

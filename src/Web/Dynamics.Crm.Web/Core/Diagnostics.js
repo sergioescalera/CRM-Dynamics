@@ -99,7 +99,7 @@ var Dynamics;
             }
             function getEntityName() {
                 try {
-                    return Xrm.Page.data.entity.getEntityName();
+                    return Xrm["Page"].data.entity.getEntityName();
                 }
                 catch (e) {
                     if (Diagnostics.trace && Diagnostics.log) {
@@ -110,7 +110,7 @@ var Dynamics;
             }
             function getEntityId() {
                 try {
-                    return Xrm.Page.data.entity.getId();
+                    return Xrm["Page"].data.entity.getId();
                 }
                 catch (e) {
                     if (Diagnostics.trace && Diagnostics.log) {
@@ -121,7 +121,7 @@ var Dynamics;
             }
             function getFormType() {
                 try {
-                    return Xrm.Page.ui.getFormType().toString();
+                    return Xrm["Page"].ui.getFormType().toString();
                 }
                 catch (e) {
                     if (Diagnostics.trace && Diagnostics.log) {
@@ -132,7 +132,7 @@ var Dynamics;
             }
             function getFormFactor() {
                 try {
-                    return Crm.Forms.getFormFactor();
+                    return Xrm.Utility.getGlobalContext().client.getFormFactor();
                 }
                 catch (e) {
                     if (Diagnostics.trace && Diagnostics.log) {
@@ -143,7 +143,7 @@ var Dynamics;
             }
             function getClientType() {
                 try {
-                    return Crm.Forms.getClientType();
+                    return Xrm.Utility.getGlobalContext().client.getClient();
                 }
                 catch (e) {
                     if (Diagnostics.trace && Diagnostics.log) {

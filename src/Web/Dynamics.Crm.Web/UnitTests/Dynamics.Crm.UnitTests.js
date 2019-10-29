@@ -7,7 +7,7 @@ var __extends = (this && this.__extends) || (function () {
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
             function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
         return extendStatics(d, b);
-    }
+    };
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -92,6 +92,39 @@ var Dynamics;
                     AttributeMock.prototype.setRequiredLevel = function (value) {
                         this._requiredLevel = value;
                     };
+                    AttributeMock.prototype.addOnChange = function (handler) { };
+                    AttributeMock.prototype.removeOnChange = function (handler) { };
+                    AttributeMock.prototype.fireOnChange = function () { };
+                    AttributeMock.prototype.getAttributeType = function () {
+                        return "string";
+                    };
+                    AttributeMock.prototype.getIsDirty = function () {
+                        return true;
+                    };
+                    AttributeMock.prototype.getName = function () {
+                        return this.name;
+                    };
+                    AttributeMock.prototype.getParent = function () {
+                        return null;
+                    };
+                    AttributeMock.prototype.getSubmitMode = function () {
+                        return "dirty";
+                    };
+                    AttributeMock.prototype.getUserPrivilege = function () {
+                        return null;
+                    };
+                    AttributeMock.prototype.getValue = function () {
+                        return this.val;
+                    };
+                    AttributeMock.prototype.isValid = function () {
+                        return true;
+                    };
+                    AttributeMock.prototype.setIsValid = function (value, message) {
+                    };
+                    AttributeMock.prototype.setSubmitMode = function (mode) { };
+                    AttributeMock.prototype.setValue = function (value) {
+                        this.val = value;
+                    };
                     return AttributeMock;
                 }());
                 Mocks.AttributeMock = AttributeMock;
@@ -165,97 +198,99 @@ var Dynamics;
         (function (UnitTests) {
             "use strict";
             describe("Attributes.get", function () {
-                beforeEach(function () {
-                    window["Xrm"] = { Page: new UnitTests.Mocks.PageMock() };
-                });
-                afterEach(function () {
-                    window["Xrm"] = undefined;
-                });
                 it("Returns null for missing attribute when not required", function () {
-                    var attribute = Crm.Forms.Attributes.get("notAge", false);
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    var attribute = forms.attributes.get("notAge", false);
                     expect(attribute).toBeNull();
                 });
                 it("Throws error for missing attribute when required", function () {
-                    expect(function () { return Crm.Forms.Attributes.get("notAge", true); }).toThrowError(Error);
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    expect(function () { return forms.attributes.get("notAge", true); }).toThrowError(Error);
                 });
                 it("Throws error for missing attribute when required by default", function () {
-                    expect(function () { return Crm.Forms.Attributes.get("notAge"); }).toThrowError(Error);
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    expect(function () { return forms.attributes.get("notAge"); }).toThrowError(Error);
                 });
                 it("Returns attribute", function () {
-                    var attribute = Crm.Forms.Attributes.get("age", false);
-                    var expected = window["Xrm"].Page.ageAttribute;
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    var attribute = forms.attributes.get("age", false);
+                    var expected = page.ageAttribute;
                     expect(attribute).toBeDefined();
                     expect(attribute).not.toBeNull();
                     expect(attribute).toBe(expected);
                 });
             });
             describe("Attributes.setRequiredLevel", function () {
-                beforeEach(function () {
-                    window["Xrm"] = { Page: new UnitTests.Mocks.PageMock() };
-                });
-                afterEach(function () {
-                    window["Xrm"] = undefined;
-                });
                 it("Does not throw error for null or undefined array", function () {
-                    expect(function () { return Crm.Forms.Attributes.setRequired(null); }).not.toThrowError(Error);
-                    expect(function () { return Crm.Forms.Attributes.setRequired(undefined); }).not.toThrowError(Error);
-                    expect(function () { return Crm.Forms.Attributes.setRequired([]); }).not.toThrowError(Error);
-                    expect(function () { return Crm.Forms.Attributes.setOptional(null); }).not.toThrowError(Error);
-                    expect(function () { return Crm.Forms.Attributes.setOptional(undefined); }).not.toThrowError(Error);
-                    expect(function () { return Crm.Forms.Attributes.setOptional([]); }).not.toThrowError(Error);
-                    expect(function () { return Crm.Forms.Attributes.setRecommended(null); }).not.toThrowError(Error);
-                    expect(function () { return Crm.Forms.Attributes.setRecommended(undefined); }).not.toThrowError(Error);
-                    expect(function () { return Crm.Forms.Attributes.setRecommended([]); }).not.toThrowError(Error);
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    expect(function () { return forms.attributes.setRequired(null); }).not.toThrowError(Error);
+                    expect(function () { return forms.attributes.setRequired(undefined); }).not.toThrowError(Error);
+                    expect(function () { return forms.attributes.setRequired([]); }).not.toThrowError(Error);
+                    expect(function () { return forms.attributes.setOptional(null); }).not.toThrowError(Error);
+                    expect(function () { return forms.attributes.setOptional(undefined); }).not.toThrowError(Error);
+                    expect(function () { return forms.attributes.setOptional([]); }).not.toThrowError(Error);
+                    expect(function () { return forms.attributes.setRecommended(null); }).not.toThrowError(Error);
+                    expect(function () { return forms.attributes.setRecommended(undefined); }).not.toThrowError(Error);
+                    expect(function () { return forms.attributes.setRecommended([]); }).not.toThrowError(Error);
                 });
                 it("Sets attribute required level to required", function () {
-                    var expected = window["Xrm"].Page.ageAttribute;
-                    Crm.Forms.Attributes.setRequired(["age"]);
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    var expected = page.ageAttribute;
+                    forms.attributes.setRequired(["age"]);
                     expect((expected.getRequiredLevel() || "").toLocaleLowerCase()).toBe("required");
-                    Crm.Forms.Attributes.setOptional(["age"]);
-                    Crm.Forms.Attributes.setRequired(["age"]);
+                    forms.attributes.setOptional(["age"]);
+                    forms.attributes.setRequired(["age"]);
                     expect((expected.getRequiredLevel() || "").toLocaleLowerCase()).toBe("required");
-                    Crm.Forms.Attributes.setRecommended(["age"]);
-                    Crm.Forms.Attributes.setRequired(["age"]);
+                    forms.attributes.setRecommended(["age"]);
+                    forms.attributes.setRequired(["age"]);
                     expect((expected.getRequiredLevel() || "").toLocaleLowerCase()).toBe("required");
                 });
                 it("Sets attribute required level to optional", function () {
-                    var expected = window["Xrm"].Page.ageAttribute;
-                    Crm.Forms.Attributes.setOptional(["age"]);
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    var expected = page.ageAttribute;
+                    forms.attributes.setOptional(["age"]);
                     expect((expected.getRequiredLevel() || "").toLocaleLowerCase()).toBe("none");
-                    Crm.Forms.Attributes.setRequired(["age"]);
-                    Crm.Forms.Attributes.setOptional(["age"]);
+                    forms.attributes.setRequired(["age"]);
+                    forms.attributes.setOptional(["age"]);
                     expect((expected.getRequiredLevel() || "").toLocaleLowerCase()).toBe("none");
-                    Crm.Forms.Attributes.setRecommended(["age"]);
-                    Crm.Forms.Attributes.setOptional(["age"]);
+                    forms.attributes.setRecommended(["age"]);
+                    forms.attributes.setOptional(["age"]);
                     expect((expected.getRequiredLevel() || "").toLocaleLowerCase()).toBe("none");
                 });
                 it("Sets attribute required level to recommended", function () {
-                    var expected = window["Xrm"].Page.ageAttribute;
-                    Crm.Forms.Attributes.setRecommended(["age"]);
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    var expected = page.ageAttribute;
+                    forms.attributes.setRecommended(["age"]);
                     expect((expected.getRequiredLevel() || "").toLocaleLowerCase()).toBe("recommended");
-                    Crm.Forms.Attributes.setOptional(["age"]);
-                    Crm.Forms.Attributes.setRecommended(["age"]);
+                    forms.attributes.setOptional(["age"]);
+                    forms.attributes.setRecommended(["age"]);
                     expect((expected.getRequiredLevel() || "").toLocaleLowerCase()).toBe("recommended");
-                    Crm.Forms.Attributes.setRequired(["age"]);
-                    Crm.Forms.Attributes.setRecommended(["age"]);
+                    forms.attributes.setRequired(["age"]);
+                    forms.attributes.setRecommended(["age"]);
                     expect((expected.getRequiredLevel() || "").toLocaleLowerCase()).toBe("recommended");
                 });
             });
             describe("Attributes.notifications", function () {
-                beforeEach(function () {
-                    window["Xrm"] = { Page: new UnitTests.Mocks.PageMock() };
-                });
-                afterEach(function () {
-                    window["Xrm"] = undefined;
-                });
                 it("Throws error for null or undefined attribute", function () {
-                    expect(function () { return Crm.Forms.Attributes.showNotification(null, "", ""); }).toThrowError(Error);
-                    expect(function () { return Crm.Forms.Attributes.showNotification(null, "", ""); }).toThrowError(Error);
-                    expect(function () { return Crm.Forms.Attributes.showNotification(undefined, "", ""); }).toThrowError(Error);
-                    expect(function () { return Crm.Forms.Attributes.showNotification(undefined, "", ""); }).toThrowError(Error);
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    expect(function () { return forms.attributes.showNotification(null, "", ""); }).toThrowError(Error);
+                    expect(function () { return forms.attributes.showNotification(null, "", ""); }).toThrowError(Error);
+                    expect(function () { return forms.attributes.showNotification(undefined, "", ""); }).toThrowError(Error);
+                    expect(function () { return forms.attributes.showNotification(undefined, "", ""); }).toThrowError(Error);
                 });
                 it("Shows/hides control notification", function () {
-                    var age = window["Xrm"].Page.ageAttribute;
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    var age = page.ageAttribute;
                     var controls = [
                         age.controls["age"],
                         age.controls["age_header"],
@@ -263,12 +298,12 @@ var Dynamics;
                     ].filter(function (c) { return !!c; });
                     var msg = "Hello world!";
                     var id = "notif";
-                    Crm.Forms.Attributes.showNotification(age, msg, id);
+                    forms.attributes.showNotification(age, msg, id);
                     for (var i = 0; i < controls.length; i++) {
                         var control = controls[i];
                         expect(control.notifications[id]).toBe(msg);
                     }
-                    Crm.Forms.Attributes.hideNotification(age, id);
+                    forms.attributes.hideNotification(age, id);
                     for (var i = 0; i < controls.length; i++) {
                         var control = controls[i];
                         expect(control.notifications[id]).toBeNull();
@@ -385,65 +420,61 @@ var Dynamics;
         (function (UnitTests) {
             "use strict";
             describe("Controls.get", function () {
-                beforeEach(function () {
-                    window["Xrm"] = { Page: new UnitTests.Mocks.PageMock() };
-                });
-                afterEach(function () {
-                    window["Xrm"] = undefined;
-                });
                 it("Returns null for missing control when not required", function () {
-                    var control = Crm.Forms.Controls.get("notAge", false);
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    var control = forms.controls.get("notAge", false);
                     expect(control).toBeNull();
                 });
                 it("Throws error for missing control when required", function () {
-                    expect(function () { return Crm.Forms.Controls.get("notAge", true); }).toThrowError(Error);
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    expect(function () { return forms.controls.get("notAge", true); }).toThrowError(Error);
                 });
                 it("Throws error for missing control when required by default", function () {
-                    expect(function () { return Crm.Forms.Controls.get("notAge"); }).toThrowError(Error);
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    expect(function () { return forms.controls.get("notAge"); }).toThrowError(Error);
                 });
             });
             describe("Controls.setDisabled", function () {
-                beforeEach(function () {
-                    window["Xrm"] = { Page: new UnitTests.Mocks.PageMock() };
-                });
-                afterEach(function () {
-                    window["Xrm"] = undefined;
-                });
                 it("Does not throw error for missing control", function () {
-                    expect(function () { return Crm.Forms.Controls.setDisabled(["notAge"], true, true); }).not.toThrowError();
-                    expect(function () { return Crm.Forms.Controls.setDisabled(["notAge"], false, true); }).not.toThrowError();
-                    expect(function () { return Crm.Forms.Controls.setDisabled(["notAge"], true, false); }).not.toThrowError();
-                    expect(function () { return Crm.Forms.Controls.setDisabled(["notAge"], false, false); }).not.toThrowError();
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    expect(function () { return forms.controls.setDisabled(["notAge"], true, true); }).not.toThrowError();
+                    expect(function () { return forms.controls.setDisabled(["notAge"], false, true); }).not.toThrowError();
+                    expect(function () { return forms.controls.setDisabled(["notAge"], true, false); }).not.toThrowError();
+                    expect(function () { return forms.controls.setDisabled(["notAge"], false, false); }).not.toThrowError();
                 });
                 it("Sets all disabled", function () {
-                    var control = window["Xrm"].Page.controls.age;
-                    var header = window["Xrm"].Page.controls.age_header;
-                    Crm.Forms.Controls.setDisabled(["age"], false, true);
-                    Crm.Forms.Controls.setDisabled(["age"], true, true);
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    var control = page.controls.age;
+                    var header = page.controls.age_header;
+                    forms.controls.setDisabled(["age"], false, true);
+                    forms.controls.setDisabled(["age"], true, true);
                     expect(control.getDisabled()).toBe(true);
                     expect(header.getDisabled()).toBe(true);
                 });
                 it("Sets control in body disabled", function () {
-                    var control = window["Xrm"].Page.controls.age;
-                    var header = window["Xrm"].Page.controls.age_header;
-                    Crm.Forms.Controls.setDisabled(["age"], false, true);
-                    Crm.Forms.Controls.setDisabled(["age"], true, false);
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    var control = page.controls.age;
+                    var header = page.controls.age_header;
+                    forms.controls.setDisabled(["age"], false, true);
+                    forms.controls.setDisabled(["age"], true, false);
                     expect(control.getDisabled()).toBe(true);
                     expect(header.getDisabled()).toBe(false);
                 });
             });
             describe("Controls.setVisible", function () {
-                beforeEach(function () {
-                    window["Xrm"] = { Page: new UnitTests.Mocks.PageMock() };
-                });
-                afterEach(function () {
-                    window["Xrm"] = undefined;
-                });
                 it("Does not throw error for missing control", function () {
-                    expect(function () { return Crm.Forms.Controls.setVisible(["notAge"], true, true); }).not.toThrowError();
-                    expect(function () { return Crm.Forms.Controls.setVisible(["notAge"], false, true); }).not.toThrowError();
-                    expect(function () { return Crm.Forms.Controls.setVisible(["notAge"], true, false); }).not.toThrowError();
-                    expect(function () { return Crm.Forms.Controls.setVisible(["notAge"], false, false); }).not.toThrowError();
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    expect(function () { return forms.controls.setVisible(["notAge"], true, true); }).not.toThrowError();
+                    expect(function () { return forms.controls.setVisible(["notAge"], false, true); }).not.toThrowError();
+                    expect(function () { return forms.controls.setVisible(["notAge"], true, false); }).not.toThrowError();
+                    expect(function () { return forms.controls.setVisible(["notAge"], false, false); }).not.toThrowError();
                 });
             });
         })(UnitTests = Crm.UnitTests || (Crm.UnitTests = {}));
@@ -458,71 +489,75 @@ var Dynamics;
         (function (UnitTests) {
             "use strict";
             describe("Sections.get", function () {
-                beforeEach(function () {
-                    window["Xrm"] = { Page: new UnitTests.Mocks.PageMock() };
-                });
-                afterEach(function () {
-                    window["Xrm"] = undefined;
-                });
                 it("Returns null for missing section when not required", function () {
-                    var tab = Crm.Forms.Sections.get("invalidTab", "invalidSection", false);
-                    expect(tab).toBeNull();
-                    var tab = Crm.Forms.Sections.get("mainTab", "invalidSection", false);
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    var notatab = forms.sections.get("invalidTab", "invalidSection", false);
+                    expect(notatab).toBeNull();
+                    var tab = forms.sections.get("mainTab", "invalidSection", false);
                     expect(tab).toBeNull();
                 });
                 it("Throws error for missing section when required", function () {
-                    expect(function () { return Crm.Forms.Sections.get("invalidTab", "invalidSection", true); }).toThrowError(Error);
-                    expect(function () { return Crm.Forms.Sections.get("mainTab", "invalidSection", true); }).toThrowError(Error);
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    expect(function () { return forms.sections.get("invalidTab", "invalidSection", true); }).toThrowError(Error);
+                    expect(function () { return forms.sections.get("mainTab", "invalidSection", true); }).toThrowError(Error);
                 });
                 it("Throws error for missing section when required by default", function () {
-                    expect(function () { return Crm.Forms.Sections.get("invalidTab", "invalidSection"); }).toThrowError(Error);
-                    expect(function () { return Crm.Forms.Sections.get("mainTab", "invalidSection", true); }).toThrowError(Error);
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    expect(function () { return forms.sections.get("invalidTab", "invalidSection"); }).toThrowError(Error);
+                    expect(function () { return forms.sections.get("mainTab", "invalidSection", true); }).toThrowError(Error);
                 });
                 it("Returns existing section", function () {
-                    var tab = Crm.Forms.Sections.get("mainTab", "mainSection");
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    var tab = forms.sections.get("mainTab", "mainSection");
                     expect(tab).toBeDefined();
                     expect(tab).not.toBeNull();
                 });
             });
             describe("Sections.setVisible", function () {
-                beforeEach(function () {
-                    window["Xrm"] = { Page: new UnitTests.Mocks.PageMock() };
-                });
-                afterEach(function () {
-                    window["Xrm"] = undefined;
-                });
                 it("Does not throw error for missing section", function () {
-                    var mainTab = window["Xrm"].Page.mainTab;
-                    expect(function () { return Crm.Forms.Sections.show(["invalidTab|invalidSection"]); }).not.toThrowError();
-                    expect(function () { return Crm.Forms.Sections.hide(["invalidTab|invalidSection"]); }).not.toThrowError();
-                    expect(function () { return Crm.Forms.Sections.show(["mainTab|invalidSection"]); }).not.toThrowError();
-                    expect(function () { return Crm.Forms.Sections.hide(["mainTab|invalidSection"]); }).not.toThrowError();
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    var mainTab = page.mainTab;
+                    expect(function () { return forms.sections.show(["invalidTab|invalidSection"]); }).not.toThrowError();
+                    expect(function () { return forms.sections.hide(["invalidTab|invalidSection"]); }).not.toThrowError();
+                    expect(function () { return forms.sections.show(["mainTab|invalidSection"]); }).not.toThrowError();
+                    expect(function () { return forms.sections.hide(["mainTab|invalidSection"]); }).not.toThrowError();
                 });
                 it("Sets section visibility to true", function () {
-                    var mainSection = window["Xrm"].Page.mainTab.mainSection;
-                    Crm.Forms.Sections.hide(["mainTab|mainSection"]);
-                    Crm.Forms.Sections.show(["mainTab|mainSection"]);
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    var mainSection = page.mainTab.mainSection;
+                    forms.sections.hide(["mainTab|mainSection"]);
+                    forms.sections.show(["mainTab|mainSection"]);
                     expect(mainSection.getVisible()).toBe(true);
-                    Crm.Forms.Sections.hide(["mainTab|mainSection"]);
-                    Crm.Forms.Sections.show(["mainTab|mainSection"], true);
+                    forms.sections.hide(["mainTab|mainSection"]);
+                    forms.sections.show(["mainTab|mainSection"], true);
                     expect(mainSection.getVisible()).toBe(true);
                 });
                 it("Sets section visibility to false", function () {
-                    var mainSection = window["Xrm"].Page.mainTab.mainSection;
-                    Crm.Forms.Sections.show(["mainTab|mainSection"]);
-                    Crm.Forms.Sections.hide(["mainTab|mainSection"]);
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    var mainSection = page.mainTab.mainSection;
+                    forms.sections.show(["mainTab|mainSection"]);
+                    forms.sections.hide(["mainTab|mainSection"]);
                     expect(mainSection.getVisible()).toBe(false);
-                    Crm.Forms.Sections.show(["mainTab|mainSection"]);
-                    Crm.Forms.Sections.hide(["mainTab|mainSection"], true);
+                    forms.sections.show(["mainTab|mainSection"]);
+                    forms.sections.hide(["mainTab|mainSection"], true);
                     expect(mainSection.getVisible()).toBe(false);
                 });
                 it("Does not change section visibility when condition is not satisfied", function () {
-                    var mainSection = window["Xrm"].Page.mainTab.mainSection;
-                    Crm.Forms.Sections.hide(["mainTab|mainSection"]);
-                    Crm.Forms.Sections.show(["mainTab|mainSection"], false);
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    var mainSection = page.mainTab.mainSection;
+                    forms.sections.hide(["mainTab|mainSection"]);
+                    forms.sections.show(["mainTab|mainSection"], false);
                     expect(mainSection.getVisible()).toBe(false);
-                    Crm.Forms.Sections.show(["mainTab|mainSection"]);
-                    Crm.Forms.Sections.hide(["mainTab|mainSection"], false);
+                    forms.sections.show(["mainTab|mainSection"]);
+                    forms.sections.hide(["mainTab|mainSection"], false);
                     expect(mainSection.getVisible()).toBe(true);
                 });
             });
@@ -538,105 +573,111 @@ var Dynamics;
         (function (UnitTests) {
             "use strict";
             describe("Tabs.get", function () {
-                beforeEach(function () {
-                    window["Xrm"] = { Page: new UnitTests.Mocks.PageMock() };
-                });
-                afterEach(function () {
-                    window["Xrm"] = undefined;
-                });
                 it("Returns null for missing tab when not required", function () {
-                    var tab = Crm.Forms.Tabs.get("invalidTab", false);
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    var tab = forms.tabs.get("invalidTab", false);
                     expect(tab).toBeNull();
                 });
                 it("Throws error for missing tab when required", function () {
-                    expect(function () { return Crm.Forms.Tabs.get("invalidTab", true); }).toThrowError(Error);
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    expect(function () { return forms.tabs.get("invalidTab", true); }).toThrowError(Error);
                 });
                 it("Throws error for missing tab when required by default", function () {
-                    expect(function () { return Crm.Forms.Tabs.get("invalidTab"); }).toThrowError(Error);
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    expect(function () { return forms.tabs.get("invalidTab"); }).toThrowError(Error);
                 });
                 it("Returns existing tab", function () {
-                    var tab = Crm.Forms.Tabs.get("mainTab");
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    var tab = forms.tabs.get("mainTab");
                     expect(tab).toBeDefined();
                     expect(tab).not.toBeNull();
                 });
             });
             describe("Tabs.setVisible", function () {
-                beforeEach(function () {
-                    window["Xrm"] = { Page: new UnitTests.Mocks.PageMock() };
-                });
-                afterEach(function () {
-                    window["Xrm"] = undefined;
-                });
                 it("Does not throw error for missing tab", function () {
-                    var mainTab = window["Xrm"].Page.mainTab;
-                    expect(function () { return Crm.Forms.Tabs.show(["invalidTab"]); }).not.toThrowError();
-                    expect(function () { return Crm.Forms.Tabs.hide(["invalidTab"]); }).not.toThrowError();
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    var mainTab = page.mainTab;
+                    expect(function () { return forms.tabs.show(["invalidTab"]); }).not.toThrowError();
+                    expect(function () { return forms.tabs.hide(["invalidTab"]); }).not.toThrowError();
                 });
                 it("Sets tab visibility to true", function () {
-                    var mainTab = window["Xrm"].Page.mainTab;
-                    Crm.Forms.Tabs.hide(["mainTab"]);
-                    Crm.Forms.Tabs.show(["mainTab"]);
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    var mainTab = page.mainTab;
+                    forms.tabs.hide(["mainTab"]);
+                    forms.tabs.show(["mainTab"]);
                     expect(mainTab.getVisible()).toBe(true);
-                    Crm.Forms.Tabs.hide(["mainTab"]);
-                    Crm.Forms.Tabs.show(["mainTab"], true);
+                    forms.tabs.hide(["mainTab"]);
+                    forms.tabs.show(["mainTab"], true);
                     expect(mainTab.getVisible()).toBe(true);
                 });
                 it("Sets tab visibility to false", function () {
-                    var mainTab = window["Xrm"].Page.mainTab;
-                    Crm.Forms.Tabs.show(["mainTab"]);
-                    Crm.Forms.Tabs.hide(["mainTab"]);
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    var mainTab = page.mainTab;
+                    forms.tabs.show(["mainTab"]);
+                    forms.tabs.hide(["mainTab"]);
                     expect(mainTab.getVisible()).toBe(false);
-                    Crm.Forms.Tabs.show(["mainTab"]);
-                    Crm.Forms.Tabs.hide(["mainTab"], true);
+                    forms.tabs.show(["mainTab"]);
+                    forms.tabs.hide(["mainTab"], true);
                     expect(mainTab.getVisible()).toBe(false);
                 });
                 it("Does not change tab visibility when condition is not satisfied", function () {
-                    var mainTab = window["Xrm"].Page.mainTab;
-                    Crm.Forms.Tabs.hide(["mainTab"]);
-                    Crm.Forms.Tabs.show(["mainTab"], false);
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    var mainTab = page.mainTab;
+                    forms.tabs.hide(["mainTab"]);
+                    forms.tabs.show(["mainTab"], false);
                     expect(mainTab.getVisible()).toBe(false);
-                    Crm.Forms.Tabs.show(["mainTab"]);
-                    Crm.Forms.Tabs.hide(["mainTab"], false);
+                    forms.tabs.show(["mainTab"]);
+                    forms.tabs.hide(["mainTab"], false);
                     expect(mainTab.getVisible()).toBe(true);
                 });
             });
             describe("Tabs.collapseExpand", function () {
-                beforeEach(function () {
-                    window["Xrm"] = { Page: new UnitTests.Mocks.PageMock() };
-                });
-                afterEach(function () {
-                    window["Xrm"] = undefined;
-                });
                 it("Does not throw error for missing tab", function () {
-                    var mainTab = window["Xrm"].Page.mainTab;
-                    expect(function () { return Crm.Forms.Tabs.expand(["invalidTab"]); }).not.toThrowError();
-                    expect(function () { return Crm.Forms.Tabs.collpase(["invalidTab"]); }).not.toThrowError();
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    var mainTab = page.mainTab;
+                    expect(function () { return forms.tabs.expand(["invalidTab"]); }).not.toThrowError();
+                    expect(function () { return forms.tabs.collpase(["invalidTab"]); }).not.toThrowError();
                 });
                 it("Sets tab to be expanded", function () {
-                    var mainTab = window["Xrm"].Page.mainTab;
-                    Crm.Forms.Tabs.collpase(["mainTab"]);
-                    Crm.Forms.Tabs.expand(["mainTab"]);
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    var mainTab = page.mainTab;
+                    forms.tabs.collpase(["mainTab"]);
+                    forms.tabs.expand(["mainTab"]);
                     expect(mainTab.getDisplayState()).toBe("expanded");
-                    Crm.Forms.Tabs.collpase(["mainTab"]);
-                    Crm.Forms.Tabs.expand(["mainTab"], true);
+                    forms.tabs.collpase(["mainTab"]);
+                    forms.tabs.expand(["mainTab"], true);
                     expect(mainTab.getDisplayState()).toBe("expanded");
                 });
                 it("Sets tab to be collapsed", function () {
-                    var mainTab = window["Xrm"].Page.mainTab;
-                    Crm.Forms.Tabs.expand(["mainTab"]);
-                    Crm.Forms.Tabs.collpase(["mainTab"]);
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    var mainTab = page.mainTab;
+                    forms.tabs.expand(["mainTab"]);
+                    forms.tabs.collpase(["mainTab"]);
                     expect(mainTab.getDisplayState()).toBe("collapsed");
-                    Crm.Forms.Tabs.expand(["mainTab"]);
-                    Crm.Forms.Tabs.collpase(["mainTab"], true);
+                    forms.tabs.expand(["mainTab"]);
+                    forms.tabs.collpase(["mainTab"], true);
                     expect(mainTab.getDisplayState()).toBe("collapsed");
                 });
                 it("Does not change tab state when condition is not satisfied", function () {
-                    var mainTab = window["Xrm"].Page.mainTab;
-                    Crm.Forms.Tabs.expand(["mainTab"]);
-                    Crm.Forms.Tabs.collpase(["mainTab"], false);
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    var mainTab = page.mainTab;
+                    forms.tabs.expand(["mainTab"]);
+                    forms.tabs.collpase(["mainTab"], false);
                     expect(mainTab.getDisplayState()).toBe("expanded");
-                    Crm.Forms.Tabs.collpase(["mainTab"]);
-                    Crm.Forms.Tabs.expand(["mainTab"], false);
+                    forms.tabs.collpase(["mainTab"]);
+                    forms.tabs.expand(["mainTab"], false);
                     expect(mainTab.getDisplayState()).toBe("collapsed");
                 });
             });
@@ -653,16 +694,22 @@ var Dynamics;
             "use strict";
             describe("Tasks.execute", function () {
                 it("Returns empty array with null tasks", function () {
-                    var results = Dynamics.Crm.Tasks.execute(null);
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    var results = forms.tasks.execute(null);
                     expect(results).not.toBeNull();
                     expect(results.length).toEqual(0);
                 });
                 it("Returns empty array with undefined tasks", function () {
-                    var results = Dynamics.Crm.Tasks.execute(undefined);
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
+                    var results = forms.tasks.execute(undefined);
                     expect(results).not.toBeNull();
                     expect(results.length).toEqual(0);
                 });
                 it("Force execute on all tasks", function () {
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
                     var counter = 0;
                     var tasks = [
                         function () { counter++; return false; },
@@ -671,12 +718,14 @@ var Dynamics;
                         function () { counter++; throw new Error("Dummy error"); },
                         function () { counter++; return false; }
                     ];
-                    var results = Dynamics.Crm.Tasks.execute(tasks, { executeAll: true, continueOnError: true });
+                    var results = forms.tasks.execute(tasks, { executeAll: true, continueOnError: true });
                     expect(results).not.toBeNull();
                     expect(results.length).toEqual(tasks.length);
                     expect(counter).toEqual(tasks.length);
                 });
                 it("Stops on third tasks", function () {
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
                     var counter = 0;
                     var tasks = [
                         function () { counter++; return false; },
@@ -684,19 +733,21 @@ var Dynamics;
                         function () { counter++; return true; },
                         function () { counter++; return false; }
                     ];
-                    var results = Dynamics.Crm.Tasks.execute(tasks);
+                    var results = forms.tasks.execute(tasks);
                     expect(results).not.toBeNull();
                     expect(results.length).toEqual(3);
                     expect(counter).toEqual(3);
                 });
                 it("Stops on first error", function () {
+                    var page = new UnitTests.Mocks.PageMock();
+                    var forms = new Crm.Forms(page);
                     var counter = 0;
                     var tasks = [
                         function () { counter++; return false; },
                         function () { counter++; throw new Error("Dummy error"); },
                         function () { counter++; return false; }
                     ];
-                    var results = Dynamics.Crm.Tasks.execute(tasks);
+                    var results = forms.tasks.execute(tasks);
                     expect(results).not.toBeNull();
                     expect(results.length).toEqual(2);
                     expect(counter).toEqual(2);

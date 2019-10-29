@@ -7,7 +7,7 @@
         Or = 2
     }
 
-    function getContext(): Context {
+    function getContext(): GlobalContext {
 
         let context;
 
@@ -182,7 +182,7 @@
 
             Xrm.WebApi.retrieveMultipleRecords(entityName, query, pageSize)
                 .then(response => {
-
+                    
                     resolve(response.entities.map(entity => toEntity(entityName, attributes, entity)));
 
                 }, (error) => {

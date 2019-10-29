@@ -3,37 +3,41 @@
     "use strict";
 
     describe("Attributes.get", () => {
-
-        beforeEach(() => {
-            window["Xrm"] = { Page: new Mocks.PageMock() };
-        });
-
-        afterEach(() => {
-            window["Xrm"] = undefined;
-        });
-
+        
         it("Returns null for missing attribute when not required", () => {
 
-            var attribute = Forms.Attributes.get("notAge", false);
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
+
+            let attribute = forms.attributes.get("notAge", false);
 
             expect(attribute).toBeNull();
         });
 
         it("Throws error for missing attribute when required", () => {
 
-            expect(() => Forms.Attributes.get("notAge", true)).toThrowError(Error);
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
+
+            expect(() => forms.attributes.get("notAge", true)).toThrowError(Error);
         });
 
         it("Throws error for missing attribute when required by default", () => {
 
-            expect(() => Forms.Attributes.get("notAge")).toThrowError(Error);
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
+
+            expect(() => forms.attributes.get("notAge")).toThrowError(Error);
         });
 
         it("Returns attribute", () => {
 
-            var attribute = Forms.Attributes.get("age", false);
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
 
-            var expected = <Mocks.AttributeMock>window["Xrm"].Page.ageAttribute;
+            let attribute = forms.attributes.get("age", false);
+
+            let expected = page.ageAttribute;
 
             expect(attribute).toBeDefined();
             expect(attribute).not.toBeNull();
@@ -42,129 +46,131 @@
     });
 
     describe("Attributes.setRequiredLevel", () => {
-
-        beforeEach(() => {
-            window["Xrm"] = { Page: new Mocks.PageMock() };
-        });
-
-        afterEach(() => {
-            window["Xrm"] = undefined;
-        });
-
+        
         it("Does not throw error for null or undefined array", () => {
 
-            expect(() => Forms.Attributes.setRequired(null)).not.toThrowError(Error);
-            expect(() => Forms.Attributes.setRequired(undefined)).not.toThrowError(Error);
-            expect(() => Forms.Attributes.setRequired([])).not.toThrowError(Error);
-            expect(() => Forms.Attributes.setOptional(null)).not.toThrowError(Error);
-            expect(() => Forms.Attributes.setOptional(undefined)).not.toThrowError(Error);
-            expect(() => Forms.Attributes.setOptional([])).not.toThrowError(Error);
-            expect(() => Forms.Attributes.setRecommended(null)).not.toThrowError(Error);
-            expect(() => Forms.Attributes.setRecommended(undefined)).not.toThrowError(Error);
-            expect(() => Forms.Attributes.setRecommended([])).not.toThrowError(Error);
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
+
+            expect(() => forms.attributes.setRequired(null)).not.toThrowError(Error);
+            expect(() => forms.attributes.setRequired(undefined)).not.toThrowError(Error);
+            expect(() => forms.attributes.setRequired([])).not.toThrowError(Error);
+            expect(() => forms.attributes.setOptional(null)).not.toThrowError(Error);
+            expect(() => forms.attributes.setOptional(undefined)).not.toThrowError(Error);
+            expect(() => forms.attributes.setOptional([])).not.toThrowError(Error);
+            expect(() => forms.attributes.setRecommended(null)).not.toThrowError(Error);
+            expect(() => forms.attributes.setRecommended(undefined)).not.toThrowError(Error);
+            expect(() => forms.attributes.setRecommended([])).not.toThrowError(Error);
         });
 
         it("Sets attribute required level to required", () => {
 
-            var expected = <Mocks.AttributeMock>window["Xrm"].Page.ageAttribute;
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
 
-            Forms.Attributes.setRequired(["age"]);
+            let expected = page.ageAttribute;
 
-            expect((expected.getRequiredLevel() || "").toLocaleLowerCase()).toBe("required");
-
-            Forms.Attributes.setOptional(["age"]);
-            Forms.Attributes.setRequired(["age"]);
+            forms.attributes.setRequired(["age"]);
 
             expect((expected.getRequiredLevel() || "").toLocaleLowerCase()).toBe("required");
 
-            Forms.Attributes.setRecommended(["age"]);
-            Forms.Attributes.setRequired(["age"]);
+            forms.attributes.setOptional(["age"]);
+            forms.attributes.setRequired(["age"]);
+
+            expect((expected.getRequiredLevel() || "").toLocaleLowerCase()).toBe("required");
+
+            forms.attributes.setRecommended(["age"]);
+            forms.attributes.setRequired(["age"]);
 
             expect((expected.getRequiredLevel() || "").toLocaleLowerCase()).toBe("required");
         });
 
         it("Sets attribute required level to optional", () => {
 
-            var expected = <Mocks.AttributeMock>window["Xrm"].Page.ageAttribute;
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
 
-            Forms.Attributes.setOptional(["age"]);
+            let expected = page.ageAttribute;
 
-            expect((expected.getRequiredLevel() || "").toLocaleLowerCase()).toBe("none");
-
-            Forms.Attributes.setRequired(["age"]);
-            Forms.Attributes.setOptional(["age"]);
+            forms.attributes.setOptional(["age"]);
 
             expect((expected.getRequiredLevel() || "").toLocaleLowerCase()).toBe("none");
 
-            Forms.Attributes.setRecommended(["age"]);
-            Forms.Attributes.setOptional(["age"]);
+            forms.attributes.setRequired(["age"]);
+            forms.attributes.setOptional(["age"]);
+
+            expect((expected.getRequiredLevel() || "").toLocaleLowerCase()).toBe("none");
+
+            forms.attributes.setRecommended(["age"]);
+            forms.attributes.setOptional(["age"]);
 
             expect((expected.getRequiredLevel() || "").toLocaleLowerCase()).toBe("none");
         });
 
         it("Sets attribute required level to recommended", () => {
 
-            var expected = <Mocks.AttributeMock>window["Xrm"].Page.ageAttribute;
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
 
-            Forms.Attributes.setRecommended(["age"]);
+            let expected = page.ageAttribute;
 
-            expect((expected.getRequiredLevel() || "").toLocaleLowerCase()).toBe("recommended");
-
-            Forms.Attributes.setOptional(["age"]);
-            Forms.Attributes.setRecommended(["age"]);
+            forms.attributes.setRecommended(["age"]);
 
             expect((expected.getRequiredLevel() || "").toLocaleLowerCase()).toBe("recommended");
 
-            Forms.Attributes.setRequired(["age"]);
-            Forms.Attributes.setRecommended(["age"]);
+            forms.attributes.setOptional(["age"]);
+            forms.attributes.setRecommended(["age"]);
+
+            expect((expected.getRequiredLevel() || "").toLocaleLowerCase()).toBe("recommended");
+
+            forms.attributes.setRequired(["age"]);
+            forms.attributes.setRecommended(["age"]);
 
             expect((expected.getRequiredLevel() || "").toLocaleLowerCase()).toBe("recommended");
         });
     });
 
     describe("Attributes.notifications", () => {
-
-        beforeEach(() => {
-            window["Xrm"] = { Page: new Mocks.PageMock() };
-        });
-
-        afterEach(() => {
-            window["Xrm"] = undefined;
-        });
-
+        
         it("Throws error for null or undefined attribute", () => {
 
-            expect(() => Forms.Attributes.showNotification(null, "", "")).toThrowError(Error);
-            expect(() => Forms.Attributes.showNotification(null, "", "")).toThrowError(Error);
-            expect(() => Forms.Attributes.showNotification(undefined, "", "")).toThrowError(Error);
-            expect(() => Forms.Attributes.showNotification(undefined, "", "")).toThrowError(Error);
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
+
+            expect(() => forms.attributes.showNotification(null, "", "")).toThrowError(Error);
+            expect(() => forms.attributes.showNotification(null, "", "")).toThrowError(Error);
+            expect(() => forms.attributes.showNotification(undefined, "", "")).toThrowError(Error);
+            expect(() => forms.attributes.showNotification(undefined, "", "")).toThrowError(Error);
         });
 
         it("Shows/hides control notification", () => {
-            
-            var age = window["Xrm"].Page.ageAttribute;
-            var controls = [
+
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
+
+            let age = page.ageAttribute;
+            let controls = [
                 age.controls["age"],
                 age.controls["age_header"],
                 age.controls["age_footer"]
             ].filter(c => !!c);
-            var msg = "Hello world!";
-            var id = "notif";
+            let msg = "Hello world!";
+            let id = "notif";
 
-            Forms.Attributes.showNotification(age, msg, id);
+            forms.attributes.showNotification(age, msg, id);
 
-            for (var i = 0; i < controls.length; i++) {
+            for (let i = 0; i < controls.length; i++) {
 
-                var control = controls[i];
+                let control = controls[i];
 
                 expect(control.notifications[id]).toBe(msg);
             }
 
-            Forms.Attributes.hideNotification(age, id);
+            forms.attributes.hideNotification(age, id);
 
-            for (var i = 0; i < controls.length; i++) {
+            for (let i = 0; i < controls.length; i++) {
 
-                var control = controls[i];
+                let control = controls[i];
 
                 expect(control.notifications[id]).toBeNull();
             }

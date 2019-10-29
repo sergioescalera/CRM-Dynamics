@@ -1,4 +1,4 @@
-﻿module Dynamics.Crm.Forms.AutoNumberingRuleForm {
+﻿module Dynamics.Crm.AutoNumberingRuleForm {
 
     "use strict";
 
@@ -6,14 +6,18 @@
 
     let _prefix: string;
     let _type: Attribute;
+    let _page: FormContext;
+    let _forms: Forms;
 
     // event handlers
 
-    export function OnLoad(prefix: string = "cc"): void {
+    export function OnLoad(page: FormContext, prefix: string = "cc"): void {
 
+        _page = page;
         _prefix = prefix;
+        _forms = new Forms(page);
 
-        Tasks.execute([
+        _forms.tasks.execute([
             Init,
             ConfigureGlobalSection,
             ConfigureDailyConfigSection,
@@ -26,7 +30,7 @@
 
     function OnTypeChanged(): void {
 
-        Tasks.execute([
+        _forms.tasks.execute([
             ConfigureGlobalSection,
             ConfigureDailyConfigSection,
             ConfigureYearConfigSection,
@@ -38,7 +42,7 @@
 
     function Init(): void {
 
-        _type = Attributes.get(`${_prefix}_type`);
+        _type = _forms.attributes.get(`${_prefix}_type`);
 
         _type.addOnChange(OnTypeChanged);
     }
@@ -47,7 +51,7 @@
 
         let type = _type.getValue();
 
-        let section = Sections.get("tabGeneral", "sectionGlobal");
+        let section = _forms.sections.get("tabGeneral", "sectionGlobal");
 
         let disabled = !isGlobal(type);
 
@@ -63,7 +67,7 @@
 
         let type = _type.getValue();
 
-        let section = Sections.get("tabGeneral", "sectionDailyConfig");
+        let section = _forms.sections.get("tabGeneral", "sectionDailyConfig");
 
         let disabled = !isDaily(type);
 
@@ -79,7 +83,7 @@
 
         let type = _type.getValue();
 
-        let section = Sections.get("tabGeneral", "sectionYearConfig");
+        let section = _forms.sections.get("tabGeneral", "sectionYearConfig");
 
         let disabled = !isYearly(type) && !isDaily(type)
         
@@ -95,7 +99,7 @@
 
         let type = _type.getValue();
 
-        let section = Sections.get("tabGeneral", "sectionParented");
+        let section = _forms.sections.get("tabGeneral", "sectionParented");
 
         let disabled = isGlobal(type);
 

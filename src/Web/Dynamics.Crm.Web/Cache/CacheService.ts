@@ -25,15 +25,15 @@
 
             Validation.ensureNotNullOrEmpty(key, "key");
 
-            var str = this._storage.getItem(key);
+            let str = this._storage.getItem(key);
 
-            var entry: ICacheEntry<T>;
+            let entry: ICacheEntry<T>;
 
             if (str) {
                 entry = this.parse<T>(str);
             }
 
-            var now = new Date();
+            let now = new Date();
 
             if (entry && moment(entry.expiration).local().toDate() >= now) {
                 return entry.value;
@@ -43,7 +43,7 @@
                 return null;
             }
 
-            var value = factory();
+            let value = factory();
 
             this.set(key, value, expiration);
 
@@ -58,7 +58,7 @@
             Validation.ensureNotNullOrEmpty(key, "key");
             Validation.ensureNumberInRange(expiration, 0);
 
-            var entry: ICacheEntry<T> = {
+            let entry: ICacheEntry<T> = {
                 expiration: moment()
                     .add({
                         seconds: expiration
@@ -68,7 +68,7 @@
                 value: value
             };
 
-            var json = JSON.stringify(entry);
+            let json = JSON.stringify(entry);
 
             this._storage.setItem(key, json);
         }

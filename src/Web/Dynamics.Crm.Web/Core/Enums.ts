@@ -1,4 +1,4 @@
-﻿module Dynamics.Crm.Forms {
+﻿module Dynamics.Crm {
 
     "use strict";
 

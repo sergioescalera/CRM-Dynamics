@@ -6,7 +6,10 @@
 
         it("Returns empty array with null tasks", () => {
 
-            var results = Dynamics.Crm.Tasks.execute(null);
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
+
+            let results = forms.tasks.execute(null);
 
             expect(results).not.toBeNull();
             expect(results.length).toEqual(0);
@@ -14,7 +17,10 @@
 
         it("Returns empty array with undefined tasks", () => {
 
-            var results = Dynamics.Crm.Tasks.execute(undefined);
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
+
+            let results = forms.tasks.execute(undefined);
 
             expect(results).not.toBeNull();
             expect(results.length).toEqual(0);
@@ -22,15 +28,18 @@
 
         it("Force execute on all tasks", () => {
 
-            var counter = 0;
-            var tasks = <(() => boolean)[]>[
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
+
+            let counter = 0;
+            let tasks = <(() => boolean)[]>[
                 () => { counter++; return false; },
                 () => { counter++; },
                 () => { counter++; return true; },
                 () => { counter++; throw new Error("Dummy error"); },
                 () => { counter++; return false; }
             ];
-            var results = Dynamics.Crm.Tasks.execute(tasks, { executeAll: true, continueOnError: true });
+            let results = forms.tasks.execute(tasks, { executeAll: true, continueOnError: true });
 
             expect(results).not.toBeNull();
             expect(results.length).toEqual(tasks.length);
@@ -39,14 +48,17 @@
 
         it("Stops on third tasks", () => {
 
-            var counter = 0;
-            var tasks = <(() => boolean)[]>[
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
+
+            let counter = 0;
+            let tasks = <(() => boolean)[]>[
                 () => { counter++; return false; },
                 () => { counter++; },
                 () => { counter++; return true; },
                 () => { counter++; return false; }
             ];
-            var results = Dynamics.Crm.Tasks.execute(tasks);
+            let results = forms.tasks.execute(tasks);
 
             expect(results).not.toBeNull();
             expect(results.length).toEqual(3);
@@ -55,13 +67,16 @@
 
         it("Stops on first error", () => {
 
-            var counter = 0;
-            var tasks = <(() => boolean)[]>[
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
+
+            let counter = 0;
+            let tasks = <(() => boolean)[]>[
                 () => { counter++; return false; },
                 () => { counter++; throw new Error("Dummy error"); },
                 () => { counter++; return false; }
             ];
-            var results = Dynamics.Crm.Tasks.execute(tasks);
+            let results = forms.tasks.execute(tasks);
 
             expect(results).not.toBeNull();
             expect(results.length).toEqual(2);

@@ -1,128 +1,154 @@
-﻿module Dynamics.Crm.Forms {
+﻿module Dynamics.Crm {
 
     "use strict";
 
-    export function getClientType(): "Web" | "Outlook" | "Mobile" {
+    export class Forms {
 
-        return Xrm.Utility.getGlobalContext().client.getClient();
-    }
+        protected page: FormContext;
 
-    export function getEntityId(): string {
+        attributes: Attributes;
+        controls: Controls;
+        nav: Navigation;
+        notify: Notifications;
+        tabs: Tabs;
+        sections: Sections;
+        tasks: Tasks;
 
-        try {
+        constructor(page: FormContext) {
 
-            return Core.parseIdentifier(
-                Xrm.Page.data.entity.getId());
+            Validation.ensureNotNullOrUndefined(page, "page");
 
-        } catch (e) {
-
-            throw new Error("Unable to retrieve entity id");
-        }
-    }
-
-    export function getEntityName(): string {
-
-        try {
-
-            return Xrm.Page.data.entity.getEntityName();
-
-        } catch (e) {
-
-            throw new Error("Unable to retrieve entity name");
-        }
-    }
-
-
-    export function getEntitySetName(): string {
-
-        try {
-
-            return Xrm.Page.data.entity.getEntitySetName();
-
-        } catch (e) {
-
-            throw new Error("Unable to retrieve entity set name");
-        }
-    }
-
-    export function getFormType(): FormType {
-
-        return Xrm.Page.ui.getFormType();
-    }
-
-    export function getFormFactor(): FormFactor {
-
-        if (!Xrm.Utility.getGlobalContext().client.getFormFactor) {
-            return FormFactor.Unknown;
+            this.page = page;
+            this.attributes = new Attributes(page);
+            this.controls = new Controls(page);
+            this.nav = new Navigation(page);
+            this.notify = new Notifications(page);
+            this.tabs = new Tabs(page);
+            this.sections = new Sections(page);
+            this.tasks = new Tasks(page);
         }
 
-        return Xrm.Utility.getGlobalContext().client.getFormFactor();
-    }
+        getClientType(): "Web" | "Outlook" | "Mobile" {
 
-    export function getIsDesktop(): boolean {
-
-        let formFactor = getFormFactor();
-
-        if (formFactor !== FormFactor.Unknown) {
-            return formFactor === FormFactor.Desktop;
+            return Xrm.Utility.getGlobalContext().client.getClient();
         }
 
-        return getClientType() !== ClientType.Mobile;
-    }
+        getEntityId(): string {
 
-    export function getIsDirty(): boolean {
+            try {
 
-        return Xrm.Page.data.entity.getIsDirty();
-    }
+                return Core.parseIdentifier(
+                    this.page.data.entity.getId());
 
-    export function isCreateForm(): boolean {
+            } catch (e) {
 
-        return getFormType() === FormType.Create;
-    }
-
-    export function isUpdateForm(): boolean {
-
-        return getFormType() === FormType.Update;
-    }
-
-    export function isBulkEditForm(): boolean {
-
-        return getFormType() === FormType.BulkEdit;
-    }
-
-    export function supportsIFrames(): boolean {
-
-        return getIsDesktop();
-    }
-
-    export function current(): FormSelectorItem {
-
-        // The formSelectoritems collection does not exist and the formSelector.getCurrentItem method isn't supported for Dynamics 365 mobile clients (phones and tablets) and the interactive service hub.
-        // https://msdn.microsoft.com/en-in/library/gg327828.aspx#formSelector
-        if (!Xrm.Page.ui ||
-            !Xrm.Page.ui.formSelector ||
-            !Xrm.Page.ui.formSelector.items) {
-            return null;
+                throw new Error("Unable to retrieve entity id");
+            }
         }
 
-        // When only one form is available this method will return null.
-        return Xrm.Page.ui.formSelector.getCurrentItem()
-            || Xrm.Page.ui.formSelector.items.get(0)
-            || null;
-    }
+        getEntityName(): string {
 
-    export function find(label: string): FormSelectorItem {
+            try {
 
-        if (!Xrm.Page.ui ||
-            !Xrm.Page.ui.formSelector ||
-            !Xrm.Page.ui.formSelector.items) {
-            return null;
+                return this.page.data.entity.getEntityName();
+
+            } catch (e) {
+
+                throw new Error("Unable to retrieve entity name");
+            }
         }
 
-        let filter = Xrm.Page.ui.formSelector.items
-            .get()
-            .filter((f: FormSelectorItem) => f.getLabel() === label);
+        getEntitySetName(): string {
 
-        return filter[0] || null;
+            try {
+
+                return Xrm.Utility.getEntitySetName(this.getEntityName());
+
+            } catch (e) {
+
+                throw new Error("Unable to retrieve entity set name");
+            }
+        }
+
+        getFormType(): FormType {
+
+            return this.page.ui.getFormType();
+        }
+
+        getFormFactor(): FormFactor {
+
+            if (!Xrm.Utility.getGlobalContext().client.getFormFactor) {
+                return FormFactor.Unknown;
+            }
+
+            return Xrm.Utility.getGlobalContext().client.getFormFactor();
+        }
+
+        getIsDesktop(): boolean {
+
+            let formFactor = this.getFormFactor();
+
+            if (formFactor !== FormFactor.Unknown) {
+                return formFactor === FormFactor.Desktop;
+            }
+
+            return this.getClientType() !== ClientType.Mobile;
+        }
+
+        getIsDirty(): boolean {
+
+            return this.page.data.entity.getIsDirty();
+        }
+
+        isCreateForm(): boolean {
+
+            return this.getFormType() === FormType.Create;
+        }
+
+        isUpdateForm(): boolean {
+
+            return this.getFormType() === FormType.Update;
+        }
+
+        isBulkEditForm(): boolean {
+
+            return this.getFormType() === FormType.BulkEdit;
+        }
+
+        supportsIFrames(): boolean {
+
+            return this.getIsDesktop();
+        }
+
+        current(): FormSelectorItem {
+
+            // The formSelectoritems collection does not exist and the formSelector.getCurrentItem method isn't supported for Dynamics 365 mobile clients (phones and tablets) and the interactive service hub.
+            // https://msdn.microsoft.com/en-in/library/gg327828.aspx#formSelector
+            if (!this.page.ui ||
+                !this.page.ui.formSelector ||
+                !this.page.ui.formSelector.items) {
+                return null;
+            }
+
+            // When only one form is available this method will return null.
+            return this.page.ui.formSelector.getCurrentItem()
+                || this.page.ui.formSelector.items.get(0)
+                || null;
+        }
+
+        find(label: string): FormSelectorItem {
+
+            if (!this.page.ui ||
+                !this.page.ui.formSelector ||
+                !this.page.ui.formSelector.items) {
+                return null;
+            }
+
+            let filter = this.page.ui.formSelector.items
+                .get()
+                .filter((f: FormSelectorItem) => f.getLabel() === label);
+
+            return filter[0] || null;
+        }
     }
 }

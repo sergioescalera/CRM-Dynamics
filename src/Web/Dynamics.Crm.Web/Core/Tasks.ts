@@ -1,110 +1,132 @@
-﻿module Dynamics.Crm.Tasks {
+﻿module Dynamics.Crm {
 
     "use strict";
 
+    let executeTaskError = {
+
+        htmlMessage: `Something went wrong.<br />
+Clearing your browser's cache <u>(using Ctrl + F5)</u> may help solve the problem.`,
+
+        errorMessage: `Something went wrong. Clearing your browser's cache (using Ctrl + F5) may help solve the problem.`,
+
+        notificationId: "ExecuteTaskErrorNotification"
+    };
+    
     export interface ITasksConfig {
         continueOnError?: boolean;
         displayGenericMessageOnError?: boolean;
         executeAll?: boolean;
     }
 
-    let executeTaskErrorHtmlMessage: string = `Something went wrong.<br />
-Clearing your browser's cache <u>(using Ctrl + F5)</u> may help solve the problem.`;
+    export class Tasks {
 
-    let executeTaskErrorMessage: string = `Something went wrong. Clearing your browser's cache (using Ctrl + F5) may help solve the problem.`;
+        protected page: FormContext;
+        protected notity: Notifications;
 
-    let executeTaskErrorNotificationId: string = "ExecuteTaskErrorNotification";
+        constructor(page: FormContext) {
 
-    export function execute(
-        tasks: ((() => boolean) | (() => void))[],
-        config: ITasksConfig = {
-            displayGenericMessageOnError: true
-        }): any[] {
+            Validation.ensureNotNullOrUndefined(page, "page");
 
-        if (Forms.Notifications.supported()) {
-            Forms.Notifications.hide(executeTaskErrorNotificationId);
+            this.page = page;
+            this.notity = new Notifications(page);
         }
 
-        if (Diagnostics.trace) {
-            Diagnostics.printArguments("Tasks.execute", tasks, config);
-        }
+        execute(
+            tasks: ((() => boolean) | (() => void))[],
+            config: ITasksConfig = {
+                displayGenericMessageOnError: true
+            }): any[] {
 
-        let results: any[] = [];
-        let errors: IError[] = [];
+            if (this.notity.supported()) {
+                this.notity.hide(executeTaskError.notificationId);
+            }
 
-        if (!Array.isArray(tasks)) {
+            if (Diagnostics.trace) {
+                Diagnostics.printArguments("Tasks.execute", tasks, config);
+            }
 
-            Diagnostics.log.Warning("Tasks.execute: Invalid argument. An array was expected.");
+            let results: any[] = [];
+            let errors: IError[] = [];
 
-        } else {
+            if (!Array.isArray(tasks)) {
 
-            for (let i: number = 0; i < tasks.length; i++) {
+                Diagnostics.log.Warning("Tasks.execute: Invalid argument. An array was expected.");
 
-                let task: (() => boolean) | (() => void ) = tasks[i];
+            } else {
 
-                try {
+                for (let i: number = 0; i < tasks.length; i++) {
 
-                    let result: boolean | void = task();
+                    let task: (() => boolean) | (() => void) = tasks[i];
 
-                    results.push(result);
+                    try {
 
-                    if (!config.executeAll && !!result) {
-                        break;
-                    }
+                        let result: boolean | void = task();
 
-                } catch (e) {
+                        results.push(result);
 
-                    Diagnostics.log.Error(
-                        `Tasks.execute: An error has occurred in ${typeof task} ${getTaskName(task)}`.trim(), e);
+                        if (!config.executeAll && !!result) {
+                            break;
+                        }
 
-                    errors.push(e);
-                    results.push(e);
+                    } catch (e) {
 
-                    if (!config.continueOnError) {
-                        break;
+                        Diagnostics.log.Error(
+                            `Tasks.execute: An error has occurred in ${typeof task} ${this.getTaskName(task)}`.trim(), e);
+
+                        errors.push(e);
+                        results.push(e);
+
+                        if (!config.continueOnError) {
+                            break;
+                        }
                     }
                 }
             }
+
+            if (errors.length > 0) {
+                this.displayErrors(config, errors);
+            }
+
+            return results;
         }
 
-        if (errors.length > 0) {
-            displayErrors(config, errors);
+        displayErrors(
+            config: ITasksConfig,
+            errors: IError[]): void {
+
+            if (!errors || !errors.length) {
+                return;
+            }
+
+            if (!config || !config.displayGenericMessageOnError) {
+                return;
+            }
+
+            if (this.notity.htmlSupported()) {
+
+                this.notity.showHtml(
+                    executeTaskError.htmlMessage,
+                    executeTaskError.notificationId,
+                    FormNotificationTypes.Warning);
+
+            } else if (this.notity.supported()) {
+
+                this.notity.show(
+                    executeTaskError.errorMessage,
+                    executeTaskError.notificationId,
+                    FormNotificationTypes.Warning);
+            }
         }
 
-        return results;
-    }
+        getTaskName(task: Function): string {
 
-    function displayErrors(config: ITasksConfig, errors: IError[]): void {
+            if (typeof task !== "function") {
+                return "";
+            }
 
-        if (!errors || !errors.length) {
-            return;
+            let result = /^function\s+([\w\$]+)\s*\(/.exec(task.toString());
+
+            return result ? result[1] : "";
         }
-
-        if (!config || !config.displayGenericMessageOnError) {
-            return;
-        }
-
-        if (Forms.Notifications.htmlSupported()) {
-            Forms.Notifications.showHtml(
-                executeTaskErrorHtmlMessage,
-                executeTaskErrorNotificationId,
-                Forms.FormNotificationType.Warning);
-        } else if (Forms.Notifications.supported()) {
-            Forms.Notifications.show(
-                executeTaskErrorMessage,
-                executeTaskErrorNotificationId,
-                Forms.FormNotificationType.Warning);
-        }
-    }
-
-    function getTaskName(task: Function): string {
-
-        if (typeof task !== "function") {
-            return "";
-        }
-
-        let result = /^function\s+([\w\$]+)\s*\(/.exec(task.toString());
-
-        return result ? result[1] : "";
     }
 }

@@ -6,7 +6,7 @@
 
         hide(id: string): void {
 
-            Xrm.Page.ui.clearFormNotification(id);
+            Xrm["Page"].ui.clearFormNotification(id);
         }
 
         init(): void {
@@ -18,10 +18,10 @@
 
         show(options: NotificationServiceOptions): void {
 
-            if (_.isFunction(Xrm.Page.ui.setFormHtmlNotification)) {
-                Xrm.Page.ui.setFormHtmlNotification(options.message, options.type, options.id);
+            if (_.isFunction(Xrm["Page"].ui.setFormHtmlNotification)) {
+                Xrm["Page"].ui.setFormHtmlNotification(options.message, options.type, options.id);
             } else {
-                Xrm.Page.ui.setFormNotification(options.message, options.type, options.id);
+                Xrm["Page"].ui.setFormNotification(options.message, options.type, options.id);
             }
         }
 
@@ -30,9 +30,9 @@
             try {
                 return typeof Xrm !== "undefined"
                     && !!Xrm
-                    && !!Xrm.Page
-                    && !!Xrm.Page.ui
-                    && _.isFunction(Xrm.Page.ui.setFormNotification);
+                    && !!Xrm["Page"]
+                    && !!Xrm["Page"].ui
+                    && _.isFunction(Xrm["Page"].ui.setFormNotification);
             }
             catch (e) {
                 console.warn(e);

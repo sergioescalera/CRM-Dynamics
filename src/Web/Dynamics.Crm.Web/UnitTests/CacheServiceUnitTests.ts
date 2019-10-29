@@ -6,24 +6,24 @@
 
         it("Throws error for null key", () => {
 
-            var cache = new Caching.CacheService();
+            let cache = new Caching.CacheService();
 
             expect(() => cache.get(null)).toThrowError(Error);
         });
 
         it("Throws error for undefined key", () => {
 
-            var cache = new Caching.CacheService();
+            let cache = new Caching.CacheService();
 
             expect(() => cache.get(undefined)).toThrowError(Error);
         });
 
         it("Returns null for missing key", () => {
 
-            var cache = new Caching.CacheService();
+            let cache = new Caching.CacheService();
 
-            var key = "key";
-            var cached = cache.get(key);
+            let key = "key";
+            let cached = cache.get(key);
 
             expect(cached).toBeDefined();
             expect(cached).toBeNull();
@@ -34,14 +34,14 @@
 
         it("Throws error for null key", () => {
 
-            var cache = new Caching.CacheService();
+            let cache = new Caching.CacheService();
 
             expect(() => cache.set(null, {})).toThrowError(Error);
         });
 
         it("Throws error for undefined key", () => {
 
-            var cache = new Caching.CacheService();
+            let cache = new Caching.CacheService();
 
             expect(() => cache.set(undefined, {})).toThrowError(Error);
         });
@@ -51,17 +51,17 @@
         
         it("Returns null if expired", (done) => {
             
-            var cache = new Caching.CacheService();
+            let cache = new Caching.CacheService();
 
-            var key = "key";
-            var value = { name: "This is a test object" };
-            var sec = 1;
+            let key = "key";
+            let value = { name: "This is a test object" };
+            let sec = 1;
 
             cache.set(key, value, sec);
             
             setTimeout(() => {
                 
-                var cached = cache.get(key);
+                let cached = cache.get(key);
 
                 expect(cached).toBeDefined();
                 expect(cached).toBeNull();
@@ -73,19 +73,19 @@
 
         it("Returns new item if expired when a factory function is provided", (done) => {
 
-            var cache = new Caching.CacheService();
+            let cache = new Caching.CacheService();
 
-            var key = "key";
-            var counter = 0;
-            var factory = () => { return { n: ++counter }; };
-            var value = factory();
-            var sec = 1;
+            let key = "key";
+            let counter = 0;
+            let factory = () => { return { n: ++counter }; };
+            let value = factory();
+            let sec = 1;
 
             cache.set(key, value, sec);
 
             setTimeout(() => {
 
-                var cached = cache.get(key, factory);
+                let cached = cache.get(key, factory);
 
                 expect(cached).toBeDefined();
                 expect(cached).not.toBeNull();
@@ -98,17 +98,17 @@
 
         it("Returns cached item", (done) => {
 
-            var cache = new Caching.CacheService();
+            let cache = new Caching.CacheService();
 
-            var key = "key";
-            var value = { name: "This is a test object" };
-            var sec = 1;
+            let key = "key";
+            let value = { name: "This is a test object" };
+            let sec = 1;
 
             cache.set(key, value, sec);
 
             setTimeout(() => {
                 
-                var cached = cache.get<any>(key);
+                let cached = cache.get<any>(key);
 
                 expect(cached).toBeDefined();
                 expect(cached).not.toBeNull();
@@ -123,15 +123,15 @@
 
         it("Overrides cached item", () => {
 
-            var cache = new Caching.CacheService();
+            let cache = new Caching.CacheService();
 
-            var key = "key";
-            var sec = 1;
+            let key = "key";
+            let sec = 1;
 
             cache.set(key, 1, sec);
             cache.set(key, 2, sec);
 
-            var cached = cache.get(key);
+            let cached = cache.get(key);
 
             expect(cached).toBeDefined();
             expect(cached).not.toBeNull();

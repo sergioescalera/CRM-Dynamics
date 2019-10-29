@@ -15,7 +15,7 @@ module Dynamics.Crm.UnitTests.Mocks {
         }
     }
 
-    export class PageMock {
+    export class PageMock implements FormContext {
 
         ageAttribute: AttributeMock;
         attributes: any;
@@ -23,6 +23,8 @@ module Dynamics.Crm.UnitTests.Mocks {
         mainTab: TabMock;
         tabs: any;
         ui: any;
+        data: any;
+        process: any;
 
         constructor() {
             this.ageAttribute = new AttributeMock("age", true);
@@ -38,7 +40,7 @@ module Dynamics.Crm.UnitTests.Mocks {
             };
         }
 
-        getTab(param: any): TabMock {
+        getTab(param: any): Tab {
 
             if (typeof param === "string") {
 
@@ -48,23 +50,24 @@ module Dynamics.Crm.UnitTests.Mocks {
             return null;
         }
 
-        getAttribute(name: string): AttributeMock {
+        getAttribute(name: string): Attribute {
 
             return this.attributes[name];
         }
 
-        getControl(name: string): ControlMock {
+        getControl(name: string): Control {
 
             return this.controls[name];
         }
     }
 
-    export class AttributeMock {
+    export class AttributeMock implements Attribute {
 
         controls: any;
         name: string;
+        val: AttributeValue;
 
-        private _requiredLevel: string;
+        private _requiredLevel: AttributeRequiredLevel;
 
         constructor(name: string, header?: boolean, footer?: boolean) {
 
@@ -83,11 +86,11 @@ module Dynamics.Crm.UnitTests.Mocks {
 
         forEach(func: (c: Control) => void): void {
             
-            var keys = [this.name, this.name + "_header", this.name + "_footer"];
+            let keys = [this.name, this.name + "_header", this.name + "_footer"];
 
-            for (var i = 0; i < keys.length; i++) {
+            for (let i = 0; i < keys.length; i++) {
 
-                var control = this.controls[keys[i]];
+                let control = this.controls[keys[i]];
 
                 if (control) {                    
                     func(control);
@@ -95,14 +98,56 @@ module Dynamics.Crm.UnitTests.Mocks {
             }
         }
 
-        getRequiredLevel(): string {
+        getRequiredLevel(): AttributeRequiredLevel {
 
             return this._requiredLevel;
         }
-        setRequiredLevel(value: string): void {
+        setRequiredLevel(value: AttributeRequiredLevel): void {
 
             this._requiredLevel = value;
-        }        
+        }      
+
+        addOnChange(handler: (ctx: ExecutionContext) => void): void {}
+        removeOnChange(handler: (ctx: ExecutionContext) => void): void {}
+
+        fireOnChange(): void { }
+        getAttributeType(): AttributeType {
+
+            return "string";
+        }
+
+        getIsDirty(): boolean {
+
+            return true;
+        }
+        getName(): string {
+
+            return this.name;
+        }
+        getParent(): XrmEntity {
+            return null;
+        }
+        getSubmitMode(): AttributeSubmitMode {
+            return "dirty";
+        }
+        getUserPrivilege(): AttributeUserPrivilege {
+            return null;
+        }
+        getValue(): any {
+            return this.val;
+        }
+        isValid(): boolean {
+            return true;
+        }
+        setIsValid(value: boolean, message: string): void {
+
+        }
+        setSubmitMode(mode: AttributeSubmitMode): void { }
+
+        setValue(value: AttributeValue): void {
+
+            this.val = value;
+        }
     }
 
     export class ControlMock extends VisibleObject {

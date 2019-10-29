@@ -3,35 +3,39 @@
     "use strict";
 
     describe("Tabs.get", () => {
-
-        beforeEach(() => {
-            window["Xrm"] = { Page: new Mocks.PageMock() };
-        });
-
-        afterEach(() => {
-            window["Xrm"] = undefined;
-        });
-
+        
         it("Returns null for missing tab when not required", () => {
 
-            var tab = Forms.Tabs.get("invalidTab", false);
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
+
+            let tab = forms.tabs.get("invalidTab", false);
 
             expect(tab).toBeNull();
         });
 
         it("Throws error for missing tab when required", () => {
 
-            expect(() => Forms.Tabs.get("invalidTab", true)).toThrowError(Error);
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
+
+            expect(() => forms.tabs.get("invalidTab", true)).toThrowError(Error);
         });
 
         it("Throws error for missing tab when required by default", () => {
 
-            expect(() => Forms.Tabs.get("invalidTab")).toThrowError(Error);
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
+
+            expect(() => forms.tabs.get("invalidTab")).toThrowError(Error);
         });
 
         it("Returns existing tab", () => {
 
-            var tab = Forms.Tabs.get("mainTab");
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
+
+            let tab = forms.tabs.get("mainTab");
 
             expect(tab).toBeDefined();
             expect(tab).not.toBeNull();
@@ -39,34 +43,32 @@
     });
 
     describe("Tabs.setVisible", () => {
-
-        beforeEach(() => {
-            window["Xrm"] = { Page: new Mocks.PageMock() };
-        });
-
-        afterEach(() => {
-            window["Xrm"] = undefined;
-        });
-
+        
         it("Does not throw error for missing tab", () => {
 
-            var mainTab = window["Xrm"].Page.mainTab;
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
 
-            expect(() => Forms.Tabs.show(["invalidTab"])).not.toThrowError();
-            expect(() => Forms.Tabs.hide(["invalidTab"])).not.toThrowError();
+            let mainTab = page.mainTab;
+
+            expect(() => forms.tabs.show(["invalidTab"])).not.toThrowError();
+            expect(() => forms.tabs.hide(["invalidTab"])).not.toThrowError();
         });
 
         it("Sets tab visibility to true", () => {
 
-            var mainTab = window["Xrm"].Page.mainTab;
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
 
-            Forms.Tabs.hide(["mainTab"]);
-            Forms.Tabs.show(["mainTab"]);
+            let mainTab = page.mainTab;
+
+            forms.tabs.hide(["mainTab"]);
+            forms.tabs.show(["mainTab"]);
 
             expect(mainTab.getVisible()).toBe(true);
 
-            Forms.Tabs.hide(["mainTab"]);
-            Forms.Tabs.show(["mainTab"], true);
+            forms.tabs.hide(["mainTab"]);
+            forms.tabs.show(["mainTab"], true);
 
             expect(mainTab.getVisible()).toBe(true);
 
@@ -74,94 +76,104 @@
 
         it("Sets tab visibility to false", () => {
 
-            var mainTab = window["Xrm"].Page.mainTab;
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
 
-            Forms.Tabs.show(["mainTab"]);
-            Forms.Tabs.hide(["mainTab"]);
+            let mainTab = page.mainTab;
+
+            forms.tabs.show(["mainTab"]);
+            forms.tabs.hide(["mainTab"]);
 
             expect(mainTab.getVisible()).toBe(false);
 
-            Forms.Tabs.show(["mainTab"]);
-            Forms.Tabs.hide(["mainTab"], true);
+            forms.tabs.show(["mainTab"]);
+            forms.tabs.hide(["mainTab"], true);
 
             expect(mainTab.getVisible()).toBe(false);
         });
 
         it("Does not change tab visibility when condition is not satisfied", () => {
 
-            var mainTab = window["Xrm"].Page.mainTab;
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
 
-            Forms.Tabs.hide(["mainTab"]);
-            Forms.Tabs.show(["mainTab"], false);
+            let mainTab = page.mainTab;
+
+            forms.tabs.hide(["mainTab"]);
+            forms.tabs.show(["mainTab"], false);
 
             expect(mainTab.getVisible()).toBe(false);
 
-            Forms.Tabs.show(["mainTab"]);
-            Forms.Tabs.hide(["mainTab"], false);
+            forms.tabs.show(["mainTab"]);
+            forms.tabs.hide(["mainTab"], false);
 
             expect(mainTab.getVisible()).toBe(true);
         });
     });
 
     describe("Tabs.collapseExpand", () => {
-
-        beforeEach(() => {
-            window["Xrm"] = { Page: new Mocks.PageMock() };
-        });
-
-        afterEach(() => {
-            window["Xrm"] = undefined;
-        });
-
+        
         it("Does not throw error for missing tab", () => {
 
-            var mainTab = window["Xrm"].Page.mainTab;
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
 
-            expect(() => Forms.Tabs.expand(["invalidTab"])).not.toThrowError();
-            expect(() => Forms.Tabs.collpase(["invalidTab"])).not.toThrowError();            
+            let mainTab = page.mainTab;
+
+            expect(() => forms.tabs.expand(["invalidTab"])).not.toThrowError();
+            expect(() => forms.tabs.collpase(["invalidTab"])).not.toThrowError();            
         });
 
         it("Sets tab to be expanded", () => {
 
-            var mainTab = window["Xrm"].Page.mainTab;
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
 
-            Forms.Tabs.collpase(["mainTab"]);
-            Forms.Tabs.expand(["mainTab"]);
+            let mainTab = page.mainTab;
+
+            forms.tabs.collpase(["mainTab"]);
+            forms.tabs.expand(["mainTab"]);
 
             expect(mainTab.getDisplayState()).toBe("expanded");
 
-            Forms.Tabs.collpase(["mainTab"]);
-            Forms.Tabs.expand(["mainTab"], true);
+            forms.tabs.collpase(["mainTab"]);
+            forms.tabs.expand(["mainTab"], true);
 
             expect(mainTab.getDisplayState()).toBe("expanded");
         });
 
         it("Sets tab to be collapsed", () => {
 
-            var mainTab = window["Xrm"].Page.mainTab;
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
 
-            Forms.Tabs.expand(["mainTab"]);
-            Forms.Tabs.collpase(["mainTab"]);
+            let mainTab = page.mainTab;
+
+            forms.tabs.expand(["mainTab"]);
+            forms.tabs.collpase(["mainTab"]);
 
             expect(mainTab.getDisplayState()).toBe("collapsed");
 
-            Forms.Tabs.expand(["mainTab"]);
-            Forms.Tabs.collpase(["mainTab"], true);
+            forms.tabs.expand(["mainTab"]);
+            forms.tabs.collpase(["mainTab"], true);
 
             expect(mainTab.getDisplayState()).toBe("collapsed");
         });
 
         it("Does not change tab state when condition is not satisfied", () => {
 
-            var mainTab = window["Xrm"].Page.mainTab;
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
 
-            Forms.Tabs.expand(["mainTab"]);
-            Forms.Tabs.collpase(["mainTab"], false);
+            let mainTab = page.mainTab;
+
+            forms.tabs.expand(["mainTab"]);
+            forms.tabs.collpase(["mainTab"], false);
 
             expect(mainTab.getDisplayState()).toBe("expanded");
 
-            Forms.Tabs.collpase(["mainTab"]);
-            Forms.Tabs.expand(["mainTab"], false);
+            forms.tabs.collpase(["mainTab"]);
+            forms.tabs.expand(["mainTab"], false);
 
             expect(mainTab.getDisplayState()).toBe("collapsed");
         });

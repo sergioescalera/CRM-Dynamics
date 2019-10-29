@@ -1,72 +1,86 @@
-﻿module Dynamics.Crm.Forms.Sections {
+﻿module Dynamics.Crm {
 
     "use strict";
 
-    export function get(tabName: string, sectionName: string, required: boolean = true): Section {
+    export class Sections {
 
-        let tab = Tabs.get(tabName, required);
+        protected page: FormContext;
+        protected tabs: Tabs;
 
-        if (!tab) {
+        constructor(page: FormContext) {
+
+            Validation.ensureNotNullOrUndefined(page, "page");
+
+            this.page = page;
+            this.tabs = new Tabs(page);
+        }
+        
+        get(tabName: string, sectionName: string, required: boolean = true): Section {
+
+            let tab = this.tabs.get(tabName, required);
+
+            if (!tab) {
+                return null;
+            }
+
+            let section = tab.sections.get(sectionName);
+
+            if (section) {
+                return section;
+            }
+
+            let msg = "The specified section could not be found: " + tabName + " - " + sectionName;
+
+            if (required) {
+                throw new Error(msg);
+            }
+
+            Diagnostics.log.Message(msg);
+
             return null;
         }
 
-        let section = tab.sections.get(sectionName);
+        show(names: string[], condition: boolean = true): void {
 
-        if (section) {
-            return section;
+            if (condition) {
+                this.setVisible(names, true);
+            }
         }
 
-        let msg = "The specified section could not be found: " + tabName + " - " + sectionName;
+        hide(names: string[], condition: boolean = true): void {
 
-        if (required) {
-            throw new Error(msg);
+            if (condition) {
+                this.setVisible(names, false);
+            }
         }
 
-        Diagnostics.log.Message(msg);
+        setVisible(names: string[], value: boolean): void {
 
-        return null;
-    }
-
-    export function show(names: string[], condition: boolean = true): void {
-
-        if (condition) {
-            setVisible(names, true);
-        }
-    }
-
-    export function hide(names: string[], condition: boolean = true): void {
-
-        if (condition) {
-            setVisible(names, false);
-        }
-    }
-
-    export function setVisible(names: string[], value: boolean): void {
-
-        if (Diagnostics.trace) {
-            Diagnostics.printArguments("Sections.setVisible", names, value);
-        }
-
-        if (Array.isArray(names)) {
-
-            for (let i = 0; i < names.length; i++) {
-
-                let name: string = names[i];
-                let pair = name.split("|");
-                let section;
-
-                if (pair && pair.length === 2) {
-                    section = get(pair[0], pair[1], false);
-                }
-
-                if (section) {
-                    section.setVisible(value);
-                }
+            if (Diagnostics.trace) {
+                Diagnostics.printArguments("Sections.setVisible", names, value);
             }
 
-        } else {
+            if (Array.isArray(names)) {
 
-            Diagnostics.log.Warning("Sections.setVisible: Invalid argument. An array was expected.");
+                for (let i = 0; i < names.length; i++) {
+
+                    let name: string = names[i];
+                    let pair = name.split("|");
+                    let section;
+
+                    if (pair && pair.length === 2) {
+                        section = this.get(pair[0], pair[1], false);
+                    }
+
+                    if (section) {
+                        section.setVisible(value);
+                    }
+                }
+
+            } else {
+
+                Diagnostics.log.Warning("Sections.setVisible: Invalid argument. An array was expected.");
+            }
         }
     }
 }

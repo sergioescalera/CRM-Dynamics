@@ -13,28 +13,28 @@ module Dynamics.Crm.Publishers {
     export var logEntry: string = "cc";
 }
 
-module Dynamics.Crm.Forms {
+module Dynamics.Crm {
 
     "use strict";
 
-    export class FormNotificationType {
+    export class FormNotificationTypes {
 
-        public static Error: string = "ERROR";
-        public static Warning: string = "WARNING";
-        public static Information: string = "INFO";
+        public static Error: "ERROR" = "ERROR";
+        public static Warning: "WARNING" = "WARNING";
+        public static Information: "INFO" = "INFO";
     }
 
     export class ClientType {
 
-        public static Browser: string = "Web";
-        public static Outlook: string = "Outlook";
-        public static Mobile: string = "Mobile";
+        public static Browser: "Web" = "Web";
+        public static Outlook: "Outlook" = "Outlook";
+        public static Mobile: "Mobile" = "Mobile";
     }
 
-    export class AttributeRequiredLevel {
+    export class AttributeRequiredLevels {
 
-        public static None: string = "none";
-        public static Required: string = "required";
-        public static Recommended: string = "recommended";
+        public static None: "none" = "none";
+        public static Required: "required" = "required";
+        public static Recommended: "recommended" = "recommended";
     }
 }

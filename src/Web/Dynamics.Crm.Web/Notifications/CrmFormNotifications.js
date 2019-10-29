@@ -5,7 +5,7 @@ var Notifications;
         function CrmFormNotificationService() {
         }
         CrmFormNotificationService.prototype.hide = function (id) {
-            Xrm.Page.ui.clearFormNotification(id);
+            Xrm["Page"].ui.clearFormNotification(id);
         };
         CrmFormNotificationService.prototype.init = function () {
             if (!this.test()) {
@@ -13,20 +13,20 @@ var Notifications;
             }
         };
         CrmFormNotificationService.prototype.show = function (options) {
-            if (_.isFunction(Xrm.Page.ui.setFormHtmlNotification)) {
-                Xrm.Page.ui.setFormHtmlNotification(options.message, options.type, options.id);
+            if (_.isFunction(Xrm["Page"].ui.setFormHtmlNotification)) {
+                Xrm["Page"].ui.setFormHtmlNotification(options.message, options.type, options.id);
             }
             else {
-                Xrm.Page.ui.setFormNotification(options.message, options.type, options.id);
+                Xrm["Page"].ui.setFormNotification(options.message, options.type, options.id);
             }
         };
         CrmFormNotificationService.prototype.test = function () {
             try {
                 return typeof Xrm !== "undefined"
                     && !!Xrm
-                    && !!Xrm.Page
-                    && !!Xrm.Page.ui
-                    && _.isFunction(Xrm.Page.ui.setFormNotification);
+                    && !!Xrm["Page"]
+                    && !!Xrm["Page"].ui
+                    && _.isFunction(Xrm["Page"].ui.setFormNotification);
             }
             catch (e) {
                 console.warn(e);

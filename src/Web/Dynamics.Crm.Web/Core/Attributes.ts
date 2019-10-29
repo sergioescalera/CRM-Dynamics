@@ -1,159 +1,177 @@
-﻿module Dynamics.Crm.Forms.Attributes {
+﻿module Dynamics.Crm {
 
     "use strict";
 
-    export function get(attributeName: string, required: boolean = true): Attribute {
+    export class Attributes {
 
-        let attribute = Xrm.Page.getAttribute(attributeName);
+        protected page: FormContext;
 
-        if (attribute) {
-            return attribute;
+        constructor(page: FormContext) {
+
+            Validation.ensureNotNullOrUndefined(page, "page");
+
+            this.page = page;
         }
 
-        let msg = "The specified attribute could not be found: " + attributeName;
+        get(attributeName: string, required: boolean = true): Attribute {
 
-        if (required) {
-            throw new Error(msg);
-        }
+            let attribute = this.page.getAttribute(attributeName);
 
-        Diagnostics.log.Message(msg);
-
-        return null;
-    }
-
-    // requirement level
-
-    export function setOptional(attributeNames: string[]): void {
-
-        setRequiredLevel(attributeNames, AttributeRequiredLevel.None);
-    }
-
-    export function setRequired(attributeNames: string[]): void {
-
-        setRequiredLevel(attributeNames, AttributeRequiredLevel.Required);
-    }
-
-    export function setRecommended(attributeNames: string[]): void {
-
-        setRequiredLevel(attributeNames, AttributeRequiredLevel.Recommended);
-    }
-
-    export function setRequiredLevel(attributeNames: string[], requirementLevel: string): void {
-
-        if (Diagnostics.trace) {
-            Diagnostics.printArguments("setRequirementLevel", attributeNames, requirementLevel);
-        }
-
-        if (Array.isArray(attributeNames)) {
-            for (let i = 0; i < attributeNames.length; i++) {
-
-                let attribute = get(attributeNames[i], false);
-
-                if (attribute) {
-                    attribute.setRequiredLevel(requirementLevel);
-                }
+            if (attribute) {
+                return attribute;
             }
 
-        } else {
+            let msg = "The specified attribute could not be found: " + attributeName;
 
-            Diagnostics.log.Warning("Attributes.setRequirementLevel: Invalid argument. An array was expected.");
+            if (required) {
+                throw new Error(msg);
+            }
+
+            Diagnostics.log.Message(msg);
+
+            return null;
         }
-    }
 
-    export function setRequiredOrOptional(attributeName: string, required: boolean, attributeRequired: boolean = false): void {
+        // requirement level
 
-        let attribute = get(attributeName, attributeRequired);
+        setOptional(attributeNames: string[]): void {
 
-        if (attribute) {
-            attribute.setRequiredLevel(required ? AttributeRequiredLevel.Required : AttributeRequiredLevel.None);
+            this.setRequiredLevel(attributeNames, AttributeRequiredLevels.None);
         }
-    }
 
-    // options
+        setRequired(attributeNames: string[]): void {
 
-    export function hideOptions(attribute: Attribute, hide?: (o: number) => boolean): void {
+            this.setRequiredLevel(attributeNames, AttributeRequiredLevels.Required);
+        }
 
-        let options = attribute.getOptions();
+        setRecommended(attributeNames: string[]): void {
 
-        attribute
-            .controls
-            .forEach((control: Control) => {
+            this.setRequiredLevel(attributeNames, AttributeRequiredLevels.Recommended);
+        }
 
-                for (let i = 0; i < options.length; i++) {
+        setRequiredLevel(attributeNames: string[], requirementLevel: AttributeRequiredLevel): void {
 
-                    let option = options[i];
+            if (Diagnostics.trace) {
+                Diagnostics.printArguments("setRequirementLevel", attributeNames, requirementLevel);
+            }
 
-                    let value = parseInt(option.value);
+            if (Array.isArray(attributeNames)) {
 
-                    if (hide === undefined || hide(value)) {
+                for (let i = 0; i < attributeNames.length; i++) {
 
-                        control.removeOption(value);
+                    let attribute = this.get(attributeNames[i], false);
+
+                    if (attribute) {
+                        attribute.setRequiredLevel(requirementLevel);
                     }
                 }
-            });
-    }
 
-    // lookup
+            } else {
 
-    export function getLookupValue(attributeName: string, required: boolean = true): LookupControlItem {
-
-        let attribute = get(attributeName, required);
-
-        if (!attribute) {
-
-            return null;
+                Diagnostics.log.Warning("Attributes.setRequirementLevel: Invalid argument. An array was expected.");
+            }
         }
 
-        let lookup = <any[]>attribute.getValue();
+        setRequiredOrOptional(attributeName: string, required: boolean, attributeRequired: boolean = false): void {
 
-        if (!lookup || !lookup.length) {
+            let attribute = this.get(attributeName, attributeRequired);
 
-            return null;
+            if (attribute) {
+                attribute.setRequiredLevel(required ? AttributeRequiredLevels.Required : AttributeRequiredLevels.None);
+            }
         }
 
-        return lookup[0];
-    }
+        // options
 
-    export function setLookupValue(attributeName: string, entityType: string, name: string, id: string, required: boolean = true): void {
+        hideOptions(attribute: Attribute, hide?: (o: number) => boolean): void {
 
-        let attribute = get(attributeName, required);
+            let options = attribute.getOptions();
 
-        if (!attribute) {
-            return;
+            attribute
+                .controls
+                .forEach((control: Control) => {
+
+                    for (let i = 0; i < options.length; i++) {
+
+                        let option = options[i];
+
+                        let value = option.value;
+
+                        if (hide === undefined || hide(value)) {
+
+                            control.removeOption(value);
+                        }
+                    }
+                });
         }
 
-        let value = !id ? null : [{
-            id: `{${Core.parseIdentifier(id)}}`,
-            name: name,
-            entityType: entityType
-        }];
+        // lookup
 
-        attribute.setValue(value);
-    }
+        getLookupValue(attributeName: string, required: boolean = true): LookupControlItem {
 
-    // notifications
+            let attribute = this.get(attributeName, required);
 
-    export function showNotification(attribute: Attribute, message: string, messageId: string): void {
+            if (!attribute) {
 
-        Validation.ensureNotNullOrUndefined(attribute, "attribute");
+                return null;
+            }
 
-        attribute
-            .controls
-            .forEach((c: Control) => {
+            let lookup = <any[]>attribute.getValue();
 
-                c.setNotification(message, messageId);
-            });
-    }
+            if (!lookup || !lookup.length) {
 
-    export function hideNotification(attribute: Attribute, messageId: string): void {
+                return null;
+            }
 
-        Validation.ensureNotNullOrUndefined(attribute, "attribute");
+            return lookup[0];
+        }
 
-        attribute
-            .controls
-            .forEach((c: Control) => {
+        setLookupValue(
+            attributeName: string,
+            entityType: string,
+            name: string,
+            id: string,
+            required: boolean = true): void {
 
-                c.clearNotification(messageId);
-            });
+            let attribute = this.get(attributeName, required);
+
+            if (!attribute) {
+                return;
+            }
+
+            let value = !id ? null : [{
+                id: `{${Core.parseIdentifier(id)}}`,
+                name: name,
+                entityType: entityType
+            }];
+
+            attribute.setValue(value);
+        }
+
+        // notifications
+
+        showNotification(attribute: Attribute, message: string, messageId: string): void {
+
+            Validation.ensureNotNullOrUndefined(attribute, "attribute");
+
+            attribute
+                .controls
+                .forEach((c: Control) => {
+
+                    c.setNotification(message, messageId);
+                });
+        }
+
+        hideNotification(attribute: Attribute, messageId: string): void {
+
+            Validation.ensureNotNullOrUndefined(attribute, "attribute");
+
+            attribute
+                .controls
+                .forEach((c: Control) => {
+
+                    c.clearNotification(messageId);
+                });
+        }
     }
 }

@@ -85,7 +85,7 @@
 
         it("Throws error for non-numeric value", () => {
 
-            var func: any = Validation.ensureNumberInRange;
+            let func: any = Validation.ensureNumberInRange;
 
             expect(() => func({})).toThrowError(Error);
             expect(() => func("", 1)).toThrowError(Error);

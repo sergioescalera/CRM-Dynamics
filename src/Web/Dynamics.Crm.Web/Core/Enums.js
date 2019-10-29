@@ -2,28 +2,25 @@ var Dynamics;
 (function (Dynamics) {
     var Crm;
     (function (Crm) {
-        var Forms;
-        (function (Forms) {
-            "use strict";
-            var FormType;
-            (function (FormType) {
-                FormType[FormType["Undefined"] = 0] = "Undefined";
-                FormType[FormType["Create"] = 1] = "Create";
-                FormType[FormType["Update"] = 2] = "Update";
-                FormType[FormType["ReadOnly"] = 3] = "ReadOnly";
-                FormType[FormType["Disabled"] = 4] = "Disabled";
-                FormType[FormType["QuickCreate"] = 5] = "QuickCreate";
-                FormType[FormType["BulkEdit"] = 6] = "BulkEdit";
-                FormType[FormType["ReadOptimized"] = 11] = "ReadOptimized";
-            })(FormType = Forms.FormType || (Forms.FormType = {}));
-            var FormFactor;
-            (function (FormFactor) {
-                FormFactor[FormFactor["Unknown"] = 0] = "Unknown";
-                FormFactor[FormFactor["Desktop"] = 1] = "Desktop";
-                FormFactor[FormFactor["Tablet"] = 2] = "Tablet";
-                FormFactor[FormFactor["Phone"] = 3] = "Phone";
-            })(FormFactor = Forms.FormFactor || (Forms.FormFactor = {}));
-        })(Forms = Crm.Forms || (Crm.Forms = {}));
+        "use strict";
+        var FormType;
+        (function (FormType) {
+            FormType[FormType["Undefined"] = 0] = "Undefined";
+            FormType[FormType["Create"] = 1] = "Create";
+            FormType[FormType["Update"] = 2] = "Update";
+            FormType[FormType["ReadOnly"] = 3] = "ReadOnly";
+            FormType[FormType["Disabled"] = 4] = "Disabled";
+            FormType[FormType["QuickCreate"] = 5] = "QuickCreate";
+            FormType[FormType["BulkEdit"] = 6] = "BulkEdit";
+            FormType[FormType["ReadOptimized"] = 11] = "ReadOptimized";
+        })(FormType = Crm.FormType || (Crm.FormType = {}));
+        var FormFactor;
+        (function (FormFactor) {
+            FormFactor[FormFactor["Unknown"] = 0] = "Unknown";
+            FormFactor[FormFactor["Desktop"] = 1] = "Desktop";
+            FormFactor[FormFactor["Tablet"] = 2] = "Tablet";
+            FormFactor[FormFactor["Phone"] = 3] = "Phone";
+        })(FormFactor = Crm.FormFactor || (Crm.FormFactor = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
 (function (Dynamics) {

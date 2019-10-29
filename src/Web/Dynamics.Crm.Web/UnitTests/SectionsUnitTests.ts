@@ -3,43 +3,47 @@
     "use strict";
 
     describe("Sections.get", () => {
-
-        beforeEach(() => {
-            window["Xrm"] = { Page: new Mocks.PageMock() };
-        });
-
-        afterEach(() => {
-            window["Xrm"] = undefined;
-        });
-
+        
         it("Returns null for missing section when not required", () => {
 
-            var tab = Forms.Sections.get("invalidTab", "invalidSection", false);
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
 
-            expect(tab).toBeNull();
+            let notatab = forms.sections.get("invalidTab", "invalidSection", false);
 
-            var tab = Forms.Sections.get("mainTab", "invalidSection", false);
+            expect(notatab).toBeNull();
+
+            let tab = forms.sections.get("mainTab", "invalidSection", false);
 
             expect(tab).toBeNull();
         });
 
         it("Throws error for missing section when required", () => {
 
-            expect(() => Forms.Sections.get("invalidTab", "invalidSection", true)).toThrowError(Error);
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
 
-            expect(() => Forms.Sections.get("mainTab", "invalidSection", true)).toThrowError(Error);
+            expect(() => forms.sections.get("invalidTab", "invalidSection", true)).toThrowError(Error);
+
+            expect(() => forms.sections.get("mainTab", "invalidSection", true)).toThrowError(Error);
         });
 
         it("Throws error for missing section when required by default", () => {
 
-            expect(() => Forms.Sections.get("invalidTab", "invalidSection")).toThrowError(Error);
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
 
-            expect(() => Forms.Sections.get("mainTab", "invalidSection", true)).toThrowError(Error);
+            expect(() => forms.sections.get("invalidTab", "invalidSection")).toThrowError(Error);
+
+            expect(() => forms.sections.get("mainTab", "invalidSection", true)).toThrowError(Error);
         });
 
         it("Returns existing section", () => {
 
-            var tab = Forms.Sections.get("mainTab", "mainSection");
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
+
+            let tab = forms.sections.get("mainTab", "mainSection");
 
             expect(tab).toBeDefined();
             expect(tab).not.toBeNull();
@@ -47,36 +51,34 @@
     });
 
     describe("Sections.setVisible", () => {
-
-        beforeEach(() => {
-            window["Xrm"] = { Page: new Mocks.PageMock() };
-        });
-
-        afterEach(() => {
-            window["Xrm"] = undefined;
-        });
-
+        
         it("Does not throw error for missing section", () => {
 
-            var mainTab = window["Xrm"].Page.mainTab;
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
 
-            expect(() => Forms.Sections.show(["invalidTab|invalidSection"])).not.toThrowError();
-            expect(() => Forms.Sections.hide(["invalidTab|invalidSection"])).not.toThrowError();
-            expect(() => Forms.Sections.show(["mainTab|invalidSection"])).not.toThrowError();
-            expect(() => Forms.Sections.hide(["mainTab|invalidSection"])).not.toThrowError();
+            let mainTab = page.mainTab;
+
+            expect(() => forms.sections.show(["invalidTab|invalidSection"])).not.toThrowError();
+            expect(() => forms.sections.hide(["invalidTab|invalidSection"])).not.toThrowError();
+            expect(() => forms.sections.show(["mainTab|invalidSection"])).not.toThrowError();
+            expect(() => forms.sections.hide(["mainTab|invalidSection"])).not.toThrowError();
         });
 
         it("Sets section visibility to true", () => {
 
-            var mainSection = window["Xrm"].Page.mainTab.mainSection;
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
 
-            Forms.Sections.hide(["mainTab|mainSection"]);
-            Forms.Sections.show(["mainTab|mainSection"]);
+            let mainSection = page.mainTab.mainSection;
+
+            forms.sections.hide(["mainTab|mainSection"]);
+            forms.sections.show(["mainTab|mainSection"]);
 
             expect(mainSection.getVisible()).toBe(true);
 
-            Forms.Sections.hide(["mainTab|mainSection"]);
-            Forms.Sections.show(["mainTab|mainSection"], true);
+            forms.sections.hide(["mainTab|mainSection"]);
+            forms.sections.show(["mainTab|mainSection"], true);
 
             expect(mainSection.getVisible()).toBe(true);
 
@@ -84,30 +86,36 @@
 
         it("Sets section visibility to false", () => {
 
-            var mainSection = window["Xrm"].Page.mainTab.mainSection;
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
 
-            Forms.Sections.show(["mainTab|mainSection"]);
-            Forms.Sections.hide(["mainTab|mainSection"]);
+            let mainSection = page.mainTab.mainSection;
+
+            forms.sections.show(["mainTab|mainSection"]);
+            forms.sections.hide(["mainTab|mainSection"]);
 
             expect(mainSection.getVisible()).toBe(false);
 
-            Forms.Sections.show(["mainTab|mainSection"]);
-            Forms.Sections.hide(["mainTab|mainSection"], true);
+            forms.sections.show(["mainTab|mainSection"]);
+            forms.sections.hide(["mainTab|mainSection"], true);
 
             expect(mainSection.getVisible()).toBe(false);
         });
 
         it("Does not change section visibility when condition is not satisfied", () => {
 
-            var mainSection = window["Xrm"].Page.mainTab.mainSection;
+            let page = new Mocks.PageMock();
+            let forms = new Forms(page);
 
-            Forms.Sections.hide(["mainTab|mainSection"]);
-            Forms.Sections.show(["mainTab|mainSection"], false);
+            let mainSection = page.mainTab.mainSection;
+
+            forms.sections.hide(["mainTab|mainSection"]);
+            forms.sections.show(["mainTab|mainSection"], false);
 
             expect(mainSection.getVisible()).toBe(false);
 
-            Forms.Sections.show(["mainTab|mainSection"]);
-            Forms.Sections.hide(["mainTab|mainSection"], false);
+            forms.sections.show(["mainTab|mainSection"]);
+            forms.sections.hide(["mainTab|mainSection"], false);
 
             expect(mainSection.getVisible()).toBe(true);
         });

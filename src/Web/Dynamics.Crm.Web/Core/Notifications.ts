@@ -1,68 +1,80 @@
-﻿module Dynamics.Crm.Forms.Notifications {
+﻿module Dynamics.Crm {
 
     "use strict";
 
     let undefinedstr: string = "undefined";
 
-    export function show(
-        message: string,
-        id: string,
-        level: string = Dynamics.Crm.Forms.FormNotificationType.Information): void {
+    export class Notifications {
 
-        Xrm.Page.ui.setFormNotification(message, level, id);
-    }
+        protected page: FormContext;
 
-    export function showHtml(
-        message: string,
-        id: string,
-        level: string = Dynamics.Crm.Forms.FormNotificationType.Information): void {
+        constructor(page: FormContext) {
 
-        if (typeof Xrm.Page.ui.setFormHtmlNotification === "function") {
+            Validation.ensureNotNullOrUndefined(page, "page");
 
-            Xrm.Page.ui.setFormHtmlNotification(message, level, id);
-
-        } else {
-
-            Xrm.Page.ui.setFormNotification(Utility.htmlToText(message), level, id);
-        }
-    }
-
-    export function hide(id: string, afterSeconds: number = null): void {
-
-        if (_.isNumber(afterSeconds) && afterSeconds > 0) {
-
-            setTimeout(() => Xrm.Page.ui.clearFormNotification(id), afterSeconds * 1000);
-
-        } else {
-
-            Xrm.Page.ui.clearFormNotification(id);
-        }
-    }
-
-    export function htmlSupported(): boolean {
-
-        if (typeof Xrm !== undefinedstr &&
-            typeof Xrm.Page !== undefinedstr &&
-            typeof Xrm.Page.ui !== undefinedstr &&
-            typeof Xrm.Page.ui.setFormHtmlNotification !== undefinedstr) {
-
-            return true;
+            this.page = page;
         }
 
-        return false;
-    }
+        show(
+            message: string,
+            id: string,
+            level: FormNotificationType = Dynamics.Crm.FormNotificationTypes.Information): void {
 
-    export function supported(): boolean {
-
-        if (typeof Xrm !== undefinedstr &&
-            typeof Xrm.Page !== undefinedstr &&
-            typeof Xrm.Page.ui !== undefinedstr &&
-            typeof Xrm.Page.ui.setFormNotification !== undefinedstr &&
-            typeof Xrm.Page.ui.clearFormNotification !== undefinedstr) {
-
-            return true;
+            this.page.ui.setFormNotification(message, level, id);
         }
 
-        return false;
+        showHtml(
+            message: string,
+            id: string,
+            level: FormNotificationType = Dynamics.Crm.FormNotificationTypes.Information): void {
+
+            if (typeof this.page.ui.setFormHtmlNotification === "function") {
+
+                this.page.ui.setFormHtmlNotification(message, level, id);
+
+            } else {
+
+                this.page.ui.setFormNotification(Utility.htmlToText(message), level, id);
+            }
+        }
+
+        hide(id: string, afterSeconds: number = null): void {
+
+            if (_.isNumber(afterSeconds) && afterSeconds > 0) {
+
+                setTimeout(() => this.page.ui.clearFormNotification(id), afterSeconds * 1000);
+
+            } else {
+
+                this.page.ui.clearFormNotification(id);
+            }
+        }
+
+        htmlSupported(): boolean {
+
+            if (typeof Xrm !== undefinedstr &&
+                typeof this.page !== undefinedstr &&
+                typeof this.page.ui !== undefinedstr &&
+                typeof this.page.ui.setFormHtmlNotification !== undefinedstr) {
+
+                return true;
+            }
+
+            return false;
+        }
+
+        supported(): boolean {
+
+            if (typeof Xrm !== undefinedstr &&
+                typeof this.page !== undefinedstr &&
+                typeof this.page.ui !== undefinedstr &&
+                typeof this.page.ui.setFormNotification !== undefinedstr &&
+                typeof this.page.ui.clearFormNotification !== undefinedstr) {
+
+                return true;
+            }
+
+            return false;
+        }
     }
 }

@@ -1,10 +1,12 @@
-﻿module Dynamics.Crm.Forms.GlobalSettingForm {
+﻿module Dynamics.Crm.GlobalSettingForm {
 
     "use strict";
 
     // properties
 
     let _prefix: string;
+    let _page: FormContext;
+    let _forms: Forms;
 
     let _type: Attribute;
     let _valueName: Attribute;
@@ -13,11 +15,13 @@
 
     // event handlers
 
-    export function OnLoad(prefix: string = "cc"): void {
+    export function OnLoad(page: FormContext, prefix: string = "cc"): void {
 
+        _page = page;
         _prefix = prefix;
+        _forms = new Forms(page);
 
-        Dynamics.Crm.Tasks.execute([
+        _forms.tasks.execute([
             Init,
             SetReferenceFieldsVisibility
         ]);
@@ -25,7 +29,7 @@
 
     function OnTypeChanged(): void {
 
-        Tasks.execute([
+        _forms.tasks.execute([
             ClearReferenceFields,
             SetReferenceFieldsVisibility
         ]);
@@ -35,10 +39,10 @@
 
     function Init(): void {
 
-        _type = Attributes.get(`${_prefix}_type`);
-        _valueName = Attributes.get(`${_prefix}_valuename`);
-        _valueType = Attributes.get(`${_prefix}_valuetype`);
-        _lookup = Controls.get("WebResource_Lookup");
+        _type = _forms.attributes.get(`${_prefix}_type`);
+        _valueName = _forms.attributes.get(`${_prefix}_valuename`);
+        _valueType = _forms.attributes.get(`${_prefix}_valuetype`);
+        _lookup = _forms.controls.get("WebResource_Lookup");
 
         _type.addOnChange(OnTypeChanged);
     }
@@ -64,11 +68,11 @@
         ];
 
         if (visible) {
-            Attributes.setRecommended(fields);
-            Controls.show(fields);
+            _forms.attributes.setRecommended(fields);
+            _forms.controls.show(fields);
         } else {
-            Attributes.setOptional(fields);
-            Controls.hide(fields);
+            _forms.attributes.setOptional(fields);
+            _forms.controls.hide(fields);
         }
 
         _lookup.setVisible(visible);

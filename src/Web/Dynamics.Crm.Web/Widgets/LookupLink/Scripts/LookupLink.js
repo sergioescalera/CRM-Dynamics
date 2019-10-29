@@ -29,7 +29,7 @@ var LookupLink;
         if (!attributeName) {
             throw new Error("Pass attribute name as custom data parameter");
         }
-        attribute = xrm.Page.getAttribute(attributeName);
+        attribute = xrm["Page"].getAttribute(attributeName);
         if (!attribute) {
             throw new Error("Invalid attribute name " + attributeName);
         }
@@ -40,13 +40,13 @@ var LookupLink;
     function getXrmObject() {
         var parent = window.parent;
         if (isCrmFormsFrame(parent)) {
-            return parent.Xrm;
+            return parent["Xrm"];
         }
         else {
             for (var i = 0; i < parent.frames.length; i++) {
                 var child = parent.frames[i];
                 if (isCrmFormsFrame(child)) {
-                    return child.Xrm;
+                    return child["Xrm"];
                 }
             }
         }

@@ -4,7 +4,7 @@ var __extends = (this && this.__extends) || (function () {
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
             function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
         return extendStatics(d, b);
-    }
+    };
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -88,6 +88,39 @@ var Dynamics;
                     };
                     AttributeMock.prototype.setRequiredLevel = function (value) {
                         this._requiredLevel = value;
+                    };
+                    AttributeMock.prototype.addOnChange = function (handler) { };
+                    AttributeMock.prototype.removeOnChange = function (handler) { };
+                    AttributeMock.prototype.fireOnChange = function () { };
+                    AttributeMock.prototype.getAttributeType = function () {
+                        return "string";
+                    };
+                    AttributeMock.prototype.getIsDirty = function () {
+                        return true;
+                    };
+                    AttributeMock.prototype.getName = function () {
+                        return this.name;
+                    };
+                    AttributeMock.prototype.getParent = function () {
+                        return null;
+                    };
+                    AttributeMock.prototype.getSubmitMode = function () {
+                        return "dirty";
+                    };
+                    AttributeMock.prototype.getUserPrivilege = function () {
+                        return null;
+                    };
+                    AttributeMock.prototype.getValue = function () {
+                        return this.val;
+                    };
+                    AttributeMock.prototype.isValid = function () {
+                        return true;
+                    };
+                    AttributeMock.prototype.setIsValid = function (value, message) {
+                    };
+                    AttributeMock.prototype.setSubmitMode = function (mode) { };
+                    AttributeMock.prototype.setValue = function (value) {
+                        this.val = value;
                     };
                     return AttributeMock;
                 }());

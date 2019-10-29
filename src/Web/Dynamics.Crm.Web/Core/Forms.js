@@ -2,105 +2,103 @@ var Dynamics;
 (function (Dynamics) {
     var Crm;
     (function (Crm) {
-        var Forms;
-        (function (Forms) {
-            "use strict";
-            function getClientType() {
-                return Xrm.Utility.getGlobalContext().client.getClient();
+        "use strict";
+        var Forms = /** @class */ (function () {
+            function Forms(page) {
+                Validation.ensureNotNullOrUndefined(page, "page");
+                this.page = page;
+                this.attributes = new Crm.Attributes(page);
+                this.controls = new Crm.Controls(page);
+                this.nav = new Crm.Navigation(page);
+                this.notify = new Crm.Notifications(page);
+                this.tabs = new Crm.Tabs(page);
+                this.sections = new Crm.Sections(page);
+                this.tasks = new Crm.Tasks(page);
             }
-            Forms.getClientType = getClientType;
-            function getEntityId() {
+            Forms.prototype.getClientType = function () {
+                return Xrm.Utility.getGlobalContext().client.getClient();
+            };
+            Forms.prototype.getEntityId = function () {
                 try {
-                    return Crm.Core.parseIdentifier(Xrm.Page.data.entity.getId());
+                    return Crm.Core.parseIdentifier(this.page.data.entity.getId());
                 }
                 catch (e) {
                     throw new Error("Unable to retrieve entity id");
                 }
-            }
-            Forms.getEntityId = getEntityId;
-            function getEntityName() {
+            };
+            Forms.prototype.getEntityName = function () {
                 try {
-                    return Xrm.Page.data.entity.getEntityName();
+                    return this.page.data.entity.getEntityName();
                 }
                 catch (e) {
                     throw new Error("Unable to retrieve entity name");
                 }
-            }
-            Forms.getEntityName = getEntityName;
-            function getEntitySetName() {
+            };
+            Forms.prototype.getEntitySetName = function () {
                 try {
-                    return Xrm.Page.data.entity.getEntitySetName();
+                    return Xrm.Utility.getEntitySetName(this.getEntityName());
                 }
                 catch (e) {
                     throw new Error("Unable to retrieve entity set name");
                 }
-            }
-            Forms.getEntitySetName = getEntitySetName;
-            function getFormType() {
-                return Xrm.Page.ui.getFormType();
-            }
-            Forms.getFormType = getFormType;
-            function getFormFactor() {
+            };
+            Forms.prototype.getFormType = function () {
+                return this.page.ui.getFormType();
+            };
+            Forms.prototype.getFormFactor = function () {
                 if (!Xrm.Utility.getGlobalContext().client.getFormFactor) {
-                    return Forms.FormFactor.Unknown;
+                    return Crm.FormFactor.Unknown;
                 }
                 return Xrm.Utility.getGlobalContext().client.getFormFactor();
-            }
-            Forms.getFormFactor = getFormFactor;
-            function getIsDesktop() {
-                var formFactor = getFormFactor();
-                if (formFactor !== Forms.FormFactor.Unknown) {
-                    return formFactor === Forms.FormFactor.Desktop;
+            };
+            Forms.prototype.getIsDesktop = function () {
+                var formFactor = this.getFormFactor();
+                if (formFactor !== Crm.FormFactor.Unknown) {
+                    return formFactor === Crm.FormFactor.Desktop;
                 }
-                return getClientType() !== Forms.ClientType.Mobile;
-            }
-            Forms.getIsDesktop = getIsDesktop;
-            function getIsDirty() {
-                return Xrm.Page.data.entity.getIsDirty();
-            }
-            Forms.getIsDirty = getIsDirty;
-            function isCreateForm() {
-                return getFormType() === Forms.FormType.Create;
-            }
-            Forms.isCreateForm = isCreateForm;
-            function isUpdateForm() {
-                return getFormType() === Forms.FormType.Update;
-            }
-            Forms.isUpdateForm = isUpdateForm;
-            function isBulkEditForm() {
-                return getFormType() === Forms.FormType.BulkEdit;
-            }
-            Forms.isBulkEditForm = isBulkEditForm;
-            function supportsIFrames() {
-                return getIsDesktop();
-            }
-            Forms.supportsIFrames = supportsIFrames;
-            function current() {
+                return this.getClientType() !== Crm.ClientType.Mobile;
+            };
+            Forms.prototype.getIsDirty = function () {
+                return this.page.data.entity.getIsDirty();
+            };
+            Forms.prototype.isCreateForm = function () {
+                return this.getFormType() === Crm.FormType.Create;
+            };
+            Forms.prototype.isUpdateForm = function () {
+                return this.getFormType() === Crm.FormType.Update;
+            };
+            Forms.prototype.isBulkEditForm = function () {
+                return this.getFormType() === Crm.FormType.BulkEdit;
+            };
+            Forms.prototype.supportsIFrames = function () {
+                return this.getIsDesktop();
+            };
+            Forms.prototype.current = function () {
                 // The formSelectoritems collection does not exist and the formSelector.getCurrentItem method isn't supported for Dynamics 365 mobile clients (phones and tablets) and the interactive service hub.
                 // https://msdn.microsoft.com/en-in/library/gg327828.aspx#formSelector
-                if (!Xrm.Page.ui ||
-                    !Xrm.Page.ui.formSelector ||
-                    !Xrm.Page.ui.formSelector.items) {
+                if (!this.page.ui ||
+                    !this.page.ui.formSelector ||
+                    !this.page.ui.formSelector.items) {
                     return null;
                 }
                 // When only one form is available this method will return null.
-                return Xrm.Page.ui.formSelector.getCurrentItem()
-                    || Xrm.Page.ui.formSelector.items.get(0)
+                return this.page.ui.formSelector.getCurrentItem()
+                    || this.page.ui.formSelector.items.get(0)
                     || null;
-            }
-            Forms.current = current;
-            function find(label) {
-                if (!Xrm.Page.ui ||
-                    !Xrm.Page.ui.formSelector ||
-                    !Xrm.Page.ui.formSelector.items) {
+            };
+            Forms.prototype.find = function (label) {
+                if (!this.page.ui ||
+                    !this.page.ui.formSelector ||
+                    !this.page.ui.formSelector.items) {
                     return null;
                 }
-                var filter = Xrm.Page.ui.formSelector.items
+                var filter = this.page.ui.formSelector.items
                     .get()
                     .filter(function (f) { return f.getLabel() === label; });
                 return filter[0] || null;
-            }
-            Forms.find = find;
-        })(Forms = Crm.Forms || (Crm.Forms = {}));
+            };
+            return Forms;
+        }());
+        Crm.Forms = Forms;
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));

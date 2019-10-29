@@ -2,127 +2,118 @@ var Dynamics;
 (function (Dynamics) {
     var Crm;
     (function (Crm) {
-        var Forms;
-        (function (Forms) {
-            var Attributes;
-            (function (Attributes) {
-                "use strict";
-                function get(attributeName, required) {
-                    if (required === void 0) { required = true; }
-                    var attribute = Xrm.Page.getAttribute(attributeName);
-                    if (attribute) {
-                        return attribute;
+        "use strict";
+        var Attributes = /** @class */ (function () {
+            function Attributes(page) {
+                Validation.ensureNotNullOrUndefined(page, "page");
+                this.page = page;
+            }
+            Attributes.prototype.get = function (attributeName, required) {
+                if (required === void 0) { required = true; }
+                var attribute = this.page.getAttribute(attributeName);
+                if (attribute) {
+                    return attribute;
+                }
+                var msg = "The specified attribute could not be found: " + attributeName;
+                if (required) {
+                    throw new Error(msg);
+                }
+                Crm.Diagnostics.log.Message(msg);
+                return null;
+            };
+            // requirement level
+            Attributes.prototype.setOptional = function (attributeNames) {
+                this.setRequiredLevel(attributeNames, Crm.AttributeRequiredLevels.None);
+            };
+            Attributes.prototype.setRequired = function (attributeNames) {
+                this.setRequiredLevel(attributeNames, Crm.AttributeRequiredLevels.Required);
+            };
+            Attributes.prototype.setRecommended = function (attributeNames) {
+                this.setRequiredLevel(attributeNames, Crm.AttributeRequiredLevels.Recommended);
+            };
+            Attributes.prototype.setRequiredLevel = function (attributeNames, requirementLevel) {
+                if (Crm.Diagnostics.trace) {
+                    Crm.Diagnostics.printArguments("setRequirementLevel", attributeNames, requirementLevel);
+                }
+                if (Array.isArray(attributeNames)) {
+                    for (var i = 0; i < attributeNames.length; i++) {
+                        var attribute = this.get(attributeNames[i], false);
+                        if (attribute) {
+                            attribute.setRequiredLevel(requirementLevel);
+                        }
                     }
-                    var msg = "The specified attribute could not be found: " + attributeName;
-                    if (required) {
-                        throw new Error(msg);
+                }
+                else {
+                    Crm.Diagnostics.log.Warning("Attributes.setRequirementLevel: Invalid argument. An array was expected.");
+                }
+            };
+            Attributes.prototype.setRequiredOrOptional = function (attributeName, required, attributeRequired) {
+                if (attributeRequired === void 0) { attributeRequired = false; }
+                var attribute = this.get(attributeName, attributeRequired);
+                if (attribute) {
+                    attribute.setRequiredLevel(required ? Crm.AttributeRequiredLevels.Required : Crm.AttributeRequiredLevels.None);
+                }
+            };
+            // options
+            Attributes.prototype.hideOptions = function (attribute, hide) {
+                var options = attribute.getOptions();
+                attribute
+                    .controls
+                    .forEach(function (control) {
+                    for (var i = 0; i < options.length; i++) {
+                        var option = options[i];
+                        var value = option.value;
+                        if (hide === undefined || hide(value)) {
+                            control.removeOption(value);
+                        }
                     }
-                    Crm.Diagnostics.log.Message(msg);
+                });
+            };
+            // lookup
+            Attributes.prototype.getLookupValue = function (attributeName, required) {
+                if (required === void 0) { required = true; }
+                var attribute = this.get(attributeName, required);
+                if (!attribute) {
                     return null;
                 }
-                Attributes.get = get;
-                // requirement level
-                function setOptional(attributeNames) {
-                    setRequiredLevel(attributeNames, Forms.AttributeRequiredLevel.None);
+                var lookup = attribute.getValue();
+                if (!lookup || !lookup.length) {
+                    return null;
                 }
-                Attributes.setOptional = setOptional;
-                function setRequired(attributeNames) {
-                    setRequiredLevel(attributeNames, Forms.AttributeRequiredLevel.Required);
+                return lookup[0];
+            };
+            Attributes.prototype.setLookupValue = function (attributeName, entityType, name, id, required) {
+                if (required === void 0) { required = true; }
+                var attribute = this.get(attributeName, required);
+                if (!attribute) {
+                    return;
                 }
-                Attributes.setRequired = setRequired;
-                function setRecommended(attributeNames) {
-                    setRequiredLevel(attributeNames, Forms.AttributeRequiredLevel.Recommended);
-                }
-                Attributes.setRecommended = setRecommended;
-                function setRequiredLevel(attributeNames, requirementLevel) {
-                    if (Crm.Diagnostics.trace) {
-                        Crm.Diagnostics.printArguments("setRequirementLevel", attributeNames, requirementLevel);
-                    }
-                    if (Array.isArray(attributeNames)) {
-                        for (var i = 0; i < attributeNames.length; i++) {
-                            var attribute = get(attributeNames[i], false);
-                            if (attribute) {
-                                attribute.setRequiredLevel(requirementLevel);
-                            }
-                        }
-                    }
-                    else {
-                        Crm.Diagnostics.log.Warning("Attributes.setRequirementLevel: Invalid argument. An array was expected.");
-                    }
-                }
-                Attributes.setRequiredLevel = setRequiredLevel;
-                function setRequiredOrOptional(attributeName, required, attributeRequired) {
-                    if (attributeRequired === void 0) { attributeRequired = false; }
-                    var attribute = get(attributeName, attributeRequired);
-                    if (attribute) {
-                        attribute.setRequiredLevel(required ? Forms.AttributeRequiredLevel.Required : Forms.AttributeRequiredLevel.None);
-                    }
-                }
-                Attributes.setRequiredOrOptional = setRequiredOrOptional;
-                // options
-                function hideOptions(attribute, hide) {
-                    var options = attribute.getOptions();
-                    attribute
-                        .controls
-                        .forEach(function (control) {
-                        for (var i = 0; i < options.length; i++) {
-                            var option = options[i];
-                            var value = parseInt(option.value);
-                            if (hide === undefined || hide(value)) {
-                                control.removeOption(value);
-                            }
-                        }
-                    });
-                }
-                Attributes.hideOptions = hideOptions;
-                // lookup
-                function getLookupValue(attributeName, required) {
-                    if (required === void 0) { required = true; }
-                    var attribute = get(attributeName, required);
-                    if (!attribute) {
-                        return null;
-                    }
-                    var lookup = attribute.getValue();
-                    if (!lookup || !lookup.length) {
-                        return null;
-                    }
-                    return lookup[0];
-                }
-                Attributes.getLookupValue = getLookupValue;
-                function setLookupValue(attributeName, entityType, name, id, required) {
-                    if (required === void 0) { required = true; }
-                    var attribute = get(attributeName, required);
-                    if (!attribute) {
-                        return;
-                    }
-                    var value = !id ? null : [{
-                            id: "{" + Crm.Core.parseIdentifier(id) + "}",
-                            name: name,
-                            entityType: entityType
-                        }];
-                    attribute.setValue(value);
-                }
-                Attributes.setLookupValue = setLookupValue;
-                // notifications
-                function showNotification(attribute, message, messageId) {
-                    Validation.ensureNotNullOrUndefined(attribute, "attribute");
-                    attribute
-                        .controls
-                        .forEach(function (c) {
-                        c.setNotification(message, messageId);
-                    });
-                }
-                Attributes.showNotification = showNotification;
-                function hideNotification(attribute, messageId) {
-                    Validation.ensureNotNullOrUndefined(attribute, "attribute");
-                    attribute
-                        .controls
-                        .forEach(function (c) {
-                        c.clearNotification(messageId);
-                    });
-                }
-                Attributes.hideNotification = hideNotification;
-            })(Attributes = Forms.Attributes || (Forms.Attributes = {}));
-        })(Forms = Crm.Forms || (Crm.Forms = {}));
+                var value = !id ? null : [{
+                        id: "{" + Crm.Core.parseIdentifier(id) + "}",
+                        name: name,
+                        entityType: entityType
+                    }];
+                attribute.setValue(value);
+            };
+            // notifications
+            Attributes.prototype.showNotification = function (attribute, message, messageId) {
+                Validation.ensureNotNullOrUndefined(attribute, "attribute");
+                attribute
+                    .controls
+                    .forEach(function (c) {
+                    c.setNotification(message, messageId);
+                });
+            };
+            Attributes.prototype.hideNotification = function (attribute, messageId) {
+                Validation.ensureNotNullOrUndefined(attribute, "attribute");
+                attribute
+                    .controls
+                    .forEach(function (c) {
+                    c.clearNotification(messageId);
+                });
+            };
+            return Attributes;
+        }());
+        Crm.Attributes = Attributes;
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));

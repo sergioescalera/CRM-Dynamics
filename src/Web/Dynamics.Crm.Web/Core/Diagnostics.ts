@@ -147,7 +147,7 @@
 
         try {
 
-            return Xrm.Page.data.entity.getEntityName();
+            return Xrm["Page"].data.entity.getEntityName();
 
         } catch (e) {
 
@@ -163,7 +163,7 @@
 
         try {
 
-            return Xrm.Page.data.entity.getId();
+            return Xrm["Page"].data.entity.getId();
 
         } catch (e) {
 
@@ -179,7 +179,7 @@
 
         try {
 
-            return Xrm.Page.ui.getFormType().toString();
+            return Xrm["Page"].ui.getFormType().toString();
 
         } catch (e) {
 
@@ -195,7 +195,7 @@
 
         try {
 
-            return Forms.getFormFactor();
+            return Xrm.Utility.getGlobalContext().client.getFormFactor();
 
         } catch (e) {
 
@@ -211,7 +211,7 @@
 
         try {
 
-            return Forms.getClientType();
+            return Xrm.Utility.getGlobalContext().client.getClient();
 
         } catch (e) {
 

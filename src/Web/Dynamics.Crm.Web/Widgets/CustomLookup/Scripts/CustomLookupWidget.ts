@@ -2,14 +2,14 @@
 
     "use strict";
 
-    var urlTemplate = (
+    let urlTemplate = (
         config: IConfig) => `/_controls/lookup/lookupinfo.aspx?LookupStyle=${config.style}&ShowNewButton=${(config.new ? 1 : 0)}&browse=false&dType=1&mrsh=false&objecttypes=${(config.types).join(",")}`;
 
-    var xrm: Xrm = (<ICrmWindow>parent).Xrm;
-    var mscrm: any = (<ICrmWindow>parent).Mscrm;
-    var searchLink: JQuery;
+    let xrm: Xrm = parent["Xrm"];
+    let mscrm: any = parent["Mscrm"];
+    let searchLink: JQuery;
 
-    var config: IConfig = {
+    let config: IConfig = {
         new: true,
         style: "multi",
         types: [1, 2]
@@ -33,12 +33,12 @@
 
     function open(): void {
         
-        var options: any = new xrm.DialogOptions();
+        let options: any = new xrm.DialogOptions();
 
         options.width = 550;
         options.height = 550;
 
-        var uri: string = mscrm.CrmUri.create(urlTemplate(config)).toString();
+        let uri: string = mscrm.CrmUri.create(urlTemplate(config)).toString();
 
         xrm.Internal.openDialog(uri, options, null, null, openDialogCallback);
     }
@@ -58,7 +58,7 @@
 
     function setAttributeValue(attributeName: string, value: any): void {
 
-        var attribute: Attribute = xrm.Page.getAttribute(attributeName);
+        let attribute: Attribute = xrm["Page"].getAttribute(attributeName);
 
         if (!attribute) {
             console.warn(`Unable to find attribute ${attributeName}`);
@@ -71,8 +71,10 @@
     function parseConfig(configStr?: string): IConfig {
         
         if (configStr) {
-            var values: string[] = configStr.split(";");
-            for (var i: number = 0; i < values.length; i++) {
+
+            let values: string[] = configStr.split(";");
+
+            for (let i: number = 0; i < values.length; i++) {
                 parseConfigValue(values[i]);
             }
         }
@@ -82,13 +84,13 @@
 
     function parseConfigValue(valueStr: string): void {
 
-        var pair: string[] = valueStr.split("=");
+        let pair: string[] = valueStr.split("=");
         if (pair.length !== 2) {
             return;
         }
 
-        var key: string = pair[0];
-        var value: string = pair[1];
+        let key: string = pair[0];
+        let value: string = pair[1];
 
         if (key === "new") {
             config.new = value === "true";
@@ -104,9 +106,9 @@
     }
 
     function getParameterByName(name: string, url: string): string {
-        var str: string = name.replace(/[\[\]]/g, "\\$&");
-        var regex: RegExp = new RegExp("[?&]" + str + "(=([^&#]*)|&|#|$)");
-        var results: RegExpExecArray = regex.exec(url);
+        let str: string = name.replace(/[\[\]]/g, "\\$&");
+        let regex: RegExp = new RegExp("[?&]" + str + "(=([^&#]*)|&|#|$)");
+        let results: RegExpExecArray = regex.exec(url);
         if (!results) {
             return null;
         }

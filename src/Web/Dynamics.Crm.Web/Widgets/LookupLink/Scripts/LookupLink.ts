@@ -38,7 +38,7 @@
             throw new Error("Pass attribute name as custom data parameter");
         }
 
-        attribute = xrm.Page.getAttribute(attributeName);
+        attribute = xrm["Page"].getAttribute(attributeName);
 
         if (!attribute) {
             throw new Error(`Invalid attribute name ${attributeName}`);
@@ -51,21 +51,21 @@
 
     function getXrmObject(): Xrm {
 
-        let parent = <ICrmWindow>window.parent;
+        let parent = window.parent;
 
         if (isCrmFormsFrame(parent)) {
-            return parent.Xrm;
+            return parent["Xrm"];
         } else {
             for (let i = 0; i < parent.frames.length; i++) {
-                let child = <ICrmWindow>parent.frames[i];
+                let child = parent.frames[i];
                 if (isCrmFormsFrame(child)) {
-                    return child.Xrm;
+                    return child["Xrm"];
                 }
             }
         }
     }
 
-    function isCrmFormsFrame(win: ICrmWindow): boolean {
+    function isCrmFormsFrame(win: any): boolean {
 
         try {
             if (win === window) {

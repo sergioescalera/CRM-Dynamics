@@ -1,14 +1,4 @@
-﻿declare interface ICrmWindow extends Window {
-    Mscrm: any;
-    Xrm: Xrm;
-}
-
-interface Xrm {
-    DialogOptions: any;
-    Internal: any;
-}
-
-declare interface IDynamics {
+﻿declare interface IDynamics {
     Crm: ICrmDynamics;
 }
 
@@ -16,13 +6,21 @@ declare interface ICrmDynamics {
     Core: ICrmCore;
     Diagnostics: ICrmDiagnostics;
     Dialogs: ICrmDialogs;
-    Forms: ICrmForms;
+    FormNotificationTypes: IFormNotificationType;
     OData: ICrmOData;
     Reports: ICrmReports;
     ScriptManager: IScriptManager;
-    Tasks: ITasks;
     User: ICrmUser;
     Utility: ICrmUtility;
+
+    Attributes: CrmAttributes;
+    Controls: CrmControls;
+    Forms: CrmForms;
+    Navigation: CrmNavigation;
+    Notifications: CrmNotifications;
+    Sections: CrmSections;
+    Tabs: CrmTabs;
+    Tasks: CrmTasks;
 }
 
 declare interface ICrmCore {
@@ -30,14 +28,15 @@ declare interface ICrmCore {
     identifiersAreEqual(id: string, otherId: string): boolean;
 }
 
-declare interface ICrmForms {
-    Attributes: ICrmAttributes;
-    Controls: ICrmControls;
-    FormNotificationType: IFormNotificationType;
-    Navigation: ICrmNavigation;
-    Notifications: ICrmNotifications;
-    Tabs: ICrmTabs;
-    Sections: ICrmSections;
+declare class CrmForms {
+
+    attributes: CrmAttributes;
+    controls: CrmControls;
+    navigation: CrmNavigation;
+    notifications: CrmNotifications;
+    tabs: CrmTabs;
+    sections: CrmSections;
+
     getClientType(): "Web" | "Outlook" | "Mobile";
     getFormType(): number;
     getFormFactor(): number;
@@ -50,11 +49,13 @@ declare interface ICrmForms {
     isUpdateForm(): boolean;
     isBulkEditForm(): boolean;
     supportsIFrames(): boolean;
+
     current(): FormSelectorItem;
     find(label: string): FormSelectorItem;
 }
 
-declare interface ICrmAttributes {
+declare class CrmAttributes {
+
     get(attributeName: string, required?: boolean): Attribute;
 
     setOptional(attributeNames: string[]): void;
@@ -72,7 +73,7 @@ declare interface ICrmAttributes {
     hideNotification(attribute: Attribute, messageId: string): void;
 }
 
-declare interface ICrmControls {
+declare class CrmControls {
     get(controlName: string, required?: boolean): Control;
 
     disable(attributeNames: string[], applyToAll?: boolean): void;
@@ -84,14 +85,14 @@ declare interface ICrmControls {
     setVisible(attributeNames: string[], value: boolean, applyToAll?: boolean): void;
 }
 
-declare interface ICrmNavigation {
-    get(itemName: string, required?: boolean): NavigationItem;
+declare class CrmNavigation {
+    get(itemName: string, required?: boolean): FormNavigationItem;
     show(items: Array<string>): void;
     hide(items: Array<string>): void;
     setVisible(items: Array<string>, visible: boolean): void;
 }
 
-declare interface ICrmNotifications {
+declare class CrmNotifications {
     show(message: string, id: string, level?: string): void;
     showHtml(message: string, id: string, level?: string): void;
     hide(id: string, afterSeconds?: number): void;
@@ -105,7 +106,7 @@ declare interface IFormNotificationType {
     Information: string;
 }
 
-declare interface ICrmTabs {
+declare class CrmTabs {
     get(tabName: string, required?: boolean): Tab;
     show(tabNames: string[], condition?: boolean): void;
     hide(tabNames: string[], condition?: boolean): void;
@@ -115,7 +116,7 @@ declare interface ICrmTabs {
     expandCollapse(tabNames: string[], value: boolean): void;
 }
 
-declare interface ICrmSections {
+declare class CrmSections {
     get(tabName: string, sectionName: string, required?: boolean): Section;
     show(names: string[], condition?: boolean): void;
     hide(names: string[], condition?: boolean): void;
@@ -123,17 +124,6 @@ declare interface ICrmSections {
 }
 
 declare interface ICrmDialogs {
-    open(
-        dialogId: string,
-        entityName?: string,
-        entityId?: string,
-        width?: number,
-        height?: number,
-        modal?: string): void;
-    getUrl(
-        dialogId: string,
-        entityName?: string,
-        entityId?: string): string;
     alert(message: string, title: string): Promise<void>;
     confirm(message: string, title: string): Promise<boolean>;
     create<TResult>(config: ICrmDialogConfig<TResult>): Promise<TResult>;
@@ -191,7 +181,8 @@ declare interface ICrmOData {
 
 declare interface IEntity {
     id?: string;
-    type: string;
+    type?: string;
+    [fieldname: string]: any;
 }
 
 declare interface ICrmUser {
@@ -235,7 +226,7 @@ declare interface IScriptManager {
         window: Window): void;
 }
 
-declare interface ITasks {
+declare class CrmTasks {
     execute(tasks: (() => any)[], config?: ITasksConfig): any[];
 }
 

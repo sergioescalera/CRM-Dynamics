@@ -20,36 +20,33 @@ var Dynamics;
 (function (Dynamics) {
     var Crm;
     (function (Crm) {
-        var Forms;
-        (function (Forms) {
-            "use strict";
-            var FormNotificationType = /** @class */ (function () {
-                function FormNotificationType() {
-                }
-                FormNotificationType.Error = "ERROR";
-                FormNotificationType.Warning = "WARNING";
-                FormNotificationType.Information = "INFO";
-                return FormNotificationType;
-            }());
-            Forms.FormNotificationType = FormNotificationType;
-            var ClientType = /** @class */ (function () {
-                function ClientType() {
-                }
-                ClientType.Browser = "Web";
-                ClientType.Outlook = "Outlook";
-                ClientType.Mobile = "Mobile";
-                return ClientType;
-            }());
-            Forms.ClientType = ClientType;
-            var AttributeRequiredLevel = /** @class */ (function () {
-                function AttributeRequiredLevel() {
-                }
-                AttributeRequiredLevel.None = "none";
-                AttributeRequiredLevel.Required = "required";
-                AttributeRequiredLevel.Recommended = "recommended";
-                return AttributeRequiredLevel;
-            }());
-            Forms.AttributeRequiredLevel = AttributeRequiredLevel;
-        })(Forms = Crm.Forms || (Crm.Forms = {}));
+        "use strict";
+        var FormNotificationTypes = /** @class */ (function () {
+            function FormNotificationTypes() {
+            }
+            FormNotificationTypes.Error = "ERROR";
+            FormNotificationTypes.Warning = "WARNING";
+            FormNotificationTypes.Information = "INFO";
+            return FormNotificationTypes;
+        }());
+        Crm.FormNotificationTypes = FormNotificationTypes;
+        var ClientType = /** @class */ (function () {
+            function ClientType() {
+            }
+            ClientType.Browser = "Web";
+            ClientType.Outlook = "Outlook";
+            ClientType.Mobile = "Mobile";
+            return ClientType;
+        }());
+        Crm.ClientType = ClientType;
+        var AttributeRequiredLevels = /** @class */ (function () {
+            function AttributeRequiredLevels() {
+            }
+            AttributeRequiredLevels.None = "none";
+            AttributeRequiredLevels.Required = "required";
+            AttributeRequiredLevels.Recommended = "recommended";
+            return AttributeRequiredLevels;
+        }());
+        Crm.AttributeRequiredLevels = AttributeRequiredLevels;
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
