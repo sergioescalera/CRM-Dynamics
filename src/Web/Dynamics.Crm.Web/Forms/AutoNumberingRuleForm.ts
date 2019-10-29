@@ -11,13 +11,14 @@
 
     // event handlers
 
-    export function OnLoad(page: FormContext, prefix: string = "cc"): void {
+    export function OnLoad(context: ExecutionContext, prefix: string = "cc"): void {
 
-        _page = page;
+        _page = context.getFormContext();
         _prefix = prefix;
-        _forms = new Forms(page);
+        _forms = new Forms(_page);
 
         _forms.tasks.execute([
+            () => Diagnostics.useLogEntryLogger(_prefix),
             Init,
             ConfigureGlobalSection,
             ConfigureDailyConfigSection,

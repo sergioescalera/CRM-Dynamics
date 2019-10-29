@@ -14,12 +14,13 @@ var Dynamics;
             var _valueType;
             var _lookup;
             // event handlers
-            function OnLoad(page, prefix) {
+            function OnLoad(context, prefix) {
                 if (prefix === void 0) { prefix = "cc"; }
-                _page = page;
+                _page = context.getFormContext();
                 _prefix = prefix;
-                _forms = new Crm.Forms(page);
+                _forms = new Crm.Forms(_page);
                 _forms.tasks.execute([
+                    function () { return Crm.Diagnostics.useLogEntryLogger(_prefix); },
                     Init,
                     SetReferenceFieldsVisibility
                 ]);
