@@ -130,6 +130,7 @@ interface Moment {
     lang(reset: boolean);
     lang(): string;
 
+    toJSON(): string;
 }
 
 
