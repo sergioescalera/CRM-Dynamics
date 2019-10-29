@@ -72,8 +72,6 @@
         return new ODataService($q);
     }
 
-    export var dataService: string = "data-service";
-
-    angular.module(dataService, [])
+    angular.module(Config.moduleName)
         .factory("metadataBrowser.core.dataService", ["$q", DataServiceFactory]);
 }

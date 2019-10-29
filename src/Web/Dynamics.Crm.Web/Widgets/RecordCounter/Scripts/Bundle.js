@@ -625,8 +625,7 @@ var MetadataBrower;
         function DataServiceFactory($q) {
             return new ODataService($q);
         }
-        Core.dataService = "data-service";
-        angular.module(Core.dataService, [])
+        angular.module(MetadataBrower.Config.moduleName)
             .factory("metadataBrowser.core.dataService", ["$q", DataServiceFactory]);
     })(Core = MetadataBrower.Core || (MetadataBrower.Core = {}));
 })(MetadataBrower || (MetadataBrower = {}));
