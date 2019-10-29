@@ -2057,6 +2057,31 @@ declare module _ {
             whereValue: W): T;
     }
 
+    //_.mean
+    interface LoDashStatic {
+
+        mean<T>(
+            collection: Collection<T>,
+            callback?: ListIterator<T, any>,
+            thisArg?: any): T;
+
+		/**
+		* @see _.max
+		* @param pluckValue _.pluck style callback
+		**/
+        mean<T>(
+            collection: Collection<T>,
+            pluckValue: string): T;
+
+		/**
+		* @see _.max
+		* @param whereValue _.where style callback
+		**/
+        mean<W, T>(
+            collection: Collection<T>,
+            whereValue: W): T;
+    }
+
     //_.pluck
     interface LoDashStatic {
 		/**
