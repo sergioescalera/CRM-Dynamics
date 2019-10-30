@@ -640,8 +640,8 @@ interface WebApiExecuteResponse {
     type: "" | "arraybuffer" | "blob" | "document" | "json" | "text"; // Deprecated
     url: string;
     responseText?: string;
-    json: Promise<any>;
-    text: Promise<string>;
+    json?(): Promise<any>;
+    text?(): Promise<string>;
 }
 
 interface EntityReference {
