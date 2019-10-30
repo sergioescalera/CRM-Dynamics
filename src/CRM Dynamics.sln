@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.902
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{68AFE417-E02E-472E-850B-8DC8C3FC3C37}"
 EndProject
@@ -25,7 +25,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{81A679CE
 		Nuget\Dynamics.Crm.Web.nuspec = Nuget\Dynamics.Crm.Web.nuspec
 		Nuget\Microsoft.VisualStudio.TestTools.UnitTesting.Extensions.nuspec = Nuget\Microsoft.VisualStudio.TestTools.UnitTesting.Extensions.nuspec
 		Nuget\nuget.exe = Nuget\nuget.exe
-		Nuget\System.Extensions.nuspec = Nuget\System.Extensions.nuspec
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dynamics.Crm.Diagnostics", "Plugins\Dynamics.Crm.Diagnostics\Dynamics.Crm.Diagnostics.csproj", "{89EBDA3C-B9EB-455A-85B9-5BD830E10794}"
@@ -43,9 +42,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{D7FB8C78-5DE3-49EA-8A2C-D3095C5C2D73}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "System.Extensions.Shared", "Common\System.Extensions.Shared\System.Extensions.Shared.shproj", "{5D8EAE7F-B989-4D5E-96D8-BB36A4A57206}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Extensions", "Common\System.Extensions\System.Extensions.csproj", "{41880AC2-1B01-42AF-84D4-CDCB0C28AAE4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Extensions", "Common\System.Extensions\System.Extensions.csproj", "{41880AC2-1B01-42AF-84D4-CDCB0C28AAE4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Extensions.UnitTests", "Tests\System.Extensions.UnitTests\System.Extensions.UnitTests.csproj", "{C134EB5E-A080-430F-99D3-2F6974142517}"
 EndProject
@@ -62,7 +59,6 @@ Global
 		Plugins\Dynamics.Crm.Extensions.Shared\Dynamics.Crm.Extensions.projitems*{4f176295-63b9-487e-b924-bf07dd61f4a8}*SharedItemsImports = 4
 		Common\System.Extensions.Shared\System.Extensions.Shared.projitems*{59514ec6-4b9b-45f6-b64b-b5685bf69a32}*SharedItemsImports = 4
 		Plugins\Dynamics.Crm.Extensions.Shared\Dynamics.Crm.Extensions.projitems*{59514ec6-4b9b-45f6-b64b-b5685bf69a32}*SharedItemsImports = 4
-		Common\System.Extensions.Shared\System.Extensions.Shared.projitems*{5d8eae7f-b989-4d5e-96d8-bb36a4a57206}*SharedItemsImports = 13
 		Plugins\Dynamics.Crm.Extensions.Shared\Dynamics.Crm.Extensions.projitems*{614d943a-4ce3-483d-8718-30186c3d18c4}*SharedItemsImports = 13
 		Common\System.Extensions.Shared\System.Extensions.Shared.projitems*{89ebda3c-b9eb-455a-85b9-5bd830e10794}*SharedItemsImports = 4
 		Plugins\Dynamics.Crm.Extensions.Shared\Dynamics.Crm.Extensions.projitems*{89ebda3c-b9eb-455a-85b9-5bd830e10794}*SharedItemsImports = 4
@@ -148,11 +144,13 @@ Global
 		{614D943A-4CE3-483D-8718-30186C3D18C4} = {68AFE417-E02E-472E-850B-8DC8C3FC3C37}
 		{B8F74789-D7E3-4DDB-BE1A-13A8C44DB72F} = {68AFE417-E02E-472E-850B-8DC8C3FC3C37}
 		{E68FD44D-8CF1-4A56-B5BD-95B62D8CF081} = {6EF24300-1F5B-4620-9629-D3AC36D89139}
-		{5D8EAE7F-B989-4D5E-96D8-BB36A4A57206} = {D7FB8C78-5DE3-49EA-8A2C-D3095C5C2D73}
 		{41880AC2-1B01-42AF-84D4-CDCB0C28AAE4} = {D7FB8C78-5DE3-49EA-8A2C-D3095C5C2D73}
 		{C134EB5E-A080-430F-99D3-2F6974142517} = {6EF24300-1F5B-4620-9629-D3AC36D89139}
 		{FBBAED29-C958-47D2-AF1C-6108AC29BC42} = {68AFE417-E02E-472E-850B-8DC8C3FC3C37}
 		{4F176295-63B9-487E-B924-BF07DD61F4A8} = {68AFE417-E02E-472E-850B-8DC8C3FC3C37}
 		{B1A42413-0900-4F9A-A97A-B91F4DA19C26} = {68AFE417-E02E-472E-850B-8DC8C3FC3C37}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8BA64DFD-DFF2-49F5-9D2D-B706EF0A7B28}
 	EndGlobalSection
 EndGlobal

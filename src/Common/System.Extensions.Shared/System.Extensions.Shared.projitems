@@ -8,15 +8,4 @@
   <PropertyGroup Label="Configuration">
     <Import_RootNamespace>System.Extensions.Shared</Import_RootNamespace>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ActionExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\DateTimeExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\DayOfWeekExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\EnumerableExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ObjectExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Linq\EnumerableExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Reflection\AssemblyExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Validation\ValidationHelper.cs" />
-  </ItemGroup>
 </Project>

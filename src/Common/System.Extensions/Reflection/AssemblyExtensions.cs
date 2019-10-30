@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿#if NET451
+
+#endif
+using System.IO;
 using System.Text;
 
 namespace System.Reflection

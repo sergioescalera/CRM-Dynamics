@@ -47,16 +47,22 @@
     <Compile Include="$(MSBuildThisFileDirectory)Diagnostics\PrettyPrintEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Diagnostics\PluginContextExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Diagnostics\TracingServiceWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ActionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\AddressExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\DateTimeExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\DayOfWeekExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityReferenceExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\EnumerableExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EnumExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ExecutionContextExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ObjectExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\OptionSetValueExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\OrganizationServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\PluginContextExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\PluginExecutionContextExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ServiceProviderExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\WorkflowActivityContextExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IAddress.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\ICodeActivityContext.cs" />
@@ -65,6 +71,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IWorkflowActivityContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IPluginContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Linq\EnumerableExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Account.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Address.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\BusinessUnit.cs" />
@@ -81,9 +88,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\UnitGroup.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Plugins\PluginBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Plugins\PluginContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Reflection\AssemblyExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SharePoint\DocumentLocation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SharePoint\DocumentLocationRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SharePoint\DocumentSite.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SharePoint\DocumentSiteRepository.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Validation\ValidationHelper.cs" />
   </ItemGroup>
 </Project>
