@@ -243,8 +243,7 @@ namespace Dynamics.Crm.Extensions
             var request = new RetrieveAttributeRequest
             {
                 EntityLogicalName = entityLogicalName,
-                LogicalName = attributeName,
-                RetrieveAsIfPublished = true
+                LogicalName = attributeName
             };
 
             var response = service.Execute<RetrieveAttributeResponse>(request);
