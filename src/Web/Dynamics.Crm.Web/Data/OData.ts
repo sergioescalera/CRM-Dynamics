@@ -201,7 +201,7 @@
     export function deleteEntity(
         entityName: string,
         entitySetName: string,
-        entityId: string): Promise<IEntity> {
+        entityId: string): Promise<Core.IEntity> {
 
         Validation.ensureNotNullOrEmpty(entityName, "entityName");
         Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
@@ -212,11 +212,13 @@
             Xrm.WebApi.deleteRecord(entityName, entityId)
                 .then((entity: EntityReference) => {
 
-                    resolve({
+                    let result: Core.IEntity = {
                         type: entity.entityType,
                         id: entity.id,
                         name: entity.name
-                    });
+                    };
+
+                    resolve(result);
 
                 }, (error) => {
 

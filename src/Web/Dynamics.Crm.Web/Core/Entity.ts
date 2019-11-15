@@ -2,7 +2,7 @@
 
     "use strict";
 
-    export interface IEntity {
+    export interface IEntity extends _.Dictionary<any> {
         id?: string;
         type: string;
     }

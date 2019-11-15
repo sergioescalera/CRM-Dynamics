@@ -94,3 +94,19 @@
         throw new Error("Unable to resolve notification provider");
     }
 }
+
+interface NotificationService {
+    init(): void;
+    hide(id?: string): void;
+    show(options: NotificationServiceOptions): void;
+    test(): boolean;
+}
+
+interface NotificationServiceOptions {
+    id?: string;
+    type?: any;
+    title?: string;
+    message: string;
+    icon?: string;
+    dismissible?: boolean;
+}

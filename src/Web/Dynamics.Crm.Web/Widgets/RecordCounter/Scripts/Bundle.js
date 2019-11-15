@@ -420,11 +420,12 @@ var Dynamics;
                 return new Promise(function (resolve, reject) {
                     Xrm.WebApi.deleteRecord(entityName, entityId)
                         .then(function (entity) {
-                        resolve({
+                        var result = {
                             type: entity.entityType,
                             id: entity.id,
                             name: entity.name
-                        });
+                        };
+                        resolve(result);
                     }, function (error) {
                         Crm.Diagnostics.log.Error(error.message + " delete " + entityName, {
                             message: error.message,

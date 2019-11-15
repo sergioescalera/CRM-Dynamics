@@ -1,4 +1,6 @@
-﻿module Dynamics.Crm.AutoNumberingRuleForm {
+﻿"use strict";
+
+module Dynamics.Crm.AutoNumberingRuleForm {
 
     "use strict";
 

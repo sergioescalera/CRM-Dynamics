@@ -1,3 +1,4 @@
+"use strict";
 var Dynamics;
 (function (Dynamics) {
     var Crm;

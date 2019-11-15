@@ -46,7 +46,7 @@ Clearing your browser's cache <u>(using Ctrl + F5)</u> may help solve the proble
             }
 
             let results: any[] = [];
-            let errors: IError[] = [];
+            let errors: Diagnostics.IError[] = [];
 
             if (!Array.isArray(tasks)) {
 
@@ -92,7 +92,7 @@ Clearing your browser's cache <u>(using Ctrl + F5)</u> may help solve the proble
 
         displayErrors(
             config: ITasksConfig,
-            errors: IError[]): void {
+            errors: Diagnostics.IError[]): void {
 
             if (!errors || !errors.length) {
                 return;

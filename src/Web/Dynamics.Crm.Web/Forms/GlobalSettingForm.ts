@@ -1,4 +1,6 @@
-﻿module Dynamics.Crm.GlobalSettingForm {
+﻿"use strict";
+
+module Dynamics.Crm.GlobalSettingForm {
 
     "use strict";
 

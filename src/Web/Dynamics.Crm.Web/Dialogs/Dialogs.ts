@@ -1,4 +1,6 @@
-﻿module Dynamics.Crm.Dialogs {
+﻿"use strict";
+
+module Dynamics.Crm.Dialogs {
 
     "use strict";
 
