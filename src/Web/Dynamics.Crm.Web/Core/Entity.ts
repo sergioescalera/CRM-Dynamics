@@ -12,7 +12,7 @@
 
     export function parseIdentifier(idStr: string): string {
 
-        if (idStr === undefined || idStr == null) {
+        if (idStr === undefined || idStr === null) {
             return "";
         }
 

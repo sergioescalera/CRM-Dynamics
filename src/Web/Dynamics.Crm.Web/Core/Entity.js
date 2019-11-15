@@ -6,7 +6,7 @@ var Dynamics;
         (function (Core) {
             "use strict";
             function parseIdentifier(idStr) {
-                if (idStr === undefined || idStr == null) {
+                if (idStr === undefined || idStr === null) {
                     return "";
                 }
                 return idStr.replace("{", "").replace("}", "").toUpperCase();
