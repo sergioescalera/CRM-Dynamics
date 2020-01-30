@@ -4,6 +4,7 @@
 
     let xrm: Xrm;
     let link: HTMLAnchorElement;
+    let createEnabled: boolean = false;
     let createlink: HTMLAnchorElement;
     let message: HTMLElement;
     let attributeName: string;
@@ -35,12 +36,17 @@
 
         message = document.querySelector<HTMLElement>("#message");
 
-        attributeName = getParameterByName("data", window.location.search) ||
-            getParameterByName("Data", window.location.search);
+        let data = (
+            getParameterByName("data", window.location.search) ||
+            getParameterByName("Data", window.location.search) || "").split("|");
 
-        if (!attributeName) {
-            throw new Error("Pass attribute name as custom data parameter");
+        if (!data || !data[0]) {
+            throw new Error("Please pass 'attribute name' as custom data parameter");
         }
+
+        attributeName = data[0];
+
+        createEnabled = data[1] === "quickCreate";
 
         attribute = xrm["Page"].getAttribute(attributeName);
 
@@ -126,7 +132,7 @@
             createlink.style.display = "none";
         } else {
             link.style.display = "none";
-            createlink.style.display = !descriptor ? "none" : "inline-block";
+            createlink.style.display = !descriptor || !createEnabled ? "none" : "inline-block";
         }
     }
 

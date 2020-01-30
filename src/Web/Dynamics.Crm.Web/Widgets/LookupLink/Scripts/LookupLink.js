@@ -3,6 +3,7 @@ var LookupLink;
     "use strict";
     var xrm;
     var link;
+    var createEnabled = false;
     var createlink;
     var message;
     var attributeName;
@@ -27,11 +28,13 @@ var LookupLink;
         link = document.querySelector("#lookup-link");
         createlink = document.querySelector("#create-link");
         message = document.querySelector("#message");
-        attributeName = getParameterByName("data", window.location.search) ||
-            getParameterByName("Data", window.location.search);
-        if (!attributeName) {
-            throw new Error("Pass attribute name as custom data parameter");
+        var data = (getParameterByName("data", window.location.search) ||
+            getParameterByName("Data", window.location.search) || "").split("|");
+        if (!data || !data[0]) {
+            throw new Error("Please pass 'attribute name' as custom data parameter");
         }
+        attributeName = data[0];
+        createEnabled = data[1] === "quickCreate";
         attribute = xrm["Page"].getAttribute(attributeName);
         if (!attribute) {
             throw new Error("Invalid attribute name " + attributeName);
@@ -99,7 +102,7 @@ var LookupLink;
         }
         else {
             link.style.display = "none";
-            createlink.style.display = !descriptor ? "none" : "inline-block";
+            createlink.style.display = !descriptor || !createEnabled ? "none" : "inline-block";
         }
     }
     function openEntity() {
