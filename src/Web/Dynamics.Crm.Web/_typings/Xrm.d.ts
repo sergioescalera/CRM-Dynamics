@@ -134,6 +134,7 @@ interface Attribute {
     setRequiredLevel(value: AttributeRequiredLevel): void;
     setSubmitMode(mode: AttributeSubmitMode): void;
     setValue(value: AttributeValue): void;
+    getAttrDescriptor?: () => AttributeDescriptor;
 }
 
 declare type AttributeValue = boolean | Date | number | LookupControlItem[] | string | number[] | null;
@@ -176,6 +177,12 @@ interface AttributeUserPrivilege {
     canRead: boolean;
     canUpdate: boolean;
     canCreate: boolean;
+}
+
+interface AttributeDescriptor {
+    LogicalName: string;
+    DisplayName: string;
+    Targets: string[];
 }
 
 interface Control {

@@ -4,9 +4,11 @@
 
     let xrm: Xrm;
     let link: HTMLAnchorElement;
+    let createlink: HTMLAnchorElement;
     let message: HTMLElement;
     let attributeName: string;
     let attribute: Attribute;
+    let descriptor: AttributeDescriptor;
 
     export function init(): void {
 
@@ -28,8 +30,10 @@
             throw new Error("Unable to resolve CRM form dependencies");
         }
 
-        link = <HTMLAnchorElement>document.getElementById("lookup-link");
-        message = document.getElementById("message");
+        link = document.querySelector<HTMLAnchorElement>("#lookup-link");
+        createlink = document.querySelector<HTMLAnchorElement>("#create-link");
+
+        message = document.querySelector<HTMLElement>("#message");
 
         attributeName = getParameterByName("data", window.location.search) ||
             getParameterByName("Data", window.location.search);
@@ -44,8 +48,21 @@
             throw new Error(`Invalid attribute name ${attributeName}`);
         }
 
+        try {
+            if ("getAttrDescriptor" in attribute) {
+                descriptor = attribute.getAttrDescriptor();
+                createlink.innerText = "New " + descriptor.DisplayName;
+            }
+        } catch (e) {
+            console.warn("LookupLink.init", e);
+        }
+
         link.addEventListener("click", openEntity);
+
+        createlink.addEventListener("click", openCreate);
+        
         attribute.addOnChange(setLinkVisibility);
+
         setLinkVisibility();
     }
 
@@ -104,10 +121,12 @@
 
         let lookup = <LookupControlItem[]>attribute.getValue();
 
-        if (!lookup || !lookup.length) {
-            link.style.display = "none";
-        } else {
+        if (lookup && lookup.length) {
             link.style.display = "inline-block";
+            createlink.style.display = "none";
+        } else {
+            link.style.display = "none";
+            createlink.style.display = !descriptor ? "none" : "inline-block";
         }
     }
 
@@ -124,5 +143,31 @@
             entityId: lookup[0].id,
             openInNewWindow: true
         });
+    }
+
+    function openCreate(): void {
+
+        if (!descriptor ||
+            !descriptor.Targets[0]) {
+            return;
+        }
+
+        xrm.Navigation.openForm({
+            entityName: descriptor.Targets[0],
+            openInNewWindow: true,
+            useQuickCreateForm: true
+        }).then(
+            (data) => {
+
+                if (data && data.savedEntityReference) {
+
+                    attribute.setValue(data.savedEntityReference);
+                    attribute.fireOnChange();
+                }
+            },
+            (error) => {
+
+                console.warn("LookupLink.openCreate", error);
+            });
     }
 }
