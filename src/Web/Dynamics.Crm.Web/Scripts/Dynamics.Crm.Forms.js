@@ -1127,6 +1127,23 @@ var Dynamics;
                 return elem.innerText;
             }
             Utility.htmlToText = htmlToText;
+            function isUci() {
+                try {
+                    if (typeof Xrm !== "undefined" &&
+                        typeof Xrm.Internal !== "undefined" && "isUci" in Xrm.Internal) {
+                        return Xrm.Internal.isUci();
+                    }
+                    var context = Xrm.Utility.getGlobalContext();
+                    var appUrl = context.getCurrentAppUrl();
+                    var clientUrl = context.getClientUrl();
+                    return appUrl !== clientUrl;
+                }
+                catch (e) {
+                    console.warn("Utility.isUci", e);
+                    return false;
+                }
+            }
+            Utility.isUci = isUci;
         })(Utility = Crm.Utility || (Crm.Utility = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));

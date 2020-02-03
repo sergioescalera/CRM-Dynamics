@@ -9,6 +9,7 @@ var LookupLink;
     var attributeName;
     var attribute;
     var descriptor;
+    var isUci = false;
     function init() {
         console.log("LookupLink.init()");
         try {
@@ -25,6 +26,7 @@ var LookupLink;
         if (!xrm) {
             throw new Error("Unable to resolve CRM form dependencies");
         }
+        isUci = resolveIsUci(xrm);
         link = document.querySelector("#lookup-link");
         createlink = document.querySelector("#create-link");
         message = document.querySelector("#message");
@@ -83,6 +85,22 @@ var LookupLink;
             return false;
         }
     }
+    function resolveIsUci(xrm) {
+        try {
+            if (typeof xrm !== "undefined" &&
+                typeof xrm.Internal !== "undefined" && "isUci" in xrm.Internal) {
+                return xrm.Internal.isUci();
+            }
+            var context = xrm.Utility.getGlobalContext();
+            var appUrl = context.getCurrentAppUrl();
+            var clientUrl = context.getClientUrl();
+            return appUrl !== clientUrl;
+        }
+        catch (e) {
+            console.warn("LookupLink.isUci", e);
+            return false;
+        }
+    }
     function getParameterByName(name, url) {
         var str = name.replace(/[\[\]]/g, "\\$&");
         var regex = new RegExp("[?&]" + str + "(=([^&#]*)|&|#|$)");
@@ -103,7 +121,7 @@ var LookupLink;
         }
         else {
             link.style.display = "none";
-            createlink.style.display = !descriptor || !createEnabled ? "none" : "inline-block";
+            createlink.style.display = !descriptor || !createEnabled || !isUci ? "none" : "inline-block";
         }
     }
     function openEntity() {

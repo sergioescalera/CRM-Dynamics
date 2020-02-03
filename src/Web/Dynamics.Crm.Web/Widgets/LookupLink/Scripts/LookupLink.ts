@@ -10,6 +10,7 @@
     let attributeName: string;
     let attribute: Attribute;
     let descriptor: AttributeDescriptor;
+    let isUci: boolean = false;
 
     export function init(): void {
 
@@ -30,6 +31,8 @@
         if (!xrm) {
             throw new Error("Unable to resolve CRM form dependencies");
         }
+
+        isUci = resolveIsUci(xrm);
 
         link = document.querySelector<HTMLAnchorElement>("#lookup-link");
         createlink = document.querySelector<HTMLAnchorElement>("#create-link");
@@ -106,6 +109,31 @@
         }
     }
 
+    function resolveIsUci(xrm: Xrm): boolean {
+
+        try {
+
+            if (typeof xrm !== "undefined" &&
+                typeof xrm.Internal !== "undefined" && "isUci" in xrm.Internal) {
+
+                return xrm.Internal.isUci();
+            }
+
+            let context = xrm.Utility.getGlobalContext();
+
+            let appUrl = context.getCurrentAppUrl();
+            let clientUrl = context.getClientUrl();
+
+            return appUrl !== clientUrl;
+
+        } catch (e) {
+
+            console.warn("LookupLink.isUci", e);
+
+            return false;
+        }
+    }
+
     function getParameterByName(name: string, url: string): string {
 
         let str: string = name.replace(/[\[\]]/g, "\\$&");
@@ -134,7 +162,7 @@
             createlink.style.display = "none";
         } else {
             link.style.display = "none";
-            createlink.style.display = !descriptor || !createEnabled ? "none" : "inline-block";
+            createlink.style.display = !descriptor || !createEnabled || !isUci ? "none" : "inline-block";
         }
     }
 
