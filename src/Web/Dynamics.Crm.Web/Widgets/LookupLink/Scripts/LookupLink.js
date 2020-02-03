@@ -51,6 +51,7 @@ var LookupLink;
         link.addEventListener("click", openEntity);
         createlink.addEventListener("click", openCreate);
         attribute.addOnChange(setLinkVisibility);
+        window.addEventListener("unload", onUnload);
         setLinkVisibility();
     }
     function getXrmObject() {
@@ -133,5 +134,14 @@ var LookupLink;
         }, function (error) {
             console.warn("LookupLink.openCreate", error);
         });
+    }
+    function onUnload() {
+        console.log("LookupLink.onUnload()");
+        try {
+            attribute.removeOnChange(setLinkVisibility);
+        }
+        catch (e) {
+            console.warn("LookupLink.onUnload()", e);
+        }
     }
 })(LookupLink || (LookupLink = {}));

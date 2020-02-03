@@ -69,6 +69,8 @@
         
         attribute.addOnChange(setLinkVisibility);
 
+        window.addEventListener("unload", onUnload);
+
         setLinkVisibility();
     }
 
@@ -175,5 +177,19 @@
 
                 console.warn("LookupLink.openCreate", error);
             });
+    }
+
+    function onUnload(): void {
+
+        console.log("LookupLink.onUnload()");
+
+        try {
+
+            attribute.removeOnChange(setLinkVisibility);
+
+        } catch (e) {
+
+            console.warn("LookupLink.onUnload()", e);
+        }
     }
 }
