@@ -62,7 +62,7 @@ var LookupLink;
             return parent["Xrm"];
         }
         else {
-            for (var i = 0; i < parent.frames.length; i++) {
+            for (var i = parent.frames.length - 1; i >= 0; i--) {
                 var child = parent.frames[i];
                 if (isCrmFormsFrame(child)) {
                     return child["Xrm"];

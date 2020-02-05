@@ -84,7 +84,7 @@
         if (isCrmFormsFrame(parent)) {
             return parent["Xrm"];
         } else {
-            for (let i = 0; i < parent.frames.length; i++) {
+            for (let i = parent.frames.length - 1; i >= 0; i--) {
                 let child = parent.frames[i];
                 if (isCrmFormsFrame(child)) {
                     return child["Xrm"];
