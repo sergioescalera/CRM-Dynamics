@@ -27,6 +27,9 @@ var LookupLink;
             throw new Error("Unable to resolve CRM form dependencies");
         }
         isUci = resolveIsUci(xrm);
+        if (isUci) {
+            document.body.classList.add("uci");
+        }
         link = document.querySelector("#lookup-link");
         createlink = document.querySelector("#create-link");
         message = document.querySelector("#message");

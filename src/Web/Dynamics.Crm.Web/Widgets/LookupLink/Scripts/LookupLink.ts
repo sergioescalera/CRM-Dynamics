@@ -34,6 +34,10 @@
 
         isUci = resolveIsUci(xrm);
 
+        if (isUci) {
+            document.body.classList.add("uci");
+        }
+
         link = document.querySelector<HTMLAnchorElement>("#lookup-link");
         createlink = document.querySelector<HTMLAnchorElement>("#create-link");
 
