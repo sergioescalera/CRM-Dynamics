@@ -76,9 +76,18 @@
         
         attribute.addOnChange(setLinkVisibility);
 
-        window.addEventListener("unload", onUnload);
+        window.addEventListener("unload", destroy);
 
         setLinkVisibility();
+
+        try {
+
+            xrm["Page"].data.addOnLoad(setLinkVisibility);
+
+        } catch (e) {
+
+            console.warn("LookupLink.init()", e);
+        }
     }
 
     function getXrmObject(): Xrm {
@@ -211,17 +220,26 @@
             });
     }
 
-    function onUnload(): void {
+    function destroy(): void {
 
-        console.log("LookupLink.onUnload()");
+        console.log("LookupLink.destroy()");
 
         try {
 
             attribute.removeOnChange(setLinkVisibility);
+            
+        } catch (e) {
+
+            console.warn("LookupLink.destroy()", e);
+        }
+
+        try {
+
+            xrm["Page"].data.removeOnLoad(setLinkVisibility);
 
         } catch (e) {
 
-            console.warn("LookupLink.onUnload()", e);
+            console.warn("LookupLink.destroy()", e);
         }
     }
 }

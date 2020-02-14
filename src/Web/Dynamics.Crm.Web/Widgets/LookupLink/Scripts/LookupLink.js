@@ -56,8 +56,14 @@ var LookupLink;
         link.addEventListener("click", openEntity);
         createlink.addEventListener("click", openCreate);
         attribute.addOnChange(setLinkVisibility);
-        window.addEventListener("unload", onUnload);
+        window.addEventListener("unload", destroy);
         setLinkVisibility();
+        try {
+            xrm["Page"].data.addOnLoad(setLinkVisibility);
+        }
+        catch (e) {
+            console.warn("LookupLink.init()", e);
+        }
     }
     function getXrmObject() {
         var parent = window.parent;
@@ -156,13 +162,19 @@ var LookupLink;
             console.warn("LookupLink.openCreate", error);
         });
     }
-    function onUnload() {
-        console.log("LookupLink.onUnload()");
+    function destroy() {
+        console.log("LookupLink.destroy()");
         try {
             attribute.removeOnChange(setLinkVisibility);
         }
         catch (e) {
-            console.warn("LookupLink.onUnload()", e);
+            console.warn("LookupLink.destroy()", e);
+        }
+        try {
+            xrm["Page"].data.removeOnLoad(setLinkVisibility);
+        }
+        catch (e) {
+            console.warn("LookupLink.destroy()", e);
         }
     }
 })(LookupLink || (LookupLink = {}));
