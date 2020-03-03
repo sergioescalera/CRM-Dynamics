@@ -59,13 +59,18 @@ var Dynamics;
                 return new Promise(function (resolve, reject) {
                     getProvider()
                         .Create(config)
-                        .then(function (d) { return d
-                        .Show()
-                        .then(function () {
-                        var result = config.Done();
-                        resolve(result);
+                        .then(function (diag) {
+                        diag.Show()
+                            .then(function () {
+                            var result = config.Done();
+                            resolve(result);
+                            diag.Destroy();
+                        })
+                            .catch(function () {
+                            reject();
+                            diag.Destroy();
+                        });
                     })
-                        .catch(function () { return reject(); }); })
                         .catch(function () { return reject(); });
                 });
             }

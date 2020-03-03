@@ -82,7 +82,9 @@
 
             let d = this._dialog;
 
-            if (d) { d.remove(); }
+            if (d) {
+                d.remove();
+            }
         }
 
         get dialog(): Bootstrap {

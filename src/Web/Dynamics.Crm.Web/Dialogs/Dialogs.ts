@@ -86,15 +86,24 @@ module Dynamics.Crm.Dialogs {
 
             getProvider()
                 .Create(config)
-                .then((d: IDialog<TResult>) => d
-                    .Show()
-                    .then(() => {
+                .then((diag: IDialog<TResult>) => {
 
-                        let result: TResult = config.Done();
+                    diag.Show()
+                        .then(() => {
 
-                        resolve(result);
-                    })
-                    .catch(() => reject()))
+                            let result: TResult = config.Done();
+
+                            resolve(result);
+
+                            diag.Destroy();
+                        })
+                        .catch(() => {
+
+                            reject();
+
+                            diag.Destroy();
+                        });
+                })
                 .catch(() => reject());
         });
     }
