@@ -112,12 +112,8 @@ module Dynamics.Crm.Dialogs {
 
     export function init(prefix: string): void {
 
-        let win = <JQueryWindow>window.top;
+        prefix = prefix;
 
-        prefix = prefix || Publishers.bootstrap;
-
-        provider = bootstrapEnabled ?
-            new BootstrapDialogProvider(win, prefix) :
-            new CrmDialogProvider();
+        provider = new CrmDialogProvider();
     }
 }

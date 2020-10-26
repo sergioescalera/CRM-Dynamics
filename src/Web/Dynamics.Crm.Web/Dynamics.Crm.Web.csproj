@@ -218,7 +218,6 @@
     <TypeScriptCompile Include="Data\Interfaces.ts" />
     <TypeScriptCompile Include="Data\OData.ts" />
     <TypeScriptCompile Include="Data\Repositories.ts" />
-    <TypeScriptCompile Include="Dialogs\BootstrapDialogs.ts" />
     <TypeScriptCompile Include="Dialogs\CrmDialogs.ts" />
     <TypeScriptCompile Include="Dialogs\Dialogs.ts" />
     <TypeScriptCompile Include="Forms\AutoNumberingRuleForm.ts" />

@@ -162,7 +162,6 @@ var Dynamics;
         var Publishers;
         (function (Publishers) {
             "use strict";
-            Publishers.bootstrap = "cc";
             Publishers.logEntry = "cc";
         })(Publishers = Crm.Publishers || (Crm.Publishers = {}));
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));

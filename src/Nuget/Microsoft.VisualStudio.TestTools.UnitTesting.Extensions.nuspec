@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<package >
+<package>
   <metadata>
     <id>Microsoft.VisualStudio.TestTools.UnitTesting.Extensions</id>
     <version>0.0.3-alpha</version>
@@ -9,7 +9,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <title>Visual Studio Unit Testing Extensions</title>
     <description>Visual Studio Unit Testing Extensions</description>
-    <tags>.NET C# VisualStudio Testing</tags>    
+    <tags>.NET C# VisualStudio Testing</tags>
   </metadata>
   <files>
     <file src="..\Tests\Microsoft.VisualStudio.TestTools.UnitTesting.Extensions\bin\Release\Microsoft.VisualStudio.TestTools.UnitTesting.Extensions.dll"

@@ -9,7 +9,6 @@ module Dynamics.Crm.Publishers {
 
     "use strict";
 
-    export var bootstrap: string = "cc";
     export var logEntry: string = "cc";
 }
 

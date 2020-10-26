@@ -77,11 +77,8 @@ var Dynamics;
             Dialogs.create = create;
             Dialogs.bootstrapEnabled = true;
             function init(prefix) {
-                var win = window.top;
-                prefix = prefix || Crm.Publishers.bootstrap;
-                provider = Dialogs.bootstrapEnabled ?
-                    new Dialogs.BootstrapDialogProvider(win, prefix) :
-                    new Dialogs.CrmDialogProvider();
+                prefix = prefix;
+                provider = new Dialogs.CrmDialogProvider();
             }
             Dialogs.init = init;
         })(Dialogs = Crm.Dialogs || (Crm.Dialogs = {}));
