@@ -13,7 +13,7 @@
 
         GetEntities(): ng.IPromise<IEntityDefinition[]> {
 
-            var defer: ng.IDeferred<IEntityDefinition[]> = this._$q.defer<IEntityDefinition[]>();
+            const defer: ng.IDeferred<IEntityDefinition[]> = this._$q.defer<IEntityDefinition[]>();
             
             Dynamics.Crm.OData
                 .entityDefinitions()
@@ -21,8 +21,8 @@
 
                     defer.resolve(array);
                 })
-                .catch(() => {
-                    defer.reject();
+                .catch((error) => {
+                    defer.reject(error);
                 });
 
             return defer.promise;
@@ -30,7 +30,7 @@
 
         GetAttributes(entityDefinition: IEntityDefinition): ng.IPromise<IAttributeDefinition[]> {
 
-            var defer: ng.IDeferred<IAttributeDefinition[]> = this._$q.defer<IAttributeDefinition[]>();
+            const defer: ng.IDeferred<IAttributeDefinition[]> = this._$q.defer<IAttributeDefinition[]>();
 
             Dynamics.Crm.OData
                 .entityAttributesDefinition(entityDefinition.MetadataId)
@@ -38,8 +38,8 @@
 
                     defer.resolve(array);
                 })
-                .fail(() => {
-                    defer.reject();
+                .catch((error) => {
+                    defer.reject(error);
                 });
 
             return defer.promise;
@@ -49,18 +49,18 @@
             entityDefinition: IEntityDefinition,
             attributeDefinition: IAttributeDefinition): ng.IPromise<IOptionSetValueDefinition[]> {
 
-            var defer: ng.IDeferred<IOptionSetValueDefinition[]> = this._$q.defer<IOptionSetValueDefinition[]>();
+            const defer: ng.IDeferred<IOptionSetValueDefinition[]> = this._$q.defer<IOptionSetValueDefinition[]>();
 
             Dynamics.Crm.OData
                 .entityAttributeOptionSetDefinition(
                     entityDefinition.MetadataId,
                     attributeDefinition.MetadataId)
-                .done((array: IAttributeDefinition[]) => {
+                .then((array: IAttributeDefinition[]) => {
 
                     defer.resolve(array);
                 })
-                .fail(() => {
-                    defer.reject();
+                .catch((error) => {
+                    defer.reject(error);
                 });
 
             return defer.promise;

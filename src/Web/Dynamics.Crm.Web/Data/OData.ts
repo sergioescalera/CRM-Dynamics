@@ -352,27 +352,6 @@
         "ExternalName"
     ];
 
-    export function entityDefinitions(
-        attributes: string[] = entityDefinitionAttributes): Promise<IEntityDefinition[]> {
-        
-        let query = `?$select=${attributes.join(",")}`;
-
-        return new Promise((resolve, reject) => {
-            
-            Xrm.WebApi.retrieveMultipleRecords("EntityDefinition", query, 500)
-                .then((response) => {
-                    
-                    resolve(response.entities);
-
-                }, (error) => {
-
-                    console.error(error);
-
-                    reject(error);
-                });
-        });
-    }
-
     let entityAttributeDefinitionAttributes: string[] = [
         "MetadataId",
         "DisplayName",
@@ -381,9 +360,31 @@
         "Description"
     ];
 
+    export function entityDefinitions(
+        attributes: string[] = entityDefinitionAttributes): Promise<IEntityDefinition[]> {
+        
+        let baseUrl: string = getContext().getClientUrl();
+
+        let url = `${baseUrl}/api/data/${getVersion()}/EntityDefinitions?$select=${attributes.join(",")}`;
+
+        return new Promise((resolve, reject) => {
+
+            return $
+                .ajax({
+                    url: url,
+                    dataType: "json"
+                })
+                .then((data: IODataResponse<IEntityDefinition[]>) => {
+
+                    resolve(!data ? [] : data.value);
+                })
+                .fail((error) => reject(error));
+        });
+    }
+
     export function entityAttributesDefinition(
         metadataId: string,
-        attributes: string[] = entityAttributeDefinitionAttributes): JQueryPromise<IAttributeDefinition[]> {
+        attributes: string[] = entityAttributeDefinitionAttributes): Promise<IAttributeDefinition[]> {
 
         Validation.ensureNotNullOrEmpty(metadataId, "metadataId");
 
@@ -391,20 +392,24 @@
 
         let url = `${baseUrl}/api/data/${getVersion()}/EntityDefinitions(${metadataId})/Attributes?$select=${attributes.join(",")}`;
 
-        return $
-            .ajax({
-                url: url,
-                dataType: "json"
-            })
-            .then((data: IODataResponse<IAttributeDefinition[]>) => {
+        return new Promise((resolve, reject) => {
 
-                return data.value;
-            });
+            return $
+                .ajax({
+                    url: url,
+                    dataType: "json"
+                })
+                .then((data: IODataResponse<IAttributeDefinition[]>) => {
+
+                    resolve(data.value);
+                })
+                .fail((error) => reject(error));
+        });
     }
 
     export function entityAttributeOptionSetDefinition(
         metadataId: string,
-        attributeMetadataId: string): JQueryPromise<IOptionSetValueDefinition[]> {
+        attributeMetadataId: string): Promise<IOptionSetValueDefinition[]> {
 
         Validation.ensureNotNullOrEmpty(metadataId, "metadataId");
         Validation.ensureNotNullOrEmpty(attributeMetadataId, "attributeMetadataId");
@@ -413,14 +418,18 @@
 
         let url = `${baseUrl}/api/data/v8.0/EntityDefinitions(${metadataId})/Attributes(${attributeMetadataId})/Microsoft.Dynamics.CRM.PicklistAttributeMetadata/OptionSet?$select=Options`;
 
-        return $
-            .ajax({
-                url: url,
-                dataType: "json"
-            })
-            .then((data: any) => {
-                return data ? data.Options : [];
-            });
+        return new Promise((resolve, reject) => {
+
+            return $
+                .ajax({
+                    url: url,
+                    dataType: "json"
+                })
+                .then((data) => {
+                    resolve(data ? data.Options : []);
+                })
+                .fail((error) => reject(error));
+        });
     }
 }
 

@@ -3,7 +3,7 @@
 
         <md-progress-linear md-mode="indeterminate" ng-show="vm.isBusy"></md-progress-linear>
 
-        <form name="SearchForm">
+        <form name="SearchForm" ng-submit="vm.search()">
 
             <md-card>
 
@@ -38,7 +38,6 @@
                     <md-button class="md-raised md-primary"
                                type="submit"
                                ng-disabled="SearchForm.$invalid || vm.isBusy"
-                               ng-click="vm.search()"
                                title="Search">
                         <md-icon>search</md-icon> Search
                     </md-button>

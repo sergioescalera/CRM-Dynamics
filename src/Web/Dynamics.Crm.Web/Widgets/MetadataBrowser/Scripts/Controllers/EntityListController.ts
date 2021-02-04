@@ -35,9 +35,9 @@
             this.navigationService = navigationService;
             this.dataService = dataService;
 
-            $scope.$watch("vm.currentPage", this.filterEntities.bind(this));
-
             this.loadEntities();
+
+            $scope.$watch("vm.currentPage", () => this.showEntities(this.filter));
         }
 
         clear(): void {
@@ -45,24 +45,12 @@
             this.currentPage = 1;
             this.filter = "";
 
-            this.showEntities();
+            this.showEntities("");
         }
 
         exportToCsv(): void {
 
             console.warn("Not implemented");
-        }
-
-        filterEntities(): void {
-
-            var filter: string = this.filter;
-
-            var entities: IEntityDefinition[] = this.entities.filter((e: IEntityDefinition) => {
-
-                return e.LogicalName.indexOf(filter) >= 0;
-            });
-
-            this.showEntities(entities);
         }
 
         loadEntities(): void {
@@ -74,7 +62,8 @@
             this.total = 0;
             this.isBusy = true;
 
-            this.dataService.GetEntities()
+            this.dataService
+                .GetEntities()
                 .then((data: IEntityDefinition[]) => {
                     
                     this.entities = data.sort((e1: IEntityDefinition, e2: IEntityDefinition) => {
@@ -88,8 +77,7 @@
                         return 0;
                     });
 
-                    this.showEntities();
-
+                    this.showEntities(this.filter);
                 })
                 .finally(this.loadEntitiesCompleted.bind(this));
         }
@@ -99,15 +87,20 @@
             this.isBusy = false;
         }
 
-        showEntities(entities?: any[]): void {
+        showEntities(filter: string): void {
 
-            entities = entities || this.entities;
+            const entities = this.entities || [];
 
-            var pageSize: number = this.pageSize;
-            var skip: number = (this.currentPage - 1) * pageSize;
+            const pageSize = this.pageSize;
+            const skip = (this.currentPage - 1) * pageSize;
+
+            const filtered = this.entities.filter((e: IEntityDefinition) => {
+
+                return e.LogicalName.indexOf(filter) >= 0;
+            });
 
             this.total = entities.length;
-            this.entitiesToShow = entities
+            this.entitiesToShow = filtered
                 .filter((e: IEntityDefinition, index: number) => index >= skip && index < skip + pageSize);
         }
 
@@ -120,7 +113,17 @@
 
             this.currentPage = 1;
 
-            this.filterEntities();
+            const filter = this.filter;
+            const entities = this.entities || [];
+
+            if (entities.length) {
+
+                this.showEntities(filter);
+
+            } else {
+
+                this.loadEntities();
+            }
         }
     }
 

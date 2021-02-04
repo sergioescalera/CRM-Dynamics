@@ -520,20 +520,6 @@ var Dynamics;
                 "PrimaryIdAttribute",
                 "ExternalName"
             ];
-            function entityDefinitions(attributes) {
-                if (attributes === void 0) { attributes = entityDefinitionAttributes; }
-                var query = "?$select=" + attributes.join(",");
-                return new Promise(function (resolve, reject) {
-                    Xrm.WebApi.retrieveMultipleRecords("EntityDefinition", query, 500)
-                        .then(function (response) {
-                        resolve(response.entities);
-                    }, function (error) {
-                        console.error(error);
-                        reject(error);
-                    });
-                });
-            }
-            OData.entityDefinitions = entityDefinitions;
             var entityAttributeDefinitionAttributes = [
                 "MetadataId",
                 "DisplayName",
@@ -541,18 +527,38 @@ var Dynamics;
                 "AttributeType",
                 "Description"
             ];
+            function entityDefinitions(attributes) {
+                if (attributes === void 0) { attributes = entityDefinitionAttributes; }
+                var baseUrl = getContext().getClientUrl();
+                var url = baseUrl + "/api/data/" + getVersion() + "/EntityDefinitions?$select=" + attributes.join(",");
+                return new Promise(function (resolve, reject) {
+                    return $
+                        .ajax({
+                        url: url,
+                        dataType: "json"
+                    })
+                        .then(function (data) {
+                        resolve(!data ? [] : data.value);
+                    })
+                        .fail(function (error) { return reject(error); });
+                });
+            }
+            OData.entityDefinitions = entityDefinitions;
             function entityAttributesDefinition(metadataId, attributes) {
                 if (attributes === void 0) { attributes = entityAttributeDefinitionAttributes; }
                 Validation.ensureNotNullOrEmpty(metadataId, "metadataId");
                 var baseUrl = getContext().getClientUrl();
                 var url = baseUrl + "/api/data/" + getVersion() + "/EntityDefinitions(" + metadataId + ")/Attributes?$select=" + attributes.join(",");
-                return $
-                    .ajax({
-                    url: url,
-                    dataType: "json"
-                })
-                    .then(function (data) {
-                    return data.value;
+                return new Promise(function (resolve, reject) {
+                    return $
+                        .ajax({
+                        url: url,
+                        dataType: "json"
+                    })
+                        .then(function (data) {
+                        resolve(data.value);
+                    })
+                        .fail(function (error) { return reject(error); });
                 });
             }
             OData.entityAttributesDefinition = entityAttributesDefinition;
@@ -561,13 +567,16 @@ var Dynamics;
                 Validation.ensureNotNullOrEmpty(attributeMetadataId, "attributeMetadataId");
                 var baseUrl = getContext().getClientUrl();
                 var url = baseUrl + "/api/data/v8.0/EntityDefinitions(" + metadataId + ")/Attributes(" + attributeMetadataId + ")/Microsoft.Dynamics.CRM.PicklistAttributeMetadata/OptionSet?$select=Options";
-                return $
-                    .ajax({
-                    url: url,
-                    dataType: "json"
-                })
-                    .then(function (data) {
-                    return data ? data.Options : [];
+                return new Promise(function (resolve, reject) {
+                    return $
+                        .ajax({
+                        url: url,
+                        dataType: "json"
+                    })
+                        .then(function (data) {
+                        resolve(data ? data.Options : []);
+                    })
+                        .fail(function (error) { return reject(error); });
                 });
             }
             OData.entityAttributeOptionSetDefinition = entityAttributeOptionSetDefinition;
@@ -591,8 +600,8 @@ var Angular;
                     .then(function (array) {
                     defer.resolve(array);
                 })
-                    .catch(function () {
-                    defer.reject();
+                    .catch(function (error) {
+                    defer.reject(error);
                 });
                 return defer.promise;
             };
@@ -603,8 +612,8 @@ var Angular;
                     .then(function (array) {
                     defer.resolve(array);
                 })
-                    .fail(function () {
-                    defer.reject();
+                    .catch(function (error) {
+                    defer.reject(error);
                 });
                 return defer.promise;
             };
@@ -612,11 +621,11 @@ var Angular;
                 var defer = this._$q.defer();
                 Dynamics.Crm.OData
                     .entityAttributeOptionSetDefinition(entityDefinition.MetadataId, attributeDefinition.MetadataId)
-                    .done(function (array) {
+                    .then(function (array) {
                     defer.resolve(array);
                 })
-                    .fail(function () {
-                    defer.reject();
+                    .catch(function (error) {
+                    defer.reject(error);
                 });
                 return defer.promise;
             };
@@ -916,6 +925,7 @@ var MetadataBrower;
         "use strict";
         var EntityListController = /** @class */ (function () {
             function EntityListController($scope, navigationService, dataService) {
+                var _this = this;
                 this.advancedView = false;
                 this.currentPage = 1;
                 this.entities = [];
@@ -926,23 +936,16 @@ var MetadataBrower;
                 this.total = 0;
                 this.navigationService = navigationService;
                 this.dataService = dataService;
-                $scope.$watch("vm.currentPage", this.filterEntities.bind(this));
                 this.loadEntities();
+                $scope.$watch("vm.currentPage", function () { return _this.showEntities(_this.filter); });
             }
             EntityListController.prototype.clear = function () {
                 this.currentPage = 1;
                 this.filter = "";
-                this.showEntities();
+                this.showEntities("");
             };
             EntityListController.prototype.exportToCsv = function () {
                 console.warn("Not implemented");
-            };
-            EntityListController.prototype.filterEntities = function () {
-                var filter = this.filter;
-                var entities = this.entities.filter(function (e) {
-                    return e.LogicalName.indexOf(filter) >= 0;
-                });
-                this.showEntities(entities);
             };
             EntityListController.prototype.loadEntities = function () {
                 var _this = this;
@@ -952,7 +955,8 @@ var MetadataBrower;
                 this.filter = "";
                 this.total = 0;
                 this.isBusy = true;
-                this.dataService.GetEntities()
+                this.dataService
+                    .GetEntities()
                     .then(function (data) {
                     _this.entities = data.sort(function (e1, e2) {
                         if (e1.LogicalName < e2.LogicalName) {
@@ -963,19 +967,22 @@ var MetadataBrower;
                         }
                         return 0;
                     });
-                    _this.showEntities();
+                    _this.showEntities(_this.filter);
                 })
                     .finally(this.loadEntitiesCompleted.bind(this));
             };
             EntityListController.prototype.loadEntitiesCompleted = function () {
                 this.isBusy = false;
             };
-            EntityListController.prototype.showEntities = function (entities) {
-                entities = entities || this.entities;
+            EntityListController.prototype.showEntities = function (filter) {
+                var entities = this.entities || [];
                 var pageSize = this.pageSize;
                 var skip = (this.currentPage - 1) * pageSize;
+                var filtered = this.entities.filter(function (e) {
+                    return e.LogicalName.indexOf(filter) >= 0;
+                });
                 this.total = entities.length;
-                this.entitiesToShow = entities
+                this.entitiesToShow = filtered
                     .filter(function (e, index) { return index >= skip && index < skip + pageSize; });
             };
             EntityListController.prototype.openEntity = function (entity) {
@@ -983,7 +990,14 @@ var MetadataBrower;
             };
             EntityListController.prototype.search = function () {
                 this.currentPage = 1;
-                this.filterEntities();
+                var filter = this.filter;
+                var entities = this.entities || [];
+                if (entities.length) {
+                    this.showEntities(filter);
+                }
+                else {
+                    this.loadEntities();
+                }
             };
             EntityListController.$inject = ["$scope", "metadataBrowser.core.navigationService", "metadataBrowser.core.dataService"];
             return EntityListController;

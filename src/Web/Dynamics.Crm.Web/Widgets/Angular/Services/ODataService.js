@@ -14,8 +14,8 @@ var Angular;
                     .then(function (array) {
                     defer.resolve(array);
                 })
-                    .catch(function () {
-                    defer.reject();
+                    .catch(function (error) {
+                    defer.reject(error);
                 });
                 return defer.promise;
             };
@@ -26,8 +26,8 @@ var Angular;
                     .then(function (array) {
                     defer.resolve(array);
                 })
-                    .fail(function () {
-                    defer.reject();
+                    .catch(function (error) {
+                    defer.reject(error);
                 });
                 return defer.promise;
             };
@@ -35,11 +35,11 @@ var Angular;
                 var defer = this._$q.defer();
                 Dynamics.Crm.OData
                     .entityAttributeOptionSetDefinition(entityDefinition.MetadataId, attributeDefinition.MetadataId)
-                    .done(function (array) {
+                    .then(function (array) {
                     defer.resolve(array);
                 })
-                    .fail(function () {
-                    defer.reject();
+                    .catch(function (error) {
+                    defer.reject(error);
                 });
                 return defer.promise;
             };

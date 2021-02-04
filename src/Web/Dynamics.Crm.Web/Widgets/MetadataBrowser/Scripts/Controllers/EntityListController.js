@@ -5,6 +5,7 @@ var MetadataBrower;
         "use strict";
         var EntityListController = /** @class */ (function () {
             function EntityListController($scope, navigationService, dataService) {
+                var _this = this;
                 this.advancedView = false;
                 this.currentPage = 1;
                 this.entities = [];
@@ -15,23 +16,16 @@ var MetadataBrower;
                 this.total = 0;
                 this.navigationService = navigationService;
                 this.dataService = dataService;
-                $scope.$watch("vm.currentPage", this.filterEntities.bind(this));
                 this.loadEntities();
+                $scope.$watch("vm.currentPage", function () { return _this.showEntities(_this.filter); });
             }
             EntityListController.prototype.clear = function () {
                 this.currentPage = 1;
                 this.filter = "";
-                this.showEntities();
+                this.showEntities("");
             };
             EntityListController.prototype.exportToCsv = function () {
                 console.warn("Not implemented");
-            };
-            EntityListController.prototype.filterEntities = function () {
-                var filter = this.filter;
-                var entities = this.entities.filter(function (e) {
-                    return e.LogicalName.indexOf(filter) >= 0;
-                });
-                this.showEntities(entities);
             };
             EntityListController.prototype.loadEntities = function () {
                 var _this = this;
@@ -41,7 +35,8 @@ var MetadataBrower;
                 this.filter = "";
                 this.total = 0;
                 this.isBusy = true;
-                this.dataService.GetEntities()
+                this.dataService
+                    .GetEntities()
                     .then(function (data) {
                     _this.entities = data.sort(function (e1, e2) {
                         if (e1.LogicalName < e2.LogicalName) {
@@ -52,19 +47,22 @@ var MetadataBrower;
                         }
                         return 0;
                     });
-                    _this.showEntities();
+                    _this.showEntities(_this.filter);
                 })
                     .finally(this.loadEntitiesCompleted.bind(this));
             };
             EntityListController.prototype.loadEntitiesCompleted = function () {
                 this.isBusy = false;
             };
-            EntityListController.prototype.showEntities = function (entities) {
-                entities = entities || this.entities;
+            EntityListController.prototype.showEntities = function (filter) {
+                var entities = this.entities || [];
                 var pageSize = this.pageSize;
                 var skip = (this.currentPage - 1) * pageSize;
+                var filtered = this.entities.filter(function (e) {
+                    return e.LogicalName.indexOf(filter) >= 0;
+                });
                 this.total = entities.length;
-                this.entitiesToShow = entities
+                this.entitiesToShow = filtered
                     .filter(function (e, index) { return index >= skip && index < skip + pageSize; });
             };
             EntityListController.prototype.openEntity = function (entity) {
@@ -72,7 +70,14 @@ var MetadataBrower;
             };
             EntityListController.prototype.search = function () {
                 this.currentPage = 1;
-                this.filterEntities();
+                var filter = this.filter;
+                var entities = this.entities || [];
+                if (entities.length) {
+                    this.showEntities(filter);
+                }
+                else {
+                    this.loadEntities();
+                }
             };
             EntityListController.$inject = ["$scope", "metadataBrowser.core.navigationService", "metadataBrowser.core.dataService"];
             return EntityListController;

@@ -520,20 +520,6 @@ var Dynamics;
                 "PrimaryIdAttribute",
                 "ExternalName"
             ];
-            function entityDefinitions(attributes) {
-                if (attributes === void 0) { attributes = entityDefinitionAttributes; }
-                var query = "?$select=" + attributes.join(",");
-                return new Promise(function (resolve, reject) {
-                    Xrm.WebApi.retrieveMultipleRecords("EntityDefinition", query, 500)
-                        .then(function (response) {
-                        resolve(response.entities);
-                    }, function (error) {
-                        console.error(error);
-                        reject(error);
-                    });
-                });
-            }
-            OData.entityDefinitions = entityDefinitions;
             var entityAttributeDefinitionAttributes = [
                 "MetadataId",
                 "DisplayName",
@@ -541,18 +527,38 @@ var Dynamics;
                 "AttributeType",
                 "Description"
             ];
+            function entityDefinitions(attributes) {
+                if (attributes === void 0) { attributes = entityDefinitionAttributes; }
+                var baseUrl = getContext().getClientUrl();
+                var url = baseUrl + "/api/data/" + getVersion() + "/EntityDefinitions?$select=" + attributes.join(",");
+                return new Promise(function (resolve, reject) {
+                    return $
+                        .ajax({
+                        url: url,
+                        dataType: "json"
+                    })
+                        .then(function (data) {
+                        resolve(!data ? [] : data.value);
+                    })
+                        .fail(function (error) { return reject(error); });
+                });
+            }
+            OData.entityDefinitions = entityDefinitions;
             function entityAttributesDefinition(metadataId, attributes) {
                 if (attributes === void 0) { attributes = entityAttributeDefinitionAttributes; }
                 Validation.ensureNotNullOrEmpty(metadataId, "metadataId");
                 var baseUrl = getContext().getClientUrl();
                 var url = baseUrl + "/api/data/" + getVersion() + "/EntityDefinitions(" + metadataId + ")/Attributes?$select=" + attributes.join(",");
-                return $
-                    .ajax({
-                    url: url,
-                    dataType: "json"
-                })
-                    .then(function (data) {
-                    return data.value;
+                return new Promise(function (resolve, reject) {
+                    return $
+                        .ajax({
+                        url: url,
+                        dataType: "json"
+                    })
+                        .then(function (data) {
+                        resolve(data.value);
+                    })
+                        .fail(function (error) { return reject(error); });
                 });
             }
             OData.entityAttributesDefinition = entityAttributesDefinition;
@@ -561,13 +567,16 @@ var Dynamics;
                 Validation.ensureNotNullOrEmpty(attributeMetadataId, "attributeMetadataId");
                 var baseUrl = getContext().getClientUrl();
                 var url = baseUrl + "/api/data/v8.0/EntityDefinitions(" + metadataId + ")/Attributes(" + attributeMetadataId + ")/Microsoft.Dynamics.CRM.PicklistAttributeMetadata/OptionSet?$select=Options";
-                return $
-                    .ajax({
-                    url: url,
-                    dataType: "json"
-                })
-                    .then(function (data) {
-                    return data ? data.Options : [];
+                return new Promise(function (resolve, reject) {
+                    return $
+                        .ajax({
+                        url: url,
+                        dataType: "json"
+                    })
+                        .then(function (data) {
+                        resolve(data ? data.Options : []);
+                    })
+                        .fail(function (error) { return reject(error); });
                 });
             }
             OData.entityAttributeOptionSetDefinition = entityAttributeOptionSetDefinition;
@@ -591,8 +600,8 @@ var Angular;
                     .then(function (array) {
                     defer.resolve(array);
                 })
-                    .catch(function () {
-                    defer.reject();
+                    .catch(function (error) {
+                    defer.reject(error);
                 });
                 return defer.promise;
             };
@@ -603,8 +612,8 @@ var Angular;
                     .then(function (array) {
                     defer.resolve(array);
                 })
-                    .fail(function () {
-                    defer.reject();
+                    .catch(function (error) {
+                    defer.reject(error);
                 });
                 return defer.promise;
             };
@@ -612,11 +621,11 @@ var Angular;
                 var defer = this._$q.defer();
                 Dynamics.Crm.OData
                     .entityAttributeOptionSetDefinition(entityDefinition.MetadataId, attributeDefinition.MetadataId)
-                    .done(function (array) {
+                    .then(function (array) {
                     defer.resolve(array);
                 })
-                    .fail(function () {
-                    defer.reject();
+                    .catch(function (error) {
+                    defer.reject(error);
                 });
                 return defer.promise;
             };
