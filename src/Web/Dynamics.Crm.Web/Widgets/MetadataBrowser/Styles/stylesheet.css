@@ -73,6 +73,6 @@ table {
             padding: 0;
         }
 
-md-tooltip.picklist .md-content {
+md-tooltip.picklist {
     height: auto;
 }
