@@ -465,7 +465,11 @@ interface Encoding {
 
 interface Navigation {
     navigateTo(
-        pageInput: NavigateToPageOptions): XrmPromise<void>; // This method is supported only on the Unified Interface
+        pageInput: NavigateToPageOptions | NavigateToFormOptions | NavigateToResourceOptions | NavigateToDashboardOptions,
+        navigationOptions: NavigationOptions): XrmPromise<{
+            savedEntityReference?: LookupControlItem[];
+            returnValue: any;
+        }>; // This method is supported only on the Unified Interface
     openAlertDialog(
         strings: AlertDialogStrings,
         options?: DialogOptions): XrmPromise<{}>; // Displays an alert dialog containing a message and a button
@@ -496,6 +500,34 @@ interface NavigateToPageOptions {
     entityName: string; // The logical name of the entity to load in the list control
     viewId?: string; // The ID of the view to load.If you don't specify it, navigates to the default main view for the entity
     viewType?: "savedquery" | "userquery"; // Type of view to load
+    webresourceName?: string;
+    data?: string;
+}
+
+interface NavigateToFormOptions {
+    pageType: "entityrecord";
+    entityName: string; // The logical name of the entity to load in the form control
+    entityId?: string;
+    formId?: string;
+    createFromEntity?: LookupControlItem;
+}
+
+interface NavigateToResourceOptions {
+    pageType: "webresource";
+    webresourceName?: string;
+    data?: string;
+}
+
+interface NavigateToDashboardOptions {
+    pageType: "dashboard";
+    dashboardId: string;
+}
+
+interface NavigationOptions {
+    target: 1 | 2;
+    width?: number;
+    height?: number;
+    position?: 1 | 2;
 }
 
 interface AlertDialogStrings {
@@ -667,7 +699,7 @@ interface LookupControlItem {
     name?: string // The primary attribute value of the record displayed or created
 }
 
-interface XrmPromise<T> {
+interface XrmPromise<T> extends Promise<T> {
     then(
         successCallback: (result: T) => void,
         errorCallback?: (error: { message: string, code?: number, errorCode?: number }) => void
