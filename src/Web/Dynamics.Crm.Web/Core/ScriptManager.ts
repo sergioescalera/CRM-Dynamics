@@ -12,7 +12,7 @@ module Dynamics.Crm.ScriptManager {
 
     export function loadScripts(
         scripts: string[],
-        win: JQueryWindow): Promise<void> {
+        win: JQueryWindow): Promise<void[]> {
 
         let promises: Promise<void>[] = scripts.map((s: string) => loadScript(s, win));
 

@@ -36,9 +36,10 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptTarget>es5</TypeScriptTarget>
+    <TypeScriptLib>es5,es2015,dom,scripthost</TypeScriptLib>
     <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
-    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptCompileOnSaveEnabled>False</TypeScriptCompileOnSaveEnabled>
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
     <TypeScriptModuleKind>CommonJS</TypeScriptModuleKind>
     <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
@@ -57,9 +58,10 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptTarget>es5</TypeScriptTarget>
+    <TypeScriptLib>es5,es2015,dom,scripthost</TypeScriptLib>
     <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
-    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptCompileOnSaveEnabled>False</TypeScriptCompileOnSaveEnabled>
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
     <TypeScriptModuleKind>CommonJS</TypeScriptModuleKind>
     <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
@@ -262,7 +264,6 @@
     <TypeScriptCompile Include="_typings\jquery.d.ts" />
     <TypeScriptCompile Include="_typings\lodash.d.ts" />
     <TypeScriptCompile Include="_typings\moment.d.ts" />
-    <TypeScriptCompile Include="_typings\Promise.d.ts" />
     <TypeScriptCompile Include="_typings\SDK.MetaData.d.ts" />
     <TypeScriptCompile Include="_typings\toastr.d.ts" />
     <TypeScriptCompile Include="_typings\Xrm.d.ts" />
