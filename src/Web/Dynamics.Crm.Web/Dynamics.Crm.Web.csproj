@@ -179,6 +179,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include=".eslintrc" />
     <None Include="bundleconfig.json" />
     <Content Include="Libs\bootstrap\config.json" />
     <Content Include="Libs\bootstrap\js\bootstrap.min.js.map">
