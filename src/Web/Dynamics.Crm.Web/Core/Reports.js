@@ -5,12 +5,9 @@ var Dynamics;
         var Reports;
         (function (Reports) {
             "use strict";
-            function getUrl(reportName, reportId, entityId, entityCode, action) {
-                if (entityId === void 0) { entityId = null; }
-                if (entityCode === void 0) { entityCode = null; }
-                if (action === void 0) { action = "run"; }
-                var url = Xrm.Utility.getGlobalContext().getClientUrl();
-                var reportUrl = url + "/crmreports/viewer/viewer.aspx?action={action}&helpID={name}&id={{id}}"
+            function getUrl(reportName, reportId, entityId = null, entityCode = null, action = "run") {
+                let url = Xrm.Utility.getGlobalContext().getClientUrl();
+                let reportUrl = url + "/crmreports/viewer/viewer.aspx?action={action}&helpID={name}&id={{id}}"
                     .replace("{action}", encodeURIComponent(action))
                     .replace("{name}", encodeURIComponent(reportName))
                     .replace("{id}", encodeURIComponent(reportId));

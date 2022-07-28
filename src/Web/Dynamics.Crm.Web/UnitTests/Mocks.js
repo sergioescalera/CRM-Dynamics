@@ -1,16 +1,3 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var Dynamics;
 (function (Dynamics) {
     var Crm;
@@ -20,19 +7,16 @@ var Dynamics;
             var Mocks;
             (function (Mocks) {
                 "use strict";
-                var VisibleObject = /** @class */ (function () {
-                    function VisibleObject() {
-                    }
-                    VisibleObject.prototype.getVisible = function () {
+                class VisibleObject {
+                    getVisible() {
                         return this._visible;
-                    };
-                    VisibleObject.prototype.setVisible = function (value) {
+                    }
+                    setVisible(value) {
                         this._visible = value;
-                    };
-                    return VisibleObject;
-                }());
-                var PageMock = /** @class */ (function () {
-                    function PageMock() {
+                    }
+                }
+                class PageMock {
+                    constructor() {
                         this.ageAttribute = new AttributeMock("age", true);
                         this.attributes = {};
                         this.attributes[this.ageAttribute.name] = this.ageAttribute;
@@ -45,23 +29,22 @@ var Dynamics;
                             }
                         };
                     }
-                    PageMock.prototype.getTab = function (param) {
+                    getTab(param) {
                         if (typeof param === "string") {
                             return this.tabs[param];
                         }
                         return null;
-                    };
-                    PageMock.prototype.getAttribute = function (name) {
+                    }
+                    getAttribute(name) {
                         return this.attributes[name];
-                    };
-                    PageMock.prototype.getControl = function (name) {
+                    }
+                    getControl(name) {
                         return this.controls[name];
-                    };
-                    return PageMock;
-                }());
+                    }
+                }
                 Mocks.PageMock = PageMock;
-                var AttributeMock = /** @class */ (function () {
-                    function AttributeMock(name, header, footer) {
+                class AttributeMock {
+                    constructor(name, header, footer) {
                         this.controls = {
                             forEach: this.forEach.bind(this)
                         };
@@ -74,113 +57,101 @@ var Dynamics;
                         }
                         this.name = name;
                     }
-                    AttributeMock.prototype.forEach = function (func) {
-                        var keys = [this.name, this.name + "_header", this.name + "_footer"];
-                        for (var i = 0; i < keys.length; i++) {
-                            var control = this.controls[keys[i]];
+                    forEach(func) {
+                        let keys = [this.name, this.name + "_header", this.name + "_footer"];
+                        for (let i = 0; i < keys.length; i++) {
+                            let control = this.controls[keys[i]];
                             if (control) {
                                 func(control);
                             }
                         }
-                    };
-                    AttributeMock.prototype.getRequiredLevel = function () {
+                    }
+                    getRequiredLevel() {
                         return this._requiredLevel;
-                    };
-                    AttributeMock.prototype.setRequiredLevel = function (value) {
+                    }
+                    setRequiredLevel(value) {
                         this._requiredLevel = value;
-                    };
-                    AttributeMock.prototype.addOnChange = function (handler) { };
-                    AttributeMock.prototype.removeOnChange = function (handler) { };
-                    AttributeMock.prototype.fireOnChange = function () { };
-                    AttributeMock.prototype.getAttributeType = function () {
+                    }
+                    addOnChange(handler) { }
+                    removeOnChange(handler) { }
+                    fireOnChange() { }
+                    getAttributeType() {
                         return "string";
-                    };
-                    AttributeMock.prototype.getIsDirty = function () {
+                    }
+                    getIsDirty() {
                         return true;
-                    };
-                    AttributeMock.prototype.getName = function () {
+                    }
+                    getName() {
                         return this.name;
-                    };
-                    AttributeMock.prototype.getParent = function () {
+                    }
+                    getParent() {
                         return null;
-                    };
-                    AttributeMock.prototype.getSubmitMode = function () {
+                    }
+                    getSubmitMode() {
                         return "dirty";
-                    };
-                    AttributeMock.prototype.getUserPrivilege = function () {
+                    }
+                    getUserPrivilege() {
                         return null;
-                    };
-                    AttributeMock.prototype.getValue = function () {
+                    }
+                    getValue() {
                         return this.val;
-                    };
-                    AttributeMock.prototype.isValid = function () {
+                    }
+                    isValid() {
                         return true;
-                    };
-                    AttributeMock.prototype.setIsValid = function (value, message) {
-                    };
-                    AttributeMock.prototype.setSubmitMode = function (mode) { };
-                    AttributeMock.prototype.setValue = function (value) {
+                    }
+                    setIsValid(value, message) {
+                    }
+                    setSubmitMode(mode) { }
+                    setValue(value) {
                         this.val = value;
-                    };
-                    return AttributeMock;
-                }());
+                    }
+                }
                 Mocks.AttributeMock = AttributeMock;
-                var ControlMock = /** @class */ (function (_super) {
-                    __extends(ControlMock, _super);
-                    function ControlMock(name) {
-                        var _this = _super.call(this) || this;
-                        _this.name = name;
-                        _this.notifications = {};
-                        return _this;
+                class ControlMock extends VisibleObject {
+                    constructor(name) {
+                        super();
+                        this.name = name;
+                        this.notifications = {};
                     }
-                    ControlMock.prototype.getDisabled = function () {
+                    getDisabled() {
                         return this._disabled;
-                    };
-                    ControlMock.prototype.setDisabled = function (value) {
-                        this._disabled = value;
-                    };
-                    ControlMock.prototype.clearNotification = function (id) {
-                        this.setNotification(null, id);
-                    };
-                    ControlMock.prototype.setNotification = function (msg, id) {
-                        this.notifications[id] = msg;
-                    };
-                    return ControlMock;
-                }(VisibleObject));
-                Mocks.ControlMock = ControlMock;
-                var TabMock = /** @class */ (function (_super) {
-                    __extends(TabMock, _super);
-                    function TabMock() {
-                        var _this = _super.call(this) || this;
-                        _this.mainSection = new SectionMock();
-                        _this._sections = { "mainSection": _this.mainSection };
-                        _this.sections = {
-                            get: _this.getSection.bind(_this)
-                        };
-                        return _this;
                     }
-                    TabMock.prototype.getDisplayState = function () {
+                    setDisabled(value) {
+                        this._disabled = value;
+                    }
+                    clearNotification(id) {
+                        this.setNotification(null, id);
+                    }
+                    setNotification(msg, id) {
+                        this.notifications[id] = msg;
+                    }
+                }
+                Mocks.ControlMock = ControlMock;
+                class TabMock extends VisibleObject {
+                    constructor() {
+                        super();
+                        this.mainSection = new SectionMock();
+                        this._sections = { "mainSection": this.mainSection };
+                        this.sections = {
+                            get: this.getSection.bind(this)
+                        };
+                    }
+                    getDisplayState() {
                         return this._displayState;
-                    };
-                    TabMock.prototype.setDisplayState = function (value) {
+                    }
+                    setDisplayState(value) {
                         this._displayState = value;
-                    };
-                    TabMock.prototype.getSection = function (param) {
+                    }
+                    getSection(param) {
                         if (typeof param === "string") {
                             return this._sections[param];
                         }
                         return null;
-                    };
-                    return TabMock;
-                }(VisibleObject));
-                Mocks.TabMock = TabMock;
-                var SectionMock = /** @class */ (function (_super) {
-                    __extends(SectionMock, _super);
-                    function SectionMock() {
-                        return _super !== null && _super.apply(this, arguments) || this;
                     }
-                    return SectionMock;
-                }(VisibleObject));
+                }
+                Mocks.TabMock = TabMock;
+                class SectionMock extends VisibleObject {
+                }
                 Mocks.SectionMock = SectionMock;
             })(Mocks = UnitTests.Mocks || (UnitTests.Mocks = {}));
         })(UnitTests = Crm.UnitTests || (Crm.UnitTests = {}));

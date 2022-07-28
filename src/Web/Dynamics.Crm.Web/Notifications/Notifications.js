@@ -12,8 +12,8 @@ var Notifications;
         Notifications.boostrap = new Notifications.BoostrapAlert(),
         Notifications.basic = new Notifications.DefaultNotifications()
     ];
-    var provider;
-    var toastProvider;
+    let provider;
+    let toastProvider;
     function show(options) {
         console.log("Notifications.show()", options);
         if (!provider) {
@@ -53,8 +53,8 @@ var Notifications;
     }
     Notifications.hideToast = hideToast;
     function resolve() {
-        for (var i = 0; i < Notifications.providers.length; i++) {
-            var service = Notifications.providers[i];
+        for (let i = 0; i < Notifications.providers.length; i++) {
+            let service = Notifications.providers[i];
             if (service && service.test()) {
                 return service;
             }
@@ -62,8 +62,8 @@ var Notifications;
         throw new Error("Unable to resolve notification provider");
     }
     function resolveToast() {
-        for (var i = 0; i < Notifications.toastProviders.length; i++) {
-            var service = Notifications.toastProviders[i];
+        for (let i = 0; i < Notifications.toastProviders.length; i++) {
+            let service = Notifications.toastProviders[i];
             if (service && service.test()) {
                 return service;
             }

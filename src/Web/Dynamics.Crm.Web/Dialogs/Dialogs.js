@@ -6,13 +6,13 @@ var Dynamics;
         var Dialogs;
         (function (Dialogs) {
             "use strict";
-            var DialogType;
+            let DialogType;
             (function (DialogType) {
                 DialogType[DialogType["Alert"] = 0] = "Alert";
                 DialogType[DialogType["Confirm"] = 1] = "Confirm";
                 DialogType[DialogType["Custom"] = 2] = "Custom";
             })(DialogType = Dialogs.DialogType || (Dialogs.DialogType = {}));
-            var provider;
+            let provider;
             function getProvider() {
                 if (!provider) {
                     throw new Error("Dialog provider hasn't been initialized");
@@ -20,58 +20,58 @@ var Dynamics;
                 return provider;
             }
             function alert(message, title) {
-                return new Promise(function (resolve, reject) {
+                return new Promise((resolve, reject) => {
                     getProvider()
                         .Alert(message, title)
-                        .then(function (d) { return d
+                        .then((d) => d
                         .Show()
-                        .then(function () {
+                        .then(() => {
                         resolve();
                         d.Destroy();
                     })
-                        .catch(function () {
+                        .catch(() => {
                         reject();
                         d.Destroy();
-                    }); })
-                        .catch(function () { return reject(); });
+                    }))
+                        .catch(() => reject());
                 });
             }
             Dialogs.alert = alert;
             function confirm(message, title) {
-                return new Promise(function (resolve, reject) {
+                return new Promise((resolve, reject) => {
                     getProvider()
                         .Confirm(message, title)
-                        .then(function (d) { return d
+                        .then((d) => d
                         .Show()
-                        .then(function () {
+                        .then(() => {
                         resolve(true);
                         d.Destroy();
                     })
-                        .catch(function () {
+                        .catch(() => {
                         reject();
                         d.Destroy();
-                    }); })
-                        .catch(function () { return reject(); });
+                    }))
+                        .catch(() => reject());
                 });
             }
             Dialogs.confirm = confirm;
             function create(config) {
-                return new Promise(function (resolve, reject) {
+                return new Promise((resolve, reject) => {
                     getProvider()
                         .Create(config)
-                        .then(function (diag) {
+                        .then((diag) => {
                         diag.Show()
-                            .then(function () {
-                            var result = config.Done();
+                            .then(() => {
+                            let result = config.Done();
                             resolve(result);
                             diag.Destroy();
                         })
-                            .catch(function () {
+                            .catch(() => {
                             reject();
                             diag.Destroy();
                         });
                     })
-                        .catch(function () { return reject(); });
+                        .catch(() => reject());
                 });
             }
             Dialogs.create = create;

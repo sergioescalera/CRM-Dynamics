@@ -3,14 +3,13 @@ var MetadataBrower;
     var Controllers;
     (function (Controllers) {
         "use strict";
-        var MetadataBrowserController = /** @class */ (function () {
-            function MetadataBrowserController(navigationService) {
+        class MetadataBrowserController {
+            constructor(navigationService) {
                 var vm = this;
                 vm.navigationService = navigationService;
             }
-            MetadataBrowserController.$inject = ["metadataBrowser.core.navigationService"];
-            return MetadataBrowserController;
-        }());
+        }
+        MetadataBrowserController.$inject = ["metadataBrowser.core.navigationService"];
         angular.module(MetadataBrower.Config.moduleName)
             .controller("metadataBrowser.ui.controllers.crmMetadataBrowser", MetadataBrowserController);
     })(Controllers = MetadataBrower.Controllers || (MetadataBrower.Controllers = {}));

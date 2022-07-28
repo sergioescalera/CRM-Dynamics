@@ -3,9 +3,8 @@ var MetadataBrower;
     var Controllers;
     (function (Controllers) {
         "use strict";
-        var EntityListController = /** @class */ (function () {
-            function EntityListController($scope, navigationService, dataService) {
-                var _this = this;
+        class EntityListController {
+            constructor($scope, navigationService, dataService) {
                 this.advancedView = false;
                 this.currentPage = 1;
                 this.entities = [];
@@ -17,18 +16,17 @@ var MetadataBrower;
                 this.navigationService = navigationService;
                 this.dataService = dataService;
                 this.loadEntities();
-                $scope.$watch("vm.currentPage", function () { return _this.showEntities(_this.filter); });
+                $scope.$watch("vm.currentPage", () => this.showEntities(this.filter));
             }
-            EntityListController.prototype.clear = function () {
+            clear() {
                 this.currentPage = 1;
                 this.filter = "";
                 this.showEntities("");
-            };
-            EntityListController.prototype.exportToCsv = function () {
+            }
+            exportToCsv() {
                 console.warn("Not implemented");
-            };
-            EntityListController.prototype.loadEntities = function () {
-                var _this = this;
+            }
+            loadEntities() {
                 this.currentPage = 1;
                 this.entities = [];
                 this.entitiesToShow = [];
@@ -37,8 +35,8 @@ var MetadataBrower;
                 this.isBusy = true;
                 this.dataService
                     .GetEntities()
-                    .then(function (data) {
-                    _this.entities = data.sort(function (e1, e2) {
+                    .then((data) => {
+                    this.entities = data.sort((e1, e2) => {
                         if (e1.LogicalName < e2.LogicalName) {
                             return -1;
                         }
@@ -47,41 +45,40 @@ var MetadataBrower;
                         }
                         return 0;
                     });
-                    _this.showEntities(_this.filter);
+                    this.showEntities(this.filter);
                 })
                     .finally(this.loadEntitiesCompleted.bind(this));
-            };
-            EntityListController.prototype.loadEntitiesCompleted = function () {
+            }
+            loadEntitiesCompleted() {
                 this.isBusy = false;
-            };
-            EntityListController.prototype.showEntities = function (filter) {
-                var entities = this.entities || [];
-                var pageSize = this.pageSize;
-                var skip = (this.currentPage - 1) * pageSize;
-                var filtered = this.entities.filter(function (e) {
+            }
+            showEntities(filter) {
+                const entities = this.entities || [];
+                const pageSize = this.pageSize;
+                const skip = (this.currentPage - 1) * pageSize;
+                const filtered = this.entities.filter((e) => {
                     return e.LogicalName.indexOf(filter) >= 0;
                 });
                 this.total = entities.length;
                 this.entitiesToShow = filtered
-                    .filter(function (e, index) { return index >= skip && index < skip + pageSize; });
-            };
-            EntityListController.prototype.openEntity = function (entity) {
+                    .filter((e, index) => index >= skip && index < skip + pageSize);
+            }
+            openEntity(entity) {
                 this.navigationService.AddEntityTab(entity);
-            };
-            EntityListController.prototype.search = function () {
+            }
+            search() {
                 this.currentPage = 1;
-                var filter = this.filter;
-                var entities = this.entities || [];
+                const filter = this.filter;
+                const entities = this.entities || [];
                 if (entities.length) {
                     this.showEntities(filter);
                 }
                 else {
                     this.loadEntities();
                 }
-            };
-            EntityListController.$inject = ["$scope", "metadataBrowser.core.navigationService", "metadataBrowser.core.dataService"];
-            return EntityListController;
-        }());
+            }
+        }
+        EntityListController.$inject = ["$scope", "metadataBrowser.core.navigationService", "metadataBrowser.core.dataService"];
         angular.module(MetadataBrower.Config.moduleName)
             .controller("metadataBrowser.ui.controllers.entityList", EntityListController);
     })(Controllers = MetadataBrower.Controllers || (MetadataBrower.Controllers = {}));

@@ -146,7 +146,7 @@ module RecordCounter.Controllers {
             this.showEntities();
         }
 
-        export(): void {
+        exportCsv(): void {
 
             let blob: Blob = new Blob([
                 `Entity Name,Record Count,Error
