@@ -3,8 +3,8 @@ var Dynamics;
     var Crm;
     (function (Crm) {
         "use strict";
-        var Forms = /** @class */ (function () {
-            function Forms(page) {
+        class Forms {
+            constructor(page) {
                 Validation.ensureNotNullOrUndefined(page, "page");
                 this.page = page;
                 this.attributes = new Crm.Attributes(page);
@@ -15,65 +15,65 @@ var Dynamics;
                 this.sections = new Crm.Sections(page);
                 this.tasks = new Crm.Tasks(page);
             }
-            Forms.prototype.getClientType = function () {
+            getClientType() {
                 return Xrm.Utility.getGlobalContext().client.getClient();
-            };
-            Forms.prototype.getEntityId = function () {
+            }
+            getEntityId() {
                 try {
                     return Crm.Core.parseIdentifier(this.page.data.entity.getId());
                 }
                 catch (e) {
                     throw new Error("Unable to retrieve entity id");
                 }
-            };
-            Forms.prototype.getEntityName = function () {
+            }
+            getEntityName() {
                 try {
                     return this.page.data.entity.getEntityName();
                 }
                 catch (e) {
                     throw new Error("Unable to retrieve entity name");
                 }
-            };
-            Forms.prototype.getEntitySetName = function () {
+            }
+            getEntitySetName() {
                 try {
                     return Xrm.Utility.getEntitySetName(this.getEntityName());
                 }
                 catch (e) {
                     throw new Error("Unable to retrieve entity set name");
                 }
-            };
-            Forms.prototype.getFormType = function () {
+            }
+            getFormType() {
                 return this.page.ui.getFormType();
-            };
-            Forms.prototype.getFormFactor = function () {
+            }
+            getFormFactor() {
                 if (!Xrm.Utility.getGlobalContext().client.getFormFactor) {
                     return Crm.FormFactor.Unknown;
                 }
                 return Xrm.Utility.getGlobalContext().client.getFormFactor();
-            };
-            Forms.prototype.getIsDesktop = function () {
-                var formFactor = this.getFormFactor();
+            }
+            getIsDesktop() {
+                let formFactor = this.getFormFactor();
                 if (formFactor !== Crm.FormFactor.Unknown) {
                     return formFactor === Crm.FormFactor.Desktop;
                 }
                 return this.getClientType() !== Crm.ClientType.Mobile;
-            };
-            Forms.prototype.getIsDirty = function () {
+            }
+            getIsDirty() {
                 return this.page.data.entity.getIsDirty();
-            };
-            Forms.prototype.isCreateForm = function () {
+            }
+            isCreateForm() {
                 return this.getFormType() === Crm.FormType.Create;
-            };
-            Forms.prototype.isUpdateForm = function () {
+            }
+            isUpdateForm() {
                 return this.getFormType() === Crm.FormType.Update;
-            };
-            Forms.prototype.isBulkEditForm = function () {
+            }
+            isBulkEditForm() {
                 return this.getFormType() === Crm.FormType.BulkEdit;
-            };
-            Forms.prototype.supportsIFrames = function () {
+            }
+            supportsIFrames() {
                 return this.getIsDesktop();
-            };
-            Forms.prototype.current = function () {
+            }
+            current() {
                 // The formSelectoritems collection does not exist and the formSelector.getCurrentItem method isn't supported for Dynamics 365 mobile clients (phones and tablets) and the interactive service hub.
                 // https://msdn.microsoft.com/en-in/library/gg327828.aspx#formSelector
                 if (!this.page.ui ||
@@ -85,20 +85,19 @@ var Dynamics;
                 return this.page.ui.formSelector.getCurrentItem()
                     || this.page.ui.formSelector.items.get(0)
                     || null;
-            };
-            Forms.prototype.find = function (label) {
+            }
+            find(label) {
                 if (!this.page.ui ||
                     !this.page.ui.formSelector ||
                     !this.page.ui.formSelector.items) {
                     return null;
                 }
-                var filter = this.page.ui.formSelector.items
+                let filter = this.page.ui.formSelector.items
                     .get()
-                    .filter(function (f) { return f.getLabel() === label; });
+                    .filter((f) => f.getLabel() === label);
                 return filter[0] || null;
-            };
-            return Forms;
-        }());
+            }
+        }
         Crm.Forms = Forms;
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));

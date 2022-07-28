@@ -1,32 +1,35 @@
 var Notifications;
 (function (Notifications) {
     "use strict";
-    var $notificationWrapper;
-    var BoostrapAlert = /** @class */ (function () {
-        function BoostrapAlert() {
-        }
-        BoostrapAlert.prototype.init = function () {
+    let $notificationWrapper;
+    class BoostrapAlert {
+        init() {
             $notificationWrapper = $notificationWrapper || $("#notification-wrapper");
             if (!$notificationWrapper.get(0)) {
-                $notificationWrapper = $("<div id=\"notification-wrapper\" class=\"hidden\"></div>");
+                $notificationWrapper = $(`<div id="notification-wrapper" class="hidden"></div>`);
                 $notificationWrapper.prependTo(document.body);
             }
-        };
-        BoostrapAlert.prototype.show = function (options) {
-            var dismissible = !!options.dismissible;
-            var message = options.message;
-            var type = options.type;
+        }
+        show(options) {
+            let dismissible = !!options.dismissible;
+            let message = options.message;
+            let type = options.type;
             $notificationWrapper
                 .removeClass("hidden")
-                .html("\n<div class=\"alert alert-" + type + " " + (dismissible ? "alert-dismissible" : "") + "\" id=\"notification\" role=\"alert\">\n    " + (dismissible ? "<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n        <span aria-hidden=\"true\">&times;</span>\n    </button>" : "") + "\n    <p>" + message + "</p>\n</div>");
-        };
-        BoostrapAlert.prototype.hide = function () {
+                .html(`
+<div class="alert alert-${type} ${(dismissible ? "alert-dismissible" : "")}" id="notification" role="alert">
+    ${(dismissible ? `<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>` : "")}
+    <p>${message}</p>
+</div>`);
+        }
+        hide() {
             $notificationWrapper.addClass("hidden");
-        };
-        BoostrapAlert.prototype.test = function () {
+        }
+        test() {
             return true;
-        };
-        return BoostrapAlert;
-    }());
+        }
+    }
     Notifications.BoostrapAlert = BoostrapAlert;
 })(Notifications || (Notifications = {}));

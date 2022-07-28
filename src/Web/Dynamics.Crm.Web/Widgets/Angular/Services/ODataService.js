@@ -3,48 +3,47 @@ var Angular;
     var Core;
     (function (Core) {
         "use strict";
-        var ODataService = /** @class */ (function () {
-            function ODataService($q) {
+        class ODataService {
+            constructor($q) {
                 this._$q = $q;
             }
-            ODataService.prototype.GetEntities = function () {
-                var defer = this._$q.defer();
+            GetEntities() {
+                const defer = this._$q.defer();
                 Dynamics.Crm.OData
                     .entityDefinitions()
-                    .then(function (array) {
+                    .then((array) => {
                     defer.resolve(array);
                 })
-                    .catch(function (error) {
+                    .catch((error) => {
                     defer.reject(error);
                 });
                 return defer.promise;
-            };
-            ODataService.prototype.GetAttributes = function (entityDefinition) {
-                var defer = this._$q.defer();
+            }
+            GetAttributes(entityDefinition) {
+                const defer = this._$q.defer();
                 Dynamics.Crm.OData
                     .entityAttributesDefinition(entityDefinition.MetadataId)
-                    .then(function (array) {
+                    .then((array) => {
                     defer.resolve(array);
                 })
-                    .catch(function (error) {
+                    .catch((error) => {
                     defer.reject(error);
                 });
                 return defer.promise;
-            };
-            ODataService.prototype.GetOptionSets = function (entityDefinition, attributeDefinition) {
-                var defer = this._$q.defer();
+            }
+            GetOptionSets(entityDefinition, attributeDefinition) {
+                const defer = this._$q.defer();
                 Dynamics.Crm.OData
                     .entityAttributeOptionSetDefinition(entityDefinition.MetadataId, attributeDefinition.MetadataId)
-                    .then(function (array) {
+                    .then((array) => {
                     defer.resolve(array);
                 })
-                    .catch(function (error) {
+                    .catch((error) => {
                     defer.reject(error);
                 });
                 return defer.promise;
-            };
-            return ODataService;
-        }());
+            }
+        }
         function DataServiceFactory($q) {
             return new ODataService($q);
         }

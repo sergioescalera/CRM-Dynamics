@@ -7,21 +7,20 @@ var Dynamics;
         (function (GlobalSettingForm) {
             "use strict";
             // properties
-            var _prefix;
-            var _page;
-            var _forms;
-            var _type;
-            var _valueName;
-            var _valueType;
-            var _lookup;
+            let _prefix;
+            let _page;
+            let _forms;
+            let _type;
+            let _valueName;
+            let _valueType;
+            let _lookup;
             // event handlers
-            function OnLoad(context, prefix) {
-                if (prefix === void 0) { prefix = "cc"; }
+            function OnLoad(context, prefix = "cc") {
                 _page = context.getFormContext();
                 _prefix = prefix;
                 _forms = new Crm.Forms(_page);
                 _forms.tasks.execute([
-                    function () { return Crm.Diagnostics.useLogEntryLogger(_prefix); },
+                    () => Crm.Diagnostics.useLogEntryLogger(_prefix),
                     Init,
                     SetReferenceFieldsVisibility
                 ]);
@@ -35,9 +34,9 @@ var Dynamics;
             }
             // tasks
             function Init() {
-                _type = _forms.attributes.get(_prefix + "_type");
-                _valueName = _forms.attributes.get(_prefix + "_valuename");
-                _valueType = _forms.attributes.get(_prefix + "_valuetype");
+                _type = _forms.attributes.get(`${_prefix}_type`);
+                _valueName = _forms.attributes.get(`${_prefix}_valuename`);
+                _valueType = _forms.attributes.get(`${_prefix}_valuetype`);
                 _lookup = _forms.controls.get("WebResource_Lookup");
                 _type.addOnChange(OnTypeChanged);
             }
@@ -49,8 +48,8 @@ var Dynamics;
                 _valueType.setValue(null);
             }
             function SetReferenceFieldsVisibility() {
-                var visible = _type.getValue() === Crm.Core.GlobalSettingType.Reference;
-                var fields = [
+                let visible = _type.getValue() === Crm.Core.GlobalSettingType.Reference;
+                let fields = [
                     _valueName.getName(),
                     _valueType.getName()
                 ];

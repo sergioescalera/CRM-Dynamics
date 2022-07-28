@@ -445,7 +445,7 @@ interface CaptureImageOptions {
 }
 
 interface PositionResult {
-    coords: Coordinates; // Contains a set of geographic coordinates along with associated accuracy as well as a set of other optional attributes such as altitude and speed
+    coords: GeolocationCoordinates; // Contains a set of geographic coordinates along with associated accuracy as well as a set of other optional attributes such as altitude and speed
     timestamp: DOMTimeStamp; // Represents the time when the object was acquired and is represented as DOMTimeStamp
 }
 

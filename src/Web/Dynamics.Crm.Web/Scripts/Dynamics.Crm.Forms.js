@@ -33,41 +33,40 @@ var Dynamics;
     var Crm;
     (function (Crm) {
         "use strict";
-        var Attributes = /** @class */ (function () {
-            function Attributes(page) {
+        class Attributes {
+            constructor(page) {
                 Validation.ensureNotNullOrUndefined(page, "page");
                 this.page = page;
             }
-            Attributes.prototype.get = function (attributeName, required) {
-                if (required === void 0) { required = true; }
-                var attribute = this.page.getAttribute(attributeName);
+            get(attributeName, required = true) {
+                let attribute = this.page.getAttribute(attributeName);
                 if (attribute) {
                     return attribute;
                 }
-                var msg = "The specified attribute could not be found: " + attributeName;
+                let msg = "The specified attribute could not be found: " + attributeName;
                 if (required) {
                     throw new Error(msg);
                 }
                 Crm.Diagnostics.log.Message(msg);
                 return null;
-            };
+            }
             // requirement level
-            Attributes.prototype.setOptional = function (attributeNames) {
+            setOptional(attributeNames) {
                 this.setRequiredLevel(attributeNames, Crm.AttributeRequiredLevels.None);
-            };
-            Attributes.prototype.setRequired = function (attributeNames) {
+            }
+            setRequired(attributeNames) {
                 this.setRequiredLevel(attributeNames, Crm.AttributeRequiredLevels.Required);
-            };
-            Attributes.prototype.setRecommended = function (attributeNames) {
+            }
+            setRecommended(attributeNames) {
                 this.setRequiredLevel(attributeNames, Crm.AttributeRequiredLevels.Recommended);
-            };
-            Attributes.prototype.setRequiredLevel = function (attributeNames, requirementLevel) {
+            }
+            setRequiredLevel(attributeNames, requirementLevel) {
                 if (Crm.Diagnostics.trace) {
                     Crm.Diagnostics.printArguments("setRequirementLevel", attributeNames, requirementLevel);
                 }
                 if (Array.isArray(attributeNames)) {
-                    for (var i = 0; i < attributeNames.length; i++) {
-                        var attribute = this.get(attributeNames[i], false);
+                    for (let i = 0; i < attributeNames.length; i++) {
+                        let attribute = this.get(attributeNames[i], false);
                         if (attribute) {
                             attribute.setRequiredLevel(requirementLevel);
                         }
@@ -76,74 +75,70 @@ var Dynamics;
                 else {
                     Crm.Diagnostics.log.Warning("Attributes.setRequirementLevel: Invalid argument. An array was expected.");
                 }
-            };
-            Attributes.prototype.setRequiredOrOptional = function (attributeName, required, attributeRequired) {
-                if (attributeRequired === void 0) { attributeRequired = false; }
-                var attribute = this.get(attributeName, attributeRequired);
+            }
+            setRequiredOrOptional(attributeName, required, attributeRequired = false) {
+                let attribute = this.get(attributeName, attributeRequired);
                 if (attribute) {
                     attribute.setRequiredLevel(required ? Crm.AttributeRequiredLevels.Required : Crm.AttributeRequiredLevels.None);
                 }
-            };
+            }
             // options
-            Attributes.prototype.hideOptions = function (attribute, hide) {
-                var options = attribute.getOptions();
+            hideOptions(attribute, hide) {
+                let options = attribute.getOptions();
                 attribute
                     .controls
-                    .forEach(function (control) {
-                    for (var i = 0; i < options.length; i++) {
-                        var option = options[i];
-                        var value = option.value;
+                    .forEach((control) => {
+                    for (let i = 0; i < options.length; i++) {
+                        let option = options[i];
+                        let value = option.value;
                         if (hide === undefined || hide(value)) {
                             control.removeOption(value);
                         }
                     }
                 });
-            };
+            }
             // lookup
-            Attributes.prototype.getLookupValue = function (attributeName, required) {
-                if (required === void 0) { required = true; }
-                var attribute = this.get(attributeName, required);
+            getLookupValue(attributeName, required = true) {
+                let attribute = this.get(attributeName, required);
                 if (!attribute) {
                     return null;
                 }
-                var lookup = attribute.getValue();
+                let lookup = attribute.getValue();
                 if (!lookup || !lookup.length) {
                     return null;
                 }
                 return lookup[0];
-            };
-            Attributes.prototype.setLookupValue = function (attributeName, entityType, name, id, required) {
-                if (required === void 0) { required = true; }
-                var attribute = this.get(attributeName, required);
+            }
+            setLookupValue(attributeName, entityType, name, id, required = true) {
+                let attribute = this.get(attributeName, required);
                 if (!attribute) {
                     return;
                 }
-                var value = !id ? null : [{
-                        id: "{" + Crm.Core.parseIdentifier(id) + "}",
+                let value = !id ? null : [{
+                        id: `{${Crm.Core.parseIdentifier(id)}}`,
                         name: name,
                         entityType: entityType
                     }];
                 attribute.setValue(value);
-            };
+            }
             // notifications
-            Attributes.prototype.showNotification = function (attribute, message, messageId) {
+            showNotification(attribute, message, messageId) {
                 Validation.ensureNotNullOrUndefined(attribute, "attribute");
                 attribute
                     .controls
-                    .forEach(function (c) {
+                    .forEach((c) => {
                     c.setNotification(message, messageId);
                 });
-            };
-            Attributes.prototype.hideNotification = function (attribute, messageId) {
+            }
+            hideNotification(attribute, messageId) {
                 Validation.ensureNotNullOrUndefined(attribute, "attribute");
                 attribute
                     .controls
-                    .forEach(function (c) {
+                    .forEach((c) => {
                     c.clearNotification(messageId);
                 });
-            };
-            return Attributes;
-        }());
+            }
+        }
         Crm.Attributes = Attributes;
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
@@ -153,7 +148,7 @@ var Dynamics;
     var Crm;
     (function (Crm) {
         "use strict";
-        Crm.componentName = function (prefix, name) { return prefix + "_" + name; };
+        Crm.componentName = (prefix, name) => `${prefix}_${name}`;
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
 (function (Dynamics) {
@@ -170,32 +165,23 @@ var Dynamics;
     var Crm;
     (function (Crm) {
         "use strict";
-        var FormNotificationTypes = /** @class */ (function () {
-            function FormNotificationTypes() {
-            }
-            FormNotificationTypes.Error = "ERROR";
-            FormNotificationTypes.Warning = "WARNING";
-            FormNotificationTypes.Information = "INFO";
-            return FormNotificationTypes;
-        }());
+        class FormNotificationTypes {
+        }
+        FormNotificationTypes.Error = "ERROR";
+        FormNotificationTypes.Warning = "WARNING";
+        FormNotificationTypes.Information = "INFO";
         Crm.FormNotificationTypes = FormNotificationTypes;
-        var ClientType = /** @class */ (function () {
-            function ClientType() {
-            }
-            ClientType.Browser = "Web";
-            ClientType.Outlook = "Outlook";
-            ClientType.Mobile = "Mobile";
-            return ClientType;
-        }());
+        class ClientType {
+        }
+        ClientType.Browser = "Web";
+        ClientType.Outlook = "Outlook";
+        ClientType.Mobile = "Mobile";
         Crm.ClientType = ClientType;
-        var AttributeRequiredLevels = /** @class */ (function () {
-            function AttributeRequiredLevels() {
-            }
-            AttributeRequiredLevels.None = "none";
-            AttributeRequiredLevels.Required = "required";
-            AttributeRequiredLevels.Recommended = "recommended";
-            return AttributeRequiredLevels;
-        }());
+        class AttributeRequiredLevels {
+        }
+        AttributeRequiredLevels.None = "none";
+        AttributeRequiredLevels.Required = "required";
+        AttributeRequiredLevels.Recommended = "recommended";
         Crm.AttributeRequiredLevels = AttributeRequiredLevels;
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
@@ -205,49 +191,45 @@ var Dynamics;
     var Crm;
     (function (Crm) {
         "use strict";
-        var Controls = /** @class */ (function () {
-            function Controls(page) {
+        class Controls {
+            constructor(page) {
                 Validation.ensureNotNullOrUndefined(page, "page");
                 this.page = page;
                 this.attributes = new Crm.Attributes(page);
             }
-            Controls.prototype.get = function (controlName, required) {
-                if (required === void 0) { required = true; }
-                var control = this.page.getControl(controlName);
+            get(controlName, required = true) {
+                let control = this.page.getControl(controlName);
                 if (control) {
                     return control;
                 }
-                var msg = "The specified control could not be found: " + controlName;
+                let msg = `The specified control could not be found: ${controlName}`;
                 if (required) {
                     throw new Error(msg);
                 }
                 Crm.Diagnostics.log.Message(msg);
                 return null;
-            };
+            }
             // enable, disable
-            Controls.prototype.disable = function (attributeNames, applyToAll) {
-                if (applyToAll === void 0) { applyToAll = true; }
+            disable(attributeNames, applyToAll = true) {
                 this.setDisabled(attributeNames, true, applyToAll);
-            };
-            Controls.prototype.enable = function (attributeNames, applyToAll) {
-                if (applyToAll === void 0) { applyToAll = true; }
+            }
+            enable(attributeNames, applyToAll = true) {
                 this.setDisabled(attributeNames, false, applyToAll);
-            };
-            Controls.prototype.setDisabled = function (attributeNames, disabled, applyToAll) {
-                if (applyToAll === void 0) { applyToAll = true; }
+            }
+            setDisabled(attributeNames, disabled, applyToAll = true) {
                 if (Crm.Diagnostics.trace) {
                     Crm.Diagnostics.printArguments("setDisabled", attributeNames, disabled);
                 }
                 if (Array.isArray(attributeNames)) {
-                    for (var i = 0; i < attributeNames.length; i++) {
+                    for (let i = 0; i < attributeNames.length; i++) {
                         if (applyToAll) {
-                            var attribute = this.attributes.get(attributeNames[i], false);
+                            let attribute = this.attributes.get(attributeNames[i], false);
                             if (attribute) {
-                                attribute.controls.forEach(function (c) { return c.setDisabled(disabled); });
+                                attribute.controls.forEach((c) => c.setDisabled(disabled));
                             }
                         }
                         else {
-                            var control = this.get(attributeNames[i], false);
+                            let control = this.get(attributeNames[i], false);
                             if (control) {
                                 control.setDisabled(disabled);
                             }
@@ -257,35 +239,30 @@ var Dynamics;
                 else {
                     Crm.Diagnostics.log.Warning("Controls.setDisabled: Invalid argument. An array was expected.");
                 }
-            };
+            }
             // show, hide
-            Controls.prototype.show = function (attributeNames, condition, applyToAll) {
-                if (condition === void 0) { condition = true; }
-                if (applyToAll === void 0) { applyToAll = true; }
+            show(attributeNames, condition = true, applyToAll = true) {
                 if (condition) {
                     this.setVisible(attributeNames, true, applyToAll);
                 }
-            };
-            Controls.prototype.hide = function (attributeNames, condition, applyToAll) {
-                if (condition === void 0) { condition = true; }
-                if (applyToAll === void 0) { applyToAll = true; }
+            }
+            hide(attributeNames, condition = true, applyToAll = true) {
                 if (condition) {
                     this.setVisible(attributeNames, false, applyToAll);
                 }
-            };
-            Controls.prototype.setVisible = function (attributeNames, value, applyToAll) {
-                if (applyToAll === void 0) { applyToAll = true; }
+            }
+            setVisible(attributeNames, value, applyToAll = true) {
                 if (Crm.Diagnostics.trace) {
                     Crm.Diagnostics.printArguments("setVisible", attributeNames, value);
                 }
                 if (Array.isArray(attributeNames)) {
-                    for (var i = 0; i < attributeNames.length; i++) {
-                        var attribute = this.attributes.get(attributeNames[i], false);
+                    for (let i = 0; i < attributeNames.length; i++) {
+                        let attribute = this.attributes.get(attributeNames[i], false);
                         if (applyToAll && attribute) {
-                            attribute.controls.forEach(function (c) { return c.setVisible(value); });
+                            attribute.controls.forEach((c) => c.setVisible(value));
                         }
                         else {
-                            var control = this.get(attributeNames[i], false);
+                            let control = this.get(attributeNames[i], false);
                             if (control) {
                                 control.setVisible(value);
                             }
@@ -295,9 +272,8 @@ var Dynamics;
                 else {
                     Crm.Diagnostics.log.Warning("Invalid argument. An array was expected.");
                 }
-            };
-            return Controls;
-        }());
+            }
+        }
         Crm.Controls = Controls;
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
@@ -311,47 +287,45 @@ var Dynamics;
             "use strict";
             Diagnostics.debug = true;
             Diagnostics.trace = true;
-            var ConsoleLogger = /** @class */ (function () {
-                function ConsoleLogger(prefix) {
+            class ConsoleLogger {
+                constructor(prefix) {
                     this._prefix = prefix;
                 }
-                ConsoleLogger.prototype.Error = function (message, error) {
+                Error(message, error) {
                     if (Diagnostics.debug) {
                         debugger;
                     }
-                    var entry = createLogEntry(this._prefix, message, error);
+                    let entry = createLogEntry(this._prefix, message, error);
                     console.error(entry);
-                };
-                ConsoleLogger.prototype.Message = function (message) {
+                }
+                Message(message) {
                     console.log(message);
-                };
-                ConsoleLogger.prototype.Warning = function (message) {
+                }
+                Warning(message) {
                     console.warn(message);
-                };
-                return ConsoleLogger;
-            }());
-            var LogEntryLogger = /** @class */ (function () {
-                function LogEntryLogger(prefix) {
+                }
+            }
+            class LogEntryLogger {
+                constructor(prefix) {
                     this._prefix = prefix;
                 }
-                LogEntryLogger.prototype.Error = function (message, error) {
+                Error(message, error) {
                     if (Diagnostics.debug) {
                         debugger;
                     }
-                    var entry = createLogEntry(this._prefix, message, error);
+                    let entry = createLogEntry(this._prefix, message, error);
                     console.error(entry);
                     Dynamics.Crm.Data.unitOfWork
                         .GetLogEntryRepository(this._prefix)
                         .Create(entry);
-                };
-                LogEntryLogger.prototype.Message = function (message) {
+                }
+                Message(message) {
                     console.log(message);
-                };
-                LogEntryLogger.prototype.Warning = function (message) {
+                }
+                Warning(message) {
                     console.warn(message);
-                };
-                return LogEntryLogger;
-            }());
+                }
+            }
             // public functions
             function useLogEntryLogger(prefix) {
                 Diagnostics.log = new LogEntryLogger(prefix || Crm.Publishers.logEntry);
@@ -361,13 +335,9 @@ var Dynamics;
                 Diagnostics.log = new ConsoleLogger(prefix || Crm.Publishers.logEntry);
             }
             Diagnostics.useConsoleLogger = useConsoleLogger;
-            function printArguments() {
-                var args = [];
-                for (var _i = 0; _i < arguments.length; _i++) {
-                    args[_i] = arguments[_i];
-                }
-                console.log("Function " + arguments[0] + " called with arguments: {");
-                for (var i = 1; i < arguments.length; i++) {
+            function printArguments(...args) {
+                console.log(`Function ${arguments[0]} called with arguments: {`);
+                for (let i = 1; i < arguments.length; i++) {
                     console.log(arguments[i]);
                 }
                 console.log("}");
@@ -375,20 +345,20 @@ var Dynamics;
             Diagnostics.printArguments = printArguments;
             // private function
             function createLogEntry(prefix, message, error) {
-                var entityName = getEntityName();
-                var entityId = getEntityId();
-                var formType = getFormType();
-                var clientType = getClientType();
-                var formFactor = getFormFactor();
-                var stack = error.stack || error.stacktrace || "<none>";
-                var desc = error.description || "<none>";
-                var source = "JavaScript::" + clientType + "," + formFactor + "," + formType + ":" + entityName + "(" + entityId + ")";
-                var description = "Stack: " + stack + "\nDescription: " + desc;
-                var entry = {
+                let entityName = getEntityName();
+                let entityId = getEntityId();
+                let formType = getFormType();
+                let clientType = getClientType();
+                let formFactor = getFormFactor();
+                let stack = error.stack || error.stacktrace || "<none>";
+                let desc = error.description || "<none>";
+                let source = `JavaScript::${clientType},${formFactor},${formType}:${entityName}(${entityId})`;
+                let description = `Stack: ${stack}\nDescription: ${desc}`;
+                let entry = {
                     type: Crm.Data.Schema.LogEntryEntity.type(prefix)
                 };
-                var name = error.type ? error.type + ":" + message : message;
-                var msg = message === error.message ? message : ((message + ". " + error.message).trim());
+                let name = error.type ? `${error.type}:${message}` : message;
+                let msg = message === error.message ? message : (`${message}. ${error.message}`.trim());
                 entry[Crm.Data.Schema.LogEntryEntity.nameField(prefix)]
                     = Validation.Strings.left(name, 300);
                 entry[Crm.Data.Schema.LogEntryEntity.messageField(prefix)]
@@ -492,7 +462,7 @@ var Dynamics;
     var Crm;
     (function (Crm) {
         "use strict";
-        var FormType;
+        let FormType;
         (function (FormType) {
             FormType[FormType["Undefined"] = 0] = "Undefined";
             FormType[FormType["Create"] = 1] = "Create";
@@ -503,7 +473,7 @@ var Dynamics;
             FormType[FormType["BulkEdit"] = 6] = "BulkEdit";
             FormType[FormType["ReadOptimized"] = 11] = "ReadOptimized";
         })(FormType = Crm.FormType || (Crm.FormType = {}));
-        var FormFactor;
+        let FormFactor;
         (function (FormFactor) {
             FormFactor[FormFactor["Unknown"] = 0] = "Unknown";
             FormFactor[FormFactor["Desktop"] = 1] = "Desktop";
@@ -518,7 +488,7 @@ var Dynamics;
         var Core;
         (function (Core) {
             "use strict";
-            var AutoNumberingRuleType;
+            let AutoNumberingRuleType;
             (function (AutoNumberingRuleType) {
                 AutoNumberingRuleType[AutoNumberingRuleType["Global"] = 0] = "Global";
                 AutoNumberingRuleType[AutoNumberingRuleType["GlobalPerDay"] = 3] = "GlobalPerDay";
@@ -527,7 +497,7 @@ var Dynamics;
                 AutoNumberingRuleType[AutoNumberingRuleType["ParentedPerDay"] = 5] = "ParentedPerDay";
                 AutoNumberingRuleType[AutoNumberingRuleType["ParentedPerYear"] = 4] = "ParentedPerYear";
             })(AutoNumberingRuleType = Core.AutoNumberingRuleType || (Core.AutoNumberingRuleType = {}));
-            var GlobalSettingType;
+            let GlobalSettingType;
             (function (GlobalSettingType) {
                 GlobalSettingType[GlobalSettingType["String"] = 0] = "String";
                 GlobalSettingType[GlobalSettingType["Int"] = 1] = "Int";
@@ -535,7 +505,7 @@ var Dynamics;
                 GlobalSettingType[GlobalSettingType["Boolean"] = 3] = "Boolean";
                 GlobalSettingType[GlobalSettingType["Reference"] = 4] = "Reference";
             })(GlobalSettingType = Core.GlobalSettingType || (Core.GlobalSettingType = {}));
-            var LogEntryType;
+            let LogEntryType;
             (function (LogEntryType) {
                 LogEntryType[LogEntryType["Trace"] = 0] = "Trace";
                 LogEntryType[LogEntryType["Warning"] = 1] = "Warning";
@@ -551,8 +521,8 @@ var Dynamics;
     var Crm;
     (function (Crm) {
         "use strict";
-        var Forms = /** @class */ (function () {
-            function Forms(page) {
+        class Forms {
+            constructor(page) {
                 Validation.ensureNotNullOrUndefined(page, "page");
                 this.page = page;
                 this.attributes = new Crm.Attributes(page);
@@ -563,65 +533,65 @@ var Dynamics;
                 this.sections = new Crm.Sections(page);
                 this.tasks = new Crm.Tasks(page);
             }
-            Forms.prototype.getClientType = function () {
+            getClientType() {
                 return Xrm.Utility.getGlobalContext().client.getClient();
-            };
-            Forms.prototype.getEntityId = function () {
+            }
+            getEntityId() {
                 try {
                     return Crm.Core.parseIdentifier(this.page.data.entity.getId());
                 }
                 catch (e) {
                     throw new Error("Unable to retrieve entity id");
                 }
-            };
-            Forms.prototype.getEntityName = function () {
+            }
+            getEntityName() {
                 try {
                     return this.page.data.entity.getEntityName();
                 }
                 catch (e) {
                     throw new Error("Unable to retrieve entity name");
                 }
-            };
-            Forms.prototype.getEntitySetName = function () {
+            }
+            getEntitySetName() {
                 try {
                     return Xrm.Utility.getEntitySetName(this.getEntityName());
                 }
                 catch (e) {
                     throw new Error("Unable to retrieve entity set name");
                 }
-            };
-            Forms.prototype.getFormType = function () {
+            }
+            getFormType() {
                 return this.page.ui.getFormType();
-            };
-            Forms.prototype.getFormFactor = function () {
+            }
+            getFormFactor() {
                 if (!Xrm.Utility.getGlobalContext().client.getFormFactor) {
                     return Crm.FormFactor.Unknown;
                 }
                 return Xrm.Utility.getGlobalContext().client.getFormFactor();
-            };
-            Forms.prototype.getIsDesktop = function () {
-                var formFactor = this.getFormFactor();
+            }
+            getIsDesktop() {
+                let formFactor = this.getFormFactor();
                 if (formFactor !== Crm.FormFactor.Unknown) {
                     return formFactor === Crm.FormFactor.Desktop;
                 }
                 return this.getClientType() !== Crm.ClientType.Mobile;
-            };
-            Forms.prototype.getIsDirty = function () {
+            }
+            getIsDirty() {
                 return this.page.data.entity.getIsDirty();
-            };
-            Forms.prototype.isCreateForm = function () {
+            }
+            isCreateForm() {
                 return this.getFormType() === Crm.FormType.Create;
-            };
-            Forms.prototype.isUpdateForm = function () {
+            }
+            isUpdateForm() {
                 return this.getFormType() === Crm.FormType.Update;
-            };
-            Forms.prototype.isBulkEditForm = function () {
+            }
+            isBulkEditForm() {
                 return this.getFormType() === Crm.FormType.BulkEdit;
-            };
-            Forms.prototype.supportsIFrames = function () {
+            }
+            supportsIFrames() {
                 return this.getIsDesktop();
-            };
-            Forms.prototype.current = function () {
+            }
+            current() {
                 // The formSelectoritems collection does not exist and the formSelector.getCurrentItem method isn't supported for Dynamics 365 mobile clients (phones and tablets) and the interactive service hub.
                 // https://msdn.microsoft.com/en-in/library/gg327828.aspx#formSelector
                 if (!this.page.ui ||
@@ -633,20 +603,19 @@ var Dynamics;
                 return this.page.ui.formSelector.getCurrentItem()
                     || this.page.ui.formSelector.items.get(0)
                     || null;
-            };
-            Forms.prototype.find = function (label) {
+            }
+            find(label) {
                 if (!this.page.ui ||
                     !this.page.ui.formSelector ||
                     !this.page.ui.formSelector.items) {
                     return null;
                 }
-                var filter = this.page.ui.formSelector.items
+                let filter = this.page.ui.formSelector.items
                     .get()
-                    .filter(function (f) { return f.getLabel() === label; });
+                    .filter((f) => f.getLabel() === label);
                 return filter[0] || null;
-            };
-            return Forms;
-        }());
+            }
+        }
         Crm.Forms = Forms;
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
@@ -657,13 +626,12 @@ var Dynamics;
     var Crm;
     (function (Crm) {
         "use strict";
-        var Navigation = /** @class */ (function () {
-            function Navigation(page) {
+        class Navigation {
+            constructor(page) {
                 Validation.ensureNotNullOrUndefined(page, "page");
                 this.page = page;
             }
-            Navigation.prototype.get = function (itemName, required) {
-                if (required === void 0) { required = false; }
+            get(itemName, required = false) {
                 // This collection does not exist with Microsoft Dynamics 365 for tablets.
                 // https://msdn.microsoft.com/en-in/library/gg327828.aspx#BKMK_navigation
                 if (!this.page.ui ||
@@ -671,31 +639,31 @@ var Dynamics;
                     !this.page.ui.navigation.items) {
                     return null;
                 }
-                var item = this.page.ui.navigation.items.get(itemName);
+                let item = this.page.ui.navigation.items.get(itemName);
                 if (item) {
                     return item;
                 }
-                var msg = "The specified navigation item could not be found: " + itemName;
+                let msg = "The specified navigation item could not be found: " + itemName;
                 if (required) {
                     throw new Error(msg);
                 }
                 Crm.Diagnostics.log.Message(msg);
                 return null;
-            };
-            Navigation.prototype.show = function (items) {
+            }
+            show(items) {
                 this.setVisible(items, true);
-            };
-            Navigation.prototype.hide = function (items) {
+            }
+            hide(items) {
                 this.setVisible(items, false);
-            };
-            Navigation.prototype.setVisible = function (items, visible) {
+            }
+            setVisible(items, visible) {
                 if (Crm.Diagnostics.trace) {
                     Crm.Diagnostics.printArguments("Navigation.setVisible", items);
                 }
                 if (Array.isArray(items)) {
-                    var value = !!visible;
-                    for (var i = 0; i < items.length; i++) {
-                        var item = this.get(items[i]);
+                    let value = !!visible;
+                    for (let i = 0; i < items.length; i++) {
+                        let item = this.get(items[i]);
                         if (!item) {
                             continue;
                         }
@@ -707,9 +675,8 @@ var Dynamics;
                 else {
                     Crm.Diagnostics.log.Warning("Navigation.setVisible: Invalid argument. An array was expected.");
                 }
-            };
-            return Navigation;
-        }());
+            }
+        }
         Crm.Navigation = Navigation;
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
@@ -719,36 +686,32 @@ var Dynamics;
     var Crm;
     (function (Crm) {
         "use strict";
-        var undefinedstr = "undefined";
-        var Notifications = /** @class */ (function () {
-            function Notifications(page) {
+        let undefinedstr = "undefined";
+        class Notifications {
+            constructor(page) {
                 Validation.ensureNotNullOrUndefined(page, "page");
                 this.page = page;
             }
-            Notifications.prototype.show = function (message, id, level) {
-                if (level === void 0) { level = Dynamics.Crm.FormNotificationTypes.Information; }
+            show(message, id, level = Dynamics.Crm.FormNotificationTypes.Information) {
                 this.page.ui.setFormNotification(message, level, id);
-            };
-            Notifications.prototype.showHtml = function (message, id, level) {
-                if (level === void 0) { level = Dynamics.Crm.FormNotificationTypes.Information; }
+            }
+            showHtml(message, id, level = Dynamics.Crm.FormNotificationTypes.Information) {
                 if (typeof this.page.ui.setFormHtmlNotification === "function") {
                     this.page.ui.setFormHtmlNotification(message, level, id);
                 }
                 else {
                     this.page.ui.setFormNotification(Crm.Utility.htmlToText(message), level, id);
                 }
-            };
-            Notifications.prototype.hide = function (id, afterSeconds) {
-                var _this = this;
-                if (afterSeconds === void 0) { afterSeconds = null; }
+            }
+            hide(id, afterSeconds = null) {
                 if (_.isNumber(afterSeconds) && afterSeconds > 0) {
-                    setTimeout(function () { return _this.page.ui.clearFormNotification(id); }, afterSeconds * 1000);
+                    setTimeout(() => this.page.ui.clearFormNotification(id), afterSeconds * 1000);
                 }
                 else {
                     this.page.ui.clearFormNotification(id);
                 }
-            };
-            Notifications.prototype.htmlSupported = function () {
+            }
+            htmlSupported() {
                 if (typeof Xrm !== undefinedstr &&
                     typeof this.page !== undefinedstr &&
                     typeof this.page.ui !== undefinedstr &&
@@ -756,8 +719,8 @@ var Dynamics;
                     return true;
                 }
                 return false;
-            };
-            Notifications.prototype.supported = function () {
+            }
+            supported() {
                 if (typeof Xrm !== undefinedstr &&
                     typeof this.page !== undefinedstr &&
                     typeof this.page.ui !== undefinedstr &&
@@ -766,9 +729,8 @@ var Dynamics;
                     return true;
                 }
                 return false;
-            };
-            return Notifications;
-        }());
+            }
+        }
         Crm.Notifications = Notifications;
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
@@ -780,12 +742,9 @@ var Dynamics;
         var Reports;
         (function (Reports) {
             "use strict";
-            function getUrl(reportName, reportId, entityId, entityCode, action) {
-                if (entityId === void 0) { entityId = null; }
-                if (entityCode === void 0) { entityCode = null; }
-                if (action === void 0) { action = "run"; }
-                var url = Xrm.Utility.getGlobalContext().getClientUrl();
-                var reportUrl = url + "/crmreports/viewer/viewer.aspx?action={action}&helpID={name}&id={{id}}"
+            function getUrl(reportName, reportId, entityId = null, entityCode = null, action = "run") {
+                let url = Xrm.Utility.getGlobalContext().getClientUrl();
+                let reportUrl = url + "/crmreports/viewer/viewer.aspx?action={action}&helpID={name}&id={{id}}"
                     .replace("{action}", encodeURIComponent(action))
                     .replace("{name}", encodeURIComponent(reportName))
                     .replace("{id}", encodeURIComponent(reportId));
@@ -808,21 +767,21 @@ var Dynamics;
         var ScriptManager;
         (function (ScriptManager) {
             "use strict";
-            var _scripts = {};
-            var _stylesheets = [];
+            let _scripts = {};
+            let _stylesheets = [];
             function loadScripts(scripts, win) {
-                var promises = scripts.map(function (s) { return loadScript(s, win); });
+                let promises = scripts.map((s) => loadScript(s, win));
                 return Promise.all(promises);
             }
             ScriptManager.loadScripts = loadScripts;
             function loadScript(script, win) {
                 console.log("Dynamics.Crm.ScriptManager.loadScript: " + script);
-                var promise = _scripts[script];
+                let promise = _scripts[script];
                 if (!!promise) {
                     return promise;
                 }
-                _scripts[script] = promise = new Promise(function (resolve, reject) {
-                    var element = win.document.createElement("script");
+                _scripts[script] = promise = new Promise((resolve, reject) => {
+                    let element = win.document.createElement("script");
                     element.defer = true;
                     element.type = "text/javascript";
                     element.src = script;
@@ -835,16 +794,16 @@ var Dynamics;
             }
             ScriptManager.loadScript = loadScript;
             function loadStylesheets(stylesheets, win) {
-                stylesheets.forEach(function (s) { return loadStylesheet(s, win); });
+                stylesheets.forEach((s) => loadStylesheet(s, win));
             }
             ScriptManager.loadStylesheets = loadStylesheets;
             function loadStylesheet(stylesheet, win) {
                 console.log("Dynamics.Crm.ScriptManager.loadStylesheet: " + stylesheet);
-                var filter = _stylesheets.filter(function (s) { return s === stylesheet; });
+                let filter = _stylesheets.filter((s) => s === stylesheet);
                 if (filter.length > 0) {
                     return;
                 }
-                win.$("head", win.document).append("<link rel='stylesheet' href='" + stylesheet + "' />");
+                win.$("head", win.document).append(`<link rel='stylesheet' href='${stylesheet}' />`);
                 _stylesheets.push(stylesheet);
             }
             ScriptManager.loadStylesheet = loadStylesheet;
@@ -857,50 +816,47 @@ var Dynamics;
     var Crm;
     (function (Crm) {
         "use strict";
-        var Sections = /** @class */ (function () {
-            function Sections(page) {
+        class Sections {
+            constructor(page) {
                 Validation.ensureNotNullOrUndefined(page, "page");
                 this.page = page;
                 this.tabs = new Crm.Tabs(page);
             }
-            Sections.prototype.get = function (tabName, sectionName, required) {
-                if (required === void 0) { required = true; }
-                var tab = this.tabs.get(tabName, required);
+            get(tabName, sectionName, required = true) {
+                let tab = this.tabs.get(tabName, required);
                 if (!tab) {
                     return null;
                 }
-                var section = tab.sections.get(sectionName);
+                let section = tab.sections.get(sectionName);
                 if (section) {
                     return section;
                 }
-                var msg = "The specified section could not be found: " + tabName + " - " + sectionName;
+                let msg = "The specified section could not be found: " + tabName + " - " + sectionName;
                 if (required) {
                     throw new Error(msg);
                 }
                 Crm.Diagnostics.log.Message(msg);
                 return null;
-            };
-            Sections.prototype.show = function (names, condition) {
-                if (condition === void 0) { condition = true; }
+            }
+            show(names, condition = true) {
                 if (condition) {
                     this.setVisible(names, true);
                 }
-            };
-            Sections.prototype.hide = function (names, condition) {
-                if (condition === void 0) { condition = true; }
+            }
+            hide(names, condition = true) {
                 if (condition) {
                     this.setVisible(names, false);
                 }
-            };
-            Sections.prototype.setVisible = function (names, value) {
+            }
+            setVisible(names, value) {
                 if (Crm.Diagnostics.trace) {
                     Crm.Diagnostics.printArguments("Sections.setVisible", names, value);
                 }
                 if (Array.isArray(names)) {
-                    for (var i = 0; i < names.length; i++) {
-                        var name_1 = names[i];
-                        var pair = name_1.split("|");
-                        var section = void 0;
+                    for (let i = 0; i < names.length; i++) {
+                        let name = names[i];
+                        let pair = name.split("|");
+                        let section;
                         if (pair && pair.length === 2) {
                             section = this.get(pair[0], pair[1], false);
                         }
@@ -912,9 +868,8 @@ var Dynamics;
                 else {
                     Crm.Diagnostics.log.Warning("Sections.setVisible: Invalid argument. An array was expected.");
                 }
-            };
-            return Sections;
-        }());
+            }
+        }
         Crm.Sections = Sections;
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
@@ -924,44 +879,41 @@ var Dynamics;
     var Crm;
     (function (Crm) {
         "use strict";
-        var Tabs = /** @class */ (function () {
-            function Tabs(page) {
+        class Tabs {
+            constructor(page) {
                 Validation.ensureNotNullOrUndefined(page, "page");
                 this.page = page;
             }
-            Tabs.prototype.get = function (tabName, required) {
-                if (required === void 0) { required = true; }
-                var tab = this.page.ui.tabs.get(tabName);
+            get(tabName, required = true) {
+                let tab = this.page.ui.tabs.get(tabName);
                 if (tab) {
                     return tab;
                 }
-                var msg = "The specified tab could not be found: " + tabName;
+                let msg = "The specified tab could not be found: " + tabName;
                 if (required) {
                     throw new Error(msg);
                 }
                 Crm.Diagnostics.log.Message(msg);
                 return null;
-            };
+            }
             // show / hide
-            Tabs.prototype.show = function (tabNames, condition) {
-                if (condition === void 0) { condition = true; }
+            show(tabNames, condition = true) {
                 if (condition) {
                     this.setVisible(tabNames, true);
                 }
-            };
-            Tabs.prototype.hide = function (tabNames, condition) {
-                if (condition === void 0) { condition = true; }
+            }
+            hide(tabNames, condition = true) {
                 if (condition) {
                     this.setVisible(tabNames, false);
                 }
-            };
-            Tabs.prototype.setVisible = function (tabNames, value) {
+            }
+            setVisible(tabNames, value) {
                 if (Crm.Diagnostics.trace) {
                     Crm.Diagnostics.printArguments("Tabs.setVisible", tabNames, value);
                 }
                 if (Array.isArray(tabNames)) {
-                    for (var i = 0; i < tabNames.length; i++) {
-                        var tab = this.get(tabNames[i], false);
+                    for (let i = 0; i < tabNames.length; i++) {
+                        let tab = this.get(tabNames[i], false);
                         if (tab) {
                             tab.setVisible(value);
                         }
@@ -970,27 +922,25 @@ var Dynamics;
                 else {
                     Crm.Diagnostics.log.Warning("Tabs.setVisible: Invalid argument. An array was expected.");
                 }
-            };
+            }
             // expand / collapse
-            Tabs.prototype.expand = function (tabNames, condition) {
-                if (condition === void 0) { condition = true; }
+            expand(tabNames, condition = true) {
                 if (condition) {
                     this.expandCollapse(tabNames, true);
                 }
-            };
-            Tabs.prototype.collpase = function (tabNames, condition) {
-                if (condition === void 0) { condition = true; }
+            }
+            collpase(tabNames, condition = true) {
                 if (condition) {
                     this.expandCollapse(tabNames, false);
                 }
-            };
-            Tabs.prototype.expandCollapse = function (tabNames, value) {
+            }
+            expandCollapse(tabNames, value) {
                 if (Crm.Diagnostics.trace) {
                     Crm.Diagnostics.printArguments("Tabs.expandCollapse", tabNames, value);
                 }
                 if (Array.isArray(tabNames)) {
-                    for (var i = 0; i < tabNames.length; i++) {
-                        var tab = this.get(tabNames[i], false);
+                    for (let i = 0; i < tabNames.length; i++) {
+                        let tab = this.get(tabNames[i], false);
                         if (tab) {
                             tab.setDisplayState(value ? "expanded" : "collapsed");
                         }
@@ -999,9 +949,8 @@ var Dynamics;
                 else {
                     Crm.Diagnostics.log.Warning("Tabs.expandCollapse: Invalid argument. An array was expected.");
                 }
-            };
-            return Tabs;
-        }());
+            }
+        }
         Crm.Tabs = Tabs;
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
@@ -1011,44 +960,44 @@ var Dynamics;
     var Crm;
     (function (Crm) {
         "use strict";
-        var executeTaskError = {
-            htmlMessage: "Something went wrong.<br />\nClearing your browser's cache <u>(using Ctrl + F5)</u> may help solve the problem.",
-            errorMessage: "Something went wrong. Clearing your browser's cache (using Ctrl + F5) may help solve the problem.",
+        let executeTaskError = {
+            htmlMessage: `Something went wrong.<br />
+Clearing your browser's cache <u>(using Ctrl + F5)</u> may help solve the problem.`,
+            errorMessage: `Something went wrong. Clearing your browser's cache (using Ctrl + F5) may help solve the problem.`,
             notificationId: "ExecuteTaskErrorNotification"
         };
-        var Tasks = /** @class */ (function () {
-            function Tasks(page) {
+        class Tasks {
+            constructor(page) {
                 Validation.ensureNotNullOrUndefined(page, "page");
                 this.page = page;
                 this.notity = new Crm.Notifications(page);
             }
-            Tasks.prototype.execute = function (tasks, config) {
-                if (config === void 0) { config = {
-                    displayGenericMessageOnError: true
-                }; }
+            execute(tasks, config = {
+                displayGenericMessageOnError: true
+            }) {
                 if (this.notity.supported()) {
                     this.notity.hide(executeTaskError.notificationId);
                 }
                 if (Crm.Diagnostics.trace) {
                     Crm.Diagnostics.printArguments("Tasks.execute", tasks, config);
                 }
-                var results = [];
-                var errors = [];
+                let results = [];
+                let errors = [];
                 if (!Array.isArray(tasks)) {
                     Crm.Diagnostics.log.Warning("Tasks.execute: Invalid argument. An array was expected.");
                 }
                 else {
-                    for (var i = 0; i < tasks.length; i++) {
-                        var task = tasks[i];
+                    for (let i = 0; i < tasks.length; i++) {
+                        let task = tasks[i];
                         try {
-                            var result = task();
+                            let result = task();
                             results.push(result);
                             if (!config.executeAll && !!result) {
                                 break;
                             }
                         }
                         catch (e) {
-                            Crm.Diagnostics.log.Error(("Tasks.execute: An error has occurred in " + typeof task + " " + this.getTaskName(task)).trim(), e);
+                            Crm.Diagnostics.log.Error(`Tasks.execute: An error has occurred in ${typeof task} ${this.getTaskName(task)}`.trim(), e);
                             errors.push(e);
                             results.push(e);
                             if (!config.continueOnError) {
@@ -1061,8 +1010,8 @@ var Dynamics;
                     this.displayErrors(config, errors);
                 }
                 return results;
-            };
-            Tasks.prototype.displayErrors = function (config, errors) {
+            }
+            displayErrors(config, errors) {
                 if (!errors || !errors.length) {
                     return;
                 }
@@ -1075,16 +1024,15 @@ var Dynamics;
                 else if (this.notity.supported()) {
                     this.notity.show(executeTaskError.errorMessage, executeTaskError.notificationId, Crm.FormNotificationTypes.Warning);
                 }
-            };
-            Tasks.prototype.getTaskName = function (task) {
+            }
+            getTaskName(task) {
                 if (typeof task !== "function") {
                     return "";
                 }
-                var result = /^function\s+([\w\$]+)\s*\(/.exec(task.toString());
+                let result = /^function\s+([\w\$]+)\s*\(/.exec(task.toString());
                 return result ? result[1] : "";
-            };
-            return Tasks;
-        }());
+            }
+        }
         Crm.Tasks = Tasks;
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
@@ -1097,13 +1045,13 @@ var Dynamics;
         (function (User) {
             "use strict";
             function getId() {
-                var userId = Xrm.Utility.getGlobalContext().userSettings.userId;
+                let userId = Xrm.Utility.getGlobalContext().userSettings.userId;
                 return Crm.Core.parseIdentifier(userId);
             }
             User.getId = getId;
             function hasRole(roleId) {
-                var roles = Xrm.Utility.getGlobalContext().userSettings.securityRoles;
-                return roles.filter(function (r) { return Crm.Core.identifiersAreEqual(r, roleId); }).length > 0;
+                let roles = Xrm.Utility.getGlobalContext().userSettings.securityRoles;
+                return roles.filter((r) => Crm.Core.identifiersAreEqual(r, roleId)).length > 0;
             }
             User.hasRole = hasRole;
         })(User = Crm.User || (Crm.User = {}));
@@ -1121,7 +1069,7 @@ var Dynamics;
                 if (!html) {
                     return html;
                 }
-                var elem = document.createElement("span");
+                let elem = document.createElement("span");
                 elem.innerHTML = html;
                 return elem.innerText;
             }
@@ -1132,9 +1080,9 @@ var Dynamics;
                         typeof Xrm.Internal !== "undefined" && "isUci" in Xrm.Internal) {
                         return Xrm.Internal.isUci();
                     }
-                    var context = Xrm.Utility.getGlobalContext();
-                    var appUrl = context.getCurrentAppUrl();
-                    var clientUrl = context.getClientUrl();
+                    let context = Xrm.Utility.getGlobalContext();
+                    let appUrl = context.getCurrentAppUrl();
+                    let clientUrl = context.getClientUrl();
                     return appUrl !== clientUrl;
                 }
                 catch (e) {
@@ -1168,10 +1116,7 @@ var Validation;
         }
     }
     Validation.ensureNotNullOrEmpty = ensureNotNullOrEmpty;
-    function ensureNumberInRange(value, min, max, paramName) {
-        if (min === void 0) { min = null; }
-        if (max === void 0) { max = null; }
-        if (paramName === void 0) { paramName = null; }
+    function ensureNumberInRange(value, min = null, max = null, paramName = null) {
         if (!_.isNumber(value)) {
             throw new Error(Resources.Strings.InvalidTypeMessageFormat("number", typeof value));
         }
@@ -1216,40 +1161,36 @@ var Validation;
 var Caching;
 (function (Caching) {
     "use strict";
-    var CacheService = /** @class */ (function () {
-        function CacheService(storage) {
-            if (storage === void 0) { storage = localStorage; }
+    class CacheService {
+        constructor(storage = localStorage) {
             Validation.ensureNotNullOrUndefined(storage, "storage");
             this._storage = storage;
         }
-        CacheService.prototype.clear = function () {
+        clear() {
             this._storage.clear();
-        };
-        CacheService.prototype.get = function (key, factory, expiration) {
-            if (factory === void 0) { factory = null; }
-            if (expiration === void 0) { expiration = 5 * 60; }
+        }
+        get(key, factory = null, expiration = 5 * 60) {
             Validation.ensureNotNullOrEmpty(key, "key");
-            var str = this._storage.getItem(key);
-            var entry;
+            let str = this._storage.getItem(key);
+            let entry;
             if (str) {
                 entry = this.parse(str);
             }
-            var now = new Date();
+            let now = new Date();
             if (entry && moment(entry.expiration).local().toDate() >= now) {
                 return entry.value;
             }
             if (!_.isFunction(factory)) {
                 return null;
             }
-            var value = factory();
+            let value = factory();
             this.set(key, value, expiration);
             return value;
-        };
-        CacheService.prototype.set = function (key, value, expiration) {
-            if (expiration === void 0) { expiration = 5 * 60; }
+        }
+        set(key, value, expiration = 5 * 60) {
             Validation.ensureNotNullOrEmpty(key, "key");
             Validation.ensureNumberInRange(expiration, 0);
-            var entry = {
+            let entry = {
                 expiration: moment()
                     .add({
                     seconds: expiration
@@ -1258,10 +1199,10 @@ var Caching;
                     .toDate(),
                 value: value
             };
-            var json = JSON.stringify(entry);
+            let json = JSON.stringify(entry);
             this._storage.setItem(key, json);
-        };
-        CacheService.prototype.parse = function (str) {
+        }
+        parse(str) {
             try {
                 return JSON.parse(str);
             }
@@ -1269,9 +1210,8 @@ var Caching;
                 console.warn(e);
                 return null;
             }
-        };
-        return CacheService;
-    }());
+        }
+    }
     Caching.CacheService = CacheService;
     Caching.cache = new CacheService();
 })(Caching || (Caching = {}));
@@ -1304,13 +1244,13 @@ var Dynamics;
         var OData;
         (function (OData) {
             "use strict";
-            var FilterType;
+            let FilterType;
             (function (FilterType) {
                 FilterType[FilterType["And"] = 1] = "And";
                 FilterType[FilterType["Or"] = 2] = "Or";
             })(FilterType = OData.FilterType || (OData.FilterType = {}));
             function getContext() {
-                var context;
+                let context;
                 if (typeof Xrm !== "undefined" &&
                     typeof Xrm.Utility !== "undefined" &&
                     typeof Xrm.Utility.getGlobalContext === "function") {
@@ -1325,7 +1265,7 @@ var Dynamics;
                 return context;
             }
             function getVersion() {
-                var version = getContext().getVersion(); // 8.2.0.780
+                let version = getContext().getVersion(); // 8.2.0.780
                 if (version === undefined) {
                     Crm.Diagnostics.log.Warning("getContext().getVersion() is undefined");
                     return "v9.0";
@@ -1345,22 +1285,22 @@ var Dynamics;
                 throw new Error("Version not supported: {version}.".replace("{version}", version));
             }
             function entityIdFieldName(entityName) {
-                return entityName + "id";
+                return `${entityName}id`;
             }
             function toEntity(entityName, attributes, obj) {
                 if (!obj) {
                     return null;
                 }
-                var idFieldName = entityIdFieldName(entityName);
-                var entity = {
+                let idFieldName = entityIdFieldName(entityName);
+                let entity = {
                     id: obj[idFieldName],
                     type: entityName
                 };
-                attributes.forEach(function (key) {
+                attributes.forEach((key) => {
                     if (key === idFieldName) {
                         return;
                     }
-                    var value = obj[key];
+                    let value = obj[key];
                     if (value !== undefined) {
                         entity[key] = value;
                     }
@@ -1368,10 +1308,10 @@ var Dynamics;
                 return entity;
             }
             function sanitizeEntity(entity) {
-                var data = {};
+                let data = {};
                 Object
                     .keys(entity)
-                    .forEach(function (k) {
+                    .forEach((k) => {
                     if (k === "id" || k === "type") {
                         return;
                     }
@@ -1384,18 +1324,18 @@ var Dynamics;
                 Validation.ensureNotNullOrEmpty(entityName, "entityName");
                 Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
                 Validation.ensureNotNullOrEmpty(entityId, "entityId");
-                var query = "?$select=" + attributes.join(",");
+                let query = `?$select=${attributes.join(",")}`;
                 if (expand && expand.length) {
-                    query += "&$expand=" + expand.join(",");
+                    query += `&$expand=${expand.join(",")}`;
                 }
-                return new Promise(function (resolve, reject) {
+                return new Promise((resolve, reject) => {
                     Xrm.WebApi.retrieveRecord(entityName, entityId, query)
-                        .then(function (entity) {
+                        .then((entity) => {
                         resolve(toEntity(entityName, attributes, entity));
-                    }, function (error) {
-                        Crm.Diagnostics.log.Error(error.message + " retrieve " + entityName + ":" + entityId + ":" + query, {
+                    }, (error) => {
+                        Crm.Diagnostics.log.Error(`${error.message} retrieve ${entityName}:${entityId}:${query}`, {
                             message: error.message,
-                            description: "Code: " + error.errorCode,
+                            description: `Code: ${error.errorCode}`,
                             name: "WebApiError"
                         });
                         reject(error);
@@ -1403,29 +1343,25 @@ var Dynamics;
                 });
             }
             OData.retrieve = retrieve;
-            function retrieveMultiple(entityName, entitySetName, attributes, filters, filterType, orderBy, expand, pageSize) {
-                if (filterType === void 0) { filterType = null; }
-                if (orderBy === void 0) { orderBy = null; }
-                if (expand === void 0) { expand = null; }
-                if (pageSize === void 0) { pageSize = 1000; }
+            function retrieveMultiple(entityName, entitySetName, attributes, filters, filterType = null, orderBy = null, expand = null, pageSize = 1000) {
                 Validation.ensureNotNullOrEmpty(entityName, "entityName");
                 Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
-                var filterJoin = !filterType || filterType === FilterType.And ? " and " : " or ";
-                var query = "?$select=" + attributes.join(",") + "&$filter=" + filters.join(filterJoin);
+                let filterJoin = !filterType || filterType === FilterType.And ? " and " : " or ";
+                let query = `?$select=${attributes.join(",")}&$filter=${filters.join(filterJoin)}`;
                 if (orderBy) {
-                    query += "&$orderby=" + orderBy.join(",");
+                    query += `&$orderby=${orderBy.join(",")}`;
                 }
                 if (expand) {
-                    query += "&$expand=" + expand.join(",");
+                    query += `&$expand=${expand.join(",")}`;
                 }
-                return new Promise(function (resolve, reject) {
+                return new Promise((resolve, reject) => {
                     Xrm.WebApi.retrieveMultipleRecords(entityName, query, pageSize)
-                        .then(function (response) {
-                        resolve(response.entities.map(function (entity) { return toEntity(entityName, attributes, entity); }));
-                    }, function (error) {
-                        Crm.Diagnostics.log.Error(error.message + " retrieve multiple " + entityName + ":" + query, {
+                        .then(response => {
+                        resolve(response.entities.map(entity => toEntity(entityName, attributes, entity)));
+                    }, (error) => {
+                        Crm.Diagnostics.log.Error(`${error.message} retrieve multiple ${entityName}:${query}`, {
                             message: error.message,
-                            description: "Code: " + error.errorCode,
+                            description: `Code: ${error.errorCode}`,
                             name: "WebApiError"
                         });
                         reject(error);
@@ -1437,19 +1373,19 @@ var Dynamics;
                 Validation.ensureNotNullOrEmpty(entityName, "entityName");
                 Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
                 Validation.ensureNotNullOrEmpty(entityId, "entityId");
-                return new Promise(function (resolve, reject) {
+                return new Promise((resolve, reject) => {
                     Xrm.WebApi.deleteRecord(entityName, entityId)
-                        .then(function (entity) {
-                        var result = {
+                        .then((entity) => {
+                        let result = {
                             type: entity.entityType,
                             id: entity.id,
                             name: entity.name
                         };
                         resolve(result);
-                    }, function (error) {
-                        Crm.Diagnostics.log.Error(error.message + " delete " + entityName, {
+                    }, (error) => {
+                        Crm.Diagnostics.log.Error(`${error.message} delete ${entityName}`, {
                             message: error.message,
-                            description: "Code: " + error.errorCode,
+                            description: `Code: ${error.errorCode}`,
                             name: "WebApiError"
                         });
                         reject(error);
@@ -1457,30 +1393,28 @@ var Dynamics;
                 });
             }
             OData.deleteEntity = deleteEntity;
-            function createEntity(entity, entitySetName, attributes, logError) {
-                if (attributes === void 0) { attributes = null; }
-                if (logError === void 0) { logError = true; }
+            function createEntity(entity, entitySetName, attributes = null, logError = true) {
                 Validation.ensureNotNullOrUndefined(entity, "entity");
                 Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
-                var idFieldName = entityIdFieldName(entity.type);
+                let idFieldName = entityIdFieldName(entity.type);
                 attributes = attributes || [];
                 if (attributes.indexOf(idFieldName) < 0) {
                     attributes.push(idFieldName);
                 }
-                var query = "?$select=" + attributes.join(",");
-                var data = sanitizeEntity(entity);
-                return new Promise(function (resolve, reject) {
+                let query = `?$select=${attributes.join(",")}`;
+                let data = sanitizeEntity(entity);
+                return new Promise((resolve, reject) => {
                     Xrm.WebApi.createRecord(entity.type, data)
-                        .then(function (entity) {
+                        .then((entity) => {
                         resolve({
                             type: entity.entityType,
                             id: entity.id
                         });
-                    }, function (error) {
+                    }, (error) => {
                         if (logError) {
-                            Crm.Diagnostics.log.Error(error.message + " create " + entity.type, {
+                            Crm.Diagnostics.log.Error(`${error.message} create ${entity.type}`, {
                                 message: error.message,
-                                description: "Code: " + error.errorCode,
+                                description: `Code: ${error.errorCode}`,
                                 name: "WebApiError"
                             });
                         }
@@ -1492,18 +1426,18 @@ var Dynamics;
             function updateEntity(entity, entitySetName) {
                 Validation.ensureNotNullOrUndefined(entity, "entity");
                 Validation.ensureNotNullOrEmpty(entitySetName, "entitySetName");
-                var data = sanitizeEntity(entity);
-                return new Promise(function (resolve, reject) {
+                let data = sanitizeEntity(entity);
+                return new Promise((resolve, reject) => {
                     Xrm.WebApi.updateRecord(entity.type, entity.id, data)
-                        .then(function (entity) {
+                        .then((entity) => {
                         resolve({
                             type: entity.entityType,
                             id: entity.id
                         });
-                    }, function (error) {
-                        Crm.Diagnostics.log.Error(error.message + " update " + entity.type + ":" + entity.id, {
+                    }, (error) => {
+                        Crm.Diagnostics.log.Error(`${error.message} update ${entity.type}:${entity.id}`, {
                             message: error.message,
-                            description: "Code: " + error.errorCode,
+                            description: `Code: ${error.errorCode}`,
                             name: "WebApiError"
                         });
                         reject(error);
@@ -1512,17 +1446,16 @@ var Dynamics;
             }
             OData.updateEntity = updateEntity;
             // fetch
-            function fetch(entityName, entitySetName, fetchXml, pageSize) {
-                if (pageSize === void 0) { pageSize = 500; }
-                var query = "?fetchXml=" + encodeURIComponent(fetchXml);
-                return new Promise(function (resolve, reject) {
+            function fetch(entityName, entitySetName, fetchXml, pageSize = 500) {
+                let query = `?fetchXml=${encodeURIComponent(fetchXml)}`;
+                return new Promise((resolve, reject) => {
                     Xrm.WebApi.retrieveMultipleRecords(entityName, query, pageSize)
-                        .then(function (response) {
+                        .then(response => {
                         resolve(response);
-                    }, function (error) {
-                        Crm.Diagnostics.log.Error(error.message + " fetch " + entityName + ":" + query, {
+                    }, (error) => {
+                        Crm.Diagnostics.log.Error(`${error.message} fetch ${entityName}:${query}`, {
                             message: error.message,
-                            description: "Code: " + error.errorCode,
+                            description: `Code: ${error.errorCode}`,
                             name: "WebApiError"
                         });
                         reject(error);
@@ -1531,7 +1464,7 @@ var Dynamics;
             }
             OData.fetch = fetch;
             // meta-data
-            var entityDefinitionAttributes = [
+            let entityDefinitionAttributes = [
                 "MetadataId",
                 "DisplayName",
                 "LogicalName",
@@ -1541,63 +1474,61 @@ var Dynamics;
                 "PrimaryIdAttribute",
                 "ExternalName"
             ];
-            var entityAttributeDefinitionAttributes = [
+            let entityAttributeDefinitionAttributes = [
                 "MetadataId",
                 "DisplayName",
                 "LogicalName",
                 "AttributeType",
                 "Description"
             ];
-            function entityDefinitions(attributes) {
-                if (attributes === void 0) { attributes = entityDefinitionAttributes; }
-                var baseUrl = getContext().getClientUrl();
-                var url = baseUrl + "/api/data/" + getVersion() + "/EntityDefinitions?$select=" + attributes.join(",");
-                return new Promise(function (resolve, reject) {
+            function entityDefinitions(attributes = entityDefinitionAttributes) {
+                let baseUrl = getContext().getClientUrl();
+                let url = `${baseUrl}/api/data/${getVersion()}/EntityDefinitions?$select=${attributes.join(",")}`;
+                return new Promise((resolve, reject) => {
                     return $
                         .ajax({
                         url: url,
                         dataType: "json"
                     })
-                        .then(function (data) {
+                        .then((data) => {
                         resolve(!data ? [] : data.value);
                     })
-                        .fail(function (error) { return reject(error); });
+                        .fail((error) => reject(error));
                 });
             }
             OData.entityDefinitions = entityDefinitions;
-            function entityAttributesDefinition(metadataId, attributes) {
-                if (attributes === void 0) { attributes = entityAttributeDefinitionAttributes; }
+            function entityAttributesDefinition(metadataId, attributes = entityAttributeDefinitionAttributes) {
                 Validation.ensureNotNullOrEmpty(metadataId, "metadataId");
-                var baseUrl = getContext().getClientUrl();
-                var url = baseUrl + "/api/data/" + getVersion() + "/EntityDefinitions(" + metadataId + ")/Attributes?$select=" + attributes.join(",");
-                return new Promise(function (resolve, reject) {
+                let baseUrl = getContext().getClientUrl();
+                let url = `${baseUrl}/api/data/${getVersion()}/EntityDefinitions(${metadataId})/Attributes?$select=${attributes.join(",")}`;
+                return new Promise((resolve, reject) => {
                     return $
                         .ajax({
                         url: url,
                         dataType: "json"
                     })
-                        .then(function (data) {
+                        .then((data) => {
                         resolve(data.value);
                     })
-                        .fail(function (error) { return reject(error); });
+                        .fail((error) => reject(error));
                 });
             }
             OData.entityAttributesDefinition = entityAttributesDefinition;
             function entityAttributeOptionSetDefinition(metadataId, attributeMetadataId) {
                 Validation.ensureNotNullOrEmpty(metadataId, "metadataId");
                 Validation.ensureNotNullOrEmpty(attributeMetadataId, "attributeMetadataId");
-                var baseUrl = getContext().getClientUrl();
-                var url = baseUrl + "/api/data/v8.0/EntityDefinitions(" + metadataId + ")/Attributes(" + attributeMetadataId + ")/Microsoft.Dynamics.CRM.PicklistAttributeMetadata/OptionSet?$select=Options";
-                return new Promise(function (resolve, reject) {
+                let baseUrl = getContext().getClientUrl();
+                let url = `${baseUrl}/api/data/v8.0/EntityDefinitions(${metadataId})/Attributes(${attributeMetadataId})/Microsoft.Dynamics.CRM.PicklistAttributeMetadata/OptionSet?$select=Options`;
+                return new Promise((resolve, reject) => {
                     return $
                         .ajax({
                         url: url,
                         dataType: "json"
                     })
-                        .then(function (data) {
+                        .then((data) => {
                         resolve(data ? data.Options : []);
                     })
-                        .fail(function (error) { return reject(error); });
+                        .fail((error) => reject(error));
                 });
             }
             OData.entityAttributeOptionSetDefinition = entityAttributeOptionSetDefinition;
@@ -1612,24 +1543,20 @@ var Dynamics;
         var Data;
         (function (Data) {
             "use strict";
-            var LogEntryRepository = /** @class */ (function () {
-                function LogEntryRepository(prefix) {
+            class LogEntryRepository {
+                constructor(prefix) {
                     this._prefix = prefix;
                 }
-                LogEntryRepository.prototype.Create = function (entry) {
+                Create(entry) {
                     Crm.OData.createEntity(entry, Data.Schema.LogEntryEntity.setName(this._prefix), [], false);
-                };
-                return LogEntryRepository;
-            }());
-            Data.LogEntryRepository = LogEntryRepository;
-            var UnitOfWork = /** @class */ (function () {
-                function UnitOfWork() {
                 }
-                UnitOfWork.prototype.GetLogEntryRepository = function (prefix) {
+            }
+            Data.LogEntryRepository = LogEntryRepository;
+            class UnitOfWork {
+                GetLogEntryRepository(prefix) {
                     return new LogEntryRepository(prefix);
-                };
-                return UnitOfWork;
-            }());
+                }
+            }
             Data.UnitOfWork = UnitOfWork;
             Data.unitOfWork = new UnitOfWork();
         })(Data = Crm.Data || (Crm.Data = {}));
@@ -1643,19 +1570,16 @@ var Dynamics;
             var Schema;
             (function (Schema) {
                 "use strict";
-                var LogEntryEntity = /** @class */ (function () {
-                    function LogEntryEntity() {
-                    }
-                    LogEntryEntity.type = function (prefix) { return Crm.componentName(prefix, "logentry"); };
-                    LogEntryEntity.setName = function (prefix) { return Crm.componentName(prefix, "logentries"); };
-                    LogEntryEntity.idField = function (prefix) { return Crm.componentName(prefix, "logentryid"); };
-                    LogEntryEntity.nameField = function (prefix) { return Crm.componentName(prefix, "name"); };
-                    LogEntryEntity.messageField = function (prefix) { return Crm.componentName(prefix, "message"); };
-                    LogEntryEntity.descriptionField = function (prefix) { return Crm.componentName(prefix, "description"); };
-                    LogEntryEntity.sourceField = function (prefix) { return Crm.componentName(prefix, "source"); };
-                    LogEntryEntity.typeField = function (prefix) { return Crm.componentName(prefix, "type"); };
-                    return LogEntryEntity;
-                }());
+                class LogEntryEntity {
+                }
+                LogEntryEntity.type = (prefix) => Crm.componentName(prefix, "logentry");
+                LogEntryEntity.setName = (prefix) => Crm.componentName(prefix, "logentries");
+                LogEntryEntity.idField = (prefix) => Crm.componentName(prefix, "logentryid");
+                LogEntryEntity.nameField = (prefix) => Crm.componentName(prefix, "name");
+                LogEntryEntity.messageField = (prefix) => Crm.componentName(prefix, "message");
+                LogEntryEntity.descriptionField = (prefix) => Crm.componentName(prefix, "description");
+                LogEntryEntity.sourceField = (prefix) => Crm.componentName(prefix, "source");
+                LogEntryEntity.typeField = (prefix) => Crm.componentName(prefix, "type");
                 Schema.LogEntryEntity = LogEntryEntity;
             })(Schema = Data.Schema || (Data.Schema = {}));
         })(Data = Crm.Data || (Crm.Data = {}));
@@ -1669,22 +1593,19 @@ var Resources;
     var nullOrEmptyArgumentMessageFormat = "Argument cannot be null or empty string '{paramName}'.";
     var invalidTypeMessageFormat = "Invalid argument type '{actualType}' expecting type '{expectedType}'.";
     var outOfRangeMessageFormat = "Argument '{paramName}' was out of the range of valid values.";
-    var Strings = /** @class */ (function () {
-        function Strings() {
-        }
-        Strings.NullArgumentMessageFormat = function (paramName) { return nullArgumentMessageFormat
-            .replace("{paramName}", paramName || ""); };
-        Strings.NullOrEmptyArgumentMessageFormat = function (paramName) { return nullOrEmptyArgumentMessageFormat
-            .replace("{paramName}", paramName || ""); };
-        Strings.InvalidTypeMessageFormat = function (expectedType, actualType) { return invalidTypeMessageFormat
-            .replace("{expectedType}", expectedType || "")
-            .replace("{actualType}", actualType || ""); };
-        Strings.OutOfRangeMessageFormat = function (paramName) { return outOfRangeMessageFormat
-            .replace("{paramName}", paramName || ""); };
-        Strings.NotSupportedMessage = "Not supported.";
-        Strings.No = "No";
-        Strings.Yes = "Yes";
-        return Strings;
-    }());
+    class Strings {
+    }
+    Strings.NullArgumentMessageFormat = (paramName) => nullArgumentMessageFormat
+        .replace("{paramName}", paramName || "");
+    Strings.NullOrEmptyArgumentMessageFormat = (paramName) => nullOrEmptyArgumentMessageFormat
+        .replace("{paramName}", paramName || "");
+    Strings.InvalidTypeMessageFormat = (expectedType, actualType) => invalidTypeMessageFormat
+        .replace("{expectedType}", expectedType || "")
+        .replace("{actualType}", actualType || "");
+    Strings.OutOfRangeMessageFormat = (paramName) => outOfRangeMessageFormat
+        .replace("{paramName}", paramName || "");
+    Strings.NotSupportedMessage = "Not supported.";
+    Strings.No = "No";
+    Strings.Yes = "Yes";
     Resources.Strings = Strings;
 })(Resources || (Resources = {}));

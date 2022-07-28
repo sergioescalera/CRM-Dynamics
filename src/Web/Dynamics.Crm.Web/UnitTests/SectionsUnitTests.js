@@ -5,49 +5,49 @@ var Dynamics;
         var UnitTests;
         (function (UnitTests) {
             "use strict";
-            describe("Sections.get", function () {
-                it("Returns null for missing section when not required", function () {
-                    var page = new UnitTests.Mocks.PageMock();
-                    var forms = new Crm.Forms(page);
-                    var notatab = forms.sections.get("invalidTab", "invalidSection", false);
+            describe("Sections.get", () => {
+                it("Returns null for missing section when not required", () => {
+                    let page = new UnitTests.Mocks.PageMock();
+                    let forms = new Crm.Forms(page);
+                    let notatab = forms.sections.get("invalidTab", "invalidSection", false);
                     expect(notatab).toBeNull();
-                    var tab = forms.sections.get("mainTab", "invalidSection", false);
+                    let tab = forms.sections.get("mainTab", "invalidSection", false);
                     expect(tab).toBeNull();
                 });
-                it("Throws error for missing section when required", function () {
-                    var page = new UnitTests.Mocks.PageMock();
-                    var forms = new Crm.Forms(page);
-                    expect(function () { return forms.sections.get("invalidTab", "invalidSection", true); }).toThrowError(Error);
-                    expect(function () { return forms.sections.get("mainTab", "invalidSection", true); }).toThrowError(Error);
+                it("Throws error for missing section when required", () => {
+                    let page = new UnitTests.Mocks.PageMock();
+                    let forms = new Crm.Forms(page);
+                    expect(() => forms.sections.get("invalidTab", "invalidSection", true)).toThrowError(Error);
+                    expect(() => forms.sections.get("mainTab", "invalidSection", true)).toThrowError(Error);
                 });
-                it("Throws error for missing section when required by default", function () {
-                    var page = new UnitTests.Mocks.PageMock();
-                    var forms = new Crm.Forms(page);
-                    expect(function () { return forms.sections.get("invalidTab", "invalidSection"); }).toThrowError(Error);
-                    expect(function () { return forms.sections.get("mainTab", "invalidSection", true); }).toThrowError(Error);
+                it("Throws error for missing section when required by default", () => {
+                    let page = new UnitTests.Mocks.PageMock();
+                    let forms = new Crm.Forms(page);
+                    expect(() => forms.sections.get("invalidTab", "invalidSection")).toThrowError(Error);
+                    expect(() => forms.sections.get("mainTab", "invalidSection", true)).toThrowError(Error);
                 });
-                it("Returns existing section", function () {
-                    var page = new UnitTests.Mocks.PageMock();
-                    var forms = new Crm.Forms(page);
-                    var tab = forms.sections.get("mainTab", "mainSection");
+                it("Returns existing section", () => {
+                    let page = new UnitTests.Mocks.PageMock();
+                    let forms = new Crm.Forms(page);
+                    let tab = forms.sections.get("mainTab", "mainSection");
                     expect(tab).toBeDefined();
                     expect(tab).not.toBeNull();
                 });
             });
-            describe("Sections.setVisible", function () {
-                it("Does not throw error for missing section", function () {
-                    var page = new UnitTests.Mocks.PageMock();
-                    var forms = new Crm.Forms(page);
-                    var mainTab = page.mainTab;
-                    expect(function () { return forms.sections.show(["invalidTab|invalidSection"]); }).not.toThrowError();
-                    expect(function () { return forms.sections.hide(["invalidTab|invalidSection"]); }).not.toThrowError();
-                    expect(function () { return forms.sections.show(["mainTab|invalidSection"]); }).not.toThrowError();
-                    expect(function () { return forms.sections.hide(["mainTab|invalidSection"]); }).not.toThrowError();
+            describe("Sections.setVisible", () => {
+                it("Does not throw error for missing section", () => {
+                    let page = new UnitTests.Mocks.PageMock();
+                    let forms = new Crm.Forms(page);
+                    let mainTab = page.mainTab;
+                    expect(() => forms.sections.show(["invalidTab|invalidSection"])).not.toThrowError();
+                    expect(() => forms.sections.hide(["invalidTab|invalidSection"])).not.toThrowError();
+                    expect(() => forms.sections.show(["mainTab|invalidSection"])).not.toThrowError();
+                    expect(() => forms.sections.hide(["mainTab|invalidSection"])).not.toThrowError();
                 });
-                it("Sets section visibility to true", function () {
-                    var page = new UnitTests.Mocks.PageMock();
-                    var forms = new Crm.Forms(page);
-                    var mainSection = page.mainTab.mainSection;
+                it("Sets section visibility to true", () => {
+                    let page = new UnitTests.Mocks.PageMock();
+                    let forms = new Crm.Forms(page);
+                    let mainSection = page.mainTab.mainSection;
                     forms.sections.hide(["mainTab|mainSection"]);
                     forms.sections.show(["mainTab|mainSection"]);
                     expect(mainSection.getVisible()).toBe(true);
@@ -55,10 +55,10 @@ var Dynamics;
                     forms.sections.show(["mainTab|mainSection"], true);
                     expect(mainSection.getVisible()).toBe(true);
                 });
-                it("Sets section visibility to false", function () {
-                    var page = new UnitTests.Mocks.PageMock();
-                    var forms = new Crm.Forms(page);
-                    var mainSection = page.mainTab.mainSection;
+                it("Sets section visibility to false", () => {
+                    let page = new UnitTests.Mocks.PageMock();
+                    let forms = new Crm.Forms(page);
+                    let mainSection = page.mainTab.mainSection;
                     forms.sections.show(["mainTab|mainSection"]);
                     forms.sections.hide(["mainTab|mainSection"]);
                     expect(mainSection.getVisible()).toBe(false);
@@ -66,10 +66,10 @@ var Dynamics;
                     forms.sections.hide(["mainTab|mainSection"], true);
                     expect(mainSection.getVisible()).toBe(false);
                 });
-                it("Does not change section visibility when condition is not satisfied", function () {
-                    var page = new UnitTests.Mocks.PageMock();
-                    var forms = new Crm.Forms(page);
-                    var mainSection = page.mainTab.mainSection;
+                it("Does not change section visibility when condition is not satisfied", () => {
+                    let page = new UnitTests.Mocks.PageMock();
+                    let forms = new Crm.Forms(page);
+                    let mainSection = page.mainTab.mainSection;
                     forms.sections.hide(["mainTab|mainSection"]);
                     forms.sections.show(["mainTab|mainSection"], false);
                     expect(mainSection.getVisible()).toBe(false);

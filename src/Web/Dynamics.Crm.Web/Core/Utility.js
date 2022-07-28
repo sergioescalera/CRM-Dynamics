@@ -9,7 +9,7 @@ var Dynamics;
                 if (!html) {
                     return html;
                 }
-                var elem = document.createElement("span");
+                let elem = document.createElement("span");
                 elem.innerHTML = html;
                 return elem.innerText;
             }
@@ -20,9 +20,9 @@ var Dynamics;
                         typeof Xrm.Internal !== "undefined" && "isUci" in Xrm.Internal) {
                         return Xrm.Internal.isUci();
                     }
-                    var context = Xrm.Utility.getGlobalContext();
-                    var appUrl = context.getCurrentAppUrl();
-                    var clientUrl = context.getClientUrl();
+                    let context = Xrm.Utility.getGlobalContext();
+                    let appUrl = context.getCurrentAppUrl();
+                    let clientUrl = context.getClientUrl();
                     return appUrl !== clientUrl;
                 }
                 catch (e) {

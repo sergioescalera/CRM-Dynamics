@@ -1,15 +1,15 @@
 var LookupLink;
 (function (LookupLink) {
     "use strict";
-    var xrm;
-    var link;
-    var createEnabled = false;
-    var createlink;
-    var message;
-    var attributeName;
-    var attribute;
-    var descriptor;
-    var isUci = false;
+    let xrm;
+    let link;
+    let createEnabled = false;
+    let createlink;
+    let message;
+    let attributeName;
+    let attribute;
+    let descriptor;
+    let isUci = false;
     function init() {
         console.log("LookupLink.init()");
         try {
@@ -33,7 +33,7 @@ var LookupLink;
         link = document.querySelector("#lookup-link");
         createlink = document.querySelector("#create-link");
         message = document.querySelector("#message");
-        var data = (getParameterByName("data", window.location.search) ||
+        let data = (getParameterByName("data", window.location.search) ||
             getParameterByName("Data", window.location.search) || "").split("|");
         if (!data || !data[0]) {
             throw new Error("Please pass 'attribute name' as custom data parameter");
@@ -42,7 +42,7 @@ var LookupLink;
         createEnabled = data[1] === "quickCreate";
         attribute = xrm["Page"].getAttribute(attributeName);
         if (!attribute) {
-            throw new Error("Invalid attribute name " + attributeName);
+            throw new Error(`Invalid attribute name ${attributeName}`);
         }
         try {
             if ("getAttrDescriptor" in attribute) {
@@ -66,13 +66,13 @@ var LookupLink;
         }
     }
     function getXrmObject() {
-        var parent = window.parent;
+        let parent = window.parent;
         if (isCrmFormsFrame(parent)) {
             return parent["Xrm"];
         }
         else {
-            for (var i = parent.frames.length - 1; i >= 0; i--) {
-                var child = parent.frames[i];
+            for (let i = parent.frames.length - 1; i >= 0; i--) {
+                let child = parent.frames[i];
                 if (isCrmFormsFrame(child)) {
                     return child["Xrm"];
                 }
@@ -100,9 +100,9 @@ var LookupLink;
                 typeof xrm.Internal !== "undefined" && "isUci" in xrm.Internal) {
                 return xrm.Internal.isUci();
             }
-            var context = xrm.Utility.getGlobalContext();
-            var appUrl = context.getCurrentAppUrl();
-            var clientUrl = context.getClientUrl();
+            let context = xrm.Utility.getGlobalContext();
+            let appUrl = context.getCurrentAppUrl();
+            let clientUrl = context.getClientUrl();
             return appUrl !== clientUrl;
         }
         catch (e) {
@@ -111,9 +111,9 @@ var LookupLink;
         }
     }
     function getParameterByName(name, url) {
-        var str = name.replace(/[\[\]]/g, "\\$&");
-        var regex = new RegExp("[?&]" + str + "(=([^&#]*)|&|#|$)");
-        var results = regex.exec(url);
+        let str = name.replace(/[\[\]]/g, "\\$&");
+        let regex = new RegExp("[?&]" + str + "(=([^&#]*)|&|#|$)");
+        let results = regex.exec(url);
         if (!results) {
             return null;
         }
@@ -123,7 +123,7 @@ var LookupLink;
         return decodeURIComponent(results[2].replace(/\+/g, " "));
     }
     function setLinkVisibility() {
-        var lookup = attribute.getValue();
+        let lookup = attribute.getValue();
         if (lookup && lookup.length) {
             link.style.display = "inline-block";
             createlink.style.display = "none";
@@ -134,7 +134,7 @@ var LookupLink;
         }
     }
     function openEntity() {
-        var lookup = attribute.getValue();
+        let lookup = attribute.getValue();
         if (!lookup || !lookup.length) {
             return;
         }
@@ -153,12 +153,12 @@ var LookupLink;
             entityName: descriptor.Targets[0],
             openInNewWindow: true,
             useQuickCreateForm: true
-        }).then(function (data) {
+        }).then((data) => {
             if (data && data.savedEntityReference) {
                 attribute.setValue(data.savedEntityReference);
                 attribute.fireOnChange();
             }
-        }, function (error) {
+        }, (error) => {
             console.warn("LookupLink.openCreate", error);
         });
     }

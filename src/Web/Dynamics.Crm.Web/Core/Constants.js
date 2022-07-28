@@ -3,7 +3,7 @@ var Dynamics;
     var Crm;
     (function (Crm) {
         "use strict";
-        Crm.componentName = function (prefix, name) { return prefix + "_" + name; };
+        Crm.componentName = (prefix, name) => `${prefix}_${name}`;
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));
 (function (Dynamics) {
@@ -20,32 +20,23 @@ var Dynamics;
     var Crm;
     (function (Crm) {
         "use strict";
-        var FormNotificationTypes = /** @class */ (function () {
-            function FormNotificationTypes() {
-            }
-            FormNotificationTypes.Error = "ERROR";
-            FormNotificationTypes.Warning = "WARNING";
-            FormNotificationTypes.Information = "INFO";
-            return FormNotificationTypes;
-        }());
+        class FormNotificationTypes {
+        }
+        FormNotificationTypes.Error = "ERROR";
+        FormNotificationTypes.Warning = "WARNING";
+        FormNotificationTypes.Information = "INFO";
         Crm.FormNotificationTypes = FormNotificationTypes;
-        var ClientType = /** @class */ (function () {
-            function ClientType() {
-            }
-            ClientType.Browser = "Web";
-            ClientType.Outlook = "Outlook";
-            ClientType.Mobile = "Mobile";
-            return ClientType;
-        }());
+        class ClientType {
+        }
+        ClientType.Browser = "Web";
+        ClientType.Outlook = "Outlook";
+        ClientType.Mobile = "Mobile";
         Crm.ClientType = ClientType;
-        var AttributeRequiredLevels = /** @class */ (function () {
-            function AttributeRequiredLevels() {
-            }
-            AttributeRequiredLevels.None = "none";
-            AttributeRequiredLevels.Required = "required";
-            AttributeRequiredLevels.Recommended = "recommended";
-            return AttributeRequiredLevels;
-        }());
+        class AttributeRequiredLevels {
+        }
+        AttributeRequiredLevels.None = "none";
+        AttributeRequiredLevels.Required = "required";
+        AttributeRequiredLevels.Recommended = "recommended";
         Crm.AttributeRequiredLevels = AttributeRequiredLevels;
     })(Crm = Dynamics.Crm || (Dynamics.Crm = {}));
 })(Dynamics || (Dynamics = {}));

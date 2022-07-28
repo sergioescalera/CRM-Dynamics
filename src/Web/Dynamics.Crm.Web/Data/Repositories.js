@@ -5,24 +5,20 @@ var Dynamics;
         var Data;
         (function (Data) {
             "use strict";
-            var LogEntryRepository = /** @class */ (function () {
-                function LogEntryRepository(prefix) {
+            class LogEntryRepository {
+                constructor(prefix) {
                     this._prefix = prefix;
                 }
-                LogEntryRepository.prototype.Create = function (entry) {
+                Create(entry) {
                     Crm.OData.createEntity(entry, Data.Schema.LogEntryEntity.setName(this._prefix), [], false);
-                };
-                return LogEntryRepository;
-            }());
-            Data.LogEntryRepository = LogEntryRepository;
-            var UnitOfWork = /** @class */ (function () {
-                function UnitOfWork() {
                 }
-                UnitOfWork.prototype.GetLogEntryRepository = function (prefix) {
+            }
+            Data.LogEntryRepository = LogEntryRepository;
+            class UnitOfWork {
+                GetLogEntryRepository(prefix) {
                     return new LogEntryRepository(prefix);
-                };
-                return UnitOfWork;
-            }());
+                }
+            }
             Data.UnitOfWork = UnitOfWork;
             Data.unitOfWork = new UnitOfWork();
         })(Data = Crm.Data || (Crm.Data = {}));
@@ -36,19 +32,16 @@ var Dynamics;
             var Schema;
             (function (Schema) {
                 "use strict";
-                var LogEntryEntity = /** @class */ (function () {
-                    function LogEntryEntity() {
-                    }
-                    LogEntryEntity.type = function (prefix) { return Crm.componentName(prefix, "logentry"); };
-                    LogEntryEntity.setName = function (prefix) { return Crm.componentName(prefix, "logentries"); };
-                    LogEntryEntity.idField = function (prefix) { return Crm.componentName(prefix, "logentryid"); };
-                    LogEntryEntity.nameField = function (prefix) { return Crm.componentName(prefix, "name"); };
-                    LogEntryEntity.messageField = function (prefix) { return Crm.componentName(prefix, "message"); };
-                    LogEntryEntity.descriptionField = function (prefix) { return Crm.componentName(prefix, "description"); };
-                    LogEntryEntity.sourceField = function (prefix) { return Crm.componentName(prefix, "source"); };
-                    LogEntryEntity.typeField = function (prefix) { return Crm.componentName(prefix, "type"); };
-                    return LogEntryEntity;
-                }());
+                class LogEntryEntity {
+                }
+                LogEntryEntity.type = (prefix) => Crm.componentName(prefix, "logentry");
+                LogEntryEntity.setName = (prefix) => Crm.componentName(prefix, "logentries");
+                LogEntryEntity.idField = (prefix) => Crm.componentName(prefix, "logentryid");
+                LogEntryEntity.nameField = (prefix) => Crm.componentName(prefix, "name");
+                LogEntryEntity.messageField = (prefix) => Crm.componentName(prefix, "message");
+                LogEntryEntity.descriptionField = (prefix) => Crm.componentName(prefix, "description");
+                LogEntryEntity.sourceField = (prefix) => Crm.componentName(prefix, "source");
+                LogEntryEntity.typeField = (prefix) => Crm.componentName(prefix, "type");
                 Schema.LogEntryEntity = LogEntryEntity;
             })(Schema = Data.Schema || (Data.Schema = {}));
         })(Data = Crm.Data || (Crm.Data = {}));

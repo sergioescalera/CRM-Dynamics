@@ -1,10 +1,8 @@
 var Notifications;
 (function (Notifications) {
     "use strict";
-    var WebNotificationService = /** @class */ (function () {
-        function WebNotificationService() {
-        }
-        WebNotificationService.prototype.init = function () {
+    class WebNotificationService {
+        init() {
             if (!this.test()) {
                 throw new Error("Web browser does not support notifications.");
             }
@@ -13,28 +11,27 @@ var Notifications;
                     .requestPermission()
                     .then(this.requestPermissionFulfilled.bind(this), this.requestPermissionRejected.bind(this));
             }
-        };
-        WebNotificationService.prototype.hide = function (id) {
-        };
-        WebNotificationService.prototype.show = function (options) {
-            var _this = this;
+        }
+        hide(id) {
+        }
+        show(options) {
             if (this._granted) {
                 this.createNotification(options.title, options.message, options.icon);
             }
             else if (this._permissionRequest) {
                 this._permissionRequest
-                    .then(function (permission) {
+                    .then((permission) => {
                     if (permission !== "granted") {
                         return;
                     }
-                    _this.createNotification(options.title, options.message, options.icon);
+                    this.createNotification(options.title, options.message, options.icon);
                 });
             }
             else {
                 throw new Error("WebNotificationService hasn't been initialized.");
             }
-        };
-        WebNotificationService.prototype.test = function () {
+        }
+        test() {
             try {
                 return _.isFunction(Notification)
                     && _.isFunction(Notification.requestPermission);
@@ -43,25 +40,24 @@ var Notifications;
                 console.warn(e);
                 return false;
             }
-        };
-        WebNotificationService.prototype.createNotification = function (title, content, icon) {
+        }
+        createNotification(title, content, icon) {
             if (!this._granted) {
                 return;
             }
-            var notification = new Notification(title, {
+            let notification = new Notification(title, {
                 body: content,
                 icon: icon
             });
             return notification;
-        };
-        WebNotificationService.prototype.requestPermissionFulfilled = function (permission) {
-            console.log("NotificationService.requestPermissionFulfilled(permission=" + permission + ")");
+        }
+        requestPermissionFulfilled(permission) {
+            console.log(`NotificationService.requestPermissionFulfilled(permission=${permission})`);
             this._granted = permission === "granted";
-        };
-        WebNotificationService.prototype.requestPermissionRejected = function (reason) {
-            console.log("NotificationService.requestPermissionRejected(reason=" + reason + ")");
-        };
-        return WebNotificationService;
-    }());
+        }
+        requestPermissionRejected(reason) {
+            console.log(`NotificationService.requestPermissionRejected(reason=${reason})`);
+        }
+    }
     Notifications.WebNotificationService = WebNotificationService;
 })(Notifications || (Notifications = {}));
