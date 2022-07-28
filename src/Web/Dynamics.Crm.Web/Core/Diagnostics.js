@@ -7,47 +7,45 @@ var Dynamics;
             "use strict";
             Diagnostics.debug = true;
             Diagnostics.trace = true;
-            var ConsoleLogger = /** @class */ (function () {
-                function ConsoleLogger(prefix) {
+            class ConsoleLogger {
+                constructor(prefix) {
                     this._prefix = prefix;
                 }
-                ConsoleLogger.prototype.Error = function (message, error) {
+                Error(message, error) {
                     if (Diagnostics.debug) {
                         debugger;
                     }
-                    var entry = createLogEntry(this._prefix, message, error);
+                    let entry = createLogEntry(this._prefix, message, error);
                     console.error(entry);
-                };
-                ConsoleLogger.prototype.Message = function (message) {
+                }
+                Message(message) {
                     console.log(message);
-                };
-                ConsoleLogger.prototype.Warning = function (message) {
+                }
+                Warning(message) {
                     console.warn(message);
-                };
-                return ConsoleLogger;
-            }());
-            var LogEntryLogger = /** @class */ (function () {
-                function LogEntryLogger(prefix) {
+                }
+            }
+            class LogEntryLogger {
+                constructor(prefix) {
                     this._prefix = prefix;
                 }
-                LogEntryLogger.prototype.Error = function (message, error) {
+                Error(message, error) {
                     if (Diagnostics.debug) {
                         debugger;
                     }
-                    var entry = createLogEntry(this._prefix, message, error);
+                    let entry = createLogEntry(this._prefix, message, error);
                     console.error(entry);
                     Dynamics.Crm.Data.unitOfWork
                         .GetLogEntryRepository(this._prefix)
                         .Create(entry);
-                };
-                LogEntryLogger.prototype.Message = function (message) {
+                }
+                Message(message) {
                     console.log(message);
-                };
-                LogEntryLogger.prototype.Warning = function (message) {
+                }
+                Warning(message) {
                     console.warn(message);
-                };
-                return LogEntryLogger;
-            }());
+                }
+            }
             // public functions
             function useLogEntryLogger(prefix) {
                 Diagnostics.log = new LogEntryLogger(prefix || Crm.Publishers.logEntry);
@@ -57,13 +55,9 @@ var Dynamics;
                 Diagnostics.log = new ConsoleLogger(prefix || Crm.Publishers.logEntry);
             }
             Diagnostics.useConsoleLogger = useConsoleLogger;
-            function printArguments() {
-                var args = [];
-                for (var _i = 0; _i < arguments.length; _i++) {
-                    args[_i] = arguments[_i];
-                }
-                console.log("Function " + arguments[0] + " called with arguments: {");
-                for (var i = 1; i < arguments.length; i++) {
+            function printArguments(...args) {
+                console.log(`Function ${arguments[0]} called with arguments: {`);
+                for (let i = 1; i < arguments.length; i++) {
                     console.log(arguments[i]);
                 }
                 console.log("}");
@@ -71,20 +65,20 @@ var Dynamics;
             Diagnostics.printArguments = printArguments;
             // private function
             function createLogEntry(prefix, message, error) {
-                var entityName = getEntityName();
-                var entityId = getEntityId();
-                var formType = getFormType();
-                var clientType = getClientType();
-                var formFactor = getFormFactor();
-                var stack = error.stack || error.stacktrace || "<none>";
-                var desc = error.description || "<none>";
-                var source = "JavaScript::" + clientType + "," + formFactor + "," + formType + ":" + entityName + "(" + entityId + ")";
-                var description = "Stack: " + stack + "\nDescription: " + desc;
-                var entry = {
+                let entityName = getEntityName();
+                let entityId = getEntityId();
+                let formType = getFormType();
+                let clientType = getClientType();
+                let formFactor = getFormFactor();
+                let stack = error.stack || error.stacktrace || "<none>";
+                let desc = error.description || "<none>";
+                let source = `JavaScript::${clientType},${formFactor},${formType}:${entityName}(${entityId})`;
+                let description = `Stack: ${stack}\nDescription: ${desc}`;
+                let entry = {
                     type: Crm.Data.Schema.LogEntryEntity.type(prefix)
                 };
-                var name = error.type ? error.type + ":" + message : message;
-                var msg = message === error.message ? message : ((message + ". " + error.message).trim());
+                let name = error.type ? `${error.type}:${message}` : message;
+                let msg = message === error.message ? message : (`${message}. ${error.message}`.trim());
                 entry[Crm.Data.Schema.LogEntryEntity.nameField(prefix)]
                     = Validation.Strings.left(name, 300);
                 entry[Crm.Data.Schema.LogEntryEntity.messageField(prefix)]

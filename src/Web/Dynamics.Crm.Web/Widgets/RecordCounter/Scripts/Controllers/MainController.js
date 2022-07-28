@@ -3,22 +3,19 @@ var RecordCounter;
     var Controllers;
     (function (Controllers) {
         "use strict";
-        function executeInBatch(q, array, task, start, size, continueOnError) {
-            if (start === void 0) { start = 0; }
-            if (size === void 0) { size = 3; }
-            if (continueOnError === void 0) { continueOnError = true; }
+        function executeInBatch(q, array, task, start = 0, size = 3, continueOnError = true) {
             if (start >= array.length) {
                 return q.resolve();
             }
-            var batch = array.slice(start, start + size);
-            var tasks = batch.map(function (o) { return task(o); });
-            var defer = q.defer();
-            var next = function () {
+            let batch = array.slice(start, start + size);
+            let tasks = batch.map(o => task(o));
+            let defer = q.defer();
+            let next = () => {
                 executeInBatch(q, array, task, start + size, size)
-                    .then(function () {
+                    .then(() => {
                     defer.resolve();
                 })
-                    .catch(function (reason) {
+                    .catch((reason) => {
                     if (continueOnError) {
                         defer.resolve();
                     }
@@ -28,10 +25,10 @@ var RecordCounter;
                 });
             };
             q.all(tasks)
-                .then(function () {
+                .then(() => {
                 next();
             })
-                .catch(function (reason) {
+                .catch((reason) => {
                 if (continueOnError) {
                     next();
                 }
@@ -42,11 +39,11 @@ var RecordCounter;
             return defer.promise;
         }
         function toCsv(e, c) {
-            return e.LogicalName + "," + c.value + "," + (c.error || "");
+            return `${e.LogicalName},${c.value},${(c.error || "")}`;
         }
-        var chart;
-        var MainController = /** @class */ (function () {
-            function MainController(scope, q, http, dataService) {
+        let chart;
+        class MainController {
+            constructor(scope, q, http, dataService) {
                 this._q = q;
                 this._http = http;
                 this._dataService = dataService;
@@ -63,55 +60,53 @@ var RecordCounter;
                 scope.$watch("vm.currentPage", this.filterEntities.bind(this));
                 this.refresh();
             }
-            MainController.prototype.refresh = function () {
-                var _this = this;
+            refresh() {
                 this.loadEntities()
-                    .then(function () {
-                    _this.count()
-                        .then(function () {
-                        _this.updateChart();
+                    .then(() => {
+                    this.count()
+                        .then(() => {
+                        this.updateChart();
                     });
                 });
-            };
-            MainController.prototype.search = function () {
+            }
+            search() {
                 this.currentPage = 1;
                 this.filterEntities();
-            };
-            MainController.prototype.clear = function () {
+            }
+            clear() {
                 this.currentPage = 1;
                 this.filter = "";
                 this.compareValue = null;
                 this.showEntities();
-            };
-            MainController.prototype.export = function () {
-                var _this = this;
-                var blob = new Blob([
-                    "Entity Name,Record Count,Error\n" + this.data.map(function (e) { return toCsv(e, _this.counter[e.LogicalName]); }).join("\n")
+            }
+            exportCsv() {
+                let blob = new Blob([
+                    `Entity Name,Record Count,Error
+${this.data.map(e => toCsv(e, this.counter[e.LogicalName])).join("\n")}`
                 ], {
                     type: "text/csv"
                 });
-                var url = URL.createObjectURL(blob);
-                var filename = "record_counter.csv";
-                var download = document.getElementById("download");
+                let url = URL.createObjectURL(blob);
+                let filename = "record_counter.csv";
+                let download = document.getElementById("download");
                 download.href = url;
                 download.download = filename;
                 download.click();
-            };
-            MainController.prototype.count = function () {
-                var _this = this;
+            }
+            count() {
                 this.isBusy = true;
-                return executeInBatch(this._q, this.data, function (entity) {
-                    var counter = {};
-                    _this.counter[entity.LogicalName] = counter;
+                return executeInBatch(this._q, this.data, (entity) => {
+                    let counter = {};
+                    this.counter[entity.LogicalName] = counter;
                     if (entity.ExternalName) {
                         counter.error = "Unable to count virtual entity";
-                        return _this._q.resolve();
+                        return this._q.resolve();
                     }
                     else {
                         counter.busy = true;
-                        var defer_1 = _this._q.defer();
-                        _this.fetchAggregateCount(entity)
-                            .then(function (response) {
+                        let defer = this._q.defer();
+                        this.fetchAggregateCount(entity)
+                            .then(response => {
                             try {
                                 counter.busy = false;
                                 counter.value = response.data.value[0].count;
@@ -120,51 +115,55 @@ var RecordCounter;
                                 counter.error = "Unable to retrieve count";
                                 console.warn(e);
                             }
-                            defer_1.resolve();
+                            defer.resolve();
                         })
-                            .catch(function (response) {
+                            .catch(response => {
                             try {
-                                var message = response.data.error.message;
+                                let message = response.data.error.message;
                                 if (message.indexOf("AggregateQueryRecordLimit") >= 0) {
-                                    _this.fetchAll(entity)
-                                        .then(function () {
+                                    this.fetchAll(entity)
+                                        .then(() => {
                                         counter.busy = false;
-                                        defer_1.resolve();
+                                        defer.resolve();
                                     })
-                                        .catch(function () {
+                                        .catch(() => {
                                         counter.busy = false;
-                                        defer_1.resolve();
+                                        defer.resolve();
                                     });
                                 }
                                 else {
                                     counter.busy = false;
                                     counter.error = message;
-                                    defer_1.resolve();
+                                    defer.resolve();
                                 }
                             }
                             catch (e) {
                                 counter.error = "Something went wrong";
                                 console.warn(e);
-                                defer_1.resolve();
+                                defer.resolve();
                             }
                         });
-                        return defer_1.promise;
+                        return defer.promise;
                     }
                 }, 0, 10)
-                    .finally(function () {
-                    _this.isBusy = false;
+                    .finally(() => {
+                    this.isBusy = false;
                 });
-            };
-            MainController.prototype.fetchAggregateCount = function (entity) {
-                var fetch = "\n<fetch aggregate=\"true\">\n    <entity name=\"" + entity.LogicalName + "\">\n        <attribute name=\"" + entity.PrimaryIdAttribute + "\" aggregate=\"count\" alias=\"count\" />\n    </entity>\n</fetch>";
-                var url = Xrm.Utility.getGlobalContext().getClientUrl() + "/api/data/v9.0/" + entity.EntitySetName + "?fetchXml=" + encodeURIComponent(fetch);
+            }
+            fetchAggregateCount(entity) {
+                let fetch = `
+<fetch aggregate="true">
+    <entity name="${entity.LogicalName}">
+        <attribute name="${entity.PrimaryIdAttribute}" aggregate="count" alias="count" />
+    </entity>
+</fetch>`;
+                let url = `${Xrm.Utility.getGlobalContext().getClientUrl()}/api/data/v9.0/${entity.EntitySetName}?fetchXml=${encodeURIComponent(fetch)}`;
                 return this._http.get(url);
-            };
-            MainController.prototype.fetchAll = function (entity) {
-                var _this = this;
-                var counter = this.counter[entity.LogicalName];
-                var defer = this._q.defer();
-                var url = Xrm.Utility.getGlobalContext().getClientUrl() + "/api/data/v9.0/" + entity.EntitySetName + "?$select=" + entity.PrimaryIdAttribute + "&$count=true";
+            }
+            fetchAll(entity) {
+                let counter = this.counter[entity.LogicalName];
+                let defer = this._q.defer();
+                let url = `${Xrm.Utility.getGlobalContext().getClientUrl()}/api/data/v9.0/${entity.EntitySetName}?$select=${entity.PrimaryIdAttribute}&$count=true`;
                 this._http.get(url, {
                     headers: {
                         "OData-MaxVersion": "4.0",
@@ -172,13 +171,13 @@ var RecordCounter;
                         "Prefer": "odata.maxpagesize=5000"
                     }
                 })
-                    .then(function (response) {
-                    var next = response.data["@odata.nextLink"];
-                    var count = response.data["@odata.count"];
+                    .then(response => {
+                    let next = response.data["@odata.nextLink"];
+                    let count = response.data["@odata.count"];
                     counter.value = count;
                     if (next) {
-                        _this.fetchNext(entity, counter, next)
-                            .then(function () {
+                        this.fetchNext(entity, counter, next)
+                            .then(() => {
                             defer.resolve();
                         });
                     }
@@ -186,27 +185,26 @@ var RecordCounter;
                         defer.resolve();
                     }
                 })
-                    .catch(function () {
+                    .catch(() => {
                     counter.error = "Unable to retrieve all records";
                     defer.resolve();
                 });
                 return defer.promise;
-            };
-            MainController.prototype.fetchNext = function (entity, counter, url) {
-                var _this = this;
-                var defer = this._q.defer();
+            }
+            fetchNext(entity, counter, url) {
+                let defer = this._q.defer();
                 this._http.get(url, {
                     headers: {
                         "OData-MaxVersion": "4.0",
                         "OData-Version": "4.0"
                     }
                 })
-                    .then(function (response) {
-                    var next = response.data["@odata.nextLink"];
+                    .then(response => {
+                    let next = response.data["@odata.nextLink"];
                     if (next) {
                         counter.value += response.data["@odata.count"];
-                        _this.fetchNext(entity, counter, next)
-                            .then(function () {
+                        this.fetchNext(entity, counter, next)
+                            .then(() => {
                             defer.resolve();
                         });
                     }
@@ -215,30 +213,28 @@ var RecordCounter;
                         counter.value += response.data.value.length;
                     }
                 })
-                    .catch(function (response) {
+                    .catch(response => {
                     defer.resolve();
                 });
                 return defer.promise;
-            };
-            MainController.prototype.filterEntities = function () {
-                var _this = this;
-                var filter = this.filter;
-                var compare = this.compareValue;
-                var entities = this.data.filter(function (e) {
-                    var value = true;
+            }
+            filterEntities() {
+                let filter = this.filter;
+                let compare = this.compareValue;
+                let entities = this.data.filter((e) => {
+                    let value = true;
                     if (filter && e.LogicalName.indexOf(filter) < 0) {
                         value = false;
                     }
-                    var counter = _this.counter[e.LogicalName] || {};
+                    let counter = this.counter[e.LogicalName] || {};
                     if (compare && (!counter.value || counter.value < compare)) {
                         value = false;
                     }
                     return value;
                 });
                 this.showEntities(entities);
-            };
-            MainController.prototype.loadEntities = function () {
-                var _this = this;
+            }
+            loadEntities() {
                 this.currentPage = 1;
                 this.data = [];
                 this.entities = [];
@@ -246,8 +242,8 @@ var RecordCounter;
                 this.total = 0;
                 this.isBusy = true;
                 return this._dataService.GetEntities()
-                    .then(function (data) {
-                    _this.data = data.sort(function (e1, e2) {
+                    .then((data) => {
+                    this.data = data.sort((e1, e2) => {
                         if (e1.LogicalName < e2.LogicalName) {
                             return -1;
                         }
@@ -256,35 +252,33 @@ var RecordCounter;
                         }
                         return 0;
                     });
-                    _this.showEntities();
+                    this.showEntities();
                 })
-                    .finally(function () {
-                    _this.isBusy = false;
+                    .finally(() => {
+                    this.isBusy = false;
                 });
-            };
-            MainController.prototype.showEntities = function (entities) {
+            }
+            showEntities(entities) {
                 entities = entities || this.data;
-                var pageSize = this.pageSize;
-                var skip = (this.currentPage - 1) * pageSize;
+                let pageSize = this.pageSize;
+                let skip = (this.currentPage - 1) * pageSize;
                 this.total = entities.length;
                 this.entities = entities
-                    .filter(function (e, index) { return index >= skip && index < skip + pageSize; });
-            };
-            MainController.prototype.updateChart = function (top) {
-                var _this = this;
-                if (top === void 0) { top = 10; }
-                var entities = this.data
-                    .sort(function (e1, e2) {
-                    var c1 = (_this.counter[e1.LogicalName] || {}).value || 0;
-                    var c2 = (_this.counter[e2.LogicalName] || {}).value || 0;
+                    .filter((e, index) => index >= skip && index < skip + pageSize);
+            }
+            updateChart(top = 10) {
+                let entities = this.data
+                    .sort((e1, e2) => {
+                    let c1 = (this.counter[e1.LogicalName] || {}).value || 0;
+                    let c2 = (this.counter[e2.LogicalName] || {}).value || 0;
                     return c2 - c1;
                 })
-                    .filter(function (e1, index) {
+                    .filter((e1, index) => {
                     return index < top;
                 });
-                var labels = entities.map(function (e) { return e.LogicalName; });
-                var data = entities.map(function (e) { return _this.counter[e.LogicalName].value || 0; });
-                var dataset = {
+                let labels = entities.map(e => e.LogicalName);
+                let data = entities.map(e => this.counter[e.LogicalName].value || 0);
+                let dataset = {
                     label: "Top Entities",
                     data: data,
                     backgroundColor: [
@@ -319,15 +313,14 @@ var RecordCounter;
                         }
                     });
                 }
-            };
-            MainController.$inject = [
-                "$scope",
-                "$q",
-                "$http",
-                "metadataBrowser.core.dataService"
-            ];
-            return MainController;
-        }());
+            }
+        }
+        MainController.$inject = [
+            "$scope",
+            "$q",
+            "$http",
+            "metadataBrowser.core.dataService"
+        ];
         angular.module(RecordCounter.Config.moduleName)
             .controller("recordCounter.ui.controllers.mainController", MainController);
     })(Controllers = RecordCounter.Controllers || (RecordCounter.Controllers = {}));

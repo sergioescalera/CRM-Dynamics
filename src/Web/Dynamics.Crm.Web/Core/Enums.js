@@ -3,7 +3,7 @@ var Dynamics;
     var Crm;
     (function (Crm) {
         "use strict";
-        var FormType;
+        let FormType;
         (function (FormType) {
             FormType[FormType["Undefined"] = 0] = "Undefined";
             FormType[FormType["Create"] = 1] = "Create";
@@ -14,7 +14,7 @@ var Dynamics;
             FormType[FormType["BulkEdit"] = 6] = "BulkEdit";
             FormType[FormType["ReadOptimized"] = 11] = "ReadOptimized";
         })(FormType = Crm.FormType || (Crm.FormType = {}));
-        var FormFactor;
+        let FormFactor;
         (function (FormFactor) {
             FormFactor[FormFactor["Unknown"] = 0] = "Unknown";
             FormFactor[FormFactor["Desktop"] = 1] = "Desktop";
@@ -29,7 +29,7 @@ var Dynamics;
         var Core;
         (function (Core) {
             "use strict";
-            var AutoNumberingRuleType;
+            let AutoNumberingRuleType;
             (function (AutoNumberingRuleType) {
                 AutoNumberingRuleType[AutoNumberingRuleType["Global"] = 0] = "Global";
                 AutoNumberingRuleType[AutoNumberingRuleType["GlobalPerDay"] = 3] = "GlobalPerDay";
@@ -38,7 +38,7 @@ var Dynamics;
                 AutoNumberingRuleType[AutoNumberingRuleType["ParentedPerDay"] = 5] = "ParentedPerDay";
                 AutoNumberingRuleType[AutoNumberingRuleType["ParentedPerYear"] = 4] = "ParentedPerYear";
             })(AutoNumberingRuleType = Core.AutoNumberingRuleType || (Core.AutoNumberingRuleType = {}));
-            var GlobalSettingType;
+            let GlobalSettingType;
             (function (GlobalSettingType) {
                 GlobalSettingType[GlobalSettingType["String"] = 0] = "String";
                 GlobalSettingType[GlobalSettingType["Int"] = 1] = "Int";
@@ -46,7 +46,7 @@ var Dynamics;
                 GlobalSettingType[GlobalSettingType["Boolean"] = 3] = "Boolean";
                 GlobalSettingType[GlobalSettingType["Reference"] = 4] = "Reference";
             })(GlobalSettingType = Core.GlobalSettingType || (Core.GlobalSettingType = {}));
-            var LogEntryType;
+            let LogEntryType;
             (function (LogEntryType) {
                 LogEntryType[LogEntryType["Trace"] = 0] = "Trace";
                 LogEntryType[LogEntryType["Warning"] = 1] = "Warning";

@@ -29,7 +29,7 @@
     interface IEntityDetailsScope extends ng.IScope {
         clear(): void;
         search(): void;
-        export(): void;
+//        export(): void;
         entity: IEntityDefinition;
         vm: IEntityDetailsViewModel;
     }
@@ -60,7 +60,7 @@
             };
             scope.clear = this.clear.bind(this);
             scope.search = this.search.bind(this);
-            scope.export = this.export.bind(this);
+//            scope.export = this.export.bind(this);
 
             this.vm = scope.vm;
             this.loadEntityMetadata();
@@ -76,10 +76,10 @@
             this.showAttributes();
         }
 
-        export(): void {
+        //export(): void {
 
-            console.warn("Not implemented");
-        }
+        //    console.warn("Not implemented");
+        //}
 
         filterAttributes(): void {
 

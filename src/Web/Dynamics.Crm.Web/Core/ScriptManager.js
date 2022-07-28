@@ -5,21 +5,21 @@ var Dynamics;
         var ScriptManager;
         (function (ScriptManager) {
             "use strict";
-            var _scripts = {};
-            var _stylesheets = [];
+            let _scripts = {};
+            let _stylesheets = [];
             function loadScripts(scripts, win) {
-                var promises = scripts.map(function (s) { return loadScript(s, win); });
+                let promises = scripts.map((s) => loadScript(s, win));
                 return Promise.all(promises);
             }
             ScriptManager.loadScripts = loadScripts;
             function loadScript(script, win) {
                 console.log("Dynamics.Crm.ScriptManager.loadScript: " + script);
-                var promise = _scripts[script];
+                let promise = _scripts[script];
                 if (!!promise) {
                     return promise;
                 }
-                _scripts[script] = promise = new Promise(function (resolve, reject) {
-                    var element = win.document.createElement("script");
+                _scripts[script] = promise = new Promise((resolve, reject) => {
+                    let element = win.document.createElement("script");
                     element.defer = true;
                     element.type = "text/javascript";
                     element.src = script;
@@ -32,16 +32,16 @@ var Dynamics;
             }
             ScriptManager.loadScript = loadScript;
             function loadStylesheets(stylesheets, win) {
-                stylesheets.forEach(function (s) { return loadStylesheet(s, win); });
+                stylesheets.forEach((s) => loadStylesheet(s, win));
             }
             ScriptManager.loadStylesheets = loadStylesheets;
             function loadStylesheet(stylesheet, win) {
                 console.log("Dynamics.Crm.ScriptManager.loadStylesheet: " + stylesheet);
-                var filter = _stylesheets.filter(function (s) { return s === stylesheet; });
+                let filter = _stylesheets.filter((s) => s === stylesheet);
                 if (filter.length > 0) {
                     return;
                 }
-                win.$("head", win.document).append("<link rel='stylesheet' href='" + stylesheet + "' />");
+                win.$("head", win.document).append(`<link rel='stylesheet' href='${stylesheet}' />`);
                 _stylesheets.push(stylesheet);
             }
             ScriptManager.loadStylesheet = loadStylesheet;

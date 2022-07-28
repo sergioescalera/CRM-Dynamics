@@ -5,22 +5,19 @@ var Resources;
     var nullOrEmptyArgumentMessageFormat = "Argument cannot be null or empty string '{paramName}'.";
     var invalidTypeMessageFormat = "Invalid argument type '{actualType}' expecting type '{expectedType}'.";
     var outOfRangeMessageFormat = "Argument '{paramName}' was out of the range of valid values.";
-    var Strings = /** @class */ (function () {
-        function Strings() {
-        }
-        Strings.NullArgumentMessageFormat = function (paramName) { return nullArgumentMessageFormat
-            .replace("{paramName}", paramName || ""); };
-        Strings.NullOrEmptyArgumentMessageFormat = function (paramName) { return nullOrEmptyArgumentMessageFormat
-            .replace("{paramName}", paramName || ""); };
-        Strings.InvalidTypeMessageFormat = function (expectedType, actualType) { return invalidTypeMessageFormat
-            .replace("{expectedType}", expectedType || "")
-            .replace("{actualType}", actualType || ""); };
-        Strings.OutOfRangeMessageFormat = function (paramName) { return outOfRangeMessageFormat
-            .replace("{paramName}", paramName || ""); };
-        Strings.NotSupportedMessage = "Not supported.";
-        Strings.No = "No";
-        Strings.Yes = "Yes";
-        return Strings;
-    }());
+    class Strings {
+    }
+    Strings.NullArgumentMessageFormat = (paramName) => nullArgumentMessageFormat
+        .replace("{paramName}", paramName || "");
+    Strings.NullOrEmptyArgumentMessageFormat = (paramName) => nullOrEmptyArgumentMessageFormat
+        .replace("{paramName}", paramName || "");
+    Strings.InvalidTypeMessageFormat = (expectedType, actualType) => invalidTypeMessageFormat
+        .replace("{expectedType}", expectedType || "")
+        .replace("{actualType}", actualType || "");
+    Strings.OutOfRangeMessageFormat = (paramName) => outOfRangeMessageFormat
+        .replace("{paramName}", paramName || "");
+    Strings.NotSupportedMessage = "Not supported.";
+    Strings.No = "No";
+    Strings.Yes = "Yes";
     Resources.Strings = Strings;
 })(Resources || (Resources = {}));

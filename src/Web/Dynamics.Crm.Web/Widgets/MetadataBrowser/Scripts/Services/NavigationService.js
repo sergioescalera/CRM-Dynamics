@@ -3,13 +3,13 @@ var MetadataBrower;
     var Core;
     (function (Core) {
         "use strict";
-        var NavigationService = /** @class */ (function () {
-            function NavigationService() {
+        class NavigationService {
+            constructor() {
                 this.EntityTabs = [];
             }
-            NavigationService.prototype.AddEntityTab = function (entity) {
+            AddEntityTab(entity) {
                 var filtered = this.EntityTabs
-                    .filter(function (x) { return x.entity.LogicalName === entity.LogicalName; });
+                    .filter((x) => x.entity.LogicalName === entity.LogicalName);
                 if (filtered.length > 0) {
                     this.SelectedIndex = this.EntityTabs.indexOf(filtered[0]) + 1;
                 }
@@ -20,12 +20,11 @@ var MetadataBrower;
                     });
                     this.SelectedIndex = this.EntityTabs.length;
                 }
-            };
-            NavigationService.prototype.DeleteEntityTab = function (tab) {
-                _.remove(this.EntityTabs, function (t) { return t.entity.LogicalName === tab.entity.LogicalName; });
-            };
-            return NavigationService;
-        }());
+            }
+            DeleteEntityTab(tab) {
+                _.remove(this.EntityTabs, (t) => t.entity.LogicalName === tab.entity.LogicalName);
+            }
+        }
         function NavigationServiceFactory() {
             return new NavigationService();
         }

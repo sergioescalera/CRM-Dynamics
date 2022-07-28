@@ -1,26 +1,24 @@
 var Notifications;
 (function (Notifications) {
     "use strict";
-    var CrmFormNotificationService = /** @class */ (function () {
-        function CrmFormNotificationService() {
-        }
-        CrmFormNotificationService.prototype.hide = function (id) {
+    class CrmFormNotificationService {
+        hide(id) {
             Xrm["Page"].ui.clearFormNotification(id);
-        };
-        CrmFormNotificationService.prototype.init = function () {
+        }
+        init() {
             if (!this.test()) {
                 throw new Error("Not supported.");
             }
-        };
-        CrmFormNotificationService.prototype.show = function (options) {
+        }
+        show(options) {
             if (_.isFunction(Xrm["Page"].ui.setFormHtmlNotification)) {
                 Xrm["Page"].ui.setFormHtmlNotification(options.message, options.type, options.id);
             }
             else {
                 Xrm["Page"].ui.setFormNotification(options.message, options.type, options.id);
             }
-        };
-        CrmFormNotificationService.prototype.test = function () {
+        }
+        test() {
             try {
                 return typeof Xrm !== "undefined"
                     && !!Xrm
@@ -32,8 +30,7 @@ var Notifications;
                 console.warn(e);
                 return false;
             }
-        };
-        return CrmFormNotificationService;
-    }());
+        }
+    }
     Notifications.CrmFormNotificationService = CrmFormNotificationService;
 })(Notifications || (Notifications = {}));

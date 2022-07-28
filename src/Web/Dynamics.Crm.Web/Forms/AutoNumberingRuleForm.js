@@ -7,18 +7,17 @@ var Dynamics;
         (function (AutoNumberingRuleForm) {
             "use strict";
             // fields
-            var _prefix;
-            var _type;
-            var _page;
-            var _forms;
+            let _prefix;
+            let _type;
+            let _page;
+            let _forms;
             // event handlers
-            function OnLoad(context, prefix) {
-                if (prefix === void 0) { prefix = "cc"; }
+            function OnLoad(context, prefix = "cc") {
                 _page = context.getFormContext();
                 _prefix = prefix;
                 _forms = new Crm.Forms(_page);
                 _forms.tasks.execute([
-                    function () { return Crm.Diagnostics.useLogEntryLogger(_prefix); },
+                    () => Crm.Diagnostics.useLogEntryLogger(_prefix),
                     Init,
                     ConfigureGlobalSection,
                     ConfigureDailyConfigSection,
@@ -38,43 +37,43 @@ var Dynamics;
             }
             // tasks
             function Init() {
-                _type = _forms.attributes.get(_prefix + "_type");
+                _type = _forms.attributes.get(`${_prefix}_type`);
                 _type.addOnChange(OnTypeChanged);
             }
             function ConfigureGlobalSection() {
-                var type = _type.getValue();
-                var section = _forms.sections.get("tabGeneral", "sectionGlobal");
-                var disabled = !isGlobal(type);
-                section.controls.forEach(function (c) { return c.setDisabled(disabled); });
+                let type = _type.getValue();
+                let section = _forms.sections.get("tabGeneral", "sectionGlobal");
+                let disabled = !isGlobal(type);
+                section.controls.forEach((c) => c.setDisabled(disabled));
                 if (disabled) {
-                    section.controls.forEach(function (c) { return c.getAttribute().setValue(null); });
+                    section.controls.forEach((c) => c.getAttribute().setValue(null));
                 }
             }
             function ConfigureDailyConfigSection() {
-                var type = _type.getValue();
-                var section = _forms.sections.get("tabGeneral", "sectionDailyConfig");
-                var disabled = !isDaily(type);
-                section.controls.forEach(function (c) { return c.setDisabled(disabled); });
+                let type = _type.getValue();
+                let section = _forms.sections.get("tabGeneral", "sectionDailyConfig");
+                let disabled = !isDaily(type);
+                section.controls.forEach((c) => c.setDisabled(disabled));
                 if (disabled) {
-                    section.controls.forEach(function (c) { return c.getAttribute().setValue(null); });
+                    section.controls.forEach((c) => c.getAttribute().setValue(null));
                 }
             }
             function ConfigureYearConfigSection() {
-                var type = _type.getValue();
-                var section = _forms.sections.get("tabGeneral", "sectionYearConfig");
-                var disabled = !isYearly(type) && !isDaily(type);
-                section.controls.forEach(function (c) { return c.setDisabled(disabled); });
+                let type = _type.getValue();
+                let section = _forms.sections.get("tabGeneral", "sectionYearConfig");
+                let disabled = !isYearly(type) && !isDaily(type);
+                section.controls.forEach((c) => c.setDisabled(disabled));
                 if (disabled) {
-                    section.controls.forEach(function (c) { return c.getAttribute().setValue(null); });
+                    section.controls.forEach((c) => c.getAttribute().setValue(null));
                 }
             }
             function ConfigureParentedSection() {
-                var type = _type.getValue();
-                var section = _forms.sections.get("tabGeneral", "sectionParented");
-                var disabled = isGlobal(type);
-                section.controls.forEach(function (c) { return c.setDisabled(disabled); });
+                let type = _type.getValue();
+                let section = _forms.sections.get("tabGeneral", "sectionParented");
+                let disabled = isGlobal(type);
+                section.controls.forEach((c) => c.setDisabled(disabled));
                 if (disabled) {
-                    section.controls.forEach(function (c) { return c.getAttribute().setValue(null); });
+                    section.controls.forEach((c) => c.getAttribute().setValue(null));
                 }
             }
             function isGlobal(type) {

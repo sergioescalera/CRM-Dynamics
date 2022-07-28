@@ -19,10 +19,7 @@ var Validation;
         }
     }
     Validation.ensureNotNullOrEmpty = ensureNotNullOrEmpty;
-    function ensureNumberInRange(value, min, max, paramName) {
-        if (min === void 0) { min = null; }
-        if (max === void 0) { max = null; }
-        if (paramName === void 0) { paramName = null; }
+    function ensureNumberInRange(value, min = null, max = null, paramName = null) {
         if (!_.isNumber(value)) {
             throw new Error(Resources.Strings.InvalidTypeMessageFormat("number", typeof value));
         }
